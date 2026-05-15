@@ -1,1 +1,1601 @@
 <!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GemFit ♊ — Deivis & Yona</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0a0a0a;--card:#161616;--card2:#1e1e1e;--border:#252525;--border2:#333;
+  --text:#e0e0e0;--muted:#666;--muted2:#999;
+  --push:#ff6b35;--pull:#3b82f6;--legs:#a855f7;--done:#4ade80;--skip:#555;
+  --accent:#c8f135;--yona:#7ecfff;
+}
+html{height:100%;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'DM Sans',sans-serif;font-size:14px;
+  height:100%;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+ 
+/* ── SCREENS ── */
+.screen{display:none;flex-direction:column;height:100%;overflow:hidden;}
+.screen.active{display:flex;}
+ 
+/* ── PROFILE SCREEN ── */
+#s-profiles{align-items:center;justify-content:center;padding:24px;gap:24px;overflow-y:auto;}
+.gem-logo-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.gem-title{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:.15em;
+  background:linear-gradient(135deg,#c8f135,#7ecfff);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text;}
+.gem-sub{font-size:11px;color:var(--muted2);letter-spacing:.15em;text-transform:uppercase;}
+.prof-cards{display:flex;gap:12px;width:100%;max-width:340px;}
+.pcard{flex:1;padding:20px 14px;border-radius:16px;border:1px solid var(--border);
+  background:var(--card);cursor:pointer;text-align:center;transition:all .2s;}
+.pcard:hover{transform:translateY(-4px);border-color:var(--pc,var(--accent));}
+.pav{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:1.7rem;margin:0 auto 10px;}
+.pname{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;margin-bottom:6px;}
+.pmeta{font-size:11px;color:var(--muted2);line-height:1.8;}
+.imc-chip{display:inline-block;margin-top:6px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;}
+ 
+/* ── TOPBAR ── */
+.topbar{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  background:rgba(10,10,10,.97);border-bottom:1px solid var(--border);
+  flex-shrink:0;z-index:10;
+}
+.tlogo{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;cursor:pointer;font-size:14px;border:1px solid;flex-shrink:0;}
+.tname{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.08em;flex:1;}
+.tright{font-size:10px;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;}
+ 
+/* ── MAIN CONTENT AREA ── */
+.main-area{flex:1;overflow:hidden;position:relative;}
+.tab{
+  position:absolute;inset:0;
+  overflow-y:auto;
+  display:none;
+  -webkit-overflow-scrolling:touch;
+}
+.tab.active{display:block;}
+.tab::-webkit-scrollbar{width:3px;}
+.tab::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.inner{padding:14px 14px 80px;max-width:900px;margin:0 auto;}
+ 
+/* ── BOTTOM NAV ── */
+.bnav{
+  flex-shrink:0;
+  background:rgba(10,10,10,.98);border-top:1px solid var(--border);
+  display:none;height:62px;z-index:10;
+}
+.bnav.on{display:flex;}
+.nbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;border:none;background:none;cursor:pointer;color:var(--muted);
+  font-size:9px;letter-spacing:.06em;text-transform:uppercase;transition:color .2s;padding:0;}
+.nbtn.active{color:var(--accent);}
+.nbtn-icon{font-size:16px;line-height:1;transition:transform .2s;}
+.nbtn.active .nbtn-icon{transform:translateY(-2px);}
+ 
+/* ── SHARED ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;}
+.card-body{padding:14px 16px;}
+.section-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-bottom:10px;}
+.h1{font-family:'Bebas Neue',sans-serif;letter-spacing:.02em;line-height:.9;}
+.mono{font-family:'DM Mono',monospace;}
+.bebas{font-family:'Bebas Neue',sans-serif;}
+ 
+/* ── PLAN TAB ── */
+.week-pills{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:16px;}
+.wpill{padding:6px 2px;border-radius:8px;text-align:center;border:1px solid var(--border);}
+.wpill-day{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
+.wpill-type{font-family:'Bebas Neue',sans-serif;font-size:11px;}
+.day-block{margin-bottom:14px;}
+.day-hdr{display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:10px 10px 0 0;border:1px solid;border-bottom:none;}
+.day-badge{font-size:9px;text-transform:uppercase;letter-spacing:.1em;padding:2px 7px;border-radius:3px;font-weight:600;}
+.day-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.04em;flex:1;}
+.day-dur{font-size:10px;color:var(--muted);}
+.ex-table{border:1px solid var(--border);border-radius:0 0 10px 10px;overflow:hidden;}
+.ex-section{padding:4px 13px;background:rgba(255,255,255,.025);font-size:9px;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.12em;border-bottom:1px solid var(--border);}
+.ex-row{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:start;
+  padding:8px 13px;border-bottom:1px solid var(--border);}
+.ex-row:last-child{border-bottom:none;}
+.ex-row.cardio-row{background:rgba(200,241,53,.04);}
+.ex-row.star-row{border-left:2px solid gold;}
+.ex-num{font-size:10px;color:var(--muted);padding-top:2px;}
+.ex-name{font-size:12px;font-weight:500;line-height:1.3;}
+.ex-note{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.4;}
+.ex-why{font-size:10px;color:#c8f135;margin-top:2px;font-style:italic;}
+.ex-sets{font-family:'DM Mono',monospace;font-size:10px;white-space:nowrap;padding-top:2px;}
+ 
+/* ── VOLUME TABLE ── */
+.vol-grid{display:grid;grid-template-columns:1fr auto auto auto;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.vol-hdr{background:rgba(255,255,255,.04);padding:7px 10px;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid var(--border);}
+.vol-cell{padding:8px 10px;border-bottom:1px solid var(--border);font-size:12px;}
+.vol-cell:nth-last-child(-n+4){border-bottom:none;}
+.vol-muscle{font-weight:500;}
+.vol-bar-wrap{display:flex;align-items:center;gap:6px;padding:8px 10px;border-bottom:1px solid var(--border);}
+.vol-bar-wrap:nth-last-child(-n+4){border-bottom:none;}
+.vol-bar-bg{flex:1;height:4px;background:var(--border);border-radius:99px;overflow:hidden;}
+.vol-bar-fill{height:100%;border-radius:99px;}
+ 
+/* ── TRACKER TAB ── */
+.month-nav{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;}
+.month-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);
+  background:var(--card);color:var(--text);cursor:pointer;font-size:15px;}
+.month-label{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:.04em;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-wd{text-align:center;font-size:9px;color:var(--muted);padding:3px 0;
+  text-transform:uppercase;letter-spacing:.05em;}
+.cal-cell{aspect-ratio:1;border-radius:6px;border:1px solid var(--border);
+  background:var(--card);cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px;transition:all .12s;}
+.cal-cell:hover{background:var(--card2);}
+.cal-cell.empty{background:transparent;border-color:transparent;cursor:default;}
+.cal-cell.today{border-color:var(--accent);}
+.cal-cell.selected{background:rgba(200,241,53,.1);border-color:var(--accent);}
+.cal-cell.skipped{opacity:.5;}
+.cal-num{font-size:11px;font-weight:500;line-height:1;}
+.cal-dot{width:5px;height:5px;border-radius:50%;}
+.cal-chk{font-size:9px;color:var(--done);}
+.day-panel{margin:0 14px;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card);}
+.sess-selector{padding:11px 13px;border-bottom:1px solid var(--border);}
+.sess-btns{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px;}
+.sess-btn{padding:4px 10px;border-radius:6px;border:1px solid var(--border2);
+  background:var(--card2);color:var(--muted);font-size:11px;font-weight:500;cursor:pointer;}
+.prog-wrap{padding:8px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.prog-bg{flex:1;height:4px;background:var(--border);border-radius:99px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:99px;transition:width .3s;}
+.prog-txt{font-size:10px;color:var(--muted);white-space:nowrap;}
+.prog-pct{font-family:'Bebas Neue',sans-serif;font-size:13px;min-width:34px;text-align:right;}
+.t-section{padding:4px 13px;background:rgba(255,255,255,.02);font-size:9px;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.12em;border-bottom:1px solid var(--border);}
+.t-ex{display:flex;align-items:flex-start;gap:9px;padding:8px 13px;
+  border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;user-select:none;}
+.t-ex:last-child{border-bottom:none;}
+.t-ex:hover{background:rgba(255,255,255,.02);}
+.t-ex.done{opacity:.42;}
+.t-ex.cardio{background:rgba(200,241,53,.03);}
+.chkbox{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);
+  background:var(--card2);display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:2px;transition:all .12s;}
+.chkbox.on{background:var(--done);border-color:var(--done);}
+.t-ex-name{font-size:12px;font-weight:500;line-height:1.3;}
+.t-ex-note{font-size:10px;color:var(--muted);margin-top:2px;}
+.t-ex-sets{font-family:'DM Mono',monospace;font-size:10px;white-space:nowrap;padding-top:2px;flex-shrink:0;}
+.notes-wrap{padding:11px 13px;border-top:1px solid var(--border);}
+.notes-ta{width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:8px;
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;
+  padding:8px 10px;resize:none;min-height:64px;line-height:1.5;margin-top:6px;}
+.notes-ta:focus{outline:none;border-color:var(--accent);}
+.note-save{margin-top:6px;padding:5px 12px;border:none;border-radius:6px;
+  font-size:11px;font-weight:600;cursor:pointer;transition:all .2s;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:12px 14px 0;}
+.stat-card{padding:8px;background:var(--card);border:1px solid var(--border);border-radius:8px;text-align:center;}
+.stat-val{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;line-height:1;}
+.stat-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+.done-banner{margin:0 14px 10px;padding:9px 12px;border-radius:9px;
+  background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);
+  font-size:12px;color:var(--done);display:none;align-items:center;gap:8px;}
+.done-banner.on{display:flex;}
+ 
+/* ── PERFIL TAB ── */
+.imc-inputs{display:flex;gap:8px;margin-bottom:12px;}
+.imc-inp{flex:1;background:var(--card2);border:1px solid var(--border2);border-radius:8px;
+  color:var(--text);font-size:13px;padding:7px 10px;}
+.imc-inp:focus{outline:none;border-color:var(--accent);}
+.imc-result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+  padding:10px;background:var(--card2);border-radius:8px;border:1px solid var(--border);margin-bottom:10px;}
+.imc-m{text-align:center;}
+.imc-v{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;line-height:1;}
+.imc-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:3px;}
+.imc-track{height:8px;border-radius:99px;
+  background:linear-gradient(to right,#3b82f6 0%,#4ade80 20%,#c8f135 27%,#ff6b35 33%,#ef4444 45%);
+  position:relative;margin:6px 0;}
+.imc-marker{position:absolute;top:-3px;width:14px;height:14px;border-radius:50%;
+  background:#fff;border:2px solid #0a0a0a;transform:translateX(-50%);transition:left .4s;
+  box-shadow:0 0 6px rgba(255,255,255,.3);}
+.imc-cat{text-align:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.05em;margin-top:6px;}
+.macro-sel-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.macro-sel{background:var(--card2);border:1px solid var(--border2);border-radius:8px;
+  color:var(--text);font-size:12px;padding:6px 8px;}
+.macro-sel:focus{outline:none;border-color:var(--accent);}
+.macro-result-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.macro-card{padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--card2);text-align:center;}
+.macro-v{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;line-height:1;}
+.macro-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px;}
+.macro-s{font-size:10px;color:var(--muted);margin-top:2px;}
+ 
+/* ── PROGRESO TAB ── */
+.streak-wrap{display:flex;align-items:center;gap:14px;padding:13px 15px;}
+.streak-num{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;line-height:1;}
+.w-input-row{display:flex;gap:8px;margin-bottom:10px;}
+.w-inp{flex:1;background:var(--card2);border:1px solid var(--border2);border-radius:8px;
+  color:var(--text);font-size:13px;padding:7px 10px;}
+.w-inp:focus{outline:none;border-color:var(--accent);}
+.w-add-btn{padding:7px 14px;background:var(--accent);color:#0a0a0a;border:none;
+  border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.06em;cursor:pointer;}
+.w-entry{display:flex;justify-content:space-between;align-items:center;
+  padding:7px 10px;background:var(--card2);border-radius:7px;border:1px solid var(--border);margin-bottom:4px;}
+.w-date{font-size:11px;color:var(--muted);}
+.w-val{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;}
+.w-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:2px 4px;}
+.chart-area{height:140px;display:flex;align-items:flex-end;gap:3px;padding-bottom:20px;position:relative;}
+.chart-col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;position:relative;}
+.chart-bars{display:flex;gap:1px;align-items:flex-end;width:100%;justify-content:center;}
+.chart-bar{width:30%;border-radius:2px 2px 0 0;min-height:0;transition:height .3s;}
+.chart-label{position:absolute;bottom:0;font-size:8px;color:var(--muted);text-align:center;line-height:1;white-space:nowrap;}
+.chart-legend{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);}
+.legend-dot{width:7px;height:7px;border-radius:50%;}
+ 
+/* ── SUPLEMENTOS TAB ── */
+.sup-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.sup-tab{padding:5px 12px;border-radius:7px;border:1px solid var(--border2);
+  background:var(--card2);color:var(--muted);font-size:11px;cursor:pointer;transition:all .15s;}
+.sup-tab.active{background:rgba(200,241,53,.12);border-color:var(--accent);color:var(--accent);}
+.sup-card{background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:12px 14px;margin-bottom:10px;position:relative;overflow:hidden;}
+.sup-accent{position:absolute;top:0;left:0;width:3px;height:100%;}
+.sup-inner{padding-left:10px;}
+.sup-name{font-size:13px;font-weight:500;margin-bottom:2px;}
+.sup-dose{font-size:11px;color:var(--muted);margin-bottom:7px;}
+.sup-verdict{font-size:10px;padding:2px 8px;border-radius:5px;font-weight:600;display:inline-block;margin-bottom:8px;}
+.sup-why{font-size:11px;color:var(--muted);line-height:1.6;background:var(--card2);
+  border-radius:7px;padding:8px 10px;border-left:2px solid;}
+.sup-tag{font-size:10px;padding:2px 7px;border-radius:5px;margin-right:4px;margin-bottom:5px;display:inline-block;}
+.tl-row{display:grid;grid-template-columns:90px 1fr;border-bottom:1px solid var(--border);}
+.tl-row:last-child{border-bottom:none;}
+.tl-time{padding:12px 10px 12px 0;font-size:11px;font-weight:500;color:var(--muted);padding-top:14px;}
+.tl-items{padding:8px 0;display:flex;flex-direction:column;gap:5px;}
+.tl-item{display:flex;align-items:center;gap:7px;padding:5px 9px;border-radius:7px;background:var(--card2);}
+.tl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.tl-name{font-size:12px;flex:1;}
+.tl-dose{font-size:10px;color:var(--muted);white-space:nowrap;}
+.chk-item{display:flex;align-items:center;gap:9px;padding:8px 11px;background:var(--card);
+  border:1px solid var(--border);border-radius:9px;cursor:pointer;margin-bottom:6px;}
+.chk-box{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);
+  background:var(--card2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.chk-box.on{background:var(--done);border-color:var(--done);}
+.chk-name{font-size:12px;font-weight:500;flex:1;}
+.chk-sub{font-size:10px;color:var(--muted);}
+.chk-badge{font-size:10px;padding:2px 7px;border-radius:5px;white-space:nowrap;}
+.prog-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.prog-bar-bg{flex:1;height:5px;background:var(--border);border-radius:99px;overflow:hidden;}
+.prog-bar-fill{height:100%;border-radius:99px;background:var(--done);transition:width .3s;}
+.prog-bar-lbl{font-size:11px;color:var(--muted);white-space:nowrap;}
+</style>
+</head>
+<body>
+ 
+<!-- ═══════════════ PROFILE SCREEN ═══════════════ -->
+<div id="s-profiles" class="screen active">
+  <div class="gem-logo-wrap">
+    <svg width="86" height="86" viewBox="0 0 90 90" fill="none">
+      <defs>
+        <linearGradient id="gl1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#c8f135"/><stop offset="100%" stop-color="#7ecfff"/>
+        </linearGradient>
+        <linearGradient id="gl2" x1="100%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#7ecfff"/><stop offset="100%" stop-color="#c8f135"/>
+        </linearGradient>
+      </defs>
+      <circle cx="45" cy="45" r="43" stroke="url(#gl1)" stroke-width="1" opacity=".5" fill="none"/>
+      <line x1="20" y1="17" x2="36" y2="17" stroke="url(#gl1)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="28" y1="17" x2="28" y2="73" stroke="url(#gl1)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="20" y1="73" x2="36" y2="73" stroke="url(#gl1)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="54" y1="17" x2="70" y2="17" stroke="url(#gl2)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="62" y1="17" x2="62" y2="73" stroke="url(#gl2)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="54" y1="73" x2="70" y2="73" stroke="url(#gl2)" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M28 32 Q45 24 62 32" stroke="url(#gl1)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M28 58 Q45 66 62 58" stroke="url(#gl2)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <circle cx="45" cy="8" r="2" fill="#c8f135" opacity=".9"/>
+      <circle cx="45" cy="82" r="2" fill="#7ecfff" opacity=".9"/>
+      <circle cx="8" cy="45" r="1.5" fill="#7ecfff" opacity=".6"/>
+      <circle cx="82" cy="45" r="1.5" fill="#c8f135" opacity=".6"/>
+    </svg>
+    <div class="gem-title">GEMFIT</div>
+    <div class="gem-sub">♊ Recomposición Corporal Científica · 2025</div>
+  </div>
+  <div class="prof-cards">
+    <div class="pcard" style="--pc:rgba(200,241,53,.4)" onclick="selectProfile('deivis')">
+      <div class="pav" style="background:rgba(200,241,53,.12);color:#c8f135;border:2px solid rgba(200,241,53,.3)">D</div>
+      <div class="pname" style="color:#c8f135">DEIVIS</div>
+      <div class="pmeta">33 años · 1.68m · 88kg<br>Géminis ♊</div>
+      <div class="imc-chip" style="background:rgba(255,107,53,.2);color:#ff6b35;">IMC 31.2 · Sobrepeso</div>
+    </div>
+    <div class="pcard" style="--pc:rgba(126,207,255,.4)" onclick="selectProfile('yona')">
+      <div class="pav" style="background:rgba(126,207,255,.12);color:#7ecfff;border:2px solid rgba(126,207,255,.3)">Y</div>
+      <div class="pname" style="color:#7ecfff">YONA</div>
+      <div class="pmeta">29 años · 1.68m · 88kg<br>Géminis ♊</div>
+      <div class="imc-chip" style="background:rgba(255,107,53,.2);color:#ff6b35;">IMC 31.2 · Sobrepeso</div>
+    </div>
+  </div>
+  <div style="font-size:11px;color:var(--muted);text-align:center;max-width:300px;line-height:1.6;margin-top:4px;">
+    Ambos con el mismo punto de partida. La diferencia estará en la consistencia.
+  </div>
+</div>
+ 
+<!-- ═══════════════ MAIN APP ═══════════════ -->
+<div id="s-main" class="screen">
+  <div class="topbar">
+    <div class="tlogo" id="tLogo" onclick="goProfiles()">♊</div>
+    <div class="tname" id="tName">GEMFIT</div>
+    <div class="tright" id="tRight">PLAN</div>
+  </div>
+ 
+  <div class="main-area">
+    <div id="tab-plan"        class="tab active"></div>
+    <div id="tab-tracker"     class="tab"></div>
+    <div id="tab-volumen"     class="tab"></div>
+    <div id="tab-perfil"      class="tab"></div>
+    <div id="tab-progreso"    class="tab"></div>
+    <div id="tab-fotos" class="tab"></div>
+    <div id="tab-suplementos" class="tab"></div>
+  </div>
+ 
+  <nav class="bnav" id="bnav">
+    <button class="nbtn active" id="nb-plan"        onclick="goTab('plan')">       <span class="nbtn-icon">📋</span>Plan</button>
+    <button class="nbtn"        id="nb-tracker"     onclick="goTab('tracker')">    <span class="nbtn-icon">✅</span>Tracker</button>
+    <button class="nbtn"        id="nb-volumen"     onclick="goTab('volumen')">    <span class="nbtn-icon">📊</span>Volumen</button>
+    <button class="nbtn"        id="nb-perfil"      onclick="goTab('perfil')">     <span class="nbtn-icon">👤</span>Perfil</button>
+    <button class="nbtn"        id="nb-progreso"    onclick="goTab('progreso')">   <span class="nbtn-icon">📈</span>Progreso</button>
+    <button class="nbtn" id="nb-fotos" onclick="goTab('fotos')"><span class="nbtn-icon">📸</span>Fotos</button>
+    <button class="nbtn" id="nb-suplementos" onclick="goTab('suplementos')"><span class="nbtn-icon">💊</span>Suplem.</button>
+  </nav>
+</div>
+ 
+<script>
+'use strict';
+ 
+// ═══════════════════════════════════════════════════════════════
+// PROFILES
+// ═══════════════════════════════════════════════════════════════
+const PROFS = {
+  deivis: { name:'DEIVIS', age:33, h:1.68, w:88, color:'#c8f135', dim:'rgba(200,241,53,.12)', init:'D' },
+  yona:   { name:'YONA',   age:29, h:1.68, w:88, color:'#7ecfff', dim:'rgba(126,207,255,.12)', init:'Y' }
+};
+ 
+// ═══════════════════════════════════════════════════════════════
+// RUTINA — Basada en evidencia (Israetel, Schoenfeld, Helms)
+// 6 días Upper/Lower/Push/Pull — frecuencia 2x por músculo
+// Ejercicios seleccionados por ratio estímulo/fatiga
+// ═══════════════════════════════════════════════════════════════
+const SESSIONS = {
+  upperA: {
+    id:'upperA', lbl:'Upper A', type:'push', emoji:'💪',
+    title:'LUNES — Upper A · Fuerza + Hipertrofia Pecho/Espalda',
+    dur:'~100 min', focus:'Compuestos pesados. RPE 8-9. Baja el peso si la técnica falla.',
+    sections: [
+      { t:'Pecho — Prioridad', ex:[
+        {id:'ua1',n:'Press de Banca con Barra',s:'4×4-6',note:'El rey del pecho. Agarre a 81cm. Baja 2 seg, explota arriba.',why:'Mayor activación pectoral absoluta. Permite mayor carga progresiva.',star:true},
+        {id:'ua2',n:'Press Inclinado con Mancuernas',s:'3×8-10',note:'Ángulo 30°. Codos a 45° del cuerpo. Stretch completo abajo.',why:'Pecho clavicular. Mancuernas permiten mayor rango de movimiento.'},
+      ]},
+      { t:'Espalda — Grosor', ex:[
+        {id:'ua3',n:'Remo con Barra Pendlay',s:'4×6-8',note:'Barra al suelo entre reps. Espalda paralela. Tirón explosivo.',why:'Mayor activación dorsal e isquios que remo tradicional. Carga máxima.',star:true},
+        {id:'ua4',n:'Remo con Mancuerna a Una Mano',s:'3×10-12',note:'Codo hacia el techo. Rango completo. Rotación escapular.',why:'Corrección de asimetría. Aislamiento dorsal unilateral.'},
+      ]},
+      { t:'Hombro', ex:[
+        {id:'ua5',n:'Press Militar Barra De Pie',s:'3×6-8',note:'Core braced. No hiperextiendas lumbar. Barra pasa por la oreja.',why:'Activación total del deltoides. Involucra core y trapecio.'},
+        {id:'ua6',n:'Facepulls con Polea Alta',s:'4×15-20',note:'Codos arriba. Lleva las manos a las orejas. Salud rotator cuff.',why:'Hombro posterior y manguito rotador. Previene lesiones.'},
+      ]},
+      { t:'Cardio LISS', ex:[
+        {id:'ua7',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% inclinación · 5.5 km/h · LISS',cardio:true,why:'Máxima quema calórica con mínima fatiga muscular.'},
+      ]},
+    ]
+  },
+ 
+  lowerA: {
+    id:'lowerA', lbl:'Lower A', type:'legs', emoji:'🦵',
+    title:'MARTES — Lower A · Cuádriceps Dominante',
+    dur:'~95 min', focus:'Día de pierna más duro. Empieza bien descansado. Descansos de 3 min en sentadilla.',
+    sections: [
+      { t:'Cuádriceps — Prioridad', ex:[
+        {id:'la1',n:'Sentadilla Trasera con Barra (High Bar)',s:'5×4-6',note:'Profundidad completa. Rodillas siguen pies. Pecho arriba.',why:'El ejercicio con mayor anabolismo sistémico. Activa más músculo que cualquier otro.',star:true},
+        {id:'la2',n:'Prensa de Piernas 45°',s:'3×10-12',note:'Pies bajos y juntos para cuádriceps. Rango completo. Sin bloquear rodillas.',why:'Volumen adicional de cuádriceps con menor fatiga de espalda baja.'},
+        {id:'la3',n:'Extensión de Cuádriceps (Máquina)',s:'3×12-15',note:'Pausa 1 seg arriba. Bajada controlada 3 seg. Aislamiento total.',why:'Único ejercicio que trabaja recto femoral en extensión total de rodilla.'},
+      ]},
+      { t:'Isquiotibiales', ex:[
+        {id:'la4',n:'Curl Femoral Tumbado (Máquina)',s:'3×10-12',note:'Bajada lenta 3 seg. No levantes caderas. Contracción completa.',why:'Isquiotibiales en posición acortada. Complementa al peso muerto rumano.'},
+      ]},
+      { t:'Gemelos', ex:[
+        {id:'la5',n:'Elevación de Talones en Prensa',s:'5×12-15',note:'Rango completo. Pausa 2 seg abajo en estiramiento. Bajada lenta.',why:'Mayor carga posible para gemelos. Gastrocnemio e isquiotibial.'},
+      ]},
+      { t:'Core', ex:[
+        {id:'la6',n:'Ab Wheel (Rueda Abdominal)',s:'4×8-12',note:'Espalda plana. Caderas no caigan. Progresa a rodillas primero.',why:'Mayor activación de recto abdominal que cualquier crunch.'},
+      ]},
+      { t:'Cardio LISS', ex:[
+        {id:'la7',n:'Caminata Inclinada en Cinta',s:'15 min',note:'10% · 5.5 km/h',cardio:true,why:'Post-piernas para maximizar oxidación de ácidos grasos.'},
+      ]},
+    ]
+  },
+ 
+  pushA: {
+    id:'pushA', lbl:'Push A', type:'push', emoji:'🔴',
+    title:'MIÉRCOLES — Push A · Hombros y Tríceps',
+    dur:'~90 min', focus:'Sesión de hombro y tríceps. Técnica sobre ego. Descansa 90 seg entre series.',
+    sections: [
+      { t:'Hombro — Prioridad', ex:[
+        {id:'pua1',n:'Press Arnold con Mancuernas',s:'4×8-10',note:'Rotación completa del hombro. Codos bajos al inicio. Control total.',why:'Activa las 3 cabezas del deltoides simultáneamente. Superior al press militar.',star:true},
+        {id:'pua2',n:'Elevaciones Laterales en Polea',s:'5×15-20',note:'Polea baja lateral. Codo ligeramente flexionado. Pausa arriba.',why:'Tensión constante vs mancuernas. Óptimo para deltoides lateral.'},
+        {id:'pua3',n:'Pájaros en Polea (Hombro Posterior)',s:'4×15',note:'Polea alta. Brazos alineados con los hombros. No gires el tronco.',why:'Deltoides posterior. Equilibrio y salud del hombro.'},
+      ]},
+      { t:'Tríceps', ex:[
+        {id:'pua4',n:'Fondos en Paralelas (Tríceps)',s:'4×8-12',note:'Cuerpo vertical. Codos cerca del cuerpo. Si no puedes: polea.',why:'Mayor activación de la cabeza larga del tríceps. El más potente.',star:true},
+        {id:'pua5',n:'Extensiones Polea Alta (Cuerda)',s:'3×12-15',note:'Separa la cuerda al final. Codos fijos. Bajada controlada.',why:'Tensión en estiramiento. Cabeza larga del tríceps.'},
+        {id:'pua6',n:'Copa de Tríceps (Mancuerna)',s:'3×12',note:'Agarre neutro. Codos apuntan al techo. Rango completo.',why:'Aislamiento de cabeza larga. Stretch en posición extendida.'},
+      ]},
+      { t:'Cardio LISS', ex:[
+        {id:'pua7',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% · 5.5 km/h',cardio:true,why:''},
+      ]},
+    ]
+  },
+ 
+  pullA: {
+    id:'pullA', lbl:'Pull A', type:'pull', emoji:'🔵',
+    title:'JUEVES — Pull A · Espalda Amplitud + Bíceps',
+    dur:'~90 min', focus:'Amplitud de espalda y V-taper. Cada rep con contracción escapular completa.',
+    sections: [
+      { t:'Espalda — Amplitud', ex:[
+        {id:'pla1',n:'Dominadas con Lastre (Agarre Pronado)',s:'4×6-8',note:'Rango completo. Pecho al bar. Bajada controlada 2 seg.',why:'El mejor ejercicio para el dorsal ancho. Difícil de superar.',star:true},
+        {id:'pla2',n:'Jalón al Pecho Agarre Neutro',s:'3×10-12',note:'Pecho hacia la barra. Agarre neutro mayor activación dorsal.',why:'Agarre neutro supera al prono en activación de dorsal ancho.'},
+        {id:'pla3',n:'Pull-over en Polea (Brazos Rectos)',s:'3×15',note:'Brazos rectos. Arco amplio. Aprieta el dorsal al bajar.',why:'Aísla el dorsal sin involucrar bíceps. Perfecto para V-taper.'},
+      ]},
+      { t:'Espalda — Grosor', ex:[
+        {id:'pla4',n:'Remo en Polea Baja (Agarre Ancho)',s:'3×10-12',note:'Agarre ancho. Tira al pecho bajo. Aprieta escápulas.',why:'Romboides y trapecio medio. Espalda densa.'},
+      ]},
+      { t:'Bíceps', ex:[
+        {id:'pla5',n:'Curl con Barra Z (Bíceps)',s:'3×8-10',note:'Codos fijos. Sin balanceo. Bajada controlada 2 seg.',why:'Mayor carga que con mancuernas. Máximo estímulo bicipital.'},
+        {id:'pla6',n:'Curl Inclinado con Mancuernas',s:'3×10-12',note:'Banco a 45°. Stretch completo en abajo. Supina la muñeca.',why:'Posición inclinada estira la cabeza larga al máximo. Mayor hipertrofia.'},
+        {id:'pla7',n:'Curl Martillo (Mancuernas)',s:'2×12',note:'Agarre neutro. Braquial y braquiorradial. Grosor del brazo.',why:'Grosor del brazo y antebrazo. Diferente a curl estándar.'},
+      ]},
+      { t:'Cardio LISS', ex:[
+        {id:'pla8',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% · 5.5 km/h',cardio:true,why:''},
+      ]},
+    ]
+  },
+ 
+  upperB: {
+    id:'upperB', lbl:'Upper B', type:'push', emoji:'💪',
+    title:'VIERNES — Upper B · Hipertrofia Pecho Alto + Espalda',
+    dur:'~95 min', focus:'Más volumen, menos carga que Upper A. Rango 8-12 reps. Conexión mente-músculo.',
+    sections: [
+      { t:'Pecho Alto — Prioridad', ex:[
+        {id:'ub1',n:'Press Inclinado con Barra (30°)',s:'4×8-10',note:'Agarre ligeramente más estrecho. Baja a la clavícula.',why:'Pecho clavicular. Complementa el press plano del lunes.',star:true},
+        {id:'ub2',n:'Aperturas en Polea a Media Altura',s:'4×12-15',note:'Ligera flexión de codos. Contracción 1 seg. Recorrido en D.',why:'Tensión constante en todo el recorrido. Superior a las mancuernas.'},
+        {id:'ub3',n:'Fondos en Paralelas (Pecho)',s:'3×10-12',note:'Inclínate adelante. Codos salen afuera. Profundidad máxima.',why:'Pecho inferior y serrato anterior. Stretch máximo en pectoral.'},
+      ]},
+      { t:'Espalda — Amplitud', ex:[
+        {id:'ub4',n:'Jalón al Pecho Agarre Ancho',s:'4×10-12',note:'Arquea ligeramente. Pecho hacia la barra. Codos hacia el suelo.',why:'Complementa las dominadas del jueves. Frecuencia 2x dorsal.'},
+        {id:'ub5',n:'Remo con Mancuerna en Banco',s:'3×10-12',note:'Apoyo de codo en banco. Mayor estabilidad. Más rango.',why:'Variante estabilizada. Permite más volumen con buena técnica.'},
+      ]},
+      { t:'Hombro y Trapecio', ex:[
+        {id:'ub6',n:'Elevaciones Laterales Mancuernas',s:'4×15-20',note:'Movimiento de arco. No más de 90°. Codos ligeramente flexionados.',why:'Segunda sesión semanal de deltoides lateral.'},
+        {id:'ub7',n:'Encogimientos con Mancuernas (Trapecio)',s:'3×12',note:'Sin rotar el hombro. Solo sube y baja. Pausa arriba.',why:'Trapecio superior. Aspecto de hombros poderosos.'},
+      ]},
+      { t:'Cardio LISS', ex:[
+        {id:'ub8',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% · 5.5 km/h',cardio:true,why:''},
+      ]},
+    ]
+  },
+ 
+  lowerB: {
+    id:'lowerB', lbl:'Lower B', type:'legs', emoji:'🦵',
+    title:'SÁBADO — Lower B · Cadena Posterior Dominante',
+    dur:'~95 min', focus:'Glúteos, isquiotibiales, fuerza funcional. El día más importante para la postura.',
+    sections: [
+      { t:'Cadena Posterior — Prioridad', ex:[
+        {id:'lb1',n:'Peso Muerto Convencional',s:'4×4-6',note:'Espalda neutra. Empuja el suelo. Bloqueo completo arriba.',why:'El ejercicio más anabólico del mundo. Fuerza total de cadena posterior.',star:true},
+        {id:'lb2',n:'Sentadilla Búlgara (Mancuernas)',s:'3×8-10',note:'Pie trasero en banco. Torso ligeramente inclinado. Rodilla no pasa el pie.',why:'Unilateral. Glúteo e isquio. Corrige desequilibrios y mayor ROM.',star:true},
+        {id:'lb3',n:'Hip Thrust con Barra',s:'4×10-12',note:'Banco al omóplato. Barbilla al pecho. Aprieta glúteo arriba.',why:'Mayor activación de glúteo mayor que cualquier otro ejercicio.',star:true},
+      ]},
+      { t:'Isquiotibiales', ex:[
+        {id:'lb4',n:'Peso Muerto Rumano (Mancuernas)',s:'3×10-12',note:'Bajada lenta. Siente el estiramiento. Caderas atrás no abajo.',why:'Isquiotibiales en posición elongada. Máxima hipertrofia.'},
+        {id:'lb5',n:'Curl Femoral Sentado (Máquina)',s:'3×12-15',note:'Posición sentado mayor stretch que tumbado. Bajada 3 seg.',why:'Isquiotibiales en posición larga. Mayor daño muscular y crecimiento.'},
+      ]},
+      { t:'Gemelos', ex:[
+        {id:'lb6',n:'Elevación de Talones De Pie (Máquina)',s:'5×10-12',note:'Bajada muy lenta 4 seg. Pausa 2 seg abajo. Rango completo.',why:'Gastrocnemio: más efectivo de pie que en prensa. Doble flexión.'},
+      ]},
+      { t:'Core', ex:[
+        {id:'lb7',n:'Plancha con Elevación Alternada',s:'3×10 c/lado',note:'Estabilidad total. Sin rotar caderas. Columna neutra.',why:'Core antirotación. Funcional y preventivo de lesiones lumbares.'},
+        {id:'lb8',n:'Elevación de Piernas Colgando',s:'3×10-15',note:'Piernas rectas si puedes. Sin balanceo. Flexión de cadera.',why:'Flexores de cadera y recto abdominal inferior. Muy difícil de aislar.'},
+      ]},
+      { t:'Cardio LISS', ex:[
+        {id:'lb9',n:'Caminata Inclinada en Cinta',s:'15 min',note:'10% · 5.5 km/h',cardio:true,why:''},
+      ]},
+    ]
+  }
+};
+ 
+const SESS_LIST = [
+  {id:'upperA',lbl:'Pecho / Espalda',type:'push'},
+  {id:'lowerA',lbl:'Cuádriceps',type:'legs'},
+  {id:'pushA', lbl:'Hombros / Tríceps',type:'push'},
+  {id:'pullA', lbl:'Espalda / Bíceps',type:'pull'},
+  {id:'upperB',lbl:'Pecho Alto / Espalda',type:'push'},
+  {id:'lowerB',lbl:'Glúteo / Isquios',type:'legs'},
+  {id:'skip',  lbl:'Descanso',type:'skip'},
+];
+ 
+const WEEK_PLAN = [
+  {day:'Lun',id:'upperA',type:'push',lbl:'Upper A'},
+  {day:'Mar',id:'lowerA',type:'legs',lbl:'Lower A'},
+  {day:'Mié',id:'pushA', type:'push',lbl:'Push A'},
+  {day:'Jue',id:'pullA', type:'pull',lbl:'Pull A'},
+  {day:'Vie',id:'upperB',type:'push',lbl:'Upper B'},
+  {day:'Sáb',id:'lowerB',type:'legs',lbl:'Lower B'},
+  {day:'Dom',id:'skip',  type:'rest',lbl:'Rest'},
+];
+ 
+// ═══════════════════════════════════════════════════════════════
+// VOLUMEN SEMANAL ÓPTIMO (Israetel et al.)
+// MEV = Mínimo Efectivo, REC = Recomendado, MRV = Máximo Recuperable
+// ═══════════════════════════════════════════════════════════════
+const VOLUME_DATA = [
+  {m:'Pecho',     mev:10,rec:16,mrv:22,plan:16,freq:2,reps:'8-12',color:'#ff6b35'},
+  {m:'Espalda',   mev:10,rec:18,mrv:25,plan:18,freq:2,reps:'6-12',color:'#3b82f6'},
+  {m:'Deltoides Lat.',mev:6,rec:16,mrv:22,plan:16,freq:2,reps:'15-20',color:'#facc15'},
+  {m:'Deltoides Post.',mev:6,rec:12,mrv:20,plan:12,freq:2,reps:'15-20',color:'#f97316'},
+  {m:'Cuádriceps',mev:8,rec:16,mrv:20,plan:16,freq:2,reps:'6-15',color:'#a855f7'},
+  {m:'Isquiotibiales',mev:6,rec:12,mrv:20,plan:12,freq:2,reps:'8-12',color:'#8b5cf6'},
+  {m:'Glúteo',    mev:6,rec:12,mrv:20,plan:12,freq:2,reps:'8-15',color:'#ec4899'},
+  {m:'Gemelos',   mev:8,rec:16,mrv:20,plan:16,freq:2,reps:'10-15',color:'#14b8a6'},
+  {m:'Bíceps',    mev:6,rec:14,mrv:20,plan:14,freq:2,reps:'8-12',color:'#22c55e'},
+  {m:'Tríceps',   mev:6,rec:14,mrv:18,plan:14,freq:2,reps:'8-15',color:'#84cc16'},
+  {m:'Trapecio',  mev:4,rec:10,mrv:16,plan:10,freq:2,reps:'10-15',color:'#64748b'},
+  {m:'Core',      mev:8,rec:16,mrv:20,plan:16,freq:2,reps:'10-20',color:'#0ea5e9'},
+];
+ 
+// ═══════════════════════════════════════════════════════════════
+// SUPLEMENTOS
+// ═══════════════════════════════════════════════════════════════
+const SUPS = [
+  {name:'Creatina monohidrato',dose:'5g · todos los días',color:'#4ade80',verdict:'✓ Esencial',vbg:'rgba(74,222,128,.15)',vc:'#4ade80',tags:['Fuerza','Dureza muscular'],why:'El suplemento más estudiado del mundo. Llena el músculo intracelularmente. Efecto visual inmediato: más duro y más lleno. Sin ciclar, sin carga.',time:'Cualquier momento, diario',p:1},
+  {name:'Whey proteína isolada',dose:'1–2 scoops · post-entreno',color:'#ff6b35',verdict:'✓ Esencial',vbg:'rgba(255,107,53,.15)',vc:'#ff6b35',tags:['Músculo','Definición'],why:'Sin proteína alta no hay definición. La isolada tiene menos calorías y lactosa. Completa tus 176–200g diarios.',time:'Post-entreno en 300ml agua',p:1},
+  {name:'Cafeína / café',dose:'150–200mg · pre-entreno',color:'#facc15',verdict:'✓ Esencial',vbg:'rgba(250,204,21,.15)',vc:'#facc15',tags:['Energía','Rendimiento'],why:'Más intensidad = más músculo preservado en déficit. Espresso doble es suficiente. No necesitas pre-entrenos caros.',time:'30–45 min antes de entrenar',p:1},
+  {name:'Ashwagandha KSM-66',dose:'300–600mg · con cena',color:'#a855f7',verdict:'✓ Muy recomendado',vbg:'rgba(168,85,247,.15)',vc:'#a855f7',tags:['Cortisol','Testosterona','Sueño'],why:'Reduce cortisol que destruye músculo y acumula grasa abdominal. Sube testosterona 10-15% en hombres. Mejora recuperación nocturna. Usa KSM-66 estandarizado.',time:'Con la cena o antes de dormir',p:2},
+  {name:'L-Citrulina malato 2:1',dose:'6–8g · pre-entreno',color:'#ff6b35',verdict:'✓ Muy recomendado',vbg:'rgba(255,107,53,.12)',vc:'#ff6b35',tags:['Bombeo','Dureza visual'],why:'Más óxido nítrico → más flujo al músculo → bombeo pronunciado. Visual inmediato: músculos más llenos y duros. Mejora recuperación entre series.',time:'30–45 min antes de entrenar',p:2},
+  {name:'Omega-3 EPA+DHA',dose:'3–4g · con comidas',color:'#3b82f6',verdict:'✓ Recomendado',vbg:'rgba(59,130,246,.15)',vc:'#3b82f6',tags:['Grasa visceral','Antiinflamatorio'],why:'Reduce grasa abdominal específicamente y mejora sensibilidad a insulina. Antiinflamatorio que acelera recuperación muscular.',time:'Con 2 comidas principales',p:2},
+  {name:'Vitamina D3 + K2',dose:'4000 UI D3 + 100mcg K2',color:'#facc15',verdict:'✓ Recomendado',vbg:'rgba(250,204,21,.12)',vc:'#facc15',tags:['Testosterona','Composición'],why:'Déficit de D3 = más grasa abdominal + testosterona baja. La K2 dirige el calcio al hueso. Tómalos siempre juntos.',time:'Con desayuno con grasa',p:2},
+  {name:'Magnesio glicinato',dose:'300–400mg · noche',color:'#7ecfff',verdict:'✓ Recomendado',vbg:'rgba(126,207,255,.12)',vc:'#7ecfff',tags:['Sueño','Recuperación'],why:'Mejor sueño = más GH nocturna = más músculo. El glicinato no da problemas digestivos. Muy infravalorado.',time:'30 min antes de dormir',p:2},
+  {name:'BCAA (ratio 2:1:1)',dose:'5g · solo si no llegas a proteína',color:'#888',verdict:'⚠ Condicional',vbg:'rgba(136,136,136,.12)',vc:'#888',tags:['Músculo'],why:'Si llegas a tus 176–200g de proteína, los BCAA no añaden nada. El whey ya los tiene. Solo útil en ayunas o días bajos de proteína.',time:'Solo si no llegas al objetivo de proteína',p:3},
+  {name:'Forskolina',dose:'No recomendada',color:'#555',verdict:'✗ No recomendado',vbg:'rgba(85,85,85,.12)',vc:'#888',tags:['Grasa'],why:'Evidencia muy débil. Puede bajar la presión arterial combinada con cafeína. Tu dinero mejor en ashwagandha o citrulina.',time:'—',p:3},
+];
+ 
+const HORARIO = [
+  {time:'Al despertar',items:[{color:'#facc15',name:'Vitamina D3 + K2',dose:'4000 UI + 100mcg con desayuno'},{color:'#3b82f6',name:'Omega-3',dose:'2g con desayuno'}]},
+  {time:'Pre-entreno',items:[{color:'#facc15',name:'Café / Cafeína',dose:'150–200mg · 30–45 min antes'},{color:'#4ade80',name:'Creatina',dose:'5g con agua'},{color:'#ff6b35',name:'L-Citrulina malato',dose:'6–8g con agua'}]},
+  {time:'Post-entreno',items:[{color:'#ff6b35',name:'Whey isolada',dose:'1–2 scoops en 300ml agua'},{color:'#3b82f6',name:'Omega-3',dose:'2g restantes con comida'}]},
+  {time:'Con la cena',items:[{color:'#a855f7',name:'Ashwagandha KSM-66',dose:'300–600mg'}]},
+  {time:'Antes de dormir',items:[{color:'#7ecfff',name:'Magnesio glicinato',dose:'300–400mg · 30 min antes'}]},
+];
+ 
+const CHK_ITEMS = [
+  {name:'Creatina monohidrato',sub:'5g · cualquier momento',badge:'Esencial',bc:'rgba(74,222,128,.2)',btc:'#4ade80'},
+  {name:'Whey isolada',sub:'1–2 scoops · post-entreno',badge:'Esencial',bc:'rgba(255,107,53,.2)',btc:'#ff6b35'},
+  {name:'Café / Cafeína',sub:'150–200mg · pre-entreno',badge:'Esencial',bc:'rgba(250,204,21,.2)',btc:'#facc15'},
+  {name:'L-Citrulina malato',sub:'6–8g · pre-entreno',badge:'Recomendado',bc:'rgba(255,107,53,.15)',btc:'#ff6b35'},
+  {name:'Ashwagandha KSM-66',sub:'300–600mg · con cena',badge:'Recomendado',bc:'rgba(168,85,247,.2)',btc:'#a855f7'},
+  {name:'Omega-3 EPA+DHA',sub:'3–4g · con comidas',badge:'Recomendado',bc:'rgba(59,130,246,.2)',btc:'#3b82f6'},
+  {name:'Vitamina D3 + K2',sub:'4000 UI + 100mcg · desayuno',badge:'Recomendado',bc:'rgba(250,204,21,.15)',btc:'#facc15'},
+  {name:'Magnesio glicinato',sub:'300–400mg · antes de dormir',badge:'Recomendado',bc:'rgba(126,207,255,.15)',btc:'#7ecfff'},
+];
+ 
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+const TC = {push:'#ff6b35',pull:'#3b82f6',legs:'#a855f7',skip:'#555',rest:'#555'};
+const MONTHS = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+const DAYS_ES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const MONTHS_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+ 
+let CP = null;
+const AD = {deivis:{}, yona:{}};
+const WD = {deivis:[], yona:[]};
+const SC = {deivis:{}, yona:{}};
+const PD = {deivis:[], yona:[]};
+const NOW = new Date();
+let VY = NOW.getFullYear(), VM = NOW.getMonth(), SK = dk(NOW);
+ 
+function dk(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function texs(sid){ if(!SESSIONS[sid])return 0; return SESSIONS[sid].sections.reduce((a,s)=>a+s.ex.length,0); }
+function gd(){ return AD[CP]; }
+function sd(d){ AD[CP]=d; }
+function gw(){ return WD[CP]; }
+function pr(){ return PROFS[CP]; }
+ 
+// ═══════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════
+function selectProfile(id){
+  CP = id;
+  const p = pr();
+  document.getElementById('s-profiles').classList.remove('active');
+  document.getElementById('s-main').classList.add('active');
+  document.getElementById('bnav').classList.add('on');
+  const tl = document.getElementById('tLogo');
+  tl.style.background = p.dim; tl.style.border = '1px solid '+p.color+'30'; tl.style.color = p.color;
+  document.getElementById('tName').style.color = p.color;
+  document.getElementById('tName').textContent = p.name;
+  goTab('plan');
+}
+ 
+function goProfiles(){
+  document.getElementById('s-main').classList.remove('active');
+  document.getElementById('s-profiles').classList.add('active');
+  document.getElementById('bnav').classList.remove('on');
+}
+ 
+function goTab(t){
+  ['plan','tracker','volumen','perfil','progreso','fotos','suplementos'].forEach(tab=>{
+    document.getElementById('tab-'+tab).classList.toggle('active', tab===t);
+    document.getElementById('nb-'+tab).classList.toggle('active', tab===t);
+  });
+  document.getElementById('tRight').textContent = t.toUpperCase();
+  if(t==='plan')        renderPlan();
+  if(t==='tracker')     { renderCal(); renderStats(); }
+  if(t==='volumen')     renderVolumen();
+  if(t==='perfil')      renderPerfil();
+  if(t==='progreso')    { renderProgreso(); renderChart(); }
+  if(t==='fotos')       renderFotos();
+  if(t==='suplementos') renderSups('stack');
+}
+ 
+// ═══════════════════════════════════════════════════════════════
+// PLAN TAB
+// ═══════════════════════════════════════════════════════════════
+function renderPlan(){
+  const p = pr(); const m = getMacros();
+  let h = `<div class="inner">
+  <div style="font-size:10px;color:${p.color};text-transform:uppercase;letter-spacing:.18em;margin-bottom:4px;">Rutina Científica 2025</div>
+  <div class="h1" style="font-size:clamp(2.5rem,9vw,5rem);margin-bottom:8px;">UPPER<br>LOWER<br><span style="color:${p.color}">SPLIT</span></div>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:4px;line-height:1.7;">
+    Sistema Upper/Lower de 6 días · Frecuencia 2× por músculo · Basado en Israetel, Schoenfeld y Helms.<br>
+    <strong style="color:var(--muted2)">★ = Ejercicio estrella — mayor ratio estímulo/fatiga.</strong>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+    <button onclick="goTab('tracker')" style="padding:7px 14px;background:${p.color};color:#0a0a0a;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.08em;cursor:pointer;">✅ Tracker</button>
+    <button onclick="goTab('volumen')" style="padding:7px 14px;background:transparent;color:${p.color};border:1px solid ${p.color}40;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.08em;cursor:pointer;">📊 Volumen semanal</button>
+    <button onclick="goTab('suplementos')" style="padding:7px 14px;background:transparent;color:${p.color};border:1px solid ${p.color}40;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.08em;cursor:pointer;">💊 Suplementos</button>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;padding:10px 13px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:14px;">
+    <div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:${p.color};line-height:1;">31.2</div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">IMC actual</div></div>
+    <div style="width:1px;background:var(--border);align-self:stretch;"></div>
+    <div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:${p.color};line-height:1;">${m?m.protein+'g':'202g'}</div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Proteína/día</div></div>
+    <div style="width:1px;background:var(--border);align-self:stretch;"></div>
+    <div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:${p.color};line-height:1;">6</div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Días/semana</div></div>
+    <div style="width:1px;background:var(--border);align-self:stretch;"></div>
+    <div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:${p.color};line-height:1;">2×</div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Frec/músculo</div></div>
+    <div style="width:1px;background:var(--border);align-self:stretch;"></div>
+    <div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:${p.color};line-height:1;">~95</div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Min/sesión</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:16px;">`;
+ 
+  WEEK_PLAN.forEach(d=>{
+    const tc = d.type==='rest'?'#555':TC[d.type];
+    h+=`<div class="wpill" style="background:${tc}10;border-color:${tc}30">
+      <div class="wpill-day">${d.day}</div>
+      <div class="wpill-type" style="color:${tc}">${d.lbl}</div>
+    </div>`;
+  });
+  h+=`</div>`;
+ 
+  // Sessions
+  Object.values(SESSIONS).forEach(sess=>{
+    const tc2 = TC[sess.type];
+    h+=`<div class="day-block">
+      <div class="day-hdr" style="background:${tc2}09;border-color:${tc2}28;">
+        <span class="day-badge" style="background:${tc2}22;color:${tc2}">${sess.emoji} ${sess.type.toUpperCase()}</span>
+        <span class="day-title">${sess.title}</span>
+        <span class="day-dur">${sess.dur}</span>
+      </div>`;
+    if(sess.focus){
+      h+=`<div style="padding:7px 13px;background:rgba(200,241,53,.04);border:1px solid var(--border);border-top:none;border-bottom:none;font-size:10px;color:var(--muted);line-height:1.5;font-style:italic;">💡 ${sess.focus}</div>`;
+    }
+    h+=`<div class="ex-table">`;
+    sess.sections.forEach(sec=>{
+      h+=`<div class="ex-section">${sec.t}</div>`;
+      sec.ex.forEach((ex,i)=>{
+        h+=`<div class="ex-row${ex.cardio?' cardio-row':''}${ex.star?' star-row':''}">
+          <span class="ex-num">${ex.cardio?'🏃':ex.star?'★':String(i+1).padStart(2,'0')}</span>
+          <div>
+            <div class="ex-name">${ex.n}</div>
+            <div class="ex-note">${ex.note}</div>
+            ${ex.why?`<div class="ex-why">▸ ${ex.why}</div>`:''}
+          </div>
+          <span class="ex-sets" style="color:${p.color}">${ex.s}</span>
+        </div>`;
+      });
+    });
+    h+=`</div></div>`;
+  });
+ 
+  if(m){
+    h+=`<div class="card" style="margin-top:4px;"><div class="card-body">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.04em;margin-bottom:4px;">NUTRICIÓN BASE</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.6;">Recomposición: déficit mínimo 150–250 kcal. Proteína alta innegociable.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+      <div class="macro-card"><div class="macro-v" style="color:${p.color}">${m.kcal}</div><div class="macro-l">Calorías</div><div class="macro-s">TDEE: ${m.tdee}</div></div>
+      <div class="macro-card"><div class="macro-v" style="color:#ff6b35">${m.protein}g</div><div class="macro-l">Proteína</div><div class="macro-s">${(m.protein/88).toFixed(1)}g/kg</div></div>
+      <div class="macro-card"><div class="macro-v" style="color:#facc15">${m.carbs}g</div><div class="macro-l">Carbos</div><div class="macro-s">Post-entreno</div></div>
+      <div class="macro-card"><div class="macro-v" style="color:#3b82f6">${m.fat}g</div><div class="macro-l">Grasas</div><div class="macro-s">Mín 0.8g/kg</div></div>
+    </div></div></div>`;
+  }
+  h+='</div>';
+  document.getElementById('tab-plan').innerHTML = h;
+}
+ 
+// ═══════════════════════════════════════════════════════════════
+// VOLUMEN TAB
+// ═══════════════════════════════════════════════════════════════
+function renderVolumen(){
+  const p = pr();
+  let h = `<div class="inner">
+  <div style="font-size:10px;color:${p.color};text-transform:uppercase;letter-spacing:.18em;margin-bottom:4px;">Ciencia del Volumen</div>
+  <div class="h1" style="font-size:2rem;margin-bottom:12px;">SERIES <span style="color:${p.color}">POR MÚSCULO</span></div>
+  <div style="font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:16px;padding:10px 13px;background:var(--card);border:1px solid var(--border);border-radius:10px;">
+    <strong style="color:var(--muted2)">MEV</strong> = Mínimo Efectivo · 
+    <strong style="color:${p.color}">REC</strong> = Tu plan actual (zona óptima) · 
+    <strong style="color:#ef4444">MRV</strong> = Máximo Recuperable<br>
+    <span style="font-size:10px;">Frecuencia 2× semanal para todos los músculos. Basado en Renaissance Periodization (Israetel 2021).</span>
+  </div>
+ 
+  <div class="vol-grid">
+    <div class="vol-hdr">Músculo</div>
+    <div class="vol-hdr">Series/sem</div>
+    <div class="vol-hdr">Reps</div>
+    <div class="vol-hdr">Freq</div>`;
+ 
+  VOLUME_DATA.forEach(v=>{
+    const pct = Math.round((v.plan/v.mrv)*100);
+    h+=`<div class="vol-bar-wrap" style="grid-column:1">
+      <span style="font-size:12px;font-weight:500;">${v.m}</span>
+    </div>
+    <div class="vol-bar-wrap" style="flex-direction:column;align-items:flex-start;gap:3px;">
+      <div style="display:flex;align-items:center;gap:6px;width:100%;">
+        <div class="vol-bar-bg" style="flex:1;">
+          <div class="vol-bar-fill" style="width:${pct}%;background:${v.color}"></div>
+        </div>
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:${p.color};white-space:nowrap;">${v.plan} series</span>
+      </div>
+      <div style="font-size:9px;color:var(--muted);">MEV ${v.mev} · MRV ${v.mrv}</div>
+    </div>
+    <div class="vol-cell mono" style="font-size:11px;color:var(--muted2)">${v.reps}</div>
+    <div class="vol-cell mono" style="font-size:11px;color:var(--muted2)">${v.freq}×/sem</div>`;
+  });
+ 
+  h+=`</div>
+ 
+  <div class="card" style="margin-top:16px;"><div class="card-body">
+    <div class="section-label">¿Por qué estas series y no más?</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.7;">
+      El cuerpo no construye músculo infinitamente con más volumen. Más allá del MRV el daño supera la recuperación y se pierde músculo en lugar de ganarlo. 
+      Este plan está en la zona de máximo estímulo para recomposición corporal en déficit calórico ligero: suficiente para crecer, no tanto que impida la recuperación.<br><br>
+      <strong style="color:var(--muted2)">Progresión:</strong> Cuando puedas hacer el límite superior de reps en todas las series, aumenta el peso. No aumentes el volumen — aumenta la carga.
+    </div>
+  </div></div>
+ 
+  <div class="card" style="margin-top:12px;"><div class="card-body">
+    <div class="section-label">Rangos de repeticiones por objetivo</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px;">
+      <div style="padding:10px;background:var(--card2);border-radius:8px;border:1px solid var(--border);text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#ff6b35;line-height:1;">1–5</div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:3px;">Fuerza máx.</div>
+        <div style="font-size:10px;color:var(--muted2);margin-top:4px;">Compuestos pesados</div>
+      </div>
+      <div style="padding:10px;background:var(--card2);border-radius:8px;border:1px solid ${p.color}40;text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:${p.color};line-height:1;">6–12</div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:3px;">Hipertrofia ★</div>
+        <div style="font-size:10px;color:var(--muted2);margin-top:4px;">Zona principal</div>
+      </div>
+      <div style="padding:10px;background:var(--card2);border-radius:8px;border:1px solid var(--border);text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#3b82f6;line-height:1;">15–30</div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:3px;">Resistencia</div>
+        <div style="font-size:10px;color:var(--muted2);margin-top:4px;">Gemelos, core</div>
+      </div>
+    </div>
+  </div></div>
+  </div>`;
+  document.getElementById('tab-volumen').innerHTML = h;
+}
+ 
+// ═══════════════════════════════════════════════════════════════
+// TRACKER TAB
+// ═══════════════════════════════════════════════════════════════
+function changeMonth(d){ VM+=d; if(VM>11){VM=0;VY++;} if(VM<0){VM=11;VY--;} renderCal(); }
+ 
+function renderCal(){
+  const p = pr(); const data = gd();
+  let h = `<div class="month-nav">
+    <button class="month-btn" onclick="changeMonth(-1)">‹</button>
+    <div class="month-label">${MONTHS[VM]} ${VY}</div>
+    <button class="month-btn" onclick="changeMonth(1)">›</button>
+  </div>
+  <div style="padding:0 14px 10px;">
+    <div class="cal-grid" style="margin-bottom:3px;">
+      <div class="cal-wd">LUN</div><div class="cal-wd">MAR</div><div class="cal-wd">MIÉ</div>
+      <div class="cal-wd">JUE</div><div class="cal-wd">VIE</div><div class="cal-wd">SÁB</div><div class="cal-wd">DOM</div>
+    </div>
+    <div class="cal-grid">`;
+ 
+  const first = new Date(VY,VM,1).getDay(), off = first===0?6:first-1;
+  const dim = new Date(VY,VM+1,0).getDate();
+  for(let i=0;i<off;i++) h+='<div class="cal-cell empty"></div>';
+  for(let d=1;d<=dim;d++){
+    const k = dk(new Date(VY,VM,d)); const dd = data[k]||{};
+    const isTod = VY===NOW.getFullYear()&&VM===NOW.getMonth()&&d===NOW.getDate();
+    const isSel = k===SK;
+    const st = dd.session&&dd.session!=='skip'?SESSIONS[dd.session]?.type:null;
+    const tot = dd.session&&dd.session!=='skip'?texs(dd.session):0;
+    const dn = Object.values(dd.checked||{}).filter(Boolean).length;
+    let cls = 'cal-cell'+(isTod?' today':'')+(isSel?' selected':'')+(dd.session==='skip'?' skipped':'');
+    let inner = `<span class="cal-num" style="${(isTod||isSel)?'color:'+p.color:''}">${d}</span>`;
+    if(st) inner+=`<div class="cal-dot" style="background:${TC[st]}"></div>`;
+    if(dd.session==='skip') inner+=`<div class="cal-dot" style="background:var(--skip)"></div>`;
+    if(dn>0) inner+=`<span class="cal-chk">${dn===tot?'✓':dn+'/'+tot}</span>`;
+    h+=`<div class="${cls}" onclick="selDay('${k}')">${inner}</div>`;
+  }
+  h+=`</div></div>`;
+  h+=renderDayPanel();
+  h+=renderStats();
+  document.getElementById('tab-tracker').innerHTML = h;
+}
+ 
+function selDay(k){ SK=k; renderCal(); }
+ 
+function setSess(sid){
+  const data=gd(); data[SK]=data[SK]||{}; data[SK].session=sid; data[SK].checked=data[SK].checked||{};
+  sd(data); renderCal();
+}
+ 
+function togEx(eid){
+  const data=gd(); data[SK]=data[SK]||{}; data[SK].checked=data[SK].checked||{};
+  data[SK].checked[eid]=!data[SK].checked[eid]; sd(data); renderCal();
+}
+ 
+function saveNote(){
+  const data=gd(); data[SK]=data[SK]||{}; data[SK].note=document.getElementById('noteTA').value; sd(data);
+  const btn=document.getElementById('sNoteBtn'); const p=pr();
+  btn.textContent='Guardado ✓'; btn.style.background='rgba(74,222,128,.3)'; btn.style.color='var(--done)';
+  setTimeout(()=>{btn.textContent='Guardar nota';btn.style.background=p.color;btn.style.color='#0a0a0a';},1500);
+}
+ 
+function renderDayPanel(){
+  const p=pr(); const data=gd(); const dd=data[SK]||{};
+  const parts=SK.split('-');
+  const sd2=new Date(+parts[0],+parts[1]-1,+parts[2]);
+  const ds=sd2.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
+  let btns=SESS_LIST.map(s=>{
+    const isA=dd.session===s.id; const c=TC[s.type]||'#555';
+    return `<button class="sess-btn" onclick="setSess('${s.id}')" style="${isA?`background:${c}18;border-color:${c};color:${c}`:''}">${s.lbl}</button>`;
+  }).join('');
+  let h=`<div class="done-banner${dd.session&&texs(dd.session)>0&&Object.values(dd.checked||{}).filter(Boolean).length===texs(dd.session)?' on':''}" id="doneBanner">
+    <span>✓</span><div><strong>SESIÓN COMPLETADA</strong> — ¡Todos los ejercicios listos!</div>
+  </div>
+  <div class="day-panel">
+    <div class="sess-selector">
+      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:5px;">Sesión del día</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.04em;margin-bottom:7px;">${ds}</div>
+      <div class="sess-btns">${btns}</div>
+    </div>`;
+ 
+  if(!dd.session){
+    h+=`<div style="padding:24px;text-align:center;"><div style="font-size:1.6rem;opacity:.35;margin-bottom:8px;">📋</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--muted);">Sin sesión asignada</div>
+    <div style="font-size:11px;color:var(--skip);margin-top:4px;">Selecciona el entrenamiento del día arriba.</div></div>`;
+  } else if(dd.session==='skip'){
+    h+=`<div style="padding:22px;text-align:center;"><div style="font-size:1.6rem;opacity:.35;margin-bottom:6px;">💤</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--skip);">DÍA DE DESCANSO</div>
+    <div style="font-size:11px;color:var(--skip);margin-top:3px;">La recuperación también es entrenamiento.</div></div>`;
+  } else if(SESSIONS[dd.session]){
+    const sess=SESSIONS[dd.session]; const chk=dd.checked||{};
+    const tot=texs(dd.session); const dn=Object.keys(chk).filter(k=>chk[k]).length;
+    const pct=tot>0?Math.round((dn/tot)*100):0;
+    h+=`<div class="prog-wrap"><div class="prog-bg"><div class="prog-fill" style="width:${pct}%;background:${p.color}"></div></div>
+    <span class="prog-txt">${dn}/${tot}</span><span class="prog-pct" style="color:${p.color}">${pct}%</span></div>`;
+    const tc2=TC[sess.type]||'#888';
+    sess.sections.forEach(sec=>{
+      h+=`<div style="display:flex;align-items:center;gap:8px;background:${tc2}10;border-bottom:1px solid ${tc2}28;padding:6px 13px;">
+        <span style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:${tc2}22;color:${tc2};">${sec.t}</span>
+      </div>`;
+      sec.ex.forEach((ex,ei)=>{
+        const done=chk[ex.id];
+        const log=dd.logs&&dd.logs[ex.id]||{};
+        const num=ex.cardio?'🏃':ex.star?'★':String(ei+1).padStart(2,'0');
+        const vol=log.kg&&log.sets&&log.reps?Math.round(log.kg*log.sets*log.reps):null;
+        h+=`<div style="border-bottom:1px solid var(--border);${ex.star?'border-left:2px solid gold;':''}${ex.cardio?'background:rgba(200,241,53,.03);':''}">
+          <div style="display:grid;grid-template-columns:18px 18px 1fr auto;gap:8px;align-items:start;padding:9px 13px;cursor:pointer;${done?'opacity:.55;':''}" onclick="togEx('${ex.id}')">
+            <div class="chkbox${done?' on':''}" style="margin-top:2px;">${done?'<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 7L9 1" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>
+            <span style="font-size:10px;color:${ex.star?'gold':'var(--muted)'};padding-top:2px;font-family:'DM Mono',monospace;">${num}</span>
+            <div>
+              <div style="font-size:12px;font-weight:500;${done?'text-decoration:line-through;color:var(--muted)':''}">${ex.n}</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px;">${ex.note}</div>
+            </div>
+            <span style="font-family:'DM Mono',monospace;font-size:10px;color:${p.color};white-space:nowrap;padding-top:2px;">${ex.s}</span>
+          </div>
+          ${!ex.cardio?`<div style="display:grid;grid-template-columns:1fr 1fr 1fr 60px;gap:6px;padding:0 13px 10px 48px;align-items:end;">
+            <div>
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Series</div>
+              <input type="number" min="1" max="20" value="${log.sets||''}" placeholder="-"
+                onchange="saveLog('${ex.id}','sets',this.value)"
+                style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
+            </div>
+            <div>
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Reps</div>
+              <input type="number" min="1" max="100" value="${log.reps||''}" placeholder="-"
+                onchange="saveLog('${ex.id}','reps',this.value)"
+                style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
+            </div>
+            <div>
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Peso (kg)</div>
+              <input type="number" min="0" max="500" step="0.5" value="${log.kg||''}" placeholder="-"
+                onchange="saveLog('${ex.id}','kg',this.value)"
+                style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Volumen</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:${p.color};">${vol?vol+'kg':'—'}</div>
+            </div>
+          </div>`:''}
+        </div>`;
+      });
+ 
+      // ── Ejercicios extra guardados en esta sección ──
+      const secKey = 'extra_'+SK+'_'+sec.t.replace(/\s+/g,'_');
+      const extras = (gd()[secKey])||[];
+      extras.forEach((ex,xi)=>{
+        const vol2=ex.kg&&ex.sets&&ex.reps?Math.round(ex.kg*ex.sets*ex.reps):null;
+        h+=`<div style="border-bottom:1px solid var(--border);border-left:2px solid ${tc2}60;background:${tc2}05;">
+          <div style="display:grid;grid-template-columns:18px 18px 1fr auto;gap:8px;align-items:start;padding:8px 13px;">
+            <div style="width:18px;height:18px;border-radius:4px;background:${tc2}25;display:flex;align-items:center;justify-content:center;margin-top:2px;">
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M4 1v6M1 4h6" stroke="${tc2}" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+            <span style="font-size:9px;color:${tc2};padding-top:3px;font-family:'DM Mono',monospace;">E${xi+1}</span>
+            <div style="font-size:12px;font-weight:500;color:var(--text);">${ex.name||'Ejercicio extra'}</div>
+            <button onclick="deleteExtra('${secKey}',${xi})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0 2px;" title="Eliminar">✕</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 60px;gap:6px;padding:0 13px 10px 48px;align-items:end;">
+            <div>
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Series</div>
+              <input type="number" min="1" max="20" value="${ex.sets||''}" placeholder="-"
+                onchange="updateExtra('${secKey}',${xi},'sets',this.value)"
+                style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
+            </div>
+            <div>
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Reps</div>
+              <input type="number" min="1" max="100" value="${ex.reps||''}" placeholder="-"
+                onchange="updateExtra('${secKey}',${xi},'reps',this.value)"
+                style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
+            </div>
+            <div>
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Peso (kg)</div>
+              <input type="number" min="0" max="500" step="0.5" value="${ex.kg||''}" placeholder="-"
+                onchange="updateExtra('${secKey}',${xi},'kg',this.value)"
+                style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Volumen</div>
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:${tc2};">${vol2?vol2+'kg':'—'}</div>
+            </div>
+          </div>
+        </div>`;
+      });
+ 
+      // ── Botón añadir ejercicio extra ──
+      h+=`<div style="padding:8px 13px;border-bottom:1px solid var(--border);">
+        <button onclick="addExtraRow('${secKey}')" style="
+          display:flex;align-items:center;gap:6px;
+          width:100%;padding:7px 12px;
+          background:${tc2}10;border:1px dashed ${tc2}40;
+          border-radius:7px;cursor:pointer;
+          color:${tc2};font-size:11px;font-weight:500;
+          font-family:'DM Sans',sans-serif;transition:all .15s;">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <path d="M6.5 1v11M1 6.5h11" stroke="${tc2}" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          Añadir ejercicio extra o alternativo
+        </button>
+      </div>`;
+    });
+ 
+    h+=`<div class="notes-wrap">
+      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;">📝 Notas</div>
+      <textarea class="notes-ta" id="noteTA" placeholder="Pesos usados, PRs, sensaciones...">${dd.note||''}</textarea>
+      <button class="note-save" id="sNoteBtn" style="background:${p.color};color:#0a0a0a;" onclick="saveNote()">Guardar nota</button>
+    </div>`;
+  }
+  h+=`</div>`;
+  return h;
+}
+ 
+function saveLog(exId, field, value){
+  const data=gd(); data[SK]=data[SK]||{};
+  data[SK].logs=data[SK].logs||{};
+  data[SK].logs[exId]=data[SK].logs[exId]||{};
+  data[SK].logs[exId][field]=parseFloat(value)||0;
+  sd(data);
+}
+ 
+function addExtraRow(secKey){
+  const name=prompt('Nombre del ejercicio:','');
+  if(!name||!name.trim())return;
+  const data=gd(); data[secKey]=data[secKey]||[];
+  data[secKey].push({name:name.trim(),sets:'',reps:'',kg:''});
+  sd(data); renderCal();
+}
+ 
+function updateExtra(secKey, idx, field, value){
+  const data=gd(); if(!data[secKey])return;
+  data[secKey][idx]=data[secKey][idx]||{};
+  data[secKey][idx][field]=field==='name'?value:parseFloat(value)||0;
+  sd(data);
+}
+ 
+function deleteExtra(secKey, idx){
+  const data=gd(); if(!data[secKey])return;
+  data[secKey].splice(idx,1); sd(data); renderCal();
+}
+ 
+function renderStats(){
+  const data=gd(); let tot=0,push=0,pull=0,legs=0;
+  Object.values(data).forEach(d=>{if(!d.session||d.session==='skip')return;const s=SESSIONS[d.session];if(!s)return;tot++;if(s.type==='push')push++;else if(s.type==='pull')pull++;else if(s.type==='legs')legs++;});
+  return `<div class="stats-grid">
+    <div class="stat-card"><div class="stat-val" style="color:var(--accent)">${tot}</div><div class="stat-lbl">Total</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--push)">${push}</div><div class="stat-lbl">Push</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--pull)">${pull}</div><div class="stat-lbl">Pull</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--legs)">${legs}</div><div class="stat-lbl">Legs</div></div>
+  </div>`;
+}
+ 
+// ═══════════════════════════════════════════════════════════════
+// PERFIL TAB
+// ═══════════════════════════════════════════════════════════════
+function renderPerfil(){
+  const p=pr(); const lw=gw().length?gw()[gw().length-1].val:p.w;
+  document.getElementById('tab-perfil').innerHTML=`<div class="inner">
+  <div class="card" style="margin-bottom:12px;"><div class="card-body" style="display:flex;align-items:center;gap:12px;">
+    <div style="width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;flex-shrink:0;background:${p.dim};color:${p.color};border:2px solid ${p.color}40">${p.init}</div>
+    <div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.06em;color:${p.color}">${p.name}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px;">${p.age} años · ${p.h}m · Géminis ♊ · Recomposición Corporal</div>
+    </div>
+  </div></div>
+  <div class="card"><div class="card-body">
+    <div class="section-label">Índice de Masa Corporal</div>
+    <div class="imc-inputs">
+      <div style="flex:1"><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px;">Peso (kg)</div>
+        <input class="imc-inp" id="imcP" type="number" step="0.1" value="${lw||''}" oninput="calcIMC()"></div>
+      <div style="flex:1"><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px;">Altura (m)</div>
+        <input class="imc-inp" id="imcH" type="number" step="0.01" value="${p.h}" oninput="calcIMC()"></div>
+    </div>
+    <div id="imcOut" style="display:none;">
+      <div class="imc-result-grid" id="imcRes"></div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-bottom:3px;"><span>Bajo</span><span>Normal</span><span>Sobre</span><span>Obeso</span></div>
+      <div class="imc-track"><div class="imc-marker" id="imcMk"></div></div>
+      <div class="imc-cat" id="imcCat"></div>
+    </div>
+  </div></div>
+  <div class="card" style="margin-top:12px;"><div class="card-body">
+    <div class="section-label">Calculadora de Macros (TDEE · Mifflin-St Jeor)</div>
+    <div class="macro-sel-grid">
+      <div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px;">Objetivo</div>
+        <select class="macro-sel" id="mGoal" onchange="calcMacros()">
+          <option value="recomp">Recomposición</option><option value="cut">Pérdida de grasa</option>
+          <option value="bulk">Ganancia muscular</option><option value="maint">Mantenimiento</option>
+        </select></div>
+      <div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px;">Actividad</div>
+        <select class="macro-sel" id="mAct" onchange="calcMacros()">
+          <option value="1.2">Sedentario</option><option value="1.375">Ligero 1-3 días</option>
+          <option value="1.55">Moderado 3-5 días</option><option value="1.725" selected>Intenso 6-7 días</option>
+        </select></div>
+    </div>
+    <div class="macro-result-grid" id="macroRes"></div>
+  </div></div></div>`;
+  calcIMC(); calcMacros();
+}
+ 
+function calcIMC(){
+  const w=parseFloat(document.getElementById('imcP')?.value);
+  const hh=parseFloat(document.getElementById('imcH')?.value);
+  const out=document.getElementById('imcOut'); if(!out)return;
+  if(!w||!hh||hh<1){out.style.display='none';return;}
+  const imc=w/(hh*hh), imin=18.5*hh*hh, imax=24.9*hh*hh, imid=(imin+imax)/2;
+  const diff=(w-imid).toFixed(1);
+  let cat,cc;
+  if(imc<18.5){cat='Bajo Peso';cc='#3b82f6';}
+  else if(imc<25){cat='✓ Peso Normal';cc='#4ade80';}
+  else if(imc<30){cat='Sobrepeso';cc='#facc15';}
+  else if(imc<35){cat='Obesidad I';cc='#ff6b35';}
+  else{cat='Obesidad II+';cc='#ef4444';}
+  const pct=Math.min(100,Math.max(0,((imc-15)/25)*100));
+  document.getElementById('imcRes').innerHTML=
+    `<div class="imc-m"><div class="imc-v" style="color:${pr().color}">${imc.toFixed(1)}</div><div class="imc-l">IMC</div></div>
+     <div class="imc-m"><div class="imc-v" style="color:#4ade80">${imin.toFixed(0)}-${imax.toFixed(0)}kg</div><div class="imc-l">Peso Ideal</div></div>
+     <div class="imc-m"><div class="imc-v" style="color:${Math.abs(diff)<3?'#4ade80':parseFloat(diff)>0?'#ff6b35':'#3b82f6'}">${(diff>0?'+':'')+diff}kg</div><div class="imc-l">Diferencia</div></div>`;
+  document.getElementById('imcMk').style.left=pct+'%';
+  const ce=document.getElementById('imcCat'); ce.textContent=cat; ce.style.color=cc;
+  out.style.display='block';
+}
+ 
+function getMacros(){
+  if(!CP)return null;
+  const p=pr();
+  const w=parseFloat(document.getElementById('imcP')?.value)||p.w||88;
+  const act=parseFloat(document.getElementById('mAct')?.value)||1.725;
+  const goal=document.getElementById('mGoal')?.value||'recomp';
+  const bmr=10*w+6.25*(p.h*100)-5*p.age+5;
+  const tdee=Math.round(bmr*act);
+  let kcal,protein,fat;
+  if(goal==='cut'){kcal=tdee-400;protein=Math.round(w*2.4);fat=Math.round(w*0.9);}
+  else if(goal==='bulk'){kcal=tdee+300;protein=Math.round(w*2.2);fat=Math.round(w*1.0);}
+  else if(goal==='maint'){kcal=tdee;protein=Math.round(w*2.0);fat=Math.round(w*0.9);}
+  else{kcal=tdee-150;protein=Math.round(w*2.3);fat=Math.round(w*0.9);}
+  const carbs=Math.max(80,Math.round((kcal-protein*4-fat*9)/4));
+  return{kcal,protein,carbs,fat,tdee,peso:w};
+}
+ 
+function calcMacros(){
+  const m=getMacros(); if(!m)return;
+  const p=pr(); const el=document.getElementById('macroRes'); if(!el)return;
+  el.innerHTML=`
+    <div class="macro-card"><div class="macro-v" style="color:${p.color}">${m.kcal}</div><div class="macro-l">Calorías</div><div class="macro-s">TDEE: ${m.tdee}</div></div>
+    <div class="macro-card"><div class="macro-v" style="color:#ff6b35">${m.protein}g</div><div class="macro-l">Proteína</div><div class="macro-s">${(m.protein/m.peso).toFixed(1)}g/kg</div></div>
+    <div class="macro-card"><div class="macro-v" style="color:#facc15">${m.carbs}g</div><div class="macro-l">Carbos</div><div class="macro-s">Post-entreno</div></div>
+    <div class="macro-card"><div class="macro-v" style="color:#3b82f6">${m.fat}g</div><div class="macro-l">Grasas</div><div class="macro-s">Mín 0.8g/kg</div></div>`;
+}
+ 
+// ═══════════════════════════════════════════════════════════════
+// PROGRESO TAB
+// ═══════════════════════════════════════════════════════════════
+function renderProgreso(){
+  const p=pr(); const wl=gw(); const data=gd();
+ 
+  // ── Streak ──
+  let streak=0;
+  for(let i=0;i<365;i++){const d2=new Date(NOW);d2.setDate(NOW.getDate()-i);const k=dk(d2);const dd=data[k];if(dd&&dd.session&&dd.session!=='skip'&&SESSIONS[dd.session])streak++;else if(i>0)break;}
+  const sub=streak===0?'Empieza a entrenar para construir tu racha.':streak<7?`${streak} días. ¡Sigue así!`:`¡${streak} días consecutivos! Brutal 🔥`;
+ 
+  // ── Peso: tendencia y proyección ──
+  const pesoInicial = wl.length>0?wl[0].val:p.w;
+  const pesoActual  = wl.length>0?wl[wl.length-1].val:p.w;
+  const perdido     = +(pesoInicial - pesoActual).toFixed(1);
+  // Velocidad de pérdida: kg/semana basado en historial o estimado
+  let kgSem = 0;
+  if(wl.length>=2){
+    const diffDias=(new Date(wl[wl.length-1].raw||NOW)-new Date(wl[0].raw||NOW))/(1000*60*60*24)||1;
+    kgSem = +((perdido/diffDias)*7).toFixed(2);
+  }
+  const kgSemEstim = kgSem>0?kgSem:0.3; // recomposición típica ~0.3kg/sem
+  // Proyección 4, 8, 12 semanas
+  const proj4  = +(pesoActual - kgSemEstim*4).toFixed(1);
+  const proj8  = +(pesoActual - kgSemEstim*8).toFixed(1);
+  const proj12 = +(pesoActual - kgSemEstim*12).toFixed(1);
+  const imcActual = +(pesoActual/(p.h*p.h)).toFixed(1);
+  const imc4  = +(proj4/(p.h*p.h)).toFixed(1);
+  const imc12 = +(proj12/(p.h*p.h)).toFixed(1);
+ 
+  // ── Historial de peso ──
+  const whist = wl.length===0
+    ? '<div style="text-align:center;color:var(--muted);font-size:11px;padding:8px">Sin registros aún. Añade tu peso de hoy.</div>'
+    : [...wl].reverse().map((w,ri)=>{
+        const i=wl.length-1-ri;
+        const diff = i>0?+(w.val-wl[i-1].val).toFixed(1):null;
+        const diffTxt = diff!==null?`<span style="font-size:10px;color:${diff<=0?'#4ade80':'#ff6b35'};margin-left:6px;">${diff>0?'+':''}${diff}kg</span>`:'';
+        return `<div class="w-entry"><span class="w-date">${w.date}</span><span class="w-val" style="color:${p.color}">${w.val} kg${diffTxt}</span><button class="w-del" onclick="delW(${i})">✕</button></div>`;
+      }).join('');
+ 
+  // ── Sesiones totales ──
+  let totSess=0;
+  Object.values(data).forEach(d=>{if(d.session&&d.session!=='skip'&&SESSIONS[d.session])totSess++;});
+ 
+  document.getElementById('tab-progreso').innerHTML=`<div class="inner">
+ 
+  <!-- RACHA -->
+  <div class="card"><div class="streak-wrap">
+    <div class="streak-num" style="color:${p.color}">${streak}</div>
+    <div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.05em;">DÍAS DE RACHA 🔥</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:3px;">${sub}</div>
+      <div style="font-size:11px;color:var(--muted2);margin-top:2px;">${totSess} sesiones completadas en total</div>
+    </div>
+  </div></div>
+ 
+  <!-- PESO Y PROYECCIÓN -->
+  <div class="card" style="margin-top:12px;"><div class="card-body">
+    <div class="section-label">Registro y Proyección de Peso</div>
+ 
+    <!-- Input -->
+    <div class="w-input-row">
+      <input class="w-inp" id="wInp" type="number" step="0.1" placeholder="Peso de hoy (kg)" onkeydown="if(event.key==='Enter')addW()">
+      <button class="w-add-btn" onclick="addW()">+ Añadir</button>
+    </div>
+ 
+    <!-- Métricas actuales -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
+      <div style="padding:10px;background:var(--card2);border-radius:8px;border:1px solid var(--border);text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;line-height:1;color:${p.color};">${pesoActual}</div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:3px;">Peso actual (kg)</div>
+      </div>
+      <div style="padding:10px;background:var(--card2);border-radius:8px;border:1px solid var(--border);text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;line-height:1;color:${perdido>0?'#4ade80':perdido<0?'#ff6b35':'var(--muted)'};">${perdido>0?'-'+perdido:perdido<0?'+'+Math.abs(perdido):'—'}</div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:3px;">kg perdidos</div>
+      </div>
+      <div style="padding:10px;background:var(--card2);border-radius:8px;border:1px solid var(--border);text-align:center;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;line-height:1;color:${imcActual<25?'#4ade80':imcActual<30?'#facc15':'#ff6b35'};">${imcActual}</div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:3px;">IMC actual</div>
+      </div>
+    </div>
+ 
+    <!-- Proyección visual -->
+    <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">
+      Proyección — ${kgSemEstim} kg/semana estimados
+      ${wl.length<2?'<span style="font-size:9px;color:var(--skip);margin-left:6px;">(añade más registros para afinar)</span>':''}
+    </div>
+ 
+    <div style="position:relative;overflow:hidden;border-radius:10px;border:1px solid var(--border);">
+      <!-- Línea de tiempo -->
+      ${[
+        {lbl:'Hoy',kg:pesoActual,imc:imcActual,sem:0,w:'25%'},
+        {lbl:'4 semanas',kg:proj4,imc:imc4,sem:4,w:'50%'},
+        {lbl:'8 semanas',kg:+(pesoActual-kgSemEstim*8).toFixed(1),imc:+((pesoActual-kgSemEstim*8)/(p.h*p.h)).toFixed(1),sem:8,w:'75%'},
+        {lbl:'12 semanas',kg:proj12,imc:imc12,sem:12,w:'100%'},
+      ].map((pt,i)=>{
+        const isToday=i===0;
+        const col=pt.imc<25?'#4ade80':pt.imc<30?'#facc15':'#ff6b35';
+        return `<div style="display:flex;align-items:center;gap:10px;padding:10px 13px;${i>0?'border-top:1px solid var(--border)':''}background:${isToday?p.color+'10':'var(--card2)'};">
+          <div style="width:6px;height:6px;border-radius:50%;background:${isToday?p.color:col};flex-shrink:0;"></div>
+          <div style="flex:1;">
+            <div style="font-size:11px;font-weight:500;color:${isToday?p.color:'var(--text)'};">${pt.lbl}</div>
+            ${!isToday?`<div style="font-size:10px;color:var(--muted);">-${(pesoActual-pt.kg).toFixed(1)} kg de grasa estimada</div>`:'<div style="font-size:10px;color:var(--muted);">Punto de partida</div>'}
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:${isToday?p.color:col};">${pt.kg} kg</div>
+            <div style="font-size:9px;color:var(--muted);">IMC ${pt.imc}</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+ 
+    <div style="font-size:10px;color:var(--skip);margin-top:8px;line-height:1.5;padding:8px 10px;background:var(--card2);border-radius:7px;">
+      ⚠️ Proyección estimada basada en déficit calórico moderado + entrenamiento 6 días/semana. La recomposición puede ser más lenta si el déficit es pequeño, pero preserva más músculo. Añade tu peso cada semana para ajustar la proyección.
+    </div>
+ 
+    <!-- Historial -->
+    <div style="margin-top:12px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Historial</div>
+    <div style="max-height:150px;overflow-y:auto;">${whist}</div>
+  </div></div>
+ 
+  <!-- GRÁFICA MINIATURA DE PESO -->
+  ${wl.length>=2?`<div class="card" style="margin-top:12px;"><div class="card-body">
+    <div class="section-label">Evolución del peso</div>
+    <div id="weightChart" style="height:80px;display:flex;align-items:flex-end;gap:3px;padding-bottom:18px;position:relative;"></div>
+  </div></div>`:''}
+ 
+  <!-- SESIONES POR SEMANA -->
+  <div class="card" style="margin-top:12px;"><div class="card-body">
+    <div class="section-label">Sesiones por semana</div>
+    <div class="chart-area" id="chWrap"></div>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#ff6b35"></div>Push/Upper</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>Pull</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#a855f7"></div>Lower/Legs</div>
+    </div>
+  </div></div>
+ 
+  </div>`;
+ 
+  // Render weight mini chart
+  if(wl.length>=2){
+    setTimeout(()=>{
+      const wc=document.getElementById('weightChart'); if(!wc)return;
+      const vals=wl.map(w=>w.val);
+      const mn=Math.min(...vals)-1, mx2=Math.max(...vals)+1;
+      const H=62;
+      vals.forEach((v,i)=>{
+        const h2=Math.round(((v-mn)/(mx2-mn))*H);
+        const col=i===vals.length-1?pr().color:'#3b82f6';
+        const bar=document.createElement('div');
+        bar.style.cssText=`flex:1;height:${h2}px;background:${col};border-radius:2px 2px 0 0;position:relative;`;
+        const lbl=document.createElement('div');
+        lbl.style.cssText='position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:8px;color:var(--muted);white-space:nowrap;';
+        lbl.textContent=v+'kg';
+        bar.appendChild(lbl);
+        wc.appendChild(bar);
+      });
+    },50);
+  }
+}
+ 
+function addW(){
+  const v=parseFloat(document.getElementById('wInp').value);
+  if(!v||v<30||v>300)return;
+  const now2=new Date();
+  const d=now2.toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'});
+  gw().push({date:d,val:v,raw:now2.toISOString()});
+  renderProgreso();renderChart();
+}
+function delW(i){gw().splice(i,1);renderProgreso();renderChart();}
+ 
+function renderChart(){
+  const data=gd(); const wrap=document.getElementById('chWrap'); if(!wrap)return;
+  wrap.innerHTML='';
+  const weeks=[];
+  for(let w=7;w>=0;w--){
+    const ws=new Date(NOW); ws.setDate(NOW.getDate()-NOW.getDay()-w*7+1);
+    let push=0,pull=0,legs=0;
+    for(let d2=0;d2<7;d2++){const dd2=new Date(ws);dd2.setDate(ws.getDate()+d2);const k=dk(dd2);const kd=data[k];if(!kd?.session||kd.session==='skip')continue;const t=SESSIONS[kd.session]?.type;if(t==='push')push++;else if(t==='pull')pull++;else if(t==='legs')legs++;}
+    weeks.push({lbl:`${ws.getDate()}/${ws.getMonth()+1}`,push,pull,legs});
+  }
+  const mx=Math.max(2,...weeks.flatMap(w=>[w.push,w.pull,w.legs]));
+  const H=115;
+  weeks.forEach(w=>{
+    const col=document.createElement('div'); col.className='chart-col';
+    const bars=document.createElement('div'); bars.className='chart-bars';
+    [[w.push,'#ff6b35'],[w.pull,'#3b82f6'],[w.legs,'#a855f7']].forEach(([v,c])=>{
+      const b=document.createElement('div'); b.className='chart-bar';
+      b.style.background=c; b.style.height=(v>0?Math.round((v/mx)*H):0)+'px';
+      bars.appendChild(b);
+    });
+    const lbl=document.createElement('div'); lbl.className='chart-label'; lbl.textContent=w.lbl;
+    col.appendChild(bars); col.appendChild(lbl); wrap.appendChild(col);
+  });
+}
+ 
+// ═══════════════════════════════════════════════════════════════
+// FOTOS TAB
+// ═══════════════════════════════════════════════════════════════
+function renderFotos(){
+  const p = pr();
+  const photos = PD[CP] || [];
+  const ANGLES = ['Frente','Lateral','Espalda'];
+ 
+  // Group by week label
+  const byWeek = {};
+  photos.forEach(ph=>{
+    const wk = ph.week||'Sin semana';
+    if(!byWeek[wk]) byWeek[wk]=[];
+    byWeek[wk].push(ph);
+  });
+  const weeks = Object.keys(byWeek).sort().reverse();
+ 
+  const emptyState = `
+    <div style="padding:40px 20px;text-align:center;opacity:.5;">
+      <div style="font-size:3rem;margin-bottom:12px;">📸</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--muted);margin-bottom:6px;">Sin fotos aún</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6;">Toca el botón de abajo para añadir<br>tu primera foto de progreso.</div>
+    </div>`;
+ 
+  let weekHtml = weeks.length===0 ? emptyState : weeks.map(wk=>{
+    const wPhotos = byWeek[wk];
+    const wPeso = wPhotos[0]?.peso||'';
+    return `<div style="margin-bottom:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.05em;color:${p.color};">${wk}</div>
+          ${wPeso?`<div style="font-size:11px;color:var(--muted);">${wPeso} kg registrados</div>`:''}
+        </div>
+        <button onclick="deleteWeek('${wk}')" style="background:none;border:1px solid var(--border2);border-radius:6px;color:var(--muted);cursor:pointer;font-size:10px;padding:3px 8px;">Eliminar</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+        ${ANGLES.map(angle=>{
+          const ph = wPhotos.find(p=>p.angle===angle);
+          return `<div style="border-radius:8px;overflow:hidden;border:1px solid var(--border);background:var(--card2);aspect-ratio:.75;position:relative;cursor:pointer;"
+            onclick="${ph?`viewPhoto('${wk}','${angle}')`:`addPhoto('${wk}','${angle}')`}">
+            ${ph
+              ? `<img src="${ph.src}" style="width:100%;height:100%;object-fit:cover;" />`
+              : `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:4px;">
+                  <div style="font-size:1.4rem;opacity:.3;">+</div>
+                  <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">${angle}</div>
+                </div>`
+            }
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:4px 6px;background:rgba(0,0,0,.6);font-size:9px;color:#fff;text-align:center;">${angle}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }).join('');
+ 
+  // Lightbox HTML
+  const lightbox = `
+    <div id="photoLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:1000;flex-direction:column;align-items:center;justify-content:center;padding:20px;">
+      <button onclick="closeLightbox()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;">✕</button>
+      <img id="lightboxImg" src="" style="max-width:100%;max-height:80vh;border-radius:10px;object-fit:contain;" />
+      <div id="lightboxLabel" style="color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.08em;margin-top:12px;"></div>
+    </div>`;
+ 
+  document.getElementById('tab-fotos').innerHTML = `
+  ${lightbox}
+  <div class="inner">
+    <div style="font-size:10px;color:${p.color};text-transform:uppercase;letter-spacing:.18em;margin-bottom:4px;">Transformación Visual</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;line-height:1;letter-spacing:.04em;margin-bottom:4px;">FOTOS <span style="color:${p.color}">📸</span></div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px;">
+      Frente · Lateral · Espalda cada 4 semanas. La foto no miente — es el mejor indicador de recomposición.
+    </div>
+ 
+    <!-- Consejo de foto -->
+    <div style="padding:10px 13px;background:rgba(200,241,53,.06);border:1px solid rgba(200,241,53,.2);border-radius:9px;margin-bottom:16px;font-size:11px;color:var(--muted2);line-height:1.6;">
+      💡 <strong style="color:${p.color}">Consejo:</strong> Misma hora (mañana), misma luz, mismo fondo, ropa interior o shorts. Así la comparación es honesta.
+    </div>
+ 
+    <!-- Botón nueva semana -->
+    <button onclick="startNewWeek()" style="
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      width:100%;padding:12px;margin-bottom:20px;
+      background:${p.color};color:#0a0a0a;border:none;border-radius:10px;
+      font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.08em;cursor:pointer;">
+      📸 Nueva semana de fotos
+    </button>
+ 
+    <!-- Comparador si hay 2+ semanas -->
+    ${weeks.length>=2?`<div style="margin-bottom:20px;">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;">Comparador antes / después</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        ${['Antes ('+weeks[weeks.length-1]+')','Después ('+weeks[0]+')'].map((lbl,li)=>{
+          const wk2 = li===0?weeks[weeks.length-1]:weeks[0];
+          const ph2 = (byWeek[wk2]||[]).find(p=>p.angle==='Frente');
+          return `<div style="border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--card2);">
+            ${ph2?`<img src="${ph2.src}" style="width:100%;aspect-ratio:.75;object-fit:cover;" />`
+                 :`<div style="aspect-ratio:.75;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);">Sin foto de frente</div>`}
+            <div style="padding:6px 8px;font-size:10px;color:${li===0?'var(--muted)':p.color};font-weight:500;">${lbl}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`:''}
+ 
+    <!-- Listado por semanas -->
+    ${weekHtml}
+  </div>`;
+}
+ 
+function startNewWeek(){
+  const p=pr();
+  const wl=WD[CP];
+  const peso=wl.length>0?wl[wl.length-1].val:'';
+  const photos=PD[CP]||[];
+  const weekNum = Math.floor(photos.length/3)+1;
+  const today2=new Date();
+  const label=`Semana ${weekNum} — ${today2.toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'})}`;
+  // Just pick photos for this week
+  addPhoto(label,'Frente');
+}
+ 
+function addPhoto(week, angle){
+  const input=document.createElement('input');
+  input.type='file'; input.accept='image/*'; input.capture='camera';
+  input.onchange=e=>{
+    const file=e.target.files[0]; if(!file)return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      if(!PD[CP])PD[CP]=[];
+      // Remove existing photo for same week+angle
+      const idx=PD[CP].findIndex(p=>p.week===week&&p.angle===angle);
+      const wl=WD[CP];
+      const peso=wl.length>0?wl[wl.length-1].val:'';
+      const entry={week,angle,src:ev.target.result,date:new Date().toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}),peso};
+      if(idx>=0)PD[CP][idx]=entry; else PD[CP].push(entry);
+      renderFotos();
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+ 
+function viewPhoto(week, angle){
+  const photos=PD[CP]||[];
+  const ph=photos.find(p=>p.week===week&&p.angle===angle);
+  if(!ph)return;
+  const lb=document.getElementById('photoLightbox');
+  document.getElementById('lightboxImg').src=ph.src;
+  document.getElementById('lightboxLabel').textContent=`${week} · ${angle}`;
+  lb.style.display='flex';
+}
+ 
+function closeLightbox(){
+  const lb=document.getElementById('photoLightbox');
+  if(lb)lb.style.display='none';
+}
+ 
+function deleteWeek(week){
+  if(!confirm('¿Eliminar todas las fotos de '+week+'?'))return;
+  PD[CP]=(PD[CP]||[]).filter(p=>p.week!==week);
+  renderFotos();
+}
+ 
+// ═══════════════════════════════════════════════════════════════
+// SUPLEMENTOS TAB
+// ═══════════════════════════════════════════════════════════════
+function renderSups(view){
+  const p=pr();
+  const today2=new Date();
+  const ds=`${DAYS_ES[today2.getDay()]} ${today2.getDate()} de ${MONTHS_ES[today2.getMonth()]}`;
+  let h=`<div class="inner">
+  <div style="font-size:10px;color:${p.color};text-transform:uppercase;letter-spacing:.18em;margin-bottom:4px;">Stack de Suplementos</div>
+  <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;line-height:1;letter-spacing:.04em;margin-bottom:14px;">SUPLEMENTOS <span style="color:${p.color}">💊</span></div>
+  <div class="sup-tabs">
+    <button class="sup-tab${view==='stack'?' active':''}" onclick="renderSups('stack')">Stack completo</button>
+    <button class="sup-tab${view==='horario'?' active':''}" onclick="renderSups('horario')">Horario diario</button>
+    <button class="sup-tab${view==='checklist'?' active':''}" onclick="renderSups('checklist')">Checklist</button>
+  </div>`;
+ 
+  if(view==='stack'){
+    h+=`<div class="section-label">Prioridad alta — impacto real y probado</div>`;
+    SUPS.filter(s=>s.p===1).forEach(s=>h+=supCard(s));
+    h+=`<div class="section-label" style="margin-top:14px;">Prioridad media — optimizadores con evidencia</div>`;
+    SUPS.filter(s=>s.p===2).forEach(s=>h+=supCard(s));
+    h+=`<div class="section-label" style="margin-top:14px;">Evidencia débil o condicional</div>`;
+    SUPS.filter(s=>s.p===3).forEach(s=>h+=supCard(s));
+  }
+ 
+  if(view==='horario'){
+    h+=`<div class="card"><div style="overflow:hidden;">`;
+    HORARIO.forEach((row,ri)=>{
+      h+=`<div class="tl-row" style="${ri===HORARIO.length-1?'border:none':''}">
+        <div class="tl-time">${row.time}</div>
+        <div class="tl-items">`;
+      row.items.forEach(item=>{
+        h+=`<div class="tl-item"><div class="tl-dot" style="background:${item.color}"></div><span class="tl-name">${item.name}</span><span class="tl-dose">${item.dose}</span></div>`;
+      });
+      h+=`</div></div>`;
+    });
+    h+=`</div></div>
+    <div class="card" style="margin-top:12px;"><div class="card-body">
+      <div class="section-label">Días de descanso</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.7;">
+        Creatina, vitaminas y omega-3 se toman igual todos los días.<br>
+        Sin cafeína ni citrulina si no entrenas.<br>
+        Ashwagandha y magnesio de noche como siempre.
+      </div>
+    </div></div>`;
+  }
+ 
+  if(view==='checklist'){
+    const sc=SC[CP]||{};
+    const total=CHK_ITEMS.length;
+    const done=CHK_ITEMS.filter((_,i)=>sc[i]).length;
+    const pct=Math.round((done/total)*100);
+    h+=`<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">${ds}</div>
+    <div class="prog-bar-row">
+      <div class="prog-bar-bg"><div class="prog-bar-fill" style="width:${pct}%"></div></div>
+      <span class="prog-bar-lbl">${done} / ${total}</span>
+    </div>`;
+    if(done===total&&total>0){h+=`<div style="padding:9px 12px;background:rgba(74,222,128,.12);border-radius:8px;font-size:12px;color:#4ade80;font-weight:600;text-align:center;margin-bottom:10px;">Stack completo del día ✓</div>`;}
+    CHK_ITEMS.forEach((item,i)=>{
+      const checked=sc[i];
+      h+=`<div class="chk-item" onclick="toggleSup(${i})">
+        <div class="chk-box${checked?' on':''}">${checked?'<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 7L9 1" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>
+        <div style="flex:1;"><div class="chk-name" style="${checked?'text-decoration:line-through;color:var(--muted)':''}">${item.name}</div><div class="chk-sub">${item.sub}</div></div>
+        <span class="chk-badge" style="background:${item.bc};color:${item.btc}">${item.badge}</span>
+      </div>`;
+    });
+  }
+  h+='</div>';
+  document.getElementById('tab-suplementos').innerHTML=h;
+}
+ 
+function supCard(s){
+  const tags=s.tags.map(t=>`<span class="sup-tag" style="background:${s.color}20;color:${s.color}">${t}</span>`).join('');
+  return `<div class="sup-card">
+    <div class="sup-accent" style="background:${s.color}"></div>
+    <div class="sup-inner">
+      <div style="position:absolute;top:10px;right:10px;"><span class="sup-verdict" style="background:${s.vbg};color:${s.vc}">${s.verdict}</span></div>
+      <div class="sup-name">${s.name}</div>
+      <div class="sup-dose">${s.dose}</div>
+      <div style="margin-bottom:7px;">${tags}</div>
+      <div class="sup-why" style="border-color:${s.color}">${s.why}</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;">🕐 ${s.time}</div>
+    </div>
+  </div>`;
+}
+ 
+function toggleSup(i){
+  if(!SC[CP])SC[CP]={};
+  SC[CP][i]=!SC[CP][i];
+  renderSups('checklist');
+}
+</script>
+</body>
+</html>
