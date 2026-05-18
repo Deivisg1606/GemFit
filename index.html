@@ -335,6 +335,7 @@ body{
     <div id="tab-perfil"      class="tab"></div>
     <div id="tab-progreso"    class="tab"></div>
     <div id="tab-fotos" class="tab"></div>
+    <div id="tab-calorias" class="tab"></div>
     <div id="tab-suplementos" class="tab"></div>
   </div>
  
@@ -344,6 +345,7 @@ body{
     <button class="nbtn"        id="nb-volumen"     onclick="goTab('volumen')">    <span class="nbtn-icon">📊</span>Volumen</button>
     <button class="nbtn"        id="nb-perfil"      onclick="goTab('perfil')">     <span class="nbtn-icon">👤</span>Perfil</button>
     <button class="nbtn"        id="nb-progreso"    onclick="goTab('progreso')">   <span class="nbtn-icon">📈</span>Progreso</button>
+    <button class="nbtn" id="nb-calorias" onclick="goTab('calorias')"><span class="nbtn-icon">🍎</span>Calorías</button>
     <button class="nbtn" id="nb-fotos" onclick="goTab('fotos')"><span class="nbtn-icon">📸</span>Fotos</button>
     <button class="nbtn" id="nb-suplementos" onclick="goTab('suplementos')"><span class="nbtn-icon">💊</span>Suplem.</button>
   </nav>
@@ -598,6 +600,7 @@ const AD = {deivis:{}, yona:{}};
 const WD = {deivis:[], yona:[]};
 const SC = {deivis:{}, yona:{}};
 const PD = {deivis:[], yona:[]};
+const CALS = {deivis:{}, yona:{}};
 const NOW = new Date();
 let VY = NOW.getFullYear(), VM = NOW.getMonth(), SK = dk(NOW);
  
@@ -631,9 +634,11 @@ function goProfiles(){
 }
  
 function goTab(t){
-  ['plan','tracker','volumen','perfil','progreso','fotos','suplementos'].forEach(tab=>{
-    document.getElementById('tab-'+tab).classList.toggle('active', tab===t);
-    document.getElementById('nb-'+tab).classList.toggle('active', tab===t);
+  ['plan','tracker','volumen','perfil','progreso','fotos','calorias','suplementos'].forEach(tab=>{
+    const tabEl=document.getElementById('tab-'+tab);
+    const nbEl=document.getElementById('nb-'+tab);
+    if(tabEl) tabEl.classList.toggle('active', tab===t);
+    if(nbEl)  nbEl.classList.toggle('active', tab===t);
   });
   document.getElementById('tRight').textContent = t.toUpperCase();
   if(t==='plan')        renderPlan();
@@ -642,6 +647,7 @@ function goTab(t){
   if(t==='perfil')      renderPerfil();
   if(t==='progreso')    { renderProgreso(); renderChart(); }
   if(t==='fotos')       renderFotos();
+  if(t==='calorias')    renderCalorias();
   if(t==='suplementos') renderSups('stack');
 }
  
@@ -905,8 +911,12 @@ function renderDayPanel(){
       sec.ex.forEach((ex,ei)=>{
         const done=chk[ex.id];
         const log=dd.logs&&dd.logs[ex.id]||{};
+        const last=getLastPerf(ex.id);
         const num=ex.cardio?'🏃':ex.star?'★':String(ei+1).padStart(2,'0');
         const vol=log.kg&&log.sets&&log.reps?Math.round(log.kg*log.sets*log.reps):null;
+        const lastTxt=last&&(last.kg||last.sets||last.reps)
+          ?`Última: ${last.sets||'?'}×${last.reps||'?'} · ${last.kg||'?'}kg${last.date?' ('+last.date+')':''}`
+          :'';
         h+=`<div style="border-bottom:1px solid var(--border);${ex.star?'border-left:2px solid gold;':''}${ex.cardio?'background:rgba(200,241,53,.03);':''}">
           <div style="display:grid;grid-template-columns:18px 18px 1fr auto;gap:8px;align-items:start;padding:9px 13px;cursor:pointer;${done?'opacity:.55;':''}" onclick="togEx('${ex.id}')">
             <div class="chkbox${done?' on':''}" style="margin-top:2px;">${done?'<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 7L9 1" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>
@@ -914,31 +924,33 @@ function renderDayPanel(){
             <div>
               <div style="font-size:12px;font-weight:500;${done?'text-decoration:line-through;color:var(--muted)':''}">${ex.n}</div>
               <div style="font-size:10px;color:var(--muted);margin-top:2px;">${ex.note}</div>
+              ${lastTxt?`<div style="font-size:10px;color:${p.color}40;margin-top:3px;font-family:'DM Mono',monospace;">↩ ${lastTxt}</div>`:''}
             </div>
             <span style="font-family:'DM Mono',monospace;font-size:10px;color:${p.color};white-space:nowrap;padding-top:2px;">${ex.s}</span>
           </div>
           ${!ex.cardio?`<div style="display:grid;grid-template-columns:1fr 1fr 1fr 60px;gap:6px;padding:0 13px 10px 48px;align-items:end;">
             <div>
-              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Series</div>
-              <input type="number" min="1" max="20" value="${log.sets||''}" placeholder="-"
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Series ${last&&last.sets?'<span style=\"color:var(--muted);font-weight:400;\">·'+last.sets+'</span>':''}</div>
+              <input type="number" min="1" max="20" value="${log.sets||''}" placeholder="${last&&last.sets?last.sets:'-'}"
                 onchange="saveLog('${ex.id}','sets',this.value)"
                 style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
             </div>
             <div>
-              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Reps</div>
-              <input type="number" min="1" max="100" value="${log.reps||''}" placeholder="-"
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Reps ${last&&last.reps?'<span style=\"color:var(--muted);font-weight:400;\">·'+last.reps+'</span>':''}</div>
+              <input type="number" min="1" max="100" value="${log.reps||''}" placeholder="${last&&last.reps?last.reps:'-'}"
                 onchange="saveLog('${ex.id}','reps',this.value)"
                 style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
             </div>
             <div>
-              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Peso (kg)</div>
-              <input type="number" min="0" max="500" step="0.5" value="${log.kg||''}" placeholder="-"
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Peso kg ${last&&last.kg?'<span style=\"color:'+p.color+'40;font-weight:400;\">·'+last.kg+'</span>':''}</div>
+              <input type="number" min="0" max="500" step="0.5" value="${log.kg||''}" placeholder="${last&&last.kg?last.kg:'-'}"
                 onchange="saveLog('${ex.id}','kg',this.value)"
-                style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
+                style="width:100%;background:var(--card2);border:1px solid ${log.kg&&last&&last.kg&&log.kg>last.kg?'#4ade80':log.kg&&last&&last.kg&&log.kg<last.kg?'#ff6b35':'var(--border2)'};border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
             </div>
             <div style="text-align:center;">
               <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Volumen</div>
               <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:${p.color};">${vol?vol+'kg':'—'}</div>
+              ${last&&last.kg&&log.kg?`<div style="font-size:9px;color:${log.kg>last.kg?'#4ade80':log.kg<last.kg?'#ff6b35':'var(--muted)'};">${log.kg>last.kg?'▲ PR':log.kg<last.kg?'▼':'='}</div>`:''}
             </div>
           </div>`:''}
         </div>`;
@@ -1017,7 +1029,32 @@ function saveLog(exId, field, value){
   data[SK].logs=data[SK].logs||{};
   data[SK].logs[exId]=data[SK].logs[exId]||{};
   data[SK].logs[exId][field]=parseFloat(value)||0;
+  // Save as best known performance for this exercise across all days
+  if(!data._lastPerf) data._lastPerf={};
+  const log=data[SK].logs[exId];
+  if(log.kg||log.sets||log.reps){
+    const prev=data._lastPerf[exId];
+    // Update if heavier or first entry
+    if(!prev||(log.kg&&log.kg>=(prev.kg||0))){
+      data._lastPerf[exId]={sets:log.sets,reps:log.reps,kg:log.kg,date:SK};
+    }
+  }
   sd(data);
+}
+ 
+function getLastPerf(exId){
+  const data=gd();
+  if(!data._lastPerf||!data._lastPerf[exId]) return null;
+  const lp=data._lastPerf[exId];
+  if(lp.date===SK) {
+    // Find a previous day entry
+    const keys=Object.keys(data).filter(k=>/^\d{4}-/.test(k)&&k!==SK&&data[k]&&data[k].logs&&data[k].logs[exId]&&data[k].logs[exId].kg);
+    if(!keys.length) return null;
+    keys.sort(); keys.reverse();
+    const prev=data[keys[0]].logs[exId];
+    return prev.kg||prev.sets||prev.reps?{...prev,date:keys[0]}:null;
+  }
+  return lp;
 }
  
 function addExtraRow(secKey){
@@ -1503,6 +1540,357 @@ function deleteWeek(week){
   if(!confirm('¿Eliminar todas las fotos de '+week+'?'))return;
   PD[CP]=(PD[CP]||[]).filter(p=>p.week!==week);
   renderFotos();
+}
+ 
+ 
+// ═══════════════════════════════════════════════════════════════
+// CALORÍAS TAB
+// ═══════════════════════════════════════════════════════════════
+const FOOD_DB = [
+  // ☕ Bebidas
+  {n:'Café solo (1 taza)',kcal:2,p:0.3,c:0,f:0},
+  {n:'Café con leche (200ml)',kcal:60,p:3.5,c:5,f:2.5},
+  {n:'Café americano (1 taza)',kcal:2,p:0.3,c:0,f:0},
+  {n:'Café con leche desnatada',kcal:40,p:3.5,c:5,f:0.2},
+  {n:'Cappuccino (200ml)',kcal:74,p:4,c:7,f:3},
+  {n:'Café con azúcar (1 sobrecito)',kcal:22,p:0,c:5.5,f:0},
+  {n:'Leche entera (200ml)',kcal:122,p:6.4,c:9.6,f:6.4},
+  {n:'Leche desnatada (200ml)',kcal:70,p:7,c:10,f:0.2},
+  {n:'Leche semidesnatada (200ml)',kcal:92,p:6.8,c:9.4,f:3.2},
+  {n:'Zumo de naranja natural (200ml)',kcal:88,p:1.4,c:20,f:0.4},
+  {n:'Zumo de manzana (200ml)',kcal:94,p:0.2,c:23,f:0.2},
+  {n:'Batido de proteínas (400ml)',kcal:180,p:30,c:8,f:3},
+  {n:'Té verde (1 taza)',kcal:2,p:0,c:0.4,f:0},
+  {n:'Té negro con leche',kcal:30,p:1.5,c:3.5,f:1},
+  {n:'Agua (500ml)',kcal:0,p:0,c:0,f:0},
+  {n:'Refresco cola (330ml)',kcal:139,p:0,c:35,f:0},
+  {n:'Cerveza (330ml)',kcal:145,p:1.1,c:11,f:0},
+  // 🥩 Proteínas
+  {n:'Pechuga de pollo (100g)',kcal:165,p:31,c:0,f:3.6},
+  {n:'Muslo de pollo (100g)',kcal:209,p:26,c:0,f:11},
+  {n:'Pollo a la plancha (150g)',kcal:248,p:46,c:0,f:5.4},
+  {n:'Atún en lata (100g)',kcal:116,p:26,c:0,f:1},
+  {n:'Sardinas en lata (100g)',kcal:208,p:25,c:0,f:12},
+  {n:'Salmón (100g)',kcal:208,p:20,c:0,f:13},
+  {n:'Merluza (100g)',kcal:82,p:17,c:0,f:1.2},
+  {n:'Bacalao (100g)',kcal:82,p:18,c:0,f:0.7},
+  {n:'Carne de ternera magra (100g)',kcal:158,p:26,c:0,f:5.4},
+  {n:'Carne picada (100g)',kcal:254,p:17,c:0,f:20},
+  {n:'Filete de cerdo (100g)',kcal:143,p:22,c:0,f:6},
+  {n:'Jamón serrano (30g)',kcal:75,p:8,c:0,f:4.5},
+  {n:'Jamón de york (30g)',kcal:33,p:5,c:0.6,f:1},
+  {n:'Pavo en lonchas (30g)',kcal:32,p:6,c:0.3,f:0.6},
+  {n:'Huevo entero (1 ud)',kcal:78,p:6,c:0.6,f:5},
+  {n:'Claras de huevo (100g)',kcal:52,p:11,c:0.7,f:0.2},
+  {n:'Tortilla francesa (2 huevos)',kcal:190,p:14,c:1,f:14},
+  {n:'Gambas (100g)',kcal:99,p:24,c:0,f:0.3},
+  {n:'Tofu (100g)',kcal:76,p:8,c:2,f:4},
+  {n:'Tempeh (100g)',kcal:193,p:19,c:9,f:11},
+  {n:'Whey isolada (1 scoop 30g)',kcal:110,p:25,c:2,f:1},
+  {n:'Requesón (100g)',kcal:98,p:11,c:3.4,f:4.3},
+  // 🍚 Carbohidratos y cereales
+  {n:'Arroz blanco cocido (100g)',kcal:130,p:2.7,c:28,f:0.3},
+  {n:'Arroz integral cocido (100g)',kcal:112,p:2.3,c:24,f:0.8},
+  {n:'Avena (100g seca)',kcal:389,p:17,c:66,f:7},
+  {n:'Avena cocida (150g)',kcal:83,p:3,c:14,f:1.7},
+  {n:'Pasta cocida (100g)',kcal:131,p:5,c:25,f:1.1},
+  {n:'Pasta integral cocida (100g)',kcal:124,p:5,c:26,f:1},
+  {n:'Pan blanco (1 rebanada 30g)',kcal:80,p:2.7,c:15,f:0.9},
+  {n:'Pan integral (1 rebanada 30g)',kcal:74,p:3,c:13,f:1},
+  {n:'Pan de centeno (1 rebanada)',kcal:65,p:2.3,c:13,f:0.5},
+  {n:'Tostada con aceite (1 ud)',kcal:130,p:2.5,c:15,f:7},
+  {n:'Patata cocida (100g)',kcal:87,p:1.9,c:20,f:0.1},
+  {n:'Patata asada (150g)',kcal:131,p:2.9,c:30,f:0.2},
+  {n:'Boniato (100g)',kcal:86,p:1.6,c:20,f:0.1},
+  {n:'Lentejas cocidas (100g)',kcal:116,p:9,c:20,f:0.4},
+  {n:'Garbanzos cocidos (100g)',kcal:164,p:8.9,c:27,f:2.6},
+  {n:'Alubias negras cocidas (100g)',kcal:132,p:8.9,c:24,f:0.5},
+  {n:'Quinoa cocida (100g)',kcal:120,p:4.4,c:22,f:1.9},
+  {n:'Cereales muesli (50g)',kcal:185,p:4.5,c:34,f:3.5},
+  {n:'Galletas integrales (3 ud)',kcal:120,p:2,c:20,f:4},
+  // 🍎 Frutas
+  {n:'Plátano mediano',kcal:89,p:1.1,c:23,f:0.3},
+  {n:'Manzana mediana',kcal:52,p:0.3,c:14,f:0.2},
+  {n:'Naranja mediana',kcal:47,p:0.9,c:12,f:0.1},
+  {n:'Fresa (100g)',kcal:32,p:0.7,c:7.7,f:0.3},
+  {n:'Uvas (100g)',kcal:69,p:0.7,c:18,f:0.2},
+  {n:'Sandía (100g)',kcal:30,p:0.6,c:7.6,f:0.2},
+  {n:'Piña (100g)',kcal:50,p:0.5,c:13,f:0.1},
+  {n:'Mango (100g)',kcal:60,p:0.8,c:15,f:0.4},
+  {n:'Kiwi (1 ud)',kcal:42,p:0.8,c:10,f:0.4},
+  {n:'Pera mediana',kcal:57,p:0.4,c:15,f:0.1},
+  {n:'Melocotón (1 ud)',kcal:39,p:0.9,c:10,f:0.3},
+  // 🥗 Verduras
+  {n:'Brócoli (100g)',kcal:34,p:2.8,c:7,f:0.4},
+  {n:'Espinacas (100g)',kcal:23,p:2.9,c:3.6,f:0.4},
+  {n:'Ensalada mixta (100g)',kcal:15,p:1,c:2.5,f:0.2},
+  {n:'Tomate (1 mediano)',kcal:22,p:1,c:4.8,f:0.2},
+  {n:'Pepino (100g)',kcal:16,p:0.7,c:3.6,f:0.1},
+  {n:'Zanahoria (100g)',kcal:41,p:0.9,c:10,f:0.2},
+  {n:'Pimiento rojo (100g)',kcal:31,p:1,c:6,f:0.3},
+  {n:'Cebolla (100g)',kcal:40,p:1.1,c:9.3,f:0.1},
+  {n:'Ajo (1 diente)',kcal:5,p:0.2,c:1,f:0},
+  {n:'Calabacín (100g)',kcal:17,p:1.2,c:3.1,f:0.3},
+  {n:'Berenjena (100g)',kcal:25,p:1,c:6,f:0.2},
+  {n:'Champiñones (100g)',kcal:22,p:3.1,c:3.3,f:0.3},
+  // 🥑 Grasas saludables
+  {n:'Aguacate (100g)',kcal:160,p:2,c:9,f:15},
+  {n:'Aguacate (1/2 ud)',kcal:120,p:1.5,c:6.5,f:11},
+  {n:'Aceite de oliva (1 cucharada)',kcal:119,p:0,c:0,f:14},
+  {n:'Almendras (30g)',kcal:174,p:6,c:6,f:15},
+  {n:'Nueces (30g)',kcal:196,p:4.6,c:4,f:19},
+  {n:'Anacardos (30g)',kcal:163,p:5,c:9,f:13},
+  {n:'Mantequilla cacahuete (1 cucharada)',kcal:94,p:4,c:3,f:8},
+  {n:'Semillas de chía (1 cucharada)',kcal:58,p:2,c:5,f:3.7},
+  {n:'Aceite de coco (1 cucharada)',kcal:121,p:0,c:0,f:14},
+  // 🧀 Lácteos
+  {n:'Yogur griego 0% (100g)',kcal:57,p:10,c:4,f:0.2},
+  {n:'Yogur natural (125g)',kcal:77,p:4.4,c:7,f:3},
+  {n:'Queso fresco (100g)',kcal:99,p:12,c:2,f:5},
+  {n:'Queso manchego (30g)',kcal:119,p:8,c:0.3,f:9.8},
+  {n:'Queso mozzarella (30g)',kcal:80,p:5.5,c:0.6,f:6},
+  {n:'Queso cottage (100g)',kcal:98,p:11,c:3.4,f:4.3},
+  // 🍽️ Platos preparados
+  {n:'Ensalada de pollo (300g)',kcal:350,p:35,c:15,f:15},
+  {n:'Tortilla española (100g)',kcal:185,p:8,c:14,f:11},
+  {n:'Paella (200g)',kcal:280,p:14,c:42,f:7},
+  {n:'Gazpacho (200ml)',kcal:60,p:1.5,c:8,f:2.5},
+  {n:'Sopa de verduras (250ml)',kcal:75,p:3,c:12,f:1.5},
+  {n:'Caldo de pollo (250ml)',kcal:40,p:5,c:2,f:1},
+  {n:'Sandwich de pavo (1 ud)',kcal:280,p:20,c:30,f:8},
+  {n:'Bocadillo de jamón serrano',kcal:380,p:22,c:45,f:12},
+  // 🍫 Snacks y extras
+  {n:'Chocolate negro 70% (30g)',kcal:170,p:2.5,c:13,f:12},
+  {n:'Barrita proteínas (1 ud)',kcal:200,p:20,c:20,f:5},
+  {n:'Frutos secos mixtos (30g)',kcal:185,p:5,c:7,f:16},
+  {n:'Palomitas sin sal (30g)',kcal:110,p:3,c:22,f:1.5},
+  {n:'Aceitunas (10 ud)',kcal:50,p:0.4,c:1.2,f:5},
+  {n:'Hummus (50g)',kcal:100,p:4,c:8,f:6},
+  {n:'Ketchup (1 cucharada)',kcal:15,p:0.2,c:3.8,f:0},
+  {n:'Mayonesa (1 cucharada)',kcal:94,p:0.1,c:0.1,f:10},
+  {n:'Salsa de soja (1 cucharada)',kcal:9,p:1.3,c:0.8,f:0.1},
+  {n:'Miel (1 cucharada)',kcal:64,p:0.1,c:17,f:0},
+  {n:'Azúcar (1 cucharadita)',kcal:20,p:0,c:5,f:0},
+];
+ 
+function gcals(){ return CALS[CP]||(CALS[CP]={}); }
+function getTodayLog(){
+  const c=gcals(); if(!c[SK])c[SK]={meals:[],water:0}; return c[SK];
+}
+ 
+function renderCalorias(){
+  const p=pr(); const m=getMacros();
+  const log=getTodayLog();
+  const meals=log.meals||[];
+  const water=log.water||0;
+ 
+  const totKcal=meals.reduce((a,x)=>a+(x.kcal||0),0);
+  const totP=meals.reduce((a,x)=>a+(x.p||0),0);
+  const totC=meals.reduce((a,x)=>a+(x.c||0),0);
+  const totF=meals.reduce((a,x)=>a+(x.f||0),0);
+ 
+  const goalKcal=m?m.kcal:2500;
+  const goalP=m?m.protein:180;
+  const goalC=m?m.carbs:250;
+  const goalF=m?m.fat:80;
+ 
+  const pctKcal=Math.min(100,Math.round((totKcal/goalKcal)*100));
+  const pctP=Math.min(100,Math.round((totP/goalP)*100));
+  const pctC=Math.min(100,Math.round((totC/goalC)*100));
+  const pctF=Math.min(100,Math.round((totF/goalF)*100));
+ 
+  const today2=new Date();
+  const ds=`${DAYS_ES[today2.getDay()]} ${today2.getDate()} de ${MONTHS_ES[today2.getMonth()]}`;
+ 
+  // Group meals by type
+  const MEAL_TYPES=['Desayuno','Media mañana','Almuerzo','Merienda','Cena','Extra'];
+  const byType={};
+  MEAL_TYPES.forEach(t=>byType[t]=[]);
+  meals.forEach((m2,i)=>{ const t=m2.meal||'Extra'; if(!byType[t])byType[t]=[]; byType[t].push({...m2,_i:i}); });
+ 
+  let mealsHtml='';
+  MEAL_TYPES.forEach(type=>{
+    const items=byType[type];
+    const typeKcal=items.reduce((a,x)=>a+(x.kcal||0),0);
+    mealsHtml+=`<div style="margin-bottom:12px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <div style="font-size:11px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;">${type}</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          ${typeKcal>0?`<span style="font-family:'DM Mono',monospace;font-size:11px;color:${p.color};">${typeKcal} kcal</span>`:''}
+          <button onclick="openFoodSearch('${type}')" style="padding:3px 9px;background:${p.color}18;border:1px solid ${p.color}40;border-radius:6px;color:${p.color};font-size:10px;cursor:pointer;font-weight:600;">+ Añadir</button>
+        </div>
+      </div>
+      ${items.length===0?`<div style="font-size:11px;color:var(--muted);padding:6px 0;">Sin alimentos registrados</div>`
+        :items.map(item=>`
+        <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--card2);border-radius:8px;border:1px solid var(--border);margin-bottom:4px;">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.name}</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:1px;">P:${item.p||0}g · C:${item.c||0}g · G:${item.f||0}g</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:${p.color};">${item.kcal} kcal</div>
+            <button onclick="removeMeal(${item._i})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:11px;">✕</button>
+          </div>
+        </div>`).join('')
+      }
+    </div>`;
+  });
+ 
+  document.getElementById('tab-calorias').innerHTML=`
+  <!-- Food search modal -->
+  <div id="foodModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;flex-direction:column;padding:20px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <button onclick="closeFoodModal()" style="background:none;border:none;color:var(--muted);font-size:1.3rem;cursor:pointer;">✕</button>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.06em;" id="modalTitle">Añadir alimento</div>
+    </div>
+    <input id="foodSearch" type="text" placeholder="Buscar alimento o escribir nombre..."
+      oninput="filterFoods()"
+      style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-size:14px;padding:10px 14px;margin-bottom:12px;outline:none;">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;">
+      <div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Kcal</div>
+        <input id="customKcal" type="number" placeholder="0" style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:6px 8px;outline:none;">
+      </div>
+      <div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Proteína g</div>
+        <input id="customP" type="number" placeholder="0" style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:6px 8px;outline:none;">
+      </div>
+      <div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Carbos g</div>
+        <input id="customC" type="number" placeholder="0" style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:6px 8px;outline:none;">
+      </div>
+    </div>
+    <div id="foodList" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:5px;"></div>
+  </div>
+ 
+  <div class="inner">
+    <div style="font-size:10px;color:${p.color};text-transform:uppercase;letter-spacing:.18em;margin-bottom:4px;">Nutrición Diaria</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;line-height:1;letter-spacing:.04em;margin-bottom:2px;">CALORÍAS <span style="color:${p.color}">🍎</span></div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">${ds}</div>
+ 
+    <!-- Calorías ring -->
+    <div style="padding:16px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div style="position:relative;width:80px;height:80px;flex-shrink:0;">
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="32" fill="none" stroke="var(--border)" stroke-width="8"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="${p.color}" stroke-width="8"
+              stroke-dasharray="${2*Math.PI*32}" stroke-dashoffset="${2*Math.PI*32*(1-pctKcal/100)}"
+              stroke-linecap="round" transform="rotate(-90 40 40)" style="transition:stroke-dashoffset .5s;"/>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;line-height:1;color:${p.color};">${pctKcal}%</div>
+          </div>
+        </div>
+        <div style="flex:1;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:${p.color};line-height:1;">${totKcal}</div>
+          <div style="font-size:11px;color:var(--muted);">de ${goalKcal} kcal objetivo</div>
+          <div style="font-size:11px;color:${goalKcal-totKcal>0?'var(--muted2)':'#ff6b35'};margin-top:3px;">
+            ${goalKcal-totKcal>0?`Quedan ${goalKcal-totKcal} kcal`:`Superado en ${totKcal-goalKcal} kcal`}
+          </div>
+        </div>
+      </div>
+ 
+      <!-- Macro bars -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px;">
+        ${[['Proteína',totP,goalP,'#ff6b35'],['Carbos',totC,goalC,'#facc15'],['Grasas',totF,goalF,'#3b82f6']].map(([lbl,val,goal2,col])=>`
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;">${lbl}</span>
+            <span style="font-family:'DM Mono',monospace;font-size:10px;color:${col};">${val}g</span>
+          </div>
+          <div style="height:5px;background:var(--border);border-radius:99px;overflow:hidden;">
+            <div style="height:100%;background:${col};border-radius:99px;width:${Math.min(100,Math.round((val/goal2)*100))}%;transition:width .4s;"></div>
+          </div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px;">/${goal2}g</div>
+        </div>`).join('')}
+      </div>
+    </div>
+ 
+    <!-- Agua -->
+    <div style="padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;display:flex;align-items:center;gap:12px;">
+      <div style="font-size:1.5rem;">💧</div>
+      <div style="flex:1;">
+        <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">Agua</div>
+        <div style="display:flex;gap:5px;align-items:center;">
+          ${[1,2,3,4,5,6,7,8].map(i=>`
+          <div onclick="setWater(${i})" style="width:26px;height:26px;border-radius:50%;border:1.5px solid ${water>=i?'#3b82f6':'var(--border2)'};background:${water>=i?'rgba(59,130,246,.2)':'var(--card2)'};cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;color:${water>=i?'#3b82f6':'var(--muted)'};">
+            ${i}
+          </div>`).join('')}
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:#3b82f6;">${water}</div>
+        <div style="font-size:9px;color:var(--muted);">vasos · ${water*250}ml</div>
+      </div>
+    </div>
+ 
+    <!-- Comidas -->
+    <div style="padding:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.05em;margin-bottom:14px;">REGISTRO DEL DÍA</div>
+      ${mealsHtml}
+    </div>
+ 
+  </div>`;
+}
+ 
+let _currentMealType='Extra';
+function openFoodSearch(mealType){
+  _currentMealType=mealType;
+  document.getElementById('modalTitle').textContent='Añadir a '+mealType;
+  document.getElementById('foodSearch').value='';
+  document.getElementById('customKcal').value='';
+  document.getElementById('customP').value='';
+  document.getElementById('customC').value='';
+  filterFoods();
+  document.getElementById('foodModal').style.display='flex';
+}
+function closeFoodModal(){
+  document.getElementById('foodModal').style.display='none';
+}
+function filterFoods(){
+  const q=(document.getElementById('foodSearch').value||'').toLowerCase();
+  const list=document.getElementById('foodList');
+  const p2=pr();
+  const filtered=q?FOOD_DB.filter(f=>f.n.toLowerCase().includes(q)):FOOD_DB;
+  list.innerHTML=filtered.slice(0,20).map(f=>`
+    <div onclick="addFoodItem('${f.n}',${f.kcal},${f.p},${f.c},${f.f})"
+      style="padding:9px 12px;background:var(--card2);border-radius:8px;border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:12px;font-weight:500;">${f.n}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px;">P:${f.p}g · C:${f.c}g · G:${f.f}g</div>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:${p2.color};flex-shrink:0;margin-left:10px;">${f.kcal}</div>
+    </div>`).join('');
+ 
+  // Custom add button
+  const name=document.getElementById('foodSearch').value;
+  const kcal=parseFloat(document.getElementById('customKcal').value)||0;
+  if(name&&kcal){
+    list.innerHTML+=`<div onclick="addCustomFood()"
+      style="padding:9px 12px;background:rgba(200,241,53,.08);border-radius:8px;border:1px dashed rgba(200,241,53,.3);cursor:pointer;text-align:center;margin-top:4px;">
+      <div style="font-size:12px;color:#c8f135;font-weight:500;">+ Añadir "${name}" · ${kcal} kcal</div>
+    </div>`;
+  }
+}
+function addFoodItem(name,kcal,p2,c,f){
+  const log=getTodayLog();
+  log.meals.push({name,kcal,p:p2,c,f,meal:_currentMealType});
+  closeFoodModal(); renderCalorias();
+}
+function addCustomFood(){
+  const name=document.getElementById('foodSearch').value||'Alimento personalizado';
+  const kcal=parseFloat(document.getElementById('customKcal').value)||0;
+  const p2=parseFloat(document.getElementById('customP').value)||0;
+  const c=parseFloat(document.getElementById('customC').value)||0;
+  const f=0;
+  addFoodItem(name,kcal,p2,c,f);
+}
+function removeMeal(idx){
+  const log=getTodayLog(); log.meals.splice(idx,1); renderCalorias();
+}
+function setWater(n){
+  const log=getTodayLog(); log.water=n; renderCalorias();
 }
  
 // ═══════════════════════════════════════════════════════════════
