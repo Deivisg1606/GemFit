@@ -4,6 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GemFit ♊ — Deivis & Yona</title>
+
+<!-- Sin caché — siempre carga la versión más reciente -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+
+<!-- iOS Web App -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GemFit">
+<meta name="theme-color" content="#0a0a0a">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -20,11 +31,11 @@ body{
   height:100%;overflow:hidden;
   display:flex;flex-direction:column;
 }
- 
+
 /* ── SCREENS ── */
 .screen{display:none;flex-direction:column;height:100%;overflow:hidden;}
 .screen.active{display:flex;}
- 
+
 /* ── PROFILE SCREEN ── */
 #s-profiles{align-items:center;justify-content:center;padding:24px;gap:24px;overflow-y:auto;}
 .gem-logo-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;}
@@ -41,7 +52,7 @@ body{
 .pname{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.08em;margin-bottom:6px;}
 .pmeta{font-size:11px;color:var(--muted2);line-height:1.8;}
 .imc-chip{display:inline-block;margin-top:6px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;}
- 
+
 /* ── TOPBAR ── */
 .topbar{
   display:flex;align-items:center;gap:10px;padding:10px 14px;
@@ -52,7 +63,7 @@ body{
   justify-content:center;cursor:pointer;font-size:14px;border:1px solid;flex-shrink:0;}
 .tname{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.08em;flex:1;}
 .tright{font-size:10px;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;}
- 
+
 /* ── MAIN CONTENT AREA ── */
 .main-area{flex:1;overflow:hidden;position:relative;}
 .tab{
@@ -65,7 +76,7 @@ body{
 .tab::-webkit-scrollbar{width:3px;}
 .tab::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 .inner{padding:14px 14px 80px;max-width:900px;margin:0 auto;}
- 
+
 /* ── BOTTOM NAV ── */
 .bnav{
   flex-shrink:0;
@@ -79,7 +90,7 @@ body{
 .nbtn.active{color:var(--accent);}
 .nbtn-icon{font-size:16px;line-height:1;transition:transform .2s;}
 .nbtn.active .nbtn-icon{transform:translateY(-2px);}
- 
+
 /* ── SHARED ── */
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;}
 .card-body{padding:14px 16px;}
@@ -87,7 +98,7 @@ body{
 .h1{font-family:'Bebas Neue',sans-serif;letter-spacing:.02em;line-height:.9;}
 .mono{font-family:'DM Mono',monospace;}
 .bebas{font-family:'Bebas Neue',sans-serif;}
- 
+
 /* ── PLAN TAB ── */
 .week-pills{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:16px;}
 .wpill{padding:6px 2px;border-radius:8px;text-align:center;border:1px solid var(--border);}
@@ -111,7 +122,7 @@ body{
 .ex-note{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.4;}
 .ex-why{font-size:10px;color:#c8f135;margin-top:2px;font-style:italic;}
 .ex-sets{font-family:'DM Mono',monospace;font-size:10px;white-space:nowrap;padding-top:2px;}
- 
+
 /* ── VOLUME TABLE ── */
 .vol-grid{display:grid;grid-template-columns:1fr auto auto auto;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
 .vol-hdr{background:rgba(255,255,255,.04);padding:7px 10px;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid var(--border);}
@@ -122,7 +133,7 @@ body{
 .vol-bar-wrap:nth-last-child(-n+4){border-bottom:none;}
 .vol-bar-bg{flex:1;height:4px;background:var(--border);border-radius:99px;overflow:hidden;}
 .vol-bar-fill{height:100%;border-radius:99px;}
- 
+
 /* ── TRACKER TAB ── */
 .month-nav{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;}
 .month-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);
@@ -182,7 +193,7 @@ body{
   background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.3);
   font-size:12px;color:var(--done);display:none;align-items:center;gap:8px;}
 .done-banner.on{display:flex;}
- 
+
 /* ── PERFIL TAB ── */
 .imc-inputs{display:flex;gap:8px;margin-bottom:12px;}
 .imc-inp{flex:1;background:var(--card2);border:1px solid var(--border2);border-radius:8px;
@@ -209,7 +220,7 @@ body{
 .macro-v{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;line-height:1;}
 .macro-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px;}
 .macro-s{font-size:10px;color:var(--muted);margin-top:2px;}
- 
+
 /* ── PROGRESO TAB ── */
 .streak-wrap{display:flex;align-items:center;gap:14px;padding:13px 15px;}
 .streak-num{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;line-height:1;}
@@ -232,7 +243,7 @@ body{
 .chart-legend{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;}
 .legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);}
 .legend-dot{width:7px;height:7px;border-radius:50%;}
- 
+
 /* ── SUPLEMENTOS TAB ── */
 .sup-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
 .sup-tab{padding:5px 12px;border-radius:7px;border:1px solid var(--border2);
@@ -271,7 +282,7 @@ body{
 </style>
 </head>
 <body>
- 
+
 <!-- ═══════════════ PROFILE SCREEN ═══════════════ -->
 <div id="s-profiles" class="screen active">
   <div class="gem-logo-wrap">
@@ -303,13 +314,21 @@ body{
   </div>
   <div class="prof-cards">
     <div class="pcard" style="--pc:rgba(200,241,53,.4)" onclick="selectProfile('deivis')">
-      <div class="pav" style="background:rgba(200,241,53,.12);color:#c8f135;border:2px solid rgba(200,241,53,.3)">D</div>
+      <div class="pav" id="pav-deivis" onclick="changeAvatar('deivis')" style="background:rgba(200,241,53,.12);color:#c8f135;border:2px solid rgba(200,241,53,.3);cursor:pointer;overflow:hidden;position:relative;" title="Toca para cambiar foto">
+              <span id="pav-txt-deivis">D</span>
+              <img id="pav-img-deivis" src="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%;">
+              <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.45);font-size:8px;color:#fff;text-align:center;padding:2px 0;letter-spacing:.05em;">EDITAR</div>
+            </div>
       <div class="pname" style="color:#c8f135">DEIVIS</div>
       <div class="pmeta">33 años · 1.68m · 88kg<br>Géminis ♊</div>
       <div class="imc-chip" style="background:rgba(255,107,53,.2);color:#ff6b35;">IMC 31.2 · Sobrepeso</div>
     </div>
     <div class="pcard" style="--pc:rgba(126,207,255,.4)" onclick="selectProfile('yona')">
-      <div class="pav" style="background:rgba(126,207,255,.12);color:#7ecfff;border:2px solid rgba(126,207,255,.3)">Y</div>
+      <div class="pav" id="pav-yona" onclick="changeAvatar('yona')" style="background:rgba(126,207,255,.12);color:#7ecfff;border:2px solid rgba(126,207,255,.3);cursor:pointer;overflow:hidden;position:relative;" title="Toca para cambiar foto">
+              <span id="pav-txt-yona">Y</span>
+              <img id="pav-img-yona" src="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%;">
+              <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.45);font-size:8px;color:#fff;text-align:center;padding:2px 0;letter-spacing:.05em;">EDITAR</div>
+            </div>
       <div class="pname" style="color:#7ecfff">YONA</div>
       <div class="pmeta">29 años · 1.68m · 88kg<br>Géminis ♊</div>
       <div class="imc-chip" style="background:rgba(255,107,53,.2);color:#ff6b35;">IMC 31.2 · Sobrepeso</div>
@@ -319,7 +338,7 @@ body{
     Ambos con el mismo punto de partida. La diferencia estará en la consistencia.
   </div>
 </div>
- 
+
 <!-- ═══════════════ MAIN APP ═══════════════ -->
 <div id="s-main" class="screen">
   <div class="topbar">
@@ -327,7 +346,7 @@ body{
     <div class="tname" id="tName">GEMFIT</div>
     <div class="tright" id="tRight">PLAN</div>
   </div>
- 
+
   <div class="main-area">
     <div id="tab-plan"        class="tab active"></div>
     <div id="tab-tracker"     class="tab"></div>
@@ -338,7 +357,7 @@ body{
     <div id="tab-calorias" class="tab"></div>
     <div id="tab-suplementos" class="tab"></div>
   </div>
- 
+
   <nav class="bnav" id="bnav">
     <button class="nbtn active" id="nb-plan"        onclick="goTab('plan')">       <span class="nbtn-icon">📋</span>Plan</button>
     <button class="nbtn"        id="nb-tracker"     onclick="goTab('tracker')">    <span class="nbtn-icon">✅</span>Tracker</button>
@@ -350,10 +369,10 @@ body{
     <button class="nbtn" id="nb-suplementos" onclick="goTab('suplementos')"><span class="nbtn-icon">💊</span>Suplem.</button>
   </nav>
 </div>
- 
+
 <script>
 'use strict';
- 
+
 // ═══════════════════════════════════════════════════════════════
 // PROFILES
 // ═══════════════════════════════════════════════════════════════
@@ -361,7 +380,7 @@ const PROFS = {
   deivis: { name:'DEIVIS', age:33, h:1.68, w:88, color:'#c8f135', dim:'rgba(200,241,53,.12)', init:'D' },
   yona:   { name:'YONA',   age:29, h:1.68, w:88, color:'#7ecfff', dim:'rgba(126,207,255,.12)', init:'Y' }
 };
- 
+
 // ═══════════════════════════════════════════════════════════════
 // RUTINA — Basada en evidencia (Israetel, Schoenfeld, Helms)
 // 6 días Upper/Lower/Push/Pull — frecuencia 2x por músculo
@@ -390,7 +409,7 @@ const SESSIONS = {
       ]},
     ]
   },
- 
+
   lowerA: {
     id:'lowerA', lbl:'Lower A', type:'legs', emoji:'🦵',
     title:'MARTES — Lower A · Cuádriceps Dominante',
@@ -415,7 +434,7 @@ const SESSIONS = {
       ]},
     ]
   },
- 
+
   pushA: {
     id:'pushA', lbl:'Push A', type:'push', emoji:'🔴',
     title:'MIÉRCOLES — Push A · Hombros y Tríceps',
@@ -436,7 +455,7 @@ const SESSIONS = {
       ]},
     ]
   },
- 
+
   pullA: {
     id:'pullA', lbl:'Pull A', type:'pull', emoji:'🔵',
     title:'JUEVES — Pull A · Espalda Amplitud + Bíceps',
@@ -460,7 +479,7 @@ const SESSIONS = {
       ]},
     ]
   },
- 
+
   upperB: {
     id:'upperB', lbl:'Upper B', type:'push', emoji:'💪',
     title:'VIERNES — Upper B · Hipertrofia Pecho Alto + Espalda',
@@ -484,7 +503,7 @@ const SESSIONS = {
       ]},
     ]
   },
- 
+
   lowerB: {
     id:'lowerB', lbl:'Lower B', type:'legs', emoji:'🦵',
     title:'SÁBADO — Lower B · Cadena Posterior Dominante',
@@ -512,7 +531,7 @@ const SESSIONS = {
     ]
   }
 };
- 
+
 const SESS_LIST = [
   {id:'upperA',lbl:'Pecho / Espalda',type:'push'},
   {id:'lowerA',lbl:'Cuádriceps',type:'legs'},
@@ -522,7 +541,7 @@ const SESS_LIST = [
   {id:'lowerB',lbl:'Glúteo / Isquios',type:'legs'},
   {id:'skip',  lbl:'Descanso',type:'skip'},
 ];
- 
+
 const WEEK_PLAN = [
   {day:'Lun',id:'upperA',type:'push',lbl:'Upper A'},
   {day:'Mar',id:'lowerA',type:'legs',lbl:'Lower A'},
@@ -532,7 +551,7 @@ const WEEK_PLAN = [
   {day:'Sáb',id:'lowerB',type:'legs',lbl:'Lower B'},
   {day:'Dom',id:'skip',  type:'rest',lbl:'Rest'},
 ];
- 
+
 // ═══════════════════════════════════════════════════════════════
 // VOLUMEN SEMANAL ÓPTIMO (Israetel et al.)
 // MEV = Mínimo Efectivo, REC = Recomendado, MRV = Máximo Recuperable
@@ -551,7 +570,7 @@ const VOLUME_DATA = [
   {m:'Trapecio',  mev:4,rec:10,mrv:16,plan:10,freq:2,reps:'10-15',color:'#64748b'},
   {m:'Core',      mev:8,rec:16,mrv:20,plan:16,freq:2,reps:'10-20',color:'#0ea5e9'},
 ];
- 
+
 // ═══════════════════════════════════════════════════════════════
 // SUPLEMENTOS
 // ═══════════════════════════════════════════════════════════════
@@ -567,7 +586,7 @@ const SUPS = [
   {name:'BCAA (ratio 2:1:1)',dose:'5g · solo si no llegas a proteína',color:'#888',verdict:'⚠ Condicional',vbg:'rgba(136,136,136,.12)',vc:'#888',tags:['Músculo'],why:'Si llegas a tus 176–200g de proteína, los BCAA no añaden nada. El whey ya los tiene. Solo útil en ayunas o días bajos de proteína.',time:'Solo si no llegas al objetivo de proteína',p:3},
   {name:'Forskolina',dose:'No recomendada',color:'#555',verdict:'✗ No recomendado',vbg:'rgba(85,85,85,.12)',vc:'#888',tags:['Grasa'],why:'Evidencia muy débil. Puede bajar la presión arterial combinada con cafeína. Tu dinero mejor en ashwagandha o citrulina.',time:'—',p:3},
 ];
- 
+
 const HORARIO = [
   {time:'Al despertar',items:[{color:'#facc15',name:'Vitamina D3 + K2',dose:'4000 UI + 100mcg con desayuno'},{color:'#3b82f6',name:'Omega-3',dose:'2g con desayuno'}]},
   {time:'Pre-entreno',items:[{color:'#facc15',name:'Café / Cafeína',dose:'150–200mg · 30–45 min antes'},{color:'#4ade80',name:'Creatina',dose:'5g con agua'},{color:'#ff6b35',name:'L-Citrulina malato',dose:'6–8g con agua'}]},
@@ -575,7 +594,7 @@ const HORARIO = [
   {time:'Con la cena',items:[{color:'#a855f7',name:'Ashwagandha KSM-66',dose:'300–600mg'}]},
   {time:'Antes de dormir',items:[{color:'#7ecfff',name:'Magnesio glicinato',dose:'300–400mg · 30 min antes'}]},
 ];
- 
+
 const CHK_ITEMS = [
   {name:'Creatina monohidrato',sub:'5g · cualquier momento',badge:'Esencial',bc:'rgba(74,222,128,.2)',btc:'#4ade80'},
   {name:'Whey isolada',sub:'1–2 scoops · post-entreno',badge:'Esencial',bc:'rgba(255,107,53,.2)',btc:'#ff6b35'},
@@ -586,7 +605,7 @@ const CHK_ITEMS = [
   {name:'Vitamina D3 + K2',sub:'4000 UI + 100mcg · desayuno',badge:'Recomendado',bc:'rgba(250,204,21,.15)',btc:'#facc15'},
   {name:'Magnesio glicinato',sub:'300–400mg · antes de dormir',badge:'Recomendado',bc:'rgba(126,207,255,.15)',btc:'#7ecfff'},
 ];
- 
+
 // ═══════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════
@@ -594,23 +613,97 @@ const TC = {push:'#ff6b35',pull:'#3b82f6',legs:'#a855f7',skip:'#555',rest:'#555'
 const MONTHS = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
 const DAYS_ES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const MONTHS_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
- 
+
 let CP = null;
 const AD = {deivis:{}, yona:{}};
 const WD = {deivis:[], yona:[]};
 const SC = {deivis:{}, yona:{}};
 const PD = {deivis:[], yona:[]};
 const CALS = {deivis:{}, yona:{}};
+const AVATARS = {deivis:null, yona:null};
 const NOW = new Date();
 let VY = NOW.getFullYear(), VM = NOW.getMonth(), SK = dk(NOW);
- 
+
 function dk(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function texs(sid){ if(!SESSIONS[sid])return 0; return SESSIONS[sid].sections.reduce((a,s)=>a+s.ex.length,0); }
 function gd(){ return AD[CP]; }
 function sd(d){ AD[CP]=d; }
 function gw(){ return WD[CP]; }
 function pr(){ return PROFS[CP]; }
- 
+
+
+// ═══════════════════════════════════════════════════════════════
+// AVATAR MANAGEMENT
+// ═══════════════════════════════════════════════════════════════
+function changeAvatar(profileId){
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.onchange = e => {
+    const file = e.target.files[0]; if(!file) return;
+    // Compress image to max 200x200 to keep it light
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const size = 200;
+        canvas.width = size; canvas.height = size;
+        const ctx = canvas.getContext('2d');
+        // Crop to square center
+        const min = Math.min(img.width, img.height);
+        const sx = (img.width - min)/2, sy = (img.height - min)/2;
+        ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+        AVATARS[profileId] = dataUrl;
+        updateProfileAvatars();
+        updateTopbarAvatar();
+        // If we're on perfil tab, re-render to show new avatar
+        if(document.getElementById('tab-perfil').classList.contains('active')){
+          renderPerfil();
+        }
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+function updateProfileAvatars(){
+  ['deivis','yona'].forEach(id => {
+    const img = document.getElementById('pav-img-'+id);
+    const txt = document.getElementById('pav-txt-'+id);
+    if(!img || !txt) return;
+    if(AVATARS[id]){
+      img.src = AVATARS[id];
+      img.style.display = 'block';
+      txt.style.display = 'none';
+    } else {
+      img.style.display = 'none';
+      txt.style.display = 'block';
+    }
+  });
+}
+
+function updateTopbarAvatar(){
+  if(!CP) return;
+  const p = pr();
+  const tl = document.getElementById('tLogo');
+  if(!tl) return;
+  if(AVATARS[CP]){
+    tl.style.backgroundImage = 'url('+AVATARS[CP]+')';
+    tl.style.backgroundSize = 'cover';
+    tl.style.backgroundPosition = 'center';
+    tl.textContent = '';
+  } else {
+    tl.style.backgroundImage = 'none';
+    tl.style.backgroundSize = '';
+    tl.style.backgroundPosition = '';
+    tl.textContent = '♊';
+  }
+}
+
 // ═══════════════════════════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════════════════════════
@@ -624,15 +717,16 @@ function selectProfile(id){
   tl.style.background = p.dim; tl.style.border = '1px solid '+p.color+'30'; tl.style.color = p.color;
   document.getElementById('tName').style.color = p.color;
   document.getElementById('tName').textContent = p.name;
+  updateTopbarAvatar();
   goTab('plan');
 }
- 
+
 function goProfiles(){
   document.getElementById('s-main').classList.remove('active');
   document.getElementById('s-profiles').classList.add('active');
   document.getElementById('bnav').classList.remove('on');
 }
- 
+
 function goTab(t){
   ['plan','tracker','volumen','perfil','progreso','fotos','calorias','suplementos'].forEach(tab=>{
     const tabEl=document.getElementById('tab-'+tab);
@@ -650,7 +744,7 @@ function goTab(t){
   if(t==='calorias')    renderCalorias();
   if(t==='suplementos') renderSups('stack');
 }
- 
+
 // ═══════════════════════════════════════════════════════════════
 // PLAN TAB
 // ═══════════════════════════════════════════════════════════════
@@ -680,7 +774,7 @@ function renderPlan(){
     <div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:${p.color};line-height:1;">~95</div><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Min/sesión</div></div>
   </div>
   <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:16px;">`;
- 
+
   WEEK_PLAN.forEach(d=>{
     const tc = d.type==='rest'?'#555':TC[d.type];
     h+=`<div class="wpill" style="background:${tc}10;border-color:${tc}30">
@@ -689,7 +783,7 @@ function renderPlan(){
     </div>`;
   });
   h+=`</div>`;
- 
+
   // Sessions
   Object.values(SESSIONS).forEach(sess=>{
     const tc2 = TC[sess.type];
@@ -719,7 +813,7 @@ function renderPlan(){
     });
     h+=`</div></div>`;
   });
- 
+
   if(m){
     h+=`<div class="card" style="margin-top:4px;"><div class="card-body">
     <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.04em;margin-bottom:4px;">NUTRICIÓN BASE</div>
@@ -734,7 +828,7 @@ function renderPlan(){
   h+='</div>';
   document.getElementById('tab-plan').innerHTML = h;
 }
- 
+
 // ═══════════════════════════════════════════════════════════════
 // VOLUMEN TAB
 // ═══════════════════════════════════════════════════════════════
@@ -749,13 +843,13 @@ function renderVolumen(){
     <strong style="color:#ef4444">MRV</strong> = Máximo Recuperable<br>
     <span style="font-size:10px;">Frecuencia 2× semanal para todos los músculos. Basado en Renaissance Periodization (Israetel 2021).</span>
   </div>
- 
+
   <div class="vol-grid">
     <div class="vol-hdr">Músculo</div>
     <div class="vol-hdr">Series/sem</div>
     <div class="vol-hdr">Reps</div>
     <div class="vol-hdr">Freq</div>`;
- 
+
   VOLUME_DATA.forEach(v=>{
     const pct = Math.round((v.plan/v.mrv)*100);
     h+=`<div class="vol-bar-wrap" style="grid-column:1">
@@ -773,9 +867,9 @@ function renderVolumen(){
     <div class="vol-cell mono" style="font-size:11px;color:var(--muted2)">${v.reps}</div>
     <div class="vol-cell mono" style="font-size:11px;color:var(--muted2)">${v.freq}×/sem</div>`;
   });
- 
+
   h+=`</div>
- 
+
   <div class="card" style="margin-top:16px;"><div class="card-body">
     <div class="section-label">¿Por qué estas series y no más?</div>
     <div style="font-size:12px;color:var(--muted);line-height:1.7;">
@@ -784,7 +878,7 @@ function renderVolumen(){
       <strong style="color:var(--muted2)">Progresión:</strong> Cuando puedas hacer el límite superior de reps en todas las series, aumenta el peso. No aumentes el volumen — aumenta la carga.
     </div>
   </div></div>
- 
+
   <div class="card" style="margin-top:12px;"><div class="card-body">
     <div class="section-label">Rangos de repeticiones por objetivo</div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px;">
@@ -808,12 +902,12 @@ function renderVolumen(){
   </div>`;
   document.getElementById('tab-volumen').innerHTML = h;
 }
- 
+
 // ═══════════════════════════════════════════════════════════════
 // TRACKER TAB
 // ═══════════════════════════════════════════════════════════════
 function changeMonth(d){ VM+=d; if(VM>11){VM=0;VY++;} if(VM<0){VM=11;VY--;} renderCal(); }
- 
+
 function renderCal(){
   const p = pr(); const data = gd();
   let h = `<div class="month-nav">
@@ -827,7 +921,7 @@ function renderCal(){
       <div class="cal-wd">JUE</div><div class="cal-wd">VIE</div><div class="cal-wd">SÁB</div><div class="cal-wd">DOM</div>
     </div>
     <div class="cal-grid">`;
- 
+
   const first = new Date(VY,VM,1).getDay(), off = first===0?6:first-1;
   const dim = new Date(VY,VM+1,0).getDate();
   for(let i=0;i<off;i++) h+='<div class="cal-cell empty"></div>';
@@ -850,26 +944,26 @@ function renderCal(){
   h+=renderStats();
   document.getElementById('tab-tracker').innerHTML = h;
 }
- 
+
 function selDay(k){ SK=k; renderCal(); }
- 
+
 function setSess(sid){
   const data=gd(); data[SK]=data[SK]||{}; data[SK].session=sid; data[SK].checked=data[SK].checked||{};
   sd(data); renderCal();
 }
- 
+
 function togEx(eid){
   const data=gd(); data[SK]=data[SK]||{}; data[SK].checked=data[SK].checked||{};
   data[SK].checked[eid]=!data[SK].checked[eid]; sd(data); renderCal();
 }
- 
+
 function saveNote(){
   const data=gd(); data[SK]=data[SK]||{}; data[SK].note=document.getElementById('noteTA').value; sd(data);
   const btn=document.getElementById('sNoteBtn'); const p=pr();
   btn.textContent='Guardado ✓'; btn.style.background='rgba(74,222,128,.3)'; btn.style.color='var(--done)';
   setTimeout(()=>{btn.textContent='Guardar nota';btn.style.background=p.color;btn.style.color='#0a0a0a';},1500);
 }
- 
+
 function renderDayPanel(){
   const p=pr(); const data=gd(); const dd=data[SK]||{};
   const parts=SK.split('-');
@@ -888,7 +982,7 @@ function renderDayPanel(){
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.04em;margin-bottom:7px;">${ds}</div>
       <div class="sess-btns">${btns}</div>
     </div>`;
- 
+
   if(!dd.session){
     h+=`<div style="padding:24px;text-align:center;"><div style="font-size:1.6rem;opacity:.35;margin-bottom:8px;">📋</div>
     <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--muted);">Sin sesión asignada</div>
@@ -955,7 +1049,7 @@ function renderDayPanel(){
           </div>`:''}
         </div>`;
       });
- 
+
       // ── Ejercicios extra guardados en esta sección ──
       const secKey = 'extra_'+SK+'_'+sec.t.replace(/\s+/g,'_');
       const extras = (gd()[secKey])||[];
@@ -996,7 +1090,7 @@ function renderDayPanel(){
           </div>
         </div>`;
       });
- 
+
       // ── Botón añadir ejercicio extra ──
       h+=`<div style="padding:8px 13px;border-bottom:1px solid var(--border);">
         <button onclick="addExtraRow('${secKey}')" style="
@@ -1013,7 +1107,7 @@ function renderDayPanel(){
         </button>
       </div>`;
     });
- 
+
     h+=`<div class="notes-wrap">
       <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;">📝 Notas</div>
       <textarea class="notes-ta" id="noteTA" placeholder="Pesos usados, PRs, sensaciones...">${dd.note||''}</textarea>
@@ -1023,7 +1117,7 @@ function renderDayPanel(){
   h+=`</div>`;
   return h;
 }
- 
+
 function saveLog(exId, field, value){
   const data=gd(); data[SK]=data[SK]||{};
   data[SK].logs=data[SK].logs||{};
@@ -1041,7 +1135,7 @@ function saveLog(exId, field, value){
   }
   sd(data);
 }
- 
+
 function getLastPerf(exId){
   const data=gd();
   if(!data._lastPerf||!data._lastPerf[exId]) return null;
@@ -1056,7 +1150,7 @@ function getLastPerf(exId){
   }
   return lp;
 }
- 
+
 function addExtraRow(secKey){
   const name=prompt('Nombre del ejercicio:','');
   if(!name||!name.trim())return;
@@ -1064,19 +1158,19 @@ function addExtraRow(secKey){
   data[secKey].push({name:name.trim(),sets:'',reps:'',kg:''});
   sd(data); renderCal();
 }
- 
+
 function updateExtra(secKey, idx, field, value){
   const data=gd(); if(!data[secKey])return;
   data[secKey][idx]=data[secKey][idx]||{};
   data[secKey][idx][field]=field==='name'?value:parseFloat(value)||0;
   sd(data);
 }
- 
+
 function deleteExtra(secKey, idx){
   const data=gd(); if(!data[secKey])return;
   data[secKey].splice(idx,1); sd(data); renderCal();
 }
- 
+
 function renderStats(){
   const data=gd(); let tot=0,push=0,pull=0,legs=0;
   Object.values(data).forEach(d=>{if(!d.session||d.session==='skip')return;const s=SESSIONS[d.session];if(!s)return;tot++;if(s.type==='push')push++;else if(s.type==='pull')pull++;else if(s.type==='legs')legs++;});
@@ -1087,7 +1181,7 @@ function renderStats(){
     <div class="stat-card"><div class="stat-val" style="color:var(--legs)">${legs}</div><div class="stat-lbl">Legs</div></div>
   </div>`;
 }
- 
+
 // ═══════════════════════════════════════════════════════════════
 // PERFIL TAB
 // ═══════════════════════════════════════════════════════════════
@@ -1095,7 +1189,10 @@ function renderPerfil(){
   const p=pr(); const lw=gw().length?gw()[gw().length-1].val:p.w;
   document.getElementById('tab-perfil').innerHTML=`<div class="inner">
   <div class="card" style="margin-bottom:12px;"><div class="card-body" style="display:flex;align-items:center;gap:12px;">
-    <div style="width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;flex-shrink:0;background:${p.dim};color:${p.color};border:2px solid ${p.color}40">${p.init}</div>
+    <div onclick="changeAvatar('${CP}')" style="width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;flex-shrink:0;background:${p.dim};color:${p.color};border:2px solid ${p.color}40;cursor:pointer;overflow:hidden;position:relative;" title="Toca para cambiar foto">
+      ${AVATARS[CP]?`<img src="${AVATARS[CP]}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%;">`:`<span>${p.init}</span>`}
+      <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);font-size:7px;color:#fff;text-align:center;padding:2px 0;letter-spacing:.05em;">📷</div>
+    </div>
     <div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.06em;color:${p.color}">${p.name}</div>
       <div style="font-size:11px;color:var(--muted);margin-top:2px;">${p.age} años · ${p.h}m · Géminis ♊ · Recomposición Corporal</div>
@@ -1134,7 +1231,7 @@ function renderPerfil(){
   </div></div></div>`;
   calcIMC(); calcMacros();
 }
- 
+
 function calcIMC(){
   const w=parseFloat(document.getElementById('imcP')?.value);
   const hh=parseFloat(document.getElementById('imcH')?.value);
@@ -1157,7 +1254,7 @@ function calcIMC(){
   const ce=document.getElementById('imcCat'); ce.textContent=cat; ce.style.color=cc;
   out.style.display='block';
 }
- 
+
 function getMacros(){
   if(!CP)return null;
   const p=pr();
@@ -1174,7 +1271,7 @@ function getMacros(){
   const carbs=Math.max(80,Math.round((kcal-protein*4-fat*9)/4));
   return{kcal,protein,carbs,fat,tdee,peso:w};
 }
- 
+
 function calcMacros(){
   const m=getMacros(); if(!m)return;
   const p=pr(); const el=document.getElementById('macroRes'); if(!el)return;
@@ -1184,18 +1281,18 @@ function calcMacros(){
     <div class="macro-card"><div class="macro-v" style="color:#facc15">${m.carbs}g</div><div class="macro-l">Carbos</div><div class="macro-s">Post-entreno</div></div>
     <div class="macro-card"><div class="macro-v" style="color:#3b82f6">${m.fat}g</div><div class="macro-l">Grasas</div><div class="macro-s">Mín 0.8g/kg</div></div>`;
 }
- 
+
 // ═══════════════════════════════════════════════════════════════
 // PROGRESO TAB
 // ═══════════════════════════════════════════════════════════════
 function renderProgreso(){
   const p=pr(); const wl=gw(); const data=gd();
- 
+
   // ── Streak ──
   let streak=0;
   for(let i=0;i<365;i++){const d2=new Date(NOW);d2.setDate(NOW.getDate()-i);const k=dk(d2);const dd=data[k];if(dd&&dd.session&&dd.session!=='skip'&&SESSIONS[dd.session])streak++;else if(i>0)break;}
   const sub=streak===0?'Empieza a entrenar para construir tu racha.':streak<7?`${streak} días. ¡Sigue así!`:`¡${streak} días consecutivos! Brutal 🔥`;
- 
+
   // ── Peso: tendencia y proyección ──
   const pesoInicial = wl.length>0?wl[0].val:p.w;
   const pesoActual  = wl.length>0?wl[wl.length-1].val:p.w;
@@ -1214,7 +1311,7 @@ function renderProgreso(){
   const imcActual = +(pesoActual/(p.h*p.h)).toFixed(1);
   const imc4  = +(proj4/(p.h*p.h)).toFixed(1);
   const imc12 = +(proj12/(p.h*p.h)).toFixed(1);
- 
+
   // ── Historial de peso ──
   const whist = wl.length===0
     ? '<div style="text-align:center;color:var(--muted);font-size:11px;padding:8px">Sin registros aún. Añade tu peso de hoy.</div>'
@@ -1224,13 +1321,13 @@ function renderProgreso(){
         const diffTxt = diff!==null?`<span style="font-size:10px;color:${diff<=0?'#4ade80':'#ff6b35'};margin-left:6px;">${diff>0?'+':''}${diff}kg</span>`:'';
         return `<div class="w-entry"><span class="w-date">${w.date}</span><span class="w-val" style="color:${p.color}">${w.val} kg${diffTxt}</span><button class="w-del" onclick="delW(${i})">✕</button></div>`;
       }).join('');
- 
+
   // ── Sesiones totales ──
   let totSess=0;
   Object.values(data).forEach(d=>{if(d.session&&d.session!=='skip'&&SESSIONS[d.session])totSess++;});
- 
+
   document.getElementById('tab-progreso').innerHTML=`<div class="inner">
- 
+
   <!-- RACHA -->
   <div class="card"><div class="streak-wrap">
     <div class="streak-num" style="color:${p.color}">${streak}</div>
@@ -1240,17 +1337,17 @@ function renderProgreso(){
       <div style="font-size:11px;color:var(--muted2);margin-top:2px;">${totSess} sesiones completadas en total</div>
     </div>
   </div></div>
- 
+
   <!-- PESO Y PROYECCIÓN -->
   <div class="card" style="margin-top:12px;"><div class="card-body">
     <div class="section-label">Registro y Proyección de Peso</div>
- 
+
     <!-- Input -->
     <div class="w-input-row">
       <input class="w-inp" id="wInp" type="number" step="0.1" placeholder="Peso de hoy (kg)" onkeydown="if(event.key==='Enter')addW()">
       <button class="w-add-btn" onclick="addW()">+ Añadir</button>
     </div>
- 
+
     <!-- Métricas actuales -->
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">
       <div style="padding:10px;background:var(--card2);border-radius:8px;border:1px solid var(--border);text-align:center;">
@@ -1266,13 +1363,13 @@ function renderProgreso(){
         <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:3px;">IMC actual</div>
       </div>
     </div>
- 
+
     <!-- Proyección visual -->
     <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">
       Proyección — ${kgSemEstim} kg/semana estimados
       ${wl.length<2?'<span style="font-size:9px;color:var(--skip);margin-left:6px;">(añade más registros para afinar)</span>':''}
     </div>
- 
+
     <div style="position:relative;overflow:hidden;border-radius:10px;border:1px solid var(--border);">
       <!-- Línea de tiempo -->
       ${[
@@ -1296,22 +1393,22 @@ function renderProgreso(){
         </div>`;
       }).join('')}
     </div>
- 
+
     <div style="font-size:10px;color:var(--skip);margin-top:8px;line-height:1.5;padding:8px 10px;background:var(--card2);border-radius:7px;">
       ⚠️ Proyección estimada basada en déficit calórico moderado + entrenamiento 6 días/semana. La recomposición puede ser más lenta si el déficit es pequeño, pero preserva más músculo. Añade tu peso cada semana para ajustar la proyección.
     </div>
- 
+
     <!-- Historial -->
     <div style="margin-top:12px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Historial</div>
     <div style="max-height:150px;overflow-y:auto;">${whist}</div>
   </div></div>
- 
+
   <!-- GRÁFICA MINIATURA DE PESO -->
   ${wl.length>=2?`<div class="card" style="margin-top:12px;"><div class="card-body">
     <div class="section-label">Evolución del peso</div>
     <div id="weightChart" style="height:80px;display:flex;align-items:flex-end;gap:3px;padding-bottom:18px;position:relative;"></div>
   </div></div>`:''}
- 
+
   <!-- SESIONES POR SEMANA -->
   <div class="card" style="margin-top:12px;"><div class="card-body">
     <div class="section-label">Sesiones por semana</div>
@@ -1322,9 +1419,9 @@ function renderProgreso(){
       <div class="legend-item"><div class="legend-dot" style="background:#a855f7"></div>Lower/Legs</div>
     </div>
   </div></div>
- 
+
   </div>`;
- 
+
   // Render weight mini chart
   if(wl.length>=2){
     setTimeout(()=>{
@@ -1346,7 +1443,7 @@ function renderProgreso(){
     },50);
   }
 }
- 
+
 function addW(){
   const v=parseFloat(document.getElementById('wInp').value);
   if(!v||v<30||v>300)return;
@@ -1356,7 +1453,7 @@ function addW(){
   renderProgreso();renderChart();
 }
 function delW(i){gw().splice(i,1);renderProgreso();renderChart();}
- 
+
 function renderChart(){
   const data=gd(); const wrap=document.getElementById('chWrap'); if(!wrap)return;
   wrap.innerHTML='';
@@ -1381,7 +1478,7 @@ function renderChart(){
     col.appendChild(bars); col.appendChild(lbl); wrap.appendChild(col);
   });
 }
- 
+
 // ═══════════════════════════════════════════════════════════════
 // FOTOS TAB
 // ═══════════════════════════════════════════════════════════════
@@ -1389,7 +1486,7 @@ function renderFotos(){
   const p = pr();
   const photos = PD[CP] || [];
   const ANGLES = ['Frente','Lateral','Espalda'];
- 
+
   // Group by week label
   const byWeek = {};
   photos.forEach(ph=>{
@@ -1398,14 +1495,14 @@ function renderFotos(){
     byWeek[wk].push(ph);
   });
   const weeks = Object.keys(byWeek).sort().reverse();
- 
+
   const emptyState = `
     <div style="padding:40px 20px;text-align:center;opacity:.5;">
       <div style="font-size:3rem;margin-bottom:12px;">📸</div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--muted);margin-bottom:6px;">Sin fotos aún</div>
       <div style="font-size:12px;color:var(--muted);line-height:1.6;">Toca el botón de abajo para añadir<br>tu primera foto de progreso.</div>
     </div>`;
- 
+
   let weekHtml = weeks.length===0 ? emptyState : weeks.map(wk=>{
     const wPhotos = byWeek[wk];
     const wPeso = wPhotos[0]?.peso||'';
@@ -1435,7 +1532,7 @@ function renderFotos(){
       </div>
     </div>`;
   }).join('');
- 
+
   // Lightbox HTML
   const lightbox = `
     <div id="photoLightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:1000;flex-direction:column;align-items:center;justify-content:center;padding:20px;">
@@ -1443,7 +1540,7 @@ function renderFotos(){
       <img id="lightboxImg" src="" style="max-width:100%;max-height:80vh;border-radius:10px;object-fit:contain;" />
       <div id="lightboxLabel" style="color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.08em;margin-top:12px;"></div>
     </div>`;
- 
+
   document.getElementById('tab-fotos').innerHTML = `
   ${lightbox}
   <div class="inner">
@@ -1452,12 +1549,12 @@ function renderFotos(){
     <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px;">
       Frente · Lateral · Espalda cada 4 semanas. La foto no miente — es el mejor indicador de recomposición.
     </div>
- 
+
     <!-- Consejo de foto -->
     <div style="padding:10px 13px;background:rgba(200,241,53,.06);border:1px solid rgba(200,241,53,.2);border-radius:9px;margin-bottom:16px;font-size:11px;color:var(--muted2);line-height:1.6;">
       💡 <strong style="color:${p.color}">Consejo:</strong> Misma hora (mañana), misma luz, mismo fondo, ropa interior o shorts. Así la comparación es honesta.
     </div>
- 
+
     <!-- Botón nueva semana -->
     <button onclick="startNewWeek()" style="
       display:flex;align-items:center;justify-content:center;gap:8px;
@@ -1466,7 +1563,7 @@ function renderFotos(){
       font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.08em;cursor:pointer;">
       📸 Nueva semana de fotos
     </button>
- 
+
     <!-- Comparador si hay 2+ semanas -->
     ${weeks.length>=2?`<div style="margin-bottom:20px;">
       <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;">Comparador antes / después</div>
@@ -1482,12 +1579,12 @@ function renderFotos(){
         }).join('')}
       </div>
     </div>`:''}
- 
+
     <!-- Listado por semanas -->
     ${weekHtml}
   </div>`;
 }
- 
+
 function startNewWeek(){
   const p=pr();
   const wl=WD[CP];
@@ -1499,7 +1596,7 @@ function startNewWeek(){
   // Just pick photos for this week
   addPhoto(label,'Frente');
 }
- 
+
 function addPhoto(week, angle){
   const input=document.createElement('input');
   input.type='file'; input.accept='image/*'; input.capture='camera';
@@ -1520,7 +1617,7 @@ function addPhoto(week, angle){
   };
   input.click();
 }
- 
+
 function viewPhoto(week, angle){
   const photos=PD[CP]||[];
   const ph=photos.find(p=>p.week===week&&p.angle===angle);
@@ -1530,19 +1627,19 @@ function viewPhoto(week, angle){
   document.getElementById('lightboxLabel').textContent=`${week} · ${angle}`;
   lb.style.display='flex';
 }
- 
+
 function closeLightbox(){
   const lb=document.getElementById('photoLightbox');
   if(lb)lb.style.display='none';
 }
- 
+
 function deleteWeek(week){
   if(!confirm('¿Eliminar todas las fotos de '+week+'?'))return;
   PD[CP]=(PD[CP]||[]).filter(p=>p.week!==week);
   renderFotos();
 }
- 
- 
+
+
 // ═══════════════════════════════════════════════════════════════
 // CALORÍAS TAB
 // ═══════════════════════════════════════════════════════════════
@@ -1672,42 +1769,42 @@ const FOOD_DB = [
   {n:'Miel (1 cucharada)',kcal:64,p:0.1,c:17,f:0},
   {n:'Azúcar (1 cucharadita)',kcal:20,p:0,c:5,f:0},
 ];
- 
+
 function gcals(){ return CALS[CP]||(CALS[CP]={}); }
 function getTodayLog(){
   const c=gcals(); if(!c[SK])c[SK]={meals:[],water:0}; return c[SK];
 }
- 
+
 function renderCalorias(){
   const p=pr(); const m=getMacros();
   const log=getTodayLog();
   const meals=log.meals||[];
   const water=log.water||0;
- 
+
   const totKcal=meals.reduce((a,x)=>a+(x.kcal||0),0);
   const totP=meals.reduce((a,x)=>a+(x.p||0),0);
   const totC=meals.reduce((a,x)=>a+(x.c||0),0);
   const totF=meals.reduce((a,x)=>a+(x.f||0),0);
- 
+
   const goalKcal=m?m.kcal:2500;
   const goalP=m?m.protein:180;
   const goalC=m?m.carbs:250;
   const goalF=m?m.fat:80;
- 
+
   const pctKcal=Math.min(100,Math.round((totKcal/goalKcal)*100));
   const pctP=Math.min(100,Math.round((totP/goalP)*100));
   const pctC=Math.min(100,Math.round((totC/goalC)*100));
   const pctF=Math.min(100,Math.round((totF/goalF)*100));
- 
+
   const today2=new Date();
   const ds=`${DAYS_ES[today2.getDay()]} ${today2.getDate()} de ${MONTHS_ES[today2.getMonth()]}`;
- 
+
   // Group meals by type
   const MEAL_TYPES=['Desayuno','Media mañana','Almuerzo','Merienda','Cena','Extra'];
   const byType={};
   MEAL_TYPES.forEach(t=>byType[t]=[]);
   meals.forEach((m2,i)=>{ const t=m2.meal||'Extra'; if(!byType[t])byType[t]=[]; byType[t].push({...m2,_i:i}); });
- 
+
   let mealsHtml='';
   MEAL_TYPES.forEach(type=>{
     const items=byType[type];
@@ -1735,7 +1832,7 @@ function renderCalorias(){
       }
     </div>`;
   });
- 
+
   document.getElementById('tab-calorias').innerHTML=`
   <!-- Food search modal -->
   <div id="foodModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;flex-direction:column;padding:20px;">
@@ -1762,12 +1859,12 @@ function renderCalorias(){
     </div>
     <div id="foodList" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:5px;"></div>
   </div>
- 
+
   <div class="inner">
     <div style="font-size:10px;color:${p.color};text-transform:uppercase;letter-spacing:.18em;margin-bottom:4px;">Nutrición Diaria</div>
     <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;line-height:1;letter-spacing:.04em;margin-bottom:2px;">CALORÍAS <span style="color:${p.color}">🍎</span></div>
     <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">${ds}</div>
- 
+
     <!-- Calorías ring -->
     <div style="padding:16px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;">
       <div style="display:flex;align-items:center;gap:16px;">
@@ -1790,7 +1887,7 @@ function renderCalorias(){
           </div>
         </div>
       </div>
- 
+
       <!-- Macro bars -->
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px;">
         ${[['Proteína',totP,goalP,'#ff6b35'],['Carbos',totC,goalC,'#facc15'],['Grasas',totF,goalF,'#3b82f6']].map(([lbl,val,goal2,col])=>`
@@ -1806,7 +1903,7 @@ function renderCalorias(){
         </div>`).join('')}
       </div>
     </div>
- 
+
     <!-- Agua -->
     <div style="padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;display:flex;align-items:center;gap:12px;">
       <div style="font-size:1.5rem;">💧</div>
@@ -1824,16 +1921,16 @@ function renderCalorias(){
         <div style="font-size:9px;color:var(--muted);">vasos · ${water*250}ml</div>
       </div>
     </div>
- 
+
     <!-- Comidas -->
     <div style="padding:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.05em;margin-bottom:14px;">REGISTRO DEL DÍA</div>
       ${mealsHtml}
     </div>
- 
+
   </div>`;
 }
- 
+
 let _currentMealType='Extra';
 function openFoodSearch(mealType){
   _currentMealType=mealType;
@@ -1862,7 +1959,7 @@ function filterFoods(){
       </div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:${p2.color};flex-shrink:0;margin-left:10px;">${f.kcal}</div>
     </div>`).join('');
- 
+
   // Custom add button
   const name=document.getElementById('foodSearch').value;
   const kcal=parseFloat(document.getElementById('customKcal').value)||0;
@@ -1892,7 +1989,7 @@ function removeMeal(idx){
 function setWater(n){
   const log=getTodayLog(); log.water=n; renderCalorias();
 }
- 
+
 // ═══════════════════════════════════════════════════════════════
 // SUPLEMENTOS TAB
 // ═══════════════════════════════════════════════════════════════
@@ -1908,7 +2005,7 @@ function renderSups(view){
     <button class="sup-tab${view==='horario'?' active':''}" onclick="renderSups('horario')">Horario diario</button>
     <button class="sup-tab${view==='checklist'?' active':''}" onclick="renderSups('checklist')">Checklist</button>
   </div>`;
- 
+
   if(view==='stack'){
     h+=`<div class="section-label">Prioridad alta — impacto real y probado</div>`;
     SUPS.filter(s=>s.p===1).forEach(s=>h+=supCard(s));
@@ -1917,7 +2014,7 @@ function renderSups(view){
     h+=`<div class="section-label" style="margin-top:14px;">Evidencia débil o condicional</div>`;
     SUPS.filter(s=>s.p===3).forEach(s=>h+=supCard(s));
   }
- 
+
   if(view==='horario'){
     h+=`<div class="card"><div style="overflow:hidden;">`;
     HORARIO.forEach((row,ri)=>{
@@ -1939,7 +2036,7 @@ function renderSups(view){
       </div>
     </div></div>`;
   }
- 
+
   if(view==='checklist'){
     const sc=SC[CP]||{};
     const total=CHK_ITEMS.length;
@@ -1963,7 +2060,7 @@ function renderSups(view){
   h+='</div>';
   document.getElementById('tab-suplementos').innerHTML=h;
 }
- 
+
 function supCard(s){
   const tags=s.tags.map(t=>`<span class="sup-tag" style="background:${s.color}20;color:${s.color}">${t}</span>`).join('');
   return `<div class="sup-card">
@@ -1978,7 +2075,7 @@ function supCard(s){
     </div>
   </div>`;
 }
- 
+
 function toggleSup(i){
   if(!SC[CP])SC[CP]={};
   SC[CP][i]=!SC[CP][i];
