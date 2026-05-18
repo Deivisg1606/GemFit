@@ -633,41 +633,249 @@ function pr(){ return PROFS[CP]; }
 
 
 // ═══════════════════════════════════════════════════════════════
-// AVATAR MANAGEMENT
+// AVATAR MANAGEMENT — con editor de zoom y arrastre
 // ═══════════════════════════════════════════════════════════════
+let _avatarEditProfile = null;
+let _avatarEditImg = null;
+let _edX = 0, _edY = 0, _edScale = 1;
+let _dragging = false, _lastTX = 0, _lastTY = 0;
+let _pinchDist = 0;
+const EDITOR_SIZE = 280, CIRCLE_R = 118;
+
 function changeAvatar(profileId){
+  _avatarEditProfile = profileId;
   const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/*';
+  input.type = 'file'; input.accept = 'image/*';
   input.onchange = e => {
     const file = e.target.files[0]; if(!file) return;
-    // Compress image to max 200x200 to keep it light
     const reader = new FileReader();
     reader.onload = ev => {
       const img = new Image();
       img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const size = 200;
-        canvas.width = size; canvas.height = size;
-        const ctx = canvas.getContext('2d');
-        // Crop to square center
-        const min = Math.min(img.width, img.height);
-        const sx = (img.width - min)/2, sy = (img.height - min)/2;
-        ctx.drawImage(img, sx, sy, min, min, 0, 0, size, size);
-        const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
-        AVATARS[profileId] = dataUrl;
-        updateProfileAvatars();
-        updateTopbarAvatar();
-        // If we're on perfil tab, re-render to show new avatar
-        if(document.getElementById('tab-perfil').classList.contains('active')){
-          renderPerfil();
-        }
+        _avatarEditImg = img;
+        openAvatarEditor(img);
       };
       img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
   };
   input.click();
+}
+
+function openAvatarEditor(img){
+  const modal = document.getElementById('avatarEditorModal');
+  const edImg = document.getElementById('avatarEditorImg');
+  const slider = document.getElementById('zoomSlider');
+
+  // Fit image to fill the circle initially
+  const fitScale = Math.max(
+    (CIRCLE_R*2) / img.width,
+    (CIRCLE_R*2) / img.height
+  );
+  _edScale = fitScale;
+  // Center image in editor
+  _edX = (EDITOR_SIZE - img.width * _edScale) / 2;
+  _edY = (EDITOR_SIZE - img.height * _edScale) / 2;
+
+  edImg.src = img.src;
+  slider.value = Math.round(_edScale * 100);
+  document.getElementById('zoomLabel').textContent = Math.round(_edScale*100)+'%';
+
+  applyEditorTransform();
+  updatePreview();
+  modal.style.display = 'flex';
+  setupEditorEvents();
+}
+
+function applyEditorTransform(){
+  const edImg = document.getElementById('avatarEditorImg');
+  if(!edImg||!_avatarEditImg) return;
+  edImg.style.width  = (_avatarEditImg.width  * _edScale)+'px';
+  edImg.style.height = (_avatarEditImg.height * _edScale)+'px';
+  edImg.style.left   = _edX+'px';
+  edImg.style.top    = _edY+'px';
+}
+
+function clampPosition(){
+  if(!_avatarEditImg) return;
+  const iw = _avatarEditImg.width  * _edScale;
+  const ih = _avatarEditImg.height * _edScale;
+  const cx = EDITOR_SIZE/2, cy = EDITOR_SIZE/2;
+  // Image must cover the circle
+  const minX = cx + CIRCLE_R - iw;
+  const maxX = cx - CIRCLE_R;
+  const minY = cy + CIRCLE_R - ih;
+  const maxY = cy - CIRCLE_R;
+  _edX = Math.max(minX, Math.min(maxX, _edX));
+  _edY = Math.max(minY, Math.min(maxY, _edY));
+}
+
+function updatePreview(){
+  const canvas = document.createElement('canvas');
+  canvas.width = 200; canvas.height = 200;
+  const ctx = canvas.getContext('2d');
+  ctx.beginPath();
+  ctx.arc(100,100,100,0,Math.PI*2);
+  ctx.clip();
+  const scaleToPreview = 200/EDITOR_SIZE;
+  const sx = (_edX - (EDITOR_SIZE/2 - CIRCLE_R)) / _edScale;
+  const sy = (_edY - (EDITOR_SIZE/2 - CIRCLE_R)) / _edScale;
+  const sSize = (CIRCLE_R*2) / _edScale;
+  ctx.drawImage(_avatarEditImg, -sx, -sy,
+    _avatarEditImg.width * _edScale * scaleToPreview,
+    _avatarEditImg.height * _edScale * scaleToPreview);
+  // Re-draw cropped
+  ctx.clearRect(0,0,200,200);
+  ctx.beginPath();
+  ctx.arc(100,100,100,0,Math.PI*2);
+  ctx.clip();
+  const drawX = (_edX - (EDITOR_SIZE/2 - CIRCLE_R)) * (200/(CIRCLE_R*2));
+  const drawY = (_edY - (EDITOR_SIZE/2 - CIRCLE_R)) * (200/(CIRCLE_R*2));
+  const drawW = _avatarEditImg.width  * _edScale * (200/(CIRCLE_R*2));
+  const drawH = _avatarEditImg.height * _edScale * (200/(CIRCLE_R*2));
+  ctx.drawImage(_avatarEditImg, drawX, drawY, drawW, drawH);
+  const prevImg = document.getElementById('avatarPreviewImg');
+  if(prevImg){
+    prevImg.src = canvas.toDataURL('image/jpeg',0.85);
+    prevImg.style.width='100%'; prevImg.style.height='100%';
+    prevImg.style.objectFit='cover'; prevImg.style.position='static';
+  }
+}
+
+function onZoomSlider(val){
+  const newScale = parseFloat(val)/100;
+  const cx = EDITOR_SIZE/2, cy = EDITOR_SIZE/2;
+  _edX = cx - (cx - _edX) * (newScale/_edScale);
+  _edY = cy - (cy - _edY) * (newScale/_edScale);
+  _edScale = newScale;
+  document.getElementById('zoomLabel').textContent = Math.round(_edScale*100)+'%';
+  clampPosition();
+  applyEditorTransform();
+  updatePreview();
+}
+
+function resetAvatarEditor(){
+  if(!_avatarEditImg) return;
+  const fitScale = Math.max((CIRCLE_R*2)/_avatarEditImg.width,(CIRCLE_R*2)/_avatarEditImg.height);
+  _edScale = fitScale;
+  _edX = (EDITOR_SIZE - _avatarEditImg.width*_edScale)/2;
+  _edY = (EDITOR_SIZE - _avatarEditImg.height*_edScale)/2;
+  document.getElementById('zoomSlider').value = Math.round(_edScale*100);
+  document.getElementById('zoomLabel').textContent = Math.round(_edScale*100)+'%';
+  applyEditorTransform();
+  updatePreview();
+}
+
+function setupEditorEvents(){
+  const wrap = document.getElementById('avatarEditorWrap');
+  if(!wrap) return;
+  // Clone to remove old listeners
+  const newWrap = wrap.cloneNode(true);
+  wrap.parentNode.replaceChild(newWrap, wrap);
+  // Re-attach img reference
+  const edImg = document.getElementById('avatarEditorImg');
+
+  // Mouse events
+  newWrap.addEventListener('mousedown', e=>{
+    _dragging=true; _lastTX=e.clientX; _lastTY=e.clientY;
+    newWrap.style.cursor='grabbing'; e.preventDefault();
+  });
+  document.addEventListener('mousemove', e=>{
+    if(!_dragging) return;
+    _edX += e.clientX-_lastTX; _edY += e.clientY-_lastTY;
+    _lastTX=e.clientX; _lastTY=e.clientY;
+    clampPosition(); applyEditorTransform(); updatePreview();
+  });
+  document.addEventListener('mouseup', ()=>{ _dragging=false; newWrap.style.cursor='grab'; });
+
+  // Wheel zoom
+  newWrap.addEventListener('wheel', e=>{
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.05 : 0.05;
+    const newScale = Math.max(0.5,Math.min(3,_edScale+delta));
+    const cx=EDITOR_SIZE/2, cy=EDITOR_SIZE/2;
+    _edX = cx-(cx-_edX)*(newScale/_edScale);
+    _edY = cy-(cy-_edY)*(newScale/_edScale);
+    _edScale=newScale;
+    document.getElementById('zoomSlider').value=Math.round(_edScale*100);
+    document.getElementById('zoomLabel').textContent=Math.round(_edScale*100)+'%';
+    clampPosition(); applyEditorTransform(); updatePreview();
+  },{passive:false});
+
+  // Touch events for iOS
+  newWrap.addEventListener('touchstart', e=>{
+    if(e.touches.length===1){
+      _dragging=true;
+      _lastTX=e.touches[0].clientX; _lastTY=e.touches[0].clientY;
+    } else if(e.touches.length===2){
+      _dragging=false;
+      _pinchDist=Math.hypot(
+        e.touches[0].clientX-e.touches[1].clientX,
+        e.touches[0].clientY-e.touches[1].clientY
+      );
+    }
+    e.preventDefault();
+  },{passive:false});
+
+  newWrap.addEventListener('touchmove', e=>{
+    if(e.touches.length===1 && _dragging){
+      const dx=e.touches[0].clientX-_lastTX;
+      const dy=e.touches[0].clientY-_lastTY;
+      _edX+=dx; _edY+=dy;
+      _lastTX=e.touches[0].clientX; _lastTY=e.touches[0].clientY;
+      clampPosition(); applyEditorTransform(); updatePreview();
+    } else if(e.touches.length===2){
+      const newDist=Math.hypot(
+        e.touches[0].clientX-e.touches[1].clientX,
+        e.touches[0].clientY-e.touches[1].clientY
+      );
+      if(_pinchDist>0){
+        const ratio=newDist/_pinchDist;
+        const newScale=Math.max(0.5,Math.min(3,_edScale*ratio));
+        const cx=(e.touches[0].clientX+e.touches[1].clientX)/2;
+        const cy=(e.touches[0].clientY+e.touches[1].clientY)/2;
+        const rect=newWrap.getBoundingClientRect();
+        const lx=cx-rect.left, ly=cy-rect.top;
+        _edX=lx-(lx-_edX)*(newScale/_edScale);
+        _edY=ly-(ly-_edY)*(newScale/_edScale);
+        _edScale=newScale;
+        document.getElementById('zoomSlider').value=Math.round(_edScale*100);
+        document.getElementById('zoomLabel').textContent=Math.round(_edScale*100)+'%';
+        clampPosition(); applyEditorTransform(); updatePreview();
+      }
+      _pinchDist=newDist;
+    }
+    e.preventDefault();
+  },{passive:false});
+
+  newWrap.addEventListener('touchend', ()=>{ _dragging=false; _pinchDist=0; });
+}
+
+function confirmAvatarEdit(){
+  if(!_avatarEditImg||!_avatarEditProfile) return;
+  const canvas=document.createElement('canvas');
+  canvas.width=300; canvas.height=300;
+  const ctx=canvas.getContext('2d');
+  ctx.beginPath();
+  ctx.arc(150,150,150,0,Math.PI*2);
+  ctx.clip();
+  const drawX=(_edX-(EDITOR_SIZE/2-CIRCLE_R))*(300/(CIRCLE_R*2));
+  const drawY=(_edY-(EDITOR_SIZE/2-CIRCLE_R))*(300/(CIRCLE_R*2));
+  const drawW=_avatarEditImg.width*_edScale*(300/(CIRCLE_R*2));
+  const drawH=_avatarEditImg.height*_edScale*(300/(CIRCLE_R*2));
+  ctx.drawImage(_avatarEditImg,drawX,drawY,drawW,drawH);
+  const dataUrl=canvas.toDataURL('image/jpeg',0.85);
+  AVATARS[_avatarEditProfile]=dataUrl;
+  closeAvatarEditor();
+  updateProfileAvatars();
+  updateTopbarAvatar();
+  if(document.getElementById('tab-perfil').classList.contains('active')) renderPerfil();
+}
+
+function closeAvatarEditor(){
+  const modal=document.getElementById('avatarEditorModal');
+  if(modal) modal.style.display='none';
+  _dragging=false; _pinchDist=0;
 }
 
 function updateProfileAvatars(){
@@ -688,7 +896,6 @@ function updateProfileAvatars(){
 
 function updateTopbarAvatar(){
   if(!CP) return;
-  const p = pr();
   const tl = document.getElementById('tLogo');
   if(!tl) return;
   if(AVATARS[CP]){
@@ -2082,5 +2289,73 @@ function toggleSup(i){
   renderSups('checklist');
 }
 </script>
+
+<!-- ═══════════════ AVATAR EDITOR MODAL ═══════════════ -->
+<div id="avatarEditorModal" style="
+  display:none; position:fixed; inset:0; z-index:2000;
+  background:rgba(0,0,0,0.96);
+  flex-direction:column; align-items:center; justify-content:flex-start;
+  padding:0;
+">
+  <!-- Header -->
+  <div style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #222;flex-shrink:0;">
+    <button onclick="closeAvatarEditor()" style="background:none;border:none;color:#888;font-size:0.9rem;cursor:pointer;padding:4px 8px;border-radius:6px;border:1px solid #333;">Cancelar</button>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.08em;color:#e0e0e0;">AJUSTAR FOTO</div>
+    <button onclick="confirmAvatarEdit()" style="background:#c8f135;color:#0a0a0a;border:none;font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:.06em;cursor:pointer;padding:5px 14px;border-radius:6px;">Confirmar</button>
+  </div>
+
+  <!-- Preview circle -->
+  <div style="margin:20px 0 10px;flex-shrink:0;">
+    <div style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:.12em;text-align:center;margin-bottom:10px;">Vista previa</div>
+    <div id="avatarPreviewCircle" style="width:90px;height:90px;border-radius:50%;overflow:hidden;border:3px solid #c8f135;margin:0 auto;position:relative;background:#111;">
+      <img id="avatarPreviewImg" style="position:absolute;transform-origin:center center;" src="">
+    </div>
+  </div>
+
+  <!-- Canvas editor area -->
+  <div style="font-size:10px;color:#555;text-transform:uppercase;letter-spacing:.12em;text-align:center;margin-bottom:8px;flex-shrink:0;">Arrastra y haz zoom para encuadrar</div>
+  <div id="avatarEditorWrap" style="
+    position:relative; width:280px; height:280px;
+    border-radius:12px; overflow:hidden;
+    background:#111; border:1px solid #2a2a2a;
+    cursor:grab; flex-shrink:0; touch-action:none;
+  ">
+    <img id="avatarEditorImg" style="position:absolute;transform-origin:0 0;user-select:none;pointer-events:none;" src="">
+    <!-- Circular overlay guide -->
+    <div style="position:absolute;inset:0;pointer-events:none;">
+      <svg width="280" height="280" viewBox="0 0 280 280">
+        <defs>
+          <mask id="circleMask">
+            <rect width="280" height="280" fill="white"/>
+            <circle cx="140" cy="140" r="118" fill="black"/>
+          </mask>
+        </defs>
+        <rect width="280" height="280" fill="rgba(0,0,0,0.55)" mask="url(#circleMask)"/>
+        <circle cx="140" cy="140" r="118" fill="none" stroke="#c8f135" stroke-width="2"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Zoom slider -->
+  <div style="width:280px;margin-top:16px;flex-shrink:0;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:14px;color:#555;">🔍</span>
+      <input type="range" id="zoomSlider" min="50" max="300" value="100"
+        oninput="onZoomSlider(this.value)"
+        style="flex:1;accent-color:#c8f135;cursor:pointer;">
+      <span style="font-size:16px;color:#555;">🔍</span>
+    </div>
+    <div style="text-align:center;font-family:'DM Mono',monospace;font-size:10px;color:#555;margin-top:4px;" id="zoomLabel">100%</div>
+  </div>
+
+  <!-- Reset button -->
+  <button onclick="resetAvatarEditor()" style="
+    margin-top:12px;padding:6px 16px;
+    background:transparent;border:1px solid #333;border-radius:7px;
+    color:#555;font-size:11px;cursor:pointer;flex-shrink:0;">
+    Restablecer
+  </button>
+</div>
+
 </body>
 </html>
