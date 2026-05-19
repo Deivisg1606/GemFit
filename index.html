@@ -19,10 +19,10 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --bg:#f5f5f5;--card:rgba(255,255,255,0.8);--card2:rgba(255,255,255,0.6);--border:rgba(0,0,0,0.09);--border2:rgba(0,0,0,0.14);
-  --text:#0d1117;--muted:#5a6a7a;--muted2:#999;
-  --push:#c0006e;--pull:#006fa8;--legs:#5a009a;--done:#00994d;--skip:#555;
-  --accent:#00994d;--yona:#0088bb;
+  --bg:#fff5ee;--card:rgba(255,255,255,0.82);--card2:rgba(255,255,255,0.62);--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.13);
+  --text:#1a1020;--muted:#7a6070;--muted2:#999;
+  --push:#dd0060;--pull:#0066aa;--legs:#6600bb;--done:#007a40;--skip:#555;
+  --accent:#cc5500;--yona:#6a00b8;
 }
 html{height:100%;}
 body{
@@ -40,7 +40,7 @@ body{
 #s-profiles{align-items:center;justify-content:center;padding:24px;gap:24px;overflow-y:auto;background:transparent;}
 .gem-logo-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;}
 .gem-title{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:.15em;
-  background:linear-gradient(135deg,#00994d,#0088bb);-webkit-background-clip:text;
+  background:linear-gradient(135deg,#ff8c42,#c0006e,#7209b7);-webkit-background-clip:text;
   -webkit-text-fill-color:transparent;background-clip:text;}
 .gem-sub{font-size:11px;color:#5a6a7a;letter-spacing:.15em;text-transform:uppercase;}
 .prof-cards{display:flex;gap:12px;width:100%;max-width:340px;}
@@ -56,7 +56,7 @@ body{
 /* ── TOPBAR ── */
 .topbar{
   display:flex;align-items:center;gap:10px;padding:10px 14px;
-  background:rgba(245,245,245,0.96);border-bottom:1px solid var(--border);
+  background:rgba(255,238,245,0.96);border-bottom:1px solid var(--border);
   flex-shrink:0;z-index:10;
 }
 .tlogo{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
@@ -80,7 +80,7 @@ body{
 /* ── BOTTOM NAV ── */
 .bnav{
   flex-shrink:0;
-  background:rgba(245,245,245,0.97);border-top:1px solid rgba(0,0,0,.1);
+  background:rgba(255,245,238,0.97);border-top:1px solid rgba(0,0,0,.1);
   display:none;height:62px;z-index:10;
 }
 .bnav.on{display:flex;}
@@ -120,7 +120,7 @@ body{
 .ex-num{font-size:10px;color:var(--muted);padding-top:2px;}
 .ex-name{font-size:12px;font-weight:500;line-height:1.3;}
 .ex-note{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.4;}
-.ex-why{font-size:10px;color:#00994d;margin-top:2px;font-style:italic;}
+.ex-why{font-size:10px;color:#cc5500;margin-top:2px;font-style:italic;}
 .ex-sets{font-family:'DM Mono',monospace;font-size:10px;white-space:nowrap;padding-top:2px;}
 
 /* ── VOLUME TABLE ── */
@@ -174,7 +174,7 @@ body{
 .chkbox{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);
   background:var(--card2);display:flex;align-items:center;justify-content:center;
   flex-shrink:0;margin-top:2px;transition:all .12s;}
-.chkbox.on{background:#00994d;border-color:#00994d;}
+.chkbox.on{background:#007a40;border-color:#007a40;}
 .t-ex-name{font-size:12px;font-weight:500;line-height:1.3;}
 .t-ex-note{font-size:10px;color:var(--muted);margin-top:2px;}
 .t-ex-sets{font-family:'DM Mono',monospace;font-size:10px;white-space:nowrap;padding-top:2px;flex-shrink:0;}
@@ -190,7 +190,7 @@ body{
 .stat-val{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;line-height:1;}
 .stat-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
 .done-banner{margin:0 14px 10px;padding:9px 12px;border-radius:9px;
-  background:rgba(0,153,77,.08);border:1px solid rgba(0,153,77,.25);
+  background:rgba(204,85,0,.07);border:1px solid rgba(204,85,0,.2);
   font-size:12px;color:#00994d;display:none;align-items:center;gap:8px;}
 .done-banner.on{display:flex;}
 
@@ -228,7 +228,7 @@ body{
 .w-inp{flex:1;background:var(--card2);border:1px solid var(--border2);border-radius:8px;
   color:var(--text);font-size:13px;padding:7px 10px;}
 .w-inp:focus{outline:none;border-color:var(--accent);}
-.w-add-btn{padding:7px 14px;background:#00994d;color:#ffffff;border:none;
+.w-add-btn{padding:7px 14px;background:#cc5500;color:#ffffff;border:none;
   border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.06em;cursor:pointer;}
 .w-entry{display:flex;justify-content:space-between;align-items:center;
   padding:7px 10px;background:var(--card2);border-radius:7px;border:1px solid var(--border);margin-bottom:4px;}
@@ -248,7 +248,7 @@ body{
 .sup-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
 .sup-tab{padding:5px 12px;border-radius:7px;border:1px solid var(--border2);
   background:var(--card2);color:var(--muted);font-size:11px;cursor:pointer;transition:all .15s;}
-.sup-tab.active{background:rgba(0,153,77,.1);border-color:#00994d;color:#00994d;}
+.sup-tab.active{background:rgba(204,85,0,.1);border-color:#cc5500;color:#cc5500;}
 .sup-card{background:var(--card);border:1px solid var(--border);border-radius:12px;
   padding:12px 14px;margin-bottom:10px;position:relative;overflow:hidden;}
 .sup-accent{position:absolute;top:0;left:0;width:3px;height:100%;}
@@ -271,7 +271,7 @@ body{
   border:1px solid var(--border);border-radius:9px;cursor:pointer;margin-bottom:6px;}
 .chk-box{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);
   background:var(--card2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.chk-box.on{background:#00994d;border-color:#00994d;}
+.chk-box.on{background:#007a40;border-color:#007a40;}
 .chk-name{font-size:12px;font-weight:500;flex:1;}
 .chk-sub{font-size:10px;color:var(--muted);}
 .chk-badge{font-size:10px;padding:2px 7px;border-radius:5px;white-space:nowrap;}
@@ -288,24 +288,80 @@ body{
 
   <!-- Logo compacto -->
   <div class="gem-logo-wrap" style="margin-bottom:6px;">
-    <svg width="56" height="56" viewBox="0 0 90 90" fill="none">
+    <svg width="180" height="180" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="gl1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#00994d"/><stop offset="100%" stop-color="#0088bb"/>
+        <radialGradient id="bgW" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ff8c42" stop-opacity="0.18"/>
+          <stop offset="40%" stop-color="#ff4081" stop-opacity="0.10"/>
+          <stop offset="75%" stop-color="#7209b7" stop-opacity="0.05"/>
+          <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="symW" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ffb347"/>
+          <stop offset="45%" stop-color="#ff6b6b"/>
+          <stop offset="100%" stop-color="#cc88ff"/>
         </linearGradient>
-        <linearGradient id="gl2" x1="100%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stop-color="#0088bb"/><stop offset="100%" stop-color="#00994d"/>
+        <linearGradient id="ringW" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ff8c42"/>
+          <stop offset="50%" stop-color="#ff4081"/>
+          <stop offset="100%" stop-color="#9b5de5"/>
         </linearGradient>
+        <filter id="glowW1" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="2.5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glowW2" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="5" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glowW3" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="11" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
       </defs>
-      <circle cx="45" cy="45" r="43" stroke="url(#gl1)" stroke-width="1.5" opacity=".6" fill="none"/>
-      <line x1="20" y1="17" x2="36" y2="17" stroke="url(#gl1)" stroke-width="2.5" stroke-linecap="round"/>
-      <line x1="28" y1="17" x2="28" y2="73" stroke="url(#gl1)" stroke-width="2.5" stroke-linecap="round"/>
-      <line x1="20" y1="73" x2="36" y2="73" stroke="url(#gl1)" stroke-width="2.5" stroke-linecap="round"/>
-      <line x1="54" y1="17" x2="70" y2="17" stroke="url(#gl2)" stroke-width="2.5" stroke-linecap="round"/>
-      <line x1="62" y1="17" x2="62" y2="73" stroke="url(#gl2)" stroke-width="2.5" stroke-linecap="round"/>
-      <line x1="54" y1="73" x2="70" y2="73" stroke="url(#gl2)" stroke-width="2.5" stroke-linecap="round"/>
-      <path d="M28 32 Q45 24 62 32" stroke="url(#gl1)" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M28 58 Q45 66 62 58" stroke="url(#gl2)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <circle cx="120" cy="120" r="118" fill="url(#bgW)"/>
+      <circle cx="120" cy="120" r="100" stroke="#ff8c42" stroke-width="10" fill="none" opacity="0.09" filter="url(#glowW3)"/>
+      <circle cx="120" cy="120" r="100" stroke="url(#ringW)" stroke-width="2.5" fill="none" opacity="0.45" filter="url(#glowW2)"/>
+      <path d="M 50 120 A 70 70 0 0 1 190 120" stroke="#ff8c42" stroke-width="5" fill="none" opacity="0.55" filter="url(#glowW2)"/>
+      <path d="M 50 120 A 70 70 0 0 0 190 120" stroke="#9b5de5" stroke-width="5" fill="none" opacity="0.45" filter="url(#glowW2)"/>
+      <circle cx="120" cy="120" r="100" stroke="url(#ringW)" stroke-width="1.5" fill="none" opacity="0.9"/>
+      <line x1="120" y1="18"  x2="120" y2="2"   stroke="#ffb347" stroke-width="3"   stroke-linecap="round" opacity="1"    filter="url(#glowW2)"/>
+      <line x1="120" y1="14"  x2="120" y2="9"   stroke="#fff"    stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+      <line x1="120" y1="222" x2="120" y2="238"  stroke="#cc88ff" stroke-width="3"   stroke-linecap="round" opacity="0.95" filter="url(#glowW2)"/>
+      <line x1="18"  y1="120" x2="2"   y2="120"  stroke="#ff8c42" stroke-width="2"   stroke-linecap="round" opacity="0.7"/>
+      <line x1="222" y1="120" x2="238" y2="120"  stroke="#9b5de5" stroke-width="2"   stroke-linecap="round" opacity="0.7"/>
+      <line x1="149" y1="27"  x2="158" y2="14"  stroke="#ffb347" stroke-width="2.5" stroke-linecap="round" opacity="0.9"  filter="url(#glowW1)"/>
+      <line x1="91"  y1="27"  x2="82"  y2="14"  stroke="#ff6b6b" stroke-width="2.5" stroke-linecap="round" opacity="0.9"  filter="url(#glowW1)"/>
+      <line x1="199" y1="73"  x2="210" y2="62"  stroke="#ff8c42" stroke-width="2"   stroke-linecap="round" opacity="0.75"/>
+      <line x1="41"  y1="73"  x2="30"  y2="62"  stroke="#ff4081" stroke-width="2"   stroke-linecap="round" opacity="0.75"/>
+      <line x1="215" y1="149" x2="228" y2="157" stroke="#9b5de5" stroke-width="2"   stroke-linecap="round" opacity="0.7"/>
+      <line x1="25"  y1="149" x2="12"  y2="157" stroke="#ff8c42" stroke-width="2"   stroke-linecap="round" opacity="0.7"/>
+      <line x1="199" y1="167" x2="210" y2="178" stroke="#ff4081" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+      <line x1="41"  y1="167" x2="30"  y2="178" stroke="#cc88ff" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+      <line x1="170" y1="19"  x2="175" y2="11"  stroke="#ffb347" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>
+      <line x1="70"  y1="19"  x2="65"  y2="11"  stroke="#ff6b6b" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>
+      <line x1="218" y1="91"  x2="228" y2="86"  stroke="#ff4081" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+      <line x1="22"  y1="91"  x2="12"  y2="86"  stroke="#ffb347" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
+      <circle cx="120" cy="20"  r="5"   fill="#ffb347" filter="url(#glowW3)" opacity="1"/>
+      <circle cx="120" cy="20"  r="2.5" fill="white"   opacity="0.95"/>
+      <circle cx="120" cy="220" r="4.5" fill="#cc88ff"  filter="url(#glowW2)" opacity="0.95"/>
+      <circle cx="120" cy="220" r="2"   fill="white"    opacity="0.7"/>
+      <circle cx="20"  cy="120" r="3.5" fill="#ff8c42"  filter="url(#glowW1)" opacity="0.8"/>
+      <circle cx="220" cy="120" r="3.5" fill="#9b5de5"  filter="url(#glowW1)" opacity="0.8"/>
+      <circle cx="191" cy="49"  r="3"   fill="#ff6b6b"  opacity="0.85"/>
+      <circle cx="49"  cy="49"  r="3"   fill="#ffb347"  opacity="0.85"/>
+      <circle cx="191" cy="191" r="3"   fill="#cc88ff"  opacity="0.85"/>
+      <circle cx="49"  cy="191" r="3"   fill="#ff4081"  opacity="0.85"/>
+      <line x1="58" y1="62"  x2="182" y2="62"  stroke="url(#symW)" stroke-width="6" stroke-linecap="round" filter="url(#glowW1)"/>
+      <line x1="58" y1="178" x2="182" y2="178" stroke="url(#symW)" stroke-width="6" stroke-linecap="round" filter="url(#glowW1)"/>
+      <line x1="82" y1="62"  x2="82"  y2="178" stroke="url(#symW)" stroke-width="6" stroke-linecap="round" filter="url(#glowW1)"/>
+      <line x1="158" y1="62" x2="158" y2="178" stroke="url(#symW)" stroke-width="6" stroke-linecap="round" filter="url(#glowW1)"/>
+      <path d="M 82 90 Q 120 66 158 90"  stroke="#ffb347" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#glowW1)"/>
+      <path d="M 82 150 Q 120 174 158 150" stroke="#cc88ff" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#glowW1)"/>
+      <line x1="58" y1="62"  x2="182" y2="62"  stroke="#ffb347" stroke-width="2" opacity="0.3" stroke-linecap="round"/>
+      <line x1="58" y1="178" x2="182" y2="178" stroke="#cc88ff" stroke-width="2" opacity="0.3" stroke-linecap="round"/>
+      <path d="M 82 90 Q 120 66 158 90"  stroke="#ff8c42" stroke-width="2" fill="none" opacity="0.3"/>
+      <path d="M 82 150 Q 120 174 158 150" stroke="#9b5de5" stroke-width="2" fill="none" opacity="0.3"/>
     </svg>
     <div class="gem-title">GEMFIT</div>
     <div class="gem-sub">¿Quién entrena hoy?</div>
@@ -315,69 +371,77 @@ body{
   <div class="prof-cards">
 
     <!-- DEIVIS -->
-    <div class="pcard" style="border-color:rgba(0,153,77,.25);" onclick="selectProfile('deivis')">
+    <div class="pcard" style="border-color:rgba(204,85,0,.2);" onclick="selectProfile('deivis')">
       <!-- Banda superior con gradiente -->
-      <div style="height:6px;background:linear-gradient(90deg,#00cc66,#00994d);"></div>
+      <div style="height:6px;background:linear-gradient(90deg,#ff8c42,#ffb347);"></div>
       <div style="padding:18px 12px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;">
         <!-- Avatar con gradiente -->
         <div id="pav-deivis" onclick="event.stopPropagation();avatarTap('deivis')"
           style="width:80px;height:80px;border-radius:50%;
-            background:linear-gradient(135deg,#00cc66,#00994d);
+            background:linear-gradient(135deg,#ff8c42,#ffb347);
             display:flex;align-items:center;justify-content:center;
             font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:#fff;
             cursor:pointer;overflow:hidden;position:relative;
-            box-shadow:0 6px 20px rgba(0,153,77,.35);flex-shrink:0;"
+            box-shadow:0 6px 20px rgba(255,140,66,.35);flex-shrink:0;"
           title="Ver o cambiar foto">
           <span id="pav-txt-deivis">D</span>
           <img id="pav-img-deivis" src="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%;">
           <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.4);font-size:9px;color:#fff;text-align:center;padding:3px 0;">📷</div>
         </div>
         <div>
-          <div class="pname" style="color:#00994d;">DEIVIS</div>
+          <div class="pname" style="color:#cc5500;">DEIVIS</div>
           <div class="pmeta">33 años · 1.68m<br>88kg · Géminis ♊</div>
-          <div class="imc-chip" style="background:rgba(0,153,77,.12);color:#007a40;">IMC 31.2</div>
+          <div class="imc-chip" style="background:rgba(204,85,0,.12);color:#cc5500;">IMC 31.2</div>
         </div>
         <!-- Barra progreso semanal dinámica -->
         <div style="width:100%;">
           <div style="display:flex;justify-content:space-between;font-size:9px;color:#8899aa;margin-bottom:4px;">
-            <span>Sesiones semana</span>
-            <span id="dp-deivis">—</span>
+            <span>Semana actual</span>
+            <span id="dp-pct-deivis" style="font-weight:700;color:#cc5500;">0%</span>
           </div>
-          <div style="height:4px;background:rgba(0,153,77,.12);border-radius:99px;overflow:hidden;">
-            <div id="dp-bar-deivis" style="height:100%;background:linear-gradient(90deg,#00cc66,#00994d);border-radius:99px;width:0%;transition:width .5s;"></div>
+          <div style="height:5px;background:rgba(0,153,77,.12);border-radius:99px;overflow:hidden;">
+            <div id="dp-bar-deivis" style="height:100%;background:linear-gradient(90deg,#ff8c42,#ffb347);border-radius:99px;width:0%;transition:width .6s ease;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:#aabbcc;margin-top:3px;">
+            <span id="dp-deivis">0/6 sesiones</span>
+            <span id="dp-streak-deivis">🔥 0 días</span>
           </div>
         </div>
       </div>
     </div>
 
     <!-- YONA -->
-    <div class="pcard" style="border-color:rgba(0,136,187,.25);" onclick="selectProfile('yona')">
-      <div style="height:6px;background:linear-gradient(90deg,#4CC9F0,#0088bb);"></div>
+    <div class="pcard" style="border-color:rgba(106,0,184,.2);" onclick="selectProfile('yona')">
+      <div style="height:6px;background:linear-gradient(90deg,#c0006e,#9b5de5);"></div>
       <div style="padding:18px 12px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;">
         <div id="pav-yona" onclick="event.stopPropagation();avatarTap('yona')"
           style="width:80px;height:80px;border-radius:50%;
-            background:linear-gradient(135deg,#4CC9F0,#0088bb);
+            background:linear-gradient(135deg,#c0006e,#9b5de5);
             display:flex;align-items:center;justify-content:center;
             font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:#fff;
             cursor:pointer;overflow:hidden;position:relative;
-            box-shadow:0 6px 20px rgba(0,136,187,.35);flex-shrink:0;"
+            box-shadow:0 6px 20px rgba(221,0,96,.3);flex-shrink:0;"
           title="Ver o cambiar foto">
           <span id="pav-txt-yona">Y</span>
           <img id="pav-img-yona" src="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%;">
           <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.4);font-size:9px;color:#fff;text-align:center;padding:3px 0;">📷</div>
         </div>
         <div>
-          <div class="pname" style="color:#0088bb;">YONA</div>
+          <div class="pname" style="color:#6a00b8;">YONA</div>
           <div class="pmeta">29 años · 1.68m<br>88kg · Géminis ♊</div>
-          <div class="imc-chip" style="background:rgba(0,136,187,.12);color:#006fa8;">IMC 31.2</div>
+          <div class="imc-chip" style="background:rgba(106,0,184,.12);color:#6a00b8;">IMC 31.2</div>
         </div>
         <div style="width:100%;">
           <div style="display:flex;justify-content:space-between;font-size:9px;color:#8899aa;margin-bottom:4px;">
-            <span>Sesiones semana</span>
-            <span id="dp-yona">—</span>
+            <span>Semana actual</span>
+            <span id="dp-pct-yona" style="font-weight:700;color:#6a00b8;">0%</span>
           </div>
-          <div style="height:4px;background:rgba(0,136,187,.12);border-radius:99px;overflow:hidden;">
-            <div id="dp-bar-yona" style="height:100%;background:linear-gradient(90deg,#4CC9F0,#0088bb);border-radius:99px;width:0%;transition:width .5s;"></div>
+          <div style="height:5px;background:rgba(0,136,187,.12);border-radius:99px;overflow:hidden;">
+            <div id="dp-bar-yona" style="height:100%;background:linear-gradient(90deg,#c0006e,#9b5de5);border-radius:99px;width:0%;transition:width .6s ease;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:#aabbcc;margin-top:3px;">
+            <span id="dp-yona">0/6 sesiones</span>
+            <span id="dp-streak-yona">🔥 0 días</span>
           </div>
         </div>
       </div>
@@ -427,8 +491,8 @@ body{
 // PROFILES
 // ═══════════════════════════════════════════════════════════════
 const PROFS = {
-  deivis: { name:'DEIVIS', age:33, h:1.68, w:88, color:'#00994d', dim:'rgba(0,153,77,.10)', init:'D' },
-  yona:   { name:'YONA',   age:29, h:1.68, w:88, color:'#0088bb', dim:'rgba(0,136,187,.10)', init:'Y' }
+  deivis: { name:'DEIVIS', age:33, h:1.68, w:88, color:'#cc5500', dim:'rgba(204,85,0,.10)', init:'D' },
+  yona:   { name:'YONA',   age:29, h:1.68, w:88, color:'#6a00b8', dim:'rgba(106,0,184,.10)', init:'Y' }
 };
 
 // ═══════════════════════════════════════════════════════════════
@@ -607,19 +671,19 @@ const WEEK_PLAN = [
 // MEV = Mínimo Efectivo, REC = Recomendado, MRV = Máximo Recuperable
 // ═══════════════════════════════════════════════════════════════
 const VOLUME_DATA = [
-  {m:'Pecho',mev:10,rec:16,mrv:22,plan:16,freq:2,reps:'8-12',color:'#c0006e'},
-  {m:'X',     mev:10,rec:16,mrv:22,plan:16,freq:2,reps:'8-12',color:'#c0006e'},
-  {m:'Espalda',   mev:10,rec:18,mrv:25,plan:18,freq:2,reps:'6-12',color:'#006fa8'},
+  {m:'Pecho',mev:10,rec:16,mrv:22,plan:16,freq:2,reps:'8-12',color:'#dd0060'},
+  {m:'X',     mev:10,rec:16,mrv:22,plan:16,freq:2,reps:'8-12',color:'#dd0060'},
+  {m:'Espalda',   mev:10,rec:18,mrv:25,plan:18,freq:2,reps:'6-12',color:'#0066aa'},
   {m:'Deltoides Lat.',mev:6,rec:16,mrv:22,plan:16,freq:2,reps:'15-20',color:'#4CC9F0'},
-  {m:'Deltoides Post.',mev:6,rec:12,mrv:20,plan:12,freq:2,reps:'15-20',color:'#c0006e'},
-  {m:'Cuádriceps',mev:8,rec:16,mrv:20,plan:16,freq:2,reps:'6-15',color:'#5a009a'},
-  {m:'Isquiotibiales',mev:6,rec:12,mrv:20,plan:12,freq:2,reps:'8-12',color:'#5a009a'},
-  {m:'Glúteo',    mev:6,rec:12,mrv:20,plan:12,freq:2,reps:'8-15',color:'#c0006e'},
-  {m:'Gemelos',   mev:8,rec:16,mrv:20,plan:16,freq:2,reps:'10-15',color:'#00994d'},
-  {m:'Bíceps',    mev:6,rec:14,mrv:20,plan:14,freq:2,reps:'8-12',color:'#00994d'},
-  {m:'Tríceps',   mev:6,rec:14,mrv:18,plan:14,freq:2,reps:'8-15',color:'#00994d'},
+  {m:'Deltoides Post.',mev:6,rec:12,mrv:20,plan:12,freq:2,reps:'15-20',color:'#dd0060'},
+  {m:'Cuádriceps',mev:8,rec:16,mrv:20,plan:16,freq:2,reps:'6-15',color:'#6600bb'},
+  {m:'Isquiotibiales',mev:6,rec:12,mrv:20,plan:12,freq:2,reps:'8-12',color:'#6600bb'},
+  {m:'Glúteo',    mev:6,rec:12,mrv:20,plan:12,freq:2,reps:'8-15',color:'#dd0060'},
+  {m:'Gemelos',   mev:8,rec:16,mrv:20,plan:16,freq:2,reps:'10-15',color:'#cc5500'},
+  {m:'Bíceps',    mev:6,rec:14,mrv:20,plan:14,freq:2,reps:'8-12',color:'#cc5500'},
+  {m:'Tríceps',   mev:6,rec:14,mrv:18,plan:14,freq:2,reps:'8-15',color:'#cc5500'},
   {m:'Trapecio',  mev:4,rec:10,mrv:16,plan:10,freq:2,reps:'10-15',color:'#3a5a48'},
-  {m:'Core',      mev:8,rec:16,mrv:20,plan:16,freq:2,reps:'10-20',color:'#006fa8'},
+  {m:'Core',      mev:8,rec:16,mrv:20,plan:16,freq:2,reps:'10-20',color:'#0066aa'},
 ];
 
 // ═══════════════════════════════════════════════════════════════
@@ -627,11 +691,11 @@ const VOLUME_DATA = [
 // ═══════════════════════════════════════════════════════════════
 const SUPS = [
   {name:'Creatina monohidrato',dose:'5g · todos los días',color:'#4ade80',verdict:'✓ Esencial',vbg:'rgba(74,222,128,.15)',vc:'#4ade80',tags:['Fuerza','Dureza muscular'],why:'El suplemento más estudiado del mundo. Llena el músculo intracelularmente. Efecto visual inmediato: más duro y más lleno. Sin ciclar, sin carga.',time:'Cualquier momento, diario',p:1},
-  {name:'Whey proteína isolada',dose:'1–2 scoops · post-entreno',color:'#ff6b35',verdict:'✓ Esencial',vbg:'rgba(192,0,110,.15)',vc:'#ff6b35',tags:['Músculo','Definición'],why:'Sin proteína alta no hay definición. La isolada tiene menos calorías y lactosa. Completa tus 176–200g diarios.',time:'Post-entreno en 300ml agua',p:1},
+  {name:'Whey proteína isolada',dose:'1–2 scoops · post-entreno',color:'#ff6b35',verdict:'✓ Esencial',vbg:'rgba(221,0,96,.15)',vc:'#ff6b35',tags:['Músculo','Definición'],why:'Sin proteína alta no hay definición. La isolada tiene menos calorías y lactosa. Completa tus 176–200g diarios.',time:'Post-entreno en 300ml agua',p:1},
   {name:'Cafeína / café',dose:'150–200mg · pre-entreno',color:'#facc15',verdict:'✓ Esencial',vbg:'rgba(250,204,21,.15)',vc:'#facc15',tags:['Energía','Rendimiento'],why:'Más intensidad = más músculo preservado en déficit. Espresso doble es suficiente. No necesitas pre-entrenos caros.',time:'30–45 min antes de entrenar',p:1},
-  {name:'Ashwagandha KSM-66',dose:'300–600mg · con cena',color:'#a855f7',verdict:'✓ Muy recomendado',vbg:'rgba(90,0,154,.15)',vc:'#a855f7',tags:['Cortisol','Testosterona','Sueño'],why:'Reduce cortisol que destruye músculo y acumula grasa abdominal. Sube testosterona 10-15% en hombres. Mejora recuperación nocturna. Usa KSM-66 estandarizado.',time:'Con la cena o antes de dormir',p:2},
-  {name:'L-Citrulina malato 2:1',dose:'6–8g · pre-entreno',color:'#ff6b35',verdict:'✓ Muy recomendado',vbg:'rgba(192,0,110,.12)',vc:'#ff6b35',tags:['Bombeo','Dureza visual'],why:'Más óxido nítrico → más flujo al músculo → bombeo pronunciado. Visual inmediato: músculos más llenos y duros. Mejora recuperación entre series.',time:'30–45 min antes de entrenar',p:2},
-  {name:'Omega-3 EPA+DHA',dose:'3–4g · con comidas',color:'#3b82f6',verdict:'✓ Recomendado',vbg:'rgba(0,111,168,.15)',vc:'#3b82f6',tags:['Grasa visceral','Antiinflamatorio'],why:'Reduce grasa abdominal específicamente y mejora sensibilidad a insulina. Antiinflamatorio que acelera recuperación muscular.',time:'Con 2 comidas principales',p:2},
+  {name:'Ashwagandha KSM-66',dose:'300–600mg · con cena',color:'#a855f7',verdict:'✓ Muy recomendado',vbg:'rgba(102,0,187,.15)',vc:'#a855f7',tags:['Cortisol','Testosterona','Sueño'],why:'Reduce cortisol que destruye músculo y acumula grasa abdominal. Sube testosterona 10-15% en hombres. Mejora recuperación nocturna. Usa KSM-66 estandarizado.',time:'Con la cena o antes de dormir',p:2},
+  {name:'L-Citrulina malato 2:1',dose:'6–8g · pre-entreno',color:'#ff6b35',verdict:'✓ Muy recomendado',vbg:'rgba(221,0,96,.12)',vc:'#ff6b35',tags:['Bombeo','Dureza visual'],why:'Más óxido nítrico → más flujo al músculo → bombeo pronunciado. Visual inmediato: músculos más llenos y duros. Mejora recuperación entre series.',time:'30–45 min antes de entrenar',p:2},
+  {name:'Omega-3 EPA+DHA',dose:'3–4g · con comidas',color:'#3b82f6',verdict:'✓ Recomendado',vbg:'rgba(0,102,170,.15)',vc:'#3b82f6',tags:['Grasa visceral','Antiinflamatorio'],why:'Reduce grasa abdominal específicamente y mejora sensibilidad a insulina. Antiinflamatorio que acelera recuperación muscular.',time:'Con 2 comidas principales',p:2},
   {name:'Vitamina D3 + K2',dose:'4000 UI D3 + 100mcg K2',color:'#facc15',verdict:'✓ Recomendado',vbg:'rgba(250,204,21,.12)',vc:'#facc15',tags:['Testosterona','Composición'],why:'Déficit de D3 = más grasa abdominal + testosterona baja. La K2 dirige el calcio al hueso. Tómalos siempre juntos.',time:'Con desayuno con grasa',p:2},
   {name:'Magnesio glicinato',dose:'300–400mg · noche',color:'#7ecfff',verdict:'✓ Recomendado',vbg:'rgba(126,207,255,.12)',vc:'#7ecfff',tags:['Sueño','Recuperación'],why:'Mejor sueño = más GH nocturna = más músculo. El glicinato no da problemas digestivos. Muy infravalorado.',time:'30 min antes de dormir',p:2},
   {name:'BCAA (ratio 2:1:1)',dose:'5g · solo si no llegas a proteína',color:'#888',verdict:'⚠ Condicional',vbg:'rgba(136,136,136,.12)',vc:'#888',tags:['Músculo'],why:'Si llegas a tus 176–200g de proteína, los BCAA no añaden nada. El whey ya los tiene. Solo útil en ayunas o días bajos de proteína.',time:'Solo si no llegas al objetivo de proteína',p:3},
@@ -648,11 +712,11 @@ const HORARIO = [
 
 const CHK_ITEMS = [
   {name:'Creatina monohidrato',sub:'5g · cualquier momento',badge:'Esencial',bc:'rgba(74,222,128,.2)',btc:'#4ade80'},
-  {name:'Whey isolada',sub:'1–2 scoops · post-entreno',badge:'Esencial',bc:'rgba(192,0,110,.2)',btc:'#ff6b35'},
+  {name:'Whey isolada',sub:'1–2 scoops · post-entreno',badge:'Esencial',bc:'rgba(221,0,96,.2)',btc:'#ff6b35'},
   {name:'Café / Cafeína',sub:'150–200mg · pre-entreno',badge:'Esencial',bc:'rgba(250,204,21,.2)',btc:'#facc15'},
-  {name:'L-Citrulina malato',sub:'6–8g · pre-entreno',badge:'Recomendado',bc:'rgba(192,0,110,.15)',btc:'#ff6b35'},
-  {name:'Ashwagandha KSM-66',sub:'300–600mg · con cena',badge:'Recomendado',bc:'rgba(90,0,154,.2)',btc:'#a855f7'},
-  {name:'Omega-3 EPA+DHA',sub:'3–4g · con comidas',badge:'Recomendado',bc:'rgba(0,111,168,.2)',btc:'#3b82f6'},
+  {name:'L-Citrulina malato',sub:'6–8g · pre-entreno',badge:'Recomendado',bc:'rgba(221,0,96,.15)',btc:'#ff6b35'},
+  {name:'Ashwagandha KSM-66',sub:'300–600mg · con cena',badge:'Recomendado',bc:'rgba(102,0,187,.2)',btc:'#a855f7'},
+  {name:'Omega-3 EPA+DHA',sub:'3–4g · con comidas',badge:'Recomendado',bc:'rgba(0,102,170,.2)',btc:'#3b82f6'},
   {name:'Vitamina D3 + K2',sub:'4000 UI + 100mcg · desayuno',badge:'Recomendado',bc:'rgba(250,204,21,.15)',btc:'#facc15'},
   {name:'Magnesio glicinato',sub:'300–400mg · antes de dormir',badge:'Recomendado',bc:'rgba(126,207,255,.15)',btc:'#7ecfff'},
 ];
@@ -660,7 +724,7 @@ const CHK_ITEMS = [
 // ═══════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════
-const TC = {push:'#c0006e',pull:'#006fa8',legs:'#5a009a',skip:'#9aabb8',rest:'#9aabb8'};
+const TC = {push:'#dd0060',pull:'#0066aa',legs:'#6600bb',skip:'#c0a0b0',rest:'#c0a0b0'};
 const MONTHS = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
 const DAYS_ES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const MONTHS_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
@@ -1080,7 +1144,6 @@ window.addEventListener('DOMContentLoaded', ()=>{
 });
 
 function updateProfileStats(){
-  // Calculate this week's sessions for each profile
   const now = new Date();
   const monday = new Date(now);
   monday.setDate(now.getDate() - ((now.getDay()+6)%7));
@@ -1088,6 +1151,8 @@ function updateProfileStats(){
 
   ['deivis','yona'].forEach(id=>{
     const data = AD[id]||{};
+
+    // Weekly sessions
     let count = 0;
     for(let d=0;d<7;d++){
       const day = new Date(monday); day.setDate(monday.getDate()+d);
@@ -1095,10 +1160,26 @@ function updateProfileStats(){
       if(data[k]&&data[k].session&&data[k].session!=='skip'&&SESSIONS[data[k].session]) count++;
     }
     const pct = Math.round((count/6)*100);
-    const lbl = document.getElementById('dp-'+id);
-    const bar = document.getElementById('dp-bar-'+id);
-    if(lbl) lbl.textContent = count+'/6 días';
-    if(bar) setTimeout(()=>bar.style.width=pct+'%', 200);
+
+    // Streak (consecutive days trained)
+    let streak = 0;
+    for(let i=0;i<365;i++){
+      const d2 = new Date(now); d2.setDate(now.getDate()-i);
+      const k = d2.getFullYear()+'-'+String(d2.getMonth()+1).padStart(2,'0')+'-'+String(d2.getDate()).padStart(2,'0');
+      if(data[k]&&data[k].session&&data[k].session!=='skip'&&SESSIONS[data[k].session]) streak++;
+      else if(i>0) break;
+    }
+
+    // Update DOM
+    const lbl    = document.getElementById('dp-'+id);
+    const bar    = document.getElementById('dp-bar-'+id);
+    const pctEl  = document.getElementById('dp-pct-'+id);
+    const strEl  = document.getElementById('dp-streak-'+id);
+
+    if(lbl)   lbl.textContent   = count+'/6 sesiones';
+    if(pctEl) pctEl.textContent = pct+'%';
+    if(strEl) strEl.textContent = '🔥 '+streak+' días';
+    if(bar)   setTimeout(()=>bar.style.width=pct+'%', 300);
   });
 }
 
@@ -1210,8 +1291,8 @@ function renderPlan(){
 function renderVolumen(){
   const p = pr();
   let h = `<div class="inner">
-  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(245,245,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
-    <button onclick="goTab('plan')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.6);border:1px solid rgba(0,0,0,.12);border-radius:8px;color:#5a6a7a;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(255,238,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
+    <button onclick="goTab('plan')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.1);border-radius:8px;color:#7a6070;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
     <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;color:${p.color};">VOLUMEN SEMANAL</span>
   </div>
   <div style="font-size:10px;color:${p.color};text-transform:uppercase;letter-spacing:.18em;margin-bottom:4px;">Ciencia del Volumen</div>
@@ -1676,10 +1757,10 @@ function renderStats(){
   const data=gd(); let tot=0,push=0,pull=0,legs=0;
   Object.values(data).forEach(d=>{if(!d.session||d.session==='skip')return;const s=SESSIONS[d.session];if(!s)return;tot++;if(s.type==='push')push++;else if(s.type==='pull')pull++;else if(s.type==='legs')legs++;});
   return `<div class="stats-grid">
-    <div class="stat-card"><div class="stat-val" style="color:#00994d">${tot}</div><div class="stat-lbl">Total</div></div>
-    <div class="stat-card"><div class="stat-val" style="color:#c0006e">${push}</div><div class="stat-lbl">Push</div></div>
-    <div class="stat-card"><div class="stat-val" style="color:#006fa8">${pull}</div><div class="stat-lbl">Pull</div></div>
-    <div class="stat-card"><div class="stat-val" style="color:#5a009a">${legs}</div><div class="stat-lbl">Legs</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#cc5500">${tot}</div><div class="stat-lbl">Total</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#dd0060">${push}</div><div class="stat-lbl">Push</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#0066aa">${pull}</div><div class="stat-lbl">Pull</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#6600bb">${legs}</div><div class="stat-lbl">Legs</div></div>
   </div>`;
 }
 
@@ -1689,8 +1770,8 @@ function renderStats(){
 function renderPerfil(){
   const p=pr(); const lw=gw().length?gw()[gw().length-1].val:p.w;
   document.getElementById('tab-perfil').innerHTML=`<div class="inner">
-  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(245,245,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
-    <button onclick="goTab('plan')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.6);border:1px solid rgba(0,0,0,.12);border-radius:8px;color:#5a6a7a;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(255,238,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
+    <button onclick="goTab('plan')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.1);border-radius:8px;color:#7a6070;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
     <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;color:${p.color};">${p.name} — PERFIL</span>
   </div>
   <div class="card" style="margin-bottom:12px;"><div class="card-body" style="display:flex;align-items:center;gap:12px;">
@@ -1847,8 +1928,8 @@ function renderProgreso(){
   Object.values(data).forEach(d=>{if(d.session&&d.session!=='skip'&&SESSIONS[d.session])totSess++;});
 
   document.getElementById('tab-progreso').innerHTML=`<div class="inner">
-  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(245,245,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
-    <button onclick="goTab('plan')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.6);border:1px solid rgba(0,0,0,.12);border-radius:8px;color:#5a6a7a;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(255,238,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
+    <button onclick="goTab('plan')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.1);border-radius:8px;color:#7a6070;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
     <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;color:${p.color};">PROGRESO</span>
   </div>
 
@@ -1938,9 +2019,9 @@ function renderProgreso(){
     <div class="section-label">Sesiones por semana</div>
     <div class="chart-area" id="chWrap"></div>
     <div class="chart-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#c0006e"></div>Push/Upper</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#006fa8"></div>Pull</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#5a009a"></div>Lower/Legs</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#dd0060"></div>Push/Upper</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0066aa"></div>Pull</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6600bb"></div>Lower/Legs</div>
     </div>
   </div></div>
 
@@ -1994,7 +2075,7 @@ function renderChart(){
   weeks.forEach(w=>{
     const col=document.createElement('div'); col.className='chart-col';
     const bars=document.createElement('div'); bars.className='chart-bars';
-    [[w.push,'#c0006e'],[w.pull,'#006fa8'],[w.legs,'#5a009a']].forEach(([v,c])=>{
+    [[w.push,'#dd0060'],[w.pull,'#0066aa'],[w.legs,'#6600bb']].forEach(([v,c])=>{
       const b=document.createElement('div'); b.className='chart-bar';
       b.style.background=c; b.style.height=(v>0?Math.round((v/mx)*H):0)+'px';
       bars.appendChild(b);
@@ -2069,8 +2150,8 @@ function renderFotos(){
   document.getElementById('tab-fotos').innerHTML = `
   ${lightbox}
   <div class="inner">
-  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(245,245,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
-    <button onclick="goTab('progreso')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.6);border:1px solid rgba(0,0,0,.12);border-radius:8px;color:#5a6a7a;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(255,238,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
+    <button onclick="goTab('progreso')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.1);border-radius:8px;color:#7a6070;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
     <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;color:${p.color};">FOTOS 📸</span>
   </div>
     <div style="font-size:10px;color:${p.color};text-transform:uppercase;letter-spacing:.18em;margin-bottom:4px;">Transformación Visual</div>
@@ -2442,7 +2523,7 @@ function renderCalorias(){
         <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">Agua</div>
         <div style="display:flex;gap:5px;align-items:center;">
           ${[1,2,3,4,5,6,7,8].map(i=>`
-          <div onclick="setWater(${i})" style="width:26px;height:26px;border-radius:50%;border:1.5px solid ${water>=i?'#3b82f6':'var(--border2)'};background:${water>=i?'rgba(0,111,168,.2)':'var(--card2)'};cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;color:${water>=i?'#3b82f6':'var(--muted)'};">
+          <div onclick="setWater(${i})" style="width:26px;height:26px;border-radius:50%;border:1.5px solid ${water>=i?'#3b82f6':'var(--border2)'};background:${water>=i?'rgba(0,102,170,.2)':'var(--card2)'};cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;color:${water>=i?'#3b82f6':'var(--muted)'};">
             ${i}
           </div>`).join('')}
         </div>
@@ -2497,7 +2578,7 @@ function filterFoods(){
   if(name&&kcal){
     list.innerHTML+=`<div onclick="addCustomFood()"
       style="padding:9px 12px;background:rgba(200,241,53,.08);border-radius:8px;border:1px dashed rgba(200,241,53,.3);cursor:pointer;text-align:center;margin-top:4px;">
-      <div style="font-size:12px;color:#00994d;font-weight:500;">+ Añadir "${name}" · ${kcal} kcal</div>
+      <div style="font-size:12px;color:#cc5500;font-weight:500;">+ Añadir "${name}" · ${kcal} kcal</div>
     </div>`;
   }
 }
@@ -2529,8 +2610,8 @@ function renderSups(view){
   const today2=new Date();
   const ds=`${DAYS_ES[today2.getDay()]} ${today2.getDate()} de ${MONTHS_ES[today2.getMonth()]}`;
   let h=`<div class="inner">
-  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(245,245,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
-    <button onclick="goTab('plan')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.6);border:1px solid rgba(0,0,0,.12);border-radius:8px;color:#5a6a7a;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(255,238,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
+    <button onclick="goTab('plan')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.1);border-radius:8px;color:#7a6070;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
     <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;color:${p.color};">SUPLEMENTOS 💊</span>
   </div>
   <div class="sup-tabs">
@@ -2690,7 +2771,7 @@ function toggleSup(i){
   <div style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #222;flex-shrink:0;">
     <button onclick="closeAvatarEditor()" style="background:none;border:none;color:#888;font-size:0.9rem;cursor:pointer;padding:4px 8px;border-radius:6px;border:1px solid #333;">Cancelar</button>
     <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.08em;color:#e0e0e0;">AJUSTAR FOTO</div>
-    <button onclick="confirmAvatarEdit()" style="background:#00994d;color:#ffffff;border:none;font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:.06em;cursor:pointer;padding:5px 14px;border-radius:6px;">Confirmar</button>
+    <button onclick="confirmAvatarEdit()" style="background:#cc5500;color:#ffffff;border:none;font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:.06em;cursor:pointer;padding:5px 14px;border-radius:6px;">Confirmar</button>
   </div>
 
   <!-- Preview circle -->
@@ -2731,7 +2812,7 @@ function toggleSup(i){
       <span style="font-size:14px;color:#555;">🔍</span>
       <input type="range" id="zoomSlider" min="50" max="300" value="100"
         oninput="onZoomSlider(this.value)"
-        style="flex:1;accent-color:#00994d;cursor:pointer;">
+        style="flex:1;accent-color:#cc5500;cursor:pointer;">
       <span style="font-size:16px;color:#555;">🔍</span>
     </div>
     <div style="text-align:center;font-family:'DM Mono',monospace;font-size:10px;color:#555;margin-top:4px;" id="zoomLabel">100%</div>
