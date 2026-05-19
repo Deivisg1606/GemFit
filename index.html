@@ -314,20 +314,20 @@ body{
   </div>
   <div class="prof-cards">
     <div class="pcard" style="--pc:rgba(245,197,66,.4)" onclick="selectProfile('deivis')">
-      <div class="pav" id="pav-deivis" onclick="changeAvatar('deivis')" style="background:rgba(245,197,66,.12);color:#f5c542;border:2px solid rgba(245,197,66,.3);cursor:pointer;overflow:hidden;position:relative;" title="Toca para cambiar foto">
+      <div class="pav" id="pav-deivis" onclick="avatarTap('deivis')" style="background:rgba(245,197,66,.12);color:#f5c542;border:2px solid rgba(245,197,66,.3);cursor:pointer;overflow:hidden;position:relative;" title="Ver o cambiar foto">
               <span id="pav-txt-deivis">D</span>
               <img id="pav-img-deivis" src="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%;">
-              <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.45);font-size:8px;color:#fff;text-align:center;padding:2px 0;letter-spacing:.05em;">EDITAR</div>
+              <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.45);font-size:8px;color:#fff;text-align:center;padding:2px 0;letter-spacing:.05em;">📷</div>
             </div>
       <div class="pname" style="color:#f5c542">DEIVIS</div>
       <div class="pmeta">33 años · 1.68m · 88kg<br>Géminis ♊</div>
       <div class="imc-chip" style="background:rgba(255,107,53,.2);color:#ff6b35;">IMC 31.2 · Sobrepeso</div>
     </div>
     <div class="pcard" style="--pc:rgba(232,232,232,.4)" onclick="selectProfile('yona')">
-      <div class="pav" id="pav-yona" onclick="changeAvatar('yona')" style="background:rgba(232,232,232,.12);color:#e8e8e8;border:2px solid rgba(232,232,232,.3);cursor:pointer;overflow:hidden;position:relative;" title="Toca para cambiar foto">
+      <div class="pav" id="pav-yona" onclick="avatarTap('yona')" style="background:rgba(232,232,232,.12);color:#e8e8e8;border:2px solid rgba(232,232,232,.3);cursor:pointer;overflow:hidden;position:relative;" title="Ver o cambiar foto">
               <span id="pav-txt-yona">Y</span>
               <img id="pav-img-yona" src="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%;">
-              <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.45);font-size:8px;color:#fff;text-align:center;padding:2px 0;letter-spacing:.05em;">EDITAR</div>
+              <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.45);font-size:8px;color:#fff;text-align:center;padding:2px 0;letter-spacing:.05em;">📷</div>
             </div>
       <div class="pname" style="color:#e8e8e8">YONA</div>
       <div class="pmeta">29 años · 1.68m · 88kg<br>Géminis ♊</div>
@@ -666,6 +666,64 @@ let _edX = 0, _edY = 0, _edScale = 1;
 let _dragging = false, _lastTX = 0, _lastTY = 0;
 let _pinchDist = 0;
 const EDITOR_SIZE = 280, CIRCLE_R = 118;
+
+function avatarTap(profileId){
+  // Show options modal — view photo + option to change or remove
+  const modal = document.getElementById('avatarOptionsModal');
+  const circle = document.getElementById('avatarViewerCircle');
+  const initial = document.getElementById('avatarViewerInitial');
+  const nameEl = document.getElementById('avatarViewerName');
+  const removeBtn = document.getElementById('avatarRemoveBtn');
+  const p2 = PROFS[profileId];
+
+  // Store which profile we're editing
+  _avatarEditProfile = profileId;
+
+  // Set name and color
+  nameEl.textContent = p2.name;
+  nameEl.style.color = p2.color;
+
+  if(AVATARS[profileId]){
+    // Has photo — show it
+    circle.style.display = 'block';
+    circle.style.borderColor = p2.color;
+    circle.innerHTML = `<img src="${AVATARS[profileId]}" style="width:100%;height:100%;object-fit:cover;">`;
+    initial.style.display = 'none';
+    removeBtn.style.display = 'block';
+  } else {
+    // No photo — show initial letter
+    circle.style.display = 'none';
+    initial.style.display = 'flex';
+    initial.style.borderColor = p2.color;
+    initial.style.color = p2.color;
+    initial.style.background = p2.dim;
+    initial.textContent = p2.init;
+    removeBtn.style.display = 'none';
+  }
+
+  modal.style.display = 'flex';
+}
+
+function closeAvatarOptions(){
+  const modal = document.getElementById('avatarOptionsModal');
+  if(modal) modal.style.display = 'none';
+}
+
+function changeAvatarFromOptions(){
+  closeAvatarOptions();
+  // Small delay so modal closes before file picker opens
+  setTimeout(()=> changeAvatar(_avatarEditProfile), 200);
+}
+
+function removeAvatarFromOptions(){
+  if(!_avatarEditProfile) return;
+  AVATARS[_avatarEditProfile] = null;
+  lsSave();
+  closeAvatarOptions();
+  updateProfileAvatars();
+  updateTopbarAvatar();
+  if(document.getElementById('tab-perfil').classList.contains('active')) renderPerfil();
+}
 
 function changeAvatar(profileId){
   _avatarEditProfile = profileId;
@@ -1444,7 +1502,7 @@ function renderPerfil(){
     <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;color:${p.color};">${p.name} — PERFIL</span>
   </div>
   <div class="card" style="margin-bottom:12px;"><div class="card-body" style="display:flex;align-items:center;gap:12px;">
-    <div onclick="changeAvatar('${CP}')" style="width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;flex-shrink:0;background:${p.dim};color:${p.color};border:2px solid ${p.color}40;cursor:pointer;overflow:hidden;position:relative;" title="Toca para cambiar foto">
+    <div onclick="avatarTap('${CP}')" style="width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;flex-shrink:0;background:${p.dim};color:${p.color};border:2px solid ${p.color}40;cursor:pointer;overflow:hidden;position:relative;" title="Ver o cambiar foto">
       ${AVATARS[CP]?`<img src="${AVATARS[CP]}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%;">`:`<span>${p.init}</span>`}
       <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);font-size:7px;color:#fff;text-align:center;padding:2px 0;letter-spacing:.05em;">📷</div>
     </div>
@@ -2366,6 +2424,45 @@ function toggleSup(i){
   renderSups('checklist');
 }
 </script>
+
+<!-- ═══════════════ AVATAR OPTIONS MODAL ═══════════════ -->
+<div id="avatarOptionsModal" style="
+  display:none; position:fixed; inset:0; z-index:1999;
+  background:rgba(0,0,0,.85); backdrop-filter:blur(8px);
+  flex-direction:column; align-items:center; justify-content:flex-end;
+  padding-bottom:30px;
+">
+  <!-- Photo viewer -->
+  <div id="avatarViewerWrap" style="flex:1;display:flex;align-items:center;justify-content:center;width:100%;padding:20px;">
+    <div style="position:relative;">
+      <div id="avatarViewerCircle" style="width:180px;height:180px;border-radius:50%;overflow:hidden;border:3px solid;margin:0 auto;background:#111;"></div>
+      <div id="avatarViewerInitial" style="width:180px;height:180px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:4rem;border:3px solid;display:none;"></div>
+    </div>
+  </div>
+  <!-- Name -->
+  <div id="avatarViewerName" style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.1em;margin-bottom:20px;"></div>
+  <!-- Action buttons -->
+  <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px;padding:0 20px;">
+    <button id="avatarChangeBtn" onclick="changeAvatarFromOptions()" style="
+      width:100%;padding:14px;border-radius:12px;
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+      color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;
+      cursor:pointer;transition:background .15s;
+    ">📷 Cambiar foto de perfil</button>
+    <button id="avatarRemoveBtn" onclick="removeAvatarFromOptions()" style="
+      width:100%;padding:14px;border-radius:12px;
+      background:rgba(255,80,80,.1);border:1px solid rgba(255,80,80,.2);
+      color:#ff5555;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;
+      cursor:pointer;display:none;
+    ">🗑 Eliminar foto</button>
+    <button onclick="closeAvatarOptions()" style="
+      width:100%;padding:14px;border-radius:12px;
+      background:transparent;border:1px solid #333;
+      color:#888;font-family:'DM Sans',sans-serif;font-size:14px;
+      cursor:pointer;
+    ">Cancelar</button>
+  </div>
+</div>
 
 <!-- ═══════════════ AVATAR EDITOR MODAL ═══════════════ -->
 <div id="avatarEditorModal" style="
