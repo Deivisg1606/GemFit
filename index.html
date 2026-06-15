@@ -748,9 +748,10 @@ function lsSave(){
     localStorage.setItem(LS_KEY, JSON.stringify({
       AD, WD, SC, PD, CALS, AVATARS, EXLIB, CP
     }));
-  }catch(e){
+}catch(e){
     console.warn('localStorage full or unavailable:', e);
   }
+  cloudSave();
 }
 
 // Load persisted data or use defaults
@@ -1138,9 +1139,14 @@ function goProfiles(){
 }
 
 // On load — only restore avatars on profile screen, never auto-login
-window.addEventListener('DOMContentLoaded', ()=>{
+window.addEventListener('DOMContentLoaded', async ()=>{
   updateProfileAvatars();
   updateProfileStats();
+  const cloudLoaded = await cloudLoad();
+  if(cloudLoaded){
+    updateProfileAvatars();
+    updateProfileStats();
+  }
 });
 
 function updateProfileStats(){
@@ -2696,6 +2702,99 @@ function toggleSup(i){
   lsSave();
   renderSups('checklist');
 }
+
+// ═══════════════════════════════════════════════════════════════
+// JSONBIN.IO — Persistencia en la nube
+// ═══════════════════════════════════════════════════════════════
+const JBIN_KEY  = '$2a$10$9zwpjHkY0al.W8DgrVHnF.j8Bm8ijv.eFJ1W.D/i2tedN1P2x9HZy';
+const JBIN_BASE = 'https://api.jsonbin.io/v3/b';
+const JBIN_BIN_KEY = 'gemfit_binId_v1';
+
+let _binId       = localStorage.getItem(JBIN_BIN_KEY) || null;
+let _saveTimer   = null;
+let _saving      = false;
+let _pendingSave = false;
+
+function buildPayload(){ return { AD, WD, SC, PD, CALS, AVATARS, EXLIB }; }
+
+function showSyncStatus(state){
+  let el = document.getElementById('syncBadge');
+  if(!el){
+    el = document.createElement('div'); el.id = 'syncBadge';
+    el.style.cssText = 'position:fixed;bottom:72px;right:12px;z-index:9999;padding:5px 11px;border-radius:20px;font-size:10px;font-weight:600;font-family:"DM Sans",sans-serif;letter-spacing:.06em;pointer-events:none;transition:opacity .5s;border:1px solid;box-shadow:0 2px 10px rgba(0,0,0,.3);';
+    document.body.appendChild(el);
+  }
+  const S = {
+    saving:{ bg:'rgba(250,204,21,.15)',color:'#facc15',border:'rgba(250,204,21,.3)',txt:'\u23eb Guardando...' },
+    saved: { bg:'rgba(74,222,128,.12)',color:'#4ade80',border:'rgba(74,222,128,.3)',txt:'\u2601\ufe0f Guardado en la nube' },
+    error: { bg:'rgba(255,107,53,.12)',color:'#ff6b35',border:'rgba(255,107,53,.3)',txt:'\u26a0\ufe0f Sin conexi\u00f3n \u2014 guardado local' },
+    loading:{bg:'rgba(0,102,170,.12)', color:'#448AFF',border:'rgba(0,102,170,.3)', txt:'\u2b07\ufe0f Cargando datos...'},
+  };
+  const s = S[state]||S.saved;
+  el.style.background=s.bg; el.style.color=s.color; el.style.borderColor=s.border;
+  el.textContent=s.txt; el.style.opacity='1';
+  if(state==='saved') setTimeout(()=>{el.style.opacity='0';},3000);
+}
+
+async function createBin(data){
+  const res = await fetch(JBIN_BASE,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-Master-Key':JBIN_KEY,'X-Bin-Name':'GemFit','X-Bin-Private':'true'},
+    body:JSON.stringify(data)
+  });
+  if(!res.ok) throw new Error('createBin '+res.status);
+  return (await res.json()).metadata.id;
+}
+
+async function updateBin(data){
+  const res = await fetch(JBIN_BASE+'/'+_binId,{
+    method:'PUT',
+    headers:{'Content-Type':'application/json','X-Master-Key':JBIN_KEY},
+    body:JSON.stringify(data)
+  });
+  if(!res.ok) throw new Error('updateBin '+res.status);
+}
+
+async function readBin(){
+  const res = await fetch(JBIN_BASE+'/'+_binId+'/latest',{headers:{'X-Master-Key':JBIN_KEY}});
+  if(!res.ok) throw new Error('readBin '+res.status);
+  return (await res.json()).record;
+}
+
+function cloudSave(){
+  if(_saveTimer) clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(async()=>{
+    if(_saving){_pendingSave=true;return;}
+    _saving=true; showSyncStatus('saving');
+    try{
+      const payload=buildPayload();
+      if(!_binId){ _binId=await createBin(payload); localStorage.setItem(JBIN_BIN_KEY,_binId); }
+      else await updateBin(payload);
+      showSyncStatus('saved');
+    }catch(e){ console.warn('CloudSave:',e); showSyncStatus('error'); }
+    finally{ _saving=false; if(_pendingSave){_pendingSave=false;cloudSave();} }
+  },2000);
+}
+
+async function cloudLoad(){
+  if(!_binId) return false;
+  try{
+    showSyncStatus('loading');
+    const data=await readBin(); if(!data) return false;
+    if(data.AD)      Object.assign(AD,data.AD);
+    if(data.WD)      Object.assign(WD,data.WD);
+    if(data.SC)      Object.assign(SC,data.SC);
+    if(data.PD)      Object.assign(PD,data.PD);
+    if(data.CALS)    Object.assign(CALS,data.CALS);
+    if(data.AVATARS) Object.assign(AVATARS,data.AVATARS);
+    if(data.EXLIB)   Object.assign(EXLIB,data.EXLIB);
+    localStorage.setItem('gemfit_v1',JSON.stringify(data));
+    showSyncStatus('saved');
+    return true;
+  }catch(e){ console.warn('CloudLoad:',e); showSyncStatus('error'); return false; }
+}
+
+
 </script>
 
 <!-- ═══════════════ EXERCISE PICKER MODAL ═══════════════ -->
