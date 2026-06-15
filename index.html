@@ -470,6 +470,7 @@ body{
     <div id="tab-fotos" class="tab"></div>
     <div id="tab-calorias" class="tab"></div>
     <div id="tab-suplementos" class="tab"></div>
+    <div id="tab-dieta" class="tab"></div>
   </div>
 
   <nav class="bnav" id="bnav">
@@ -481,6 +482,7 @@ body{
     <button class="nbtn" id="nb-calorias" onclick="goTab('calorias')"><span class="nbtn-icon">🍎</span>Calorías</button>
     <button class="nbtn" id="nb-fotos" onclick="goTab('fotos')"><span class="nbtn-icon">📸</span>Fotos</button>
     <button class="nbtn" id="nb-suplementos" onclick="goTab('suplementos')"><span class="nbtn-icon">💊</span>Suplem.</button>
+    <button class="nbtn" id="nb-dieta" onclick="goTab('dieta')"><span class="nbtn-icon">🥗</span>Dieta</button>
   </nav>
 </div>
 
@@ -1190,7 +1192,7 @@ function updateProfileStats(){
 }
 
 function goTab(t){
-  ['plan','tracker','volumen','perfil','progreso','fotos','calorias','suplementos'].forEach(tab=>{
+  ['plan','tracker','volumen','perfil','progreso','fotos','calorias','suplementos','dieta'].forEach(tab=>{
     const tabEl=document.getElementById('tab-'+tab);
     const nbEl=document.getElementById('nb-'+tab);
     if(tabEl) tabEl.classList.toggle('active', tab===t);
@@ -1205,6 +1207,7 @@ function goTab(t){
   if(t==='fotos')       renderFotos();
   if(t==='calorias')    renderCalorias();
   if(t==='suplementos') renderSups('stack');
+  if(t==='dieta') renderDieta();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2818,6 +2821,454 @@ async function cloudLoad(){
     return false;
   }
 }
+
+// ═══════════════════════════════════════════════════════════════
+// PLAN NUTRICIONAL SEMANAL — Deivis & Yona (Team David Marmol)
+// Pega esto en el archivo index.html, dentro del bloque <script>
+// junto a los otros datos como SESSIONS, SUPS, etc.
+// ═══════════════════════════════════════════════════════════════
+
+const MEAL_PLAN = {
+  lunes: {
+    kcal: 1980, p: 160, c: 196, g: 62,
+    comidas: [
+      {
+        nombre: 'Comida',
+        nota: '',
+        items: [
+          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
+          { n: 'Ternera', g: '150g', kcal: 300, p: 28.5, c: 0, f: 19.5 },
+          { n: 'Ensalada / Verdura', g: 'sin límite', kcal: 17, p: 1, c: 3, f: 0 },
+        ]
+      },
+      {
+        nombre: 'Merienda',
+        nota: 'Opción 1',
+        items: [
+          { n: 'Claras de huevo', g: '250g', kcal: 105, p: 27.5, c: 2.5, f: 2.5 },
+          { n: 'Harina de avena Prozis', g: '50g', kcal: 184, p: 6.5, c: 32, f: 3 },
+          { n: 'Verdura sin límite', g: '200g', kcal: 34, p: 2, c: 6, f: 0 },
+        ]
+      },
+      {
+        nombre: 'Cena',
+        nota: 'Opción 1 · + Omega3 + Primrose + Cúrcuma',
+        items: [
+          { n: 'Ensalada / Verdura', g: '200g', kcal: 34, p: 2, c: 6, f: 0 },
+          { n: '1 Huevo', g: '60g', kcal: 78, p: 6, c: 0.6, f: 5 },
+          { n: 'Claras de huevo', g: '250g', kcal: 105, p: 27.5, c: 2.5, f: 2.5 },
+          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
+        ]
+      },
+      {
+        nombre: 'Pre cama',
+        nota: 'Lo puedes hacer como postre junto a la cena',
+        items: [
+          { n: 'Kefir Natural Hacendado', g: '75g', kcal: 56, p: 3, c: 5, f: 2 },
+          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
+          { n: 'Yogur 0% Natural Hacendado', g: '125g', kcal: 48, p: 5, c: 5, f: 0.1 },
+          { n: 'Real Casein Prozis', g: '15g', kcal: 54, p: 11, c: 2, f: 0.5 },
+        ]
+      },
+    ]
+  },
+  martes: {
+    kcal: 1980, p: 160, c: 196, g: 62,
+    comidas: [
+      {
+        nombre: 'Comida',
+        nota: '',
+        items: [
+          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
+          { n: 'Ternera', g: '150g', kcal: 300, p: 28.5, c: 0, f: 19.5 },
+          { n: 'Ensalada / Verdura', g: 'sin límite', kcal: 17, p: 1, c: 3, f: 0 },
+        ]
+      },
+      {
+        nombre: 'Merienda',
+        nota: 'Opción 2',
+        items: [
+          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
+          { n: 'Pollo', g: '150g', kcal: 180, p: 34.5, c: 0, f: 4.5 },
+        ]
+      },
+      {
+        nombre: 'Cena',
+        nota: 'Opción 2 · + Omega3 + Primrose + Cúrcuma',
+        items: [
+          { n: 'Ternera', g: '120g', kcal: 240, p: 22.8, c: 0, f: 15.6 },
+          { n: 'Ensalada / Verdura', g: '300g', kcal: 51, p: 3, c: 9, f: 0 },
+          { n: '1 Huevo', g: '60g', kcal: 78, p: 6, c: 0.6, f: 5 },
+          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
+        ]
+      },
+      {
+        nombre: 'Pre cama',
+        nota: 'Lo puedes hacer como postre junto a la cena',
+        items: [
+          { n: 'Kefir Natural Hacendado', g: '75g', kcal: 56, p: 3, c: 5, f: 2 },
+          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
+          { n: 'Yogur 0% Natural Hacendado', g: '125g', kcal: 48, p: 5, c: 5, f: 0.1 },
+          { n: 'Real Casein Prozis', g: '15g', kcal: 54, p: 11, c: 2, f: 0.5 },
+        ]
+      },
+    ]
+  },
+  miercoles: {
+    kcal: 1980, p: 160, c: 196, g: 62,
+    comidas: [
+      {
+        nombre: 'Comida',
+        nota: '',
+        items: [
+          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
+          { n: 'Ternera', g: '150g', kcal: 300, p: 28.5, c: 0, f: 19.5 },
+          { n: 'Ensalada / Verdura', g: 'sin límite', kcal: 17, p: 1, c: 3, f: 0 },
+        ]
+      },
+      {
+        nombre: 'Merienda',
+        nota: 'Opción 3',
+        items: [
+          { n: 'Harina de avena Prozis', g: '50g', kcal: 184, p: 6.5, c: 32, f: 3 },
+          { n: 'Proteína en polvo Prozis', g: '30g', kcal: 116, p: 25, c: 2, f: 1 },
+        ]
+      },
+      {
+        nombre: 'Cena',
+        nota: 'Opción 1 · + Omega3 + Primrose + Cúrcuma',
+        items: [
+          { n: 'Ensalada / Verdura', g: '200g', kcal: 34, p: 2, c: 6, f: 0 },
+          { n: '1 Huevo', g: '60g', kcal: 78, p: 6, c: 0.6, f: 5 },
+          { n: 'Claras de huevo', g: '250g', kcal: 105, p: 27.5, c: 2.5, f: 2.5 },
+          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
+        ]
+      },
+      {
+        nombre: 'Pre cama',
+        nota: 'Lo puedes hacer como postre junto a la cena',
+        items: [
+          { n: 'Kefir Natural Hacendado', g: '75g', kcal: 56, p: 3, c: 5, f: 2 },
+          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
+          { n: 'Yogur 0% Natural Hacendado', g: '125g', kcal: 48, p: 5, c: 5, f: 0.1 },
+          { n: 'Real Casein Prozis', g: '15g', kcal: 54, p: 11, c: 2, f: 0.5 },
+        ]
+      },
+    ]
+  },
+  jueves: {
+    kcal: 1980, p: 160, c: 196, g: 62,
+    comidas: [
+      {
+        nombre: 'Comida',
+        nota: '',
+        items: [
+          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
+          { n: 'Ternera', g: '150g', kcal: 300, p: 28.5, c: 0, f: 19.5 },
+          { n: 'Ensalada / Verdura', g: 'sin límite', kcal: 17, p: 1, c: 3, f: 0 },
+        ]
+      },
+      {
+        nombre: 'Merienda',
+        nota: 'Opción 4',
+        items: [
+          { n: 'Queso Fresco Batido 0% Hacendado', g: '250g', kcal: 115, p: 13.5, c: 5, f: 0.5 },
+          { n: 'Crema de arroz', g: '50g', kcal: 192, p: 4, c: 42, f: 1 },
+          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
+        ]
+      },
+      {
+        nombre: 'Cena',
+        nota: 'Opción 2 · + Omega3 + Primrose + Cúrcuma',
+        items: [
+          { n: 'Ternera', g: '120g', kcal: 240, p: 22.8, c: 0, f: 15.6 },
+          { n: 'Ensalada / Verdura', g: '300g', kcal: 51, p: 3, c: 9, f: 0 },
+          { n: '1 Huevo', g: '60g', kcal: 78, p: 6, c: 0.6, f: 5 },
+          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
+        ]
+      },
+      {
+        nombre: 'Pre cama',
+        nota: 'Lo puedes hacer como postre junto a la cena',
+        items: [
+          { n: 'Kefir Natural Hacendado', g: '75g', kcal: 56, p: 3, c: 5, f: 2 },
+          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
+          { n: 'Yogur 0% Natural Hacendado', g: '125g', kcal: 48, p: 5, c: 5, f: 0.1 },
+          { n: 'Real Casein Prozis', g: '15g', kcal: 54, p: 11, c: 2, f: 0.5 },
+        ]
+      },
+    ]
+  },
+  viernes: {
+    kcal: 1980, p: 160, c: 196, g: 62,
+    comidas: [
+      {
+        nombre: 'Comida',
+        nota: '',
+        items: [
+          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
+          { n: 'Ternera', g: '150g', kcal: 300, p: 28.5, c: 0, f: 19.5 },
+          { n: 'Ensalada / Verdura', g: 'sin límite', kcal: 17, p: 1, c: 3, f: 0 },
+        ]
+      },
+      {
+        nombre: 'Merienda',
+        nota: 'Opción 1',
+        items: [
+          { n: 'Claras de huevo', g: '250g', kcal: 105, p: 27.5, c: 2.5, f: 2.5 },
+          { n: 'Harina de avena Prozis', g: '50g', kcal: 184, p: 6.5, c: 32, f: 3 },
+          { n: 'Verdura sin límite', g: '200g', kcal: 34, p: 2, c: 6, f: 0 },
+        ]
+      },
+      {
+        nombre: 'Cena',
+        nota: 'Opción 1 · + Omega3 + Primrose + Cúrcuma',
+        items: [
+          { n: 'Ensalada / Verdura', g: '200g', kcal: 34, p: 2, c: 6, f: 0 },
+          { n: '1 Huevo', g: '60g', kcal: 78, p: 6, c: 0.6, f: 5 },
+          { n: 'Claras de huevo', g: '250g', kcal: 105, p: 27.5, c: 2.5, f: 2.5 },
+          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
+        ]
+      },
+      {
+        nombre: 'Pre cama',
+        nota: 'Lo puedes hacer como postre junto a la cena',
+        items: [
+          { n: 'Kefir Natural Hacendado', g: '75g', kcal: 56, p: 3, c: 5, f: 2 },
+          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
+          { n: 'Yogur 0% Natural Hacendado', g: '125g', kcal: 48, p: 5, c: 5, f: 0.1 },
+          { n: 'Real Casein Prozis', g: '15g', kcal: 54, p: 11, c: 2, f: 0.5 },
+        ]
+      },
+    ]
+  },
+  sabado: {
+    kcal: 1980, p: 160, c: 196, g: 62,
+    comidas: [
+      {
+        nombre: 'Comida',
+        nota: '',
+        items: [
+          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
+          { n: 'Pollo', g: '150g', kcal: 180, p: 34.5, c: 0, f: 4.5 },
+          { n: 'Ensalada / Verdura', g: 'sin límite', kcal: 17, p: 1, c: 3, f: 0 },
+        ]
+      },
+      {
+        nombre: 'Merienda',
+        nota: 'Opción 2',
+        items: [
+          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
+          { n: 'Pollo', g: '150g', kcal: 180, p: 34.5, c: 0, f: 4.5 },
+        ]
+      },
+      {
+        nombre: 'Cena',
+        nota: 'Opción 2 · + Omega3 + Primrose + Cúrcuma',
+        items: [
+          { n: 'Ternera', g: '120g', kcal: 240, p: 22.8, c: 0, f: 15.6 },
+          { n: 'Ensalada / Verdura', g: '300g', kcal: 51, p: 3, c: 9, f: 0 },
+          { n: '1 Huevo', g: '60g', kcal: 78, p: 6, c: 0.6, f: 5 },
+          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
+        ]
+      },
+      {
+        nombre: 'Pre cama',
+        nota: 'Lo puedes hacer como postre junto a la cena',
+        items: [
+          { n: 'Kefir Natural Hacendado', g: '75g', kcal: 56, p: 3, c: 5, f: 2 },
+          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
+          { n: 'Yogur 0% Natural Hacendado', g: '125g', kcal: 48, p: 5, c: 5, f: 0.1 },
+          { n: 'Real Casein Prozis', g: '15g', kcal: 54, p: 11, c: 2, f: 0.5 },
+        ]
+      },
+    ]
+  },
+  domingo: {
+    kcal: 1980, p: 160, c: 196, g: 62,
+    libre: true,
+    comidas: [
+      {
+        nombre: 'Comida',
+        nota: '🎉 Comida libre moderada hoy',
+        items: [
+          { n: 'Una comida libre moderada', g: '', kcal: 0, p: 0, c: 0, f: 0 },
+        ]
+      },
+      {
+        nombre: 'Resto del día',
+        nota: 'Mantén el plan habitual',
+        items: [
+          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
+          { n: 'Pollo / Ternera', g: '150g', kcal: 240, p: 30, c: 0, f: 12 },
+          { n: 'Verdura sin límite', g: '', kcal: 17, p: 1, c: 3, f: 0 },
+        ]
+      },
+      {
+        nombre: 'Pre cama',
+        nota: 'Lo puedes hacer como postre junto a la cena',
+        items: [
+          { n: 'Kefir Natural Hacendado', g: '75g', kcal: 56, p: 3, c: 5, f: 2 },
+          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
+          { n: 'Yogur 0% Natural Hacendado', g: '125g', kcal: 48, p: 5, c: 5, f: 0.1 },
+          { n: 'Real Casein Prozis', g: '15g', kcal: 54, p: 11, c: 2, f: 0.5 },
+        ]
+      },
+    ]
+  },
+};
+
+const PRE_ENTRENO = {
+  nombre: 'Pre Entreno',
+  nota: 'Hazlo 45-90 min antes · Sustituye una de las comidas del día · + 3g Carnitina + 1 Termogénico · Intra: 6g BCAAs + 6g EAAs + 6g Creatina',
+  items: [
+    { n: 'Crema de arroz', g: '50g', kcal: 192, p: 4, c: 42, f: 1 },
+    { n: 'Crema de almendras Prozis', g: '15g', kcal: 95, p: 3.5, c: 3, f: 8 },
+    { n: 'Proteína en polvo Prozis', g: '30g', kcal: 116, p: 25, c: 2, f: 1 },
+  ]
+};
+
+// ── Función que renderiza la tab de Dieta ──
+function renderDieta(){
+  const p = pr();
+  const DIAS = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
+  const DIAS_ES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const todayIdx = new Date().getDay();
+  const todayKey = DIAS[todayIdx];
+  const plan = MEAL_PLAN[todayKey];
+
+  // Totales del día
+  let totKcal=0, totP=0, totC=0, totF=0;
+  plan.comidas.forEach(c=>c.items.forEach(i=>{totKcal+=i.kcal;totP+=i.p;totC+=i.c;totF+=i.f;}));
+
+  let h = `<div class="inner">
+  <div style="font-size:10px;color:${p.color};text-transform:uppercase;letter-spacing:.18em;margin-bottom:4px;">Plan Team David Marmol</div>
+  <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;line-height:1;margin-bottom:2px;">DIETA <span style="color:${p.color}">🥗</span></div>
+  <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">1980 kcal · P:160g · C:196g · G:62g · Peso en crudo</div>
+
+  <!-- Selector de día -->
+  <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:16px;">`;
+
+  DIAS.forEach((d,i)=>{
+    const isToday = i===todayIdx;
+    h+=`<div onclick="renderDietaDay('${d}')" style="
+      padding:6px 2px;border-radius:8px;text-align:center;cursor:pointer;
+      border:1px solid ${isToday?p.color:'var(--border)'};
+      background:${isToday?p.color+'18':'transparent'};">
+      <div style="font-size:9px;color:${isToday?p.color:'var(--muted)'};text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;">${DIAS_ES[i]}</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:10px;color:${isToday?p.color:'var(--muted2)'};">${d==='domingo'?'🎉':'💪'}</div>
+    </div>`;
+  });
+
+  h+=`</div>
+  <div id="dietaDayContent"></div>
+  </div>`;
+
+  document.getElementById('tab-dieta').innerHTML = h;
+  renderDietaDay(todayKey);
+}
+
+function renderDietaDay(dayKey){
+  const p = pr();
+  const plan = MEAL_PLAN[dayKey];
+  const DIAS_LABEL = {lunes:'LUNES',martes:'MARTES',miercoles:'MIÉRCOLES',jueves:'JUEVES',viernes:'VIERNES',sabado:'SÁBADO',domingo:'DOMINGO'};
+
+  let totKcal=0, totP=0, totC=0, totF=0;
+  plan.comidas.forEach(c=>c.items.forEach(i=>{totKcal+=i.kcal;totP+=i.p||0;totC+=i.c||0;totF+=i.f||0;}));
+
+  let h = `
+  <!-- Resumen macro del día -->
+  <div style="padding:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.06em;color:${p.color};margin-bottom:10px;">${DIAS_LABEL[dayKey]}${plan.libre?' — Comida Libre 🎉':''}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;">
+      ${[['~'+Math.round(totKcal),'kcal',p.color],['~'+Math.round(totP)+'g','Proteína','#ff6b35'],['~'+Math.round(totC)+'g','Carbos','#facc15'],['~'+Math.round(totF)+'g','Grasas','#448AFF']].map(([v,l,c2])=>`
+      <div style="text-align:center;padding:8px;background:var(--card2);border-radius:8px;border:1px solid var(--border);">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:${c2};line-height:1;">${v}</div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;">${l}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+
+  // Pre entreno card
+  h+=`<div style="padding:12px 14px;background:rgba(204,85,0,.07);border:1px solid rgba(204,85,0,.2);border-radius:12px;margin-bottom:14px;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.06em;color:#cc5500;margin-bottom:4px;">💪 PRE ENTRENO (días de gym)</div>
+    <div style="font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:8px;">${PRE_ENTRENO.nota}</div>
+    ${PRE_ENTRENO.items.map(i=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(204,85,0,.1);">
+      <div>
+        <div style="font-size:12px;font-weight:500;">${i.n}</div>
+        <div style="font-size:10px;color:var(--muted);">${i.g} · P:${i.p}g · C:${i.c}g</div>
+      </div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:#cc5500;">${i.kcal} kcal</div>
+    </div>`).join('')}
+  </div>`;
+
+  // Comidas del día
+  const MEAL_COLORS = ['#ff6b35','#facc15','#4ade80','#448AFF','#a855f7'];
+  plan.comidas.forEach((comida, ci)=>{
+    const mc = MEAL_COLORS[ci % MEAL_COLORS.length];
+    const mKcal = comida.items.reduce((a,i)=>a+i.kcal,0);
+    h+=`<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;">
+      <div style="padding:10px 14px;background:${mc}10;border-bottom:1px solid ${mc}20;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.06em;color:${mc};">${comida.nombre}</div>
+          ${comida.nota?`<div style="font-size:10px;color:var(--muted);margin-top:1px;">${comida.nota}</div>`:''}
+        </div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:${mc};">${Math.round(mKcal)} kcal</div>
+      </div>`;
+
+    comida.items.forEach((item,ii)=>{
+      if(!item.n) return;
+      h+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 14px;${ii<comida.items.length-1?'border-bottom:1px solid var(--border)':''}">
+        <div style="flex:1;">
+          <div style="font-size:12px;font-weight:500;">${item.n}</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px;">${item.g?item.g+' · ':''}P:${item.p||0}g · C:${item.c||0}g · G:${item.f||0}g</div>
+        </div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:${p.color};flex-shrink:0;margin-left:10px;">${item.kcal} kcal</div>
+      </div>`;
+    });
+    h+=`</div>`;
+  });
+
+  // Nota suplementos cena
+  h+=`<div style="padding:10px 13px;background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);border-radius:9px;font-size:11px;color:var(--muted2);line-height:1.6;margin-top:4px;">
+    💊 <strong style="color:#4ade80">Siempre en la cena:</strong> 1 Omega 3 + 1 Primrose + 1 Cúrcuma<br>
+    🏃 <strong style="color:#facc15">Antes del cardio en ayunas:</strong> 3g Carnitina + 1 Termogénico
+  </div>`;
+
+  document.getElementById('dietaDayContent').innerHTML = h;
+
+  // Update day selector highlight
+  const DIAS = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
+  // Re-highlight selected day buttons
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+// INSTRUCCIONES DE INTEGRACIÓN EN index.html
+// ═══════════════════════════════════════════════════════════════
+//
+// PASO 1 — Añade el tab HTML. Busca la línea:
+//   <div id="tab-suplementos" class="tab"></div>
+// Y después añade:
+//   <div id="tab-dieta" class="tab"></div>
+//
+// PASO 2 — Añade el botón de nav. Busca el último <button> del nav (Suplem.)
+// Y después añade:
+//   <button class="nbtn" id="nb-dieta" onclick="goTab('dieta')">
+//     <span class="nbtn-icon">🥗</span>Dieta</button>
+//
+// PASO 3 — En la función goTab(), busca:
+//   if(t==='suplementos') renderSups('stack');
+// Y después añade:
+//   if(t==='dieta') renderDieta();
+//
+// PASO 4 — En el array de tabs de goTab(), añade 'dieta' a la lista:
+//   ['plan','tracker','volumen','perfil','progreso','fotos','calorias','suplementos','dieta']
+//
+// PASO 5 — Pega TODO el código de arriba (MEAL_PLAN, PRE_ENTRENO,
+//   renderDieta, renderDietaDay) dentro del bloque <script>, junto
+//   al resto de funciones.
 </script>
 
 <!-- ═══════════════ EXERCISE PICKER MODAL ═══════════════ -->
