@@ -845,8 +845,10 @@ function removeAvatarFromOptions(){
 
 function changeAvatar(profileId){
   _avatarEditProfile = profileId;
-  const input = document.createElement('input');
-  input.type = 'file'; input.accept = 'image/*';
+  const input = document.getElementById('iosPhotoInput');
+  input.accept = 'image/*';
+  input._week = null; input._angle = null;
+  input.value = '';
   input.onchange = e => {
     const file = e.target.files[0]; if(!file) return;
     const reader = new FileReader();
@@ -2217,8 +2219,10 @@ function startNewWeek(){
 }
 
 function addPhoto(week, angle){
-  const input=document.createElement('input');
-  input.type='file'; input.accept='image/*'; input.capture='camera';
+  const input=document.getElementById('iosPhotoInput');
+  input.accept='image/*';
+  input._week=week; input._angle=angle;
+  input.value='';
   input.onchange=e=>{
     const file=e.target.files[0]; if(!file)return;
     const reader=new FileReader();
