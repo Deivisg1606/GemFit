@@ -748,7 +748,7 @@ function lsSave(){
     localStorage.setItem(LS_KEY, JSON.stringify({
       AD, WD, SC, PD, CALS, AVATARS, EXLIB, CP
     }));
-}catch(e){
+} catch(e){
     console.warn('localStorage full or unavailable:', e);
   }
   cloudSave();
@@ -2704,18 +2704,47 @@ function toggleSup(i){
 }
 
 // ═══════════════════════════════════════════════════════════════
-// JSONBIN.IO — Persistencia en la nube
+// FIREBASE FIRESTORE — Sincronización en tiempo real
 // ═══════════════════════════════════════════════════════════════
-const JBIN_KEY  = '$2a$10$9zwpjHkY0al.W8DgrVHnF.j8Bm8ijv.eFJ1W.D/i2tedN1P2x9HZy';
-const JBIN_BASE = 'https://api.jsonbin.io/v3/b';
-const JBIN_BIN_KEY = 'gemfit_binId_v1';
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBgQzYMh-RW6b86mgErT__UIAVazp4Q0PA",
+  authDomain: "gem-fit-78df1.firebaseapp.com",
+  projectId: "gem-fit-78df1",
+  storageBucket: "gem-fit-78df1.firebasestorage.app",
+  messagingSenderId: "158062728708",
+  appId: "1:158062728708:web:18d82ef3471be7580d8751"
+};
 
-let _binId       = localStorage.getItem(JBIN_BIN_KEY) || null;
-let _saveTimer   = null;
-let _saving      = false;
+let _db = null;
+let _firebaseReady = false;
+let _saveTimer = null;
+let _saving = false;
 let _pendingSave = false;
 
-function buildPayload(){ return { AD, WD, SC, PD, CALS, AVATARS, EXLIB }; }
+function initFirebase(){
+  return new Promise((resolve) => {
+    if(_firebaseReady){ resolve(); return; }
+    const scripts = [
+      'https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js',
+      'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js'
+    ];
+    let loaded = 0;
+    scripts.forEach(src => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.onload = () => {
+        loaded++;
+        if(loaded === scripts.length){
+          firebase.initializeApp(FIREBASE_CONFIG);
+          _db = firebase.firestore();
+          _firebaseReady = true;
+          resolve();
+        }
+      };
+      document.head.appendChild(s);
+    });
+  });
+}
 
 function showSyncStatus(state){
   let el = document.getElementById('syncBadge');
@@ -2725,76 +2754,70 @@ function showSyncStatus(state){
     document.body.appendChild(el);
   }
   const S = {
-    saving:{ bg:'rgba(250,204,21,.15)',color:'#facc15',border:'rgba(250,204,21,.3)',txt:'\u23eb Guardando...' },
-    saved: { bg:'rgba(74,222,128,.12)',color:'#4ade80',border:'rgba(74,222,128,.3)',txt:'\u2601\ufe0f Guardado en la nube' },
-    error: { bg:'rgba(255,107,53,.12)',color:'#ff6b35',border:'rgba(255,107,53,.3)',txt:'\u26a0\ufe0f Sin conexi\u00f3n \u2014 guardado local' },
-    loading:{bg:'rgba(0,102,170,.12)', color:'#448AFF',border:'rgba(0,102,170,.3)', txt:'\u2b07\ufe0f Cargando datos...'},
+    saving: { bg:'rgba(250,204,21,.15)', color:'#facc15', border:'rgba(250,204,21,.3)', txt:'\u23eb Guardando...' },
+    saved:  { bg:'rgba(74,222,128,.12)', color:'#4ade80', border:'rgba(74,222,128,.3)', txt:'\u2601\ufe0f Sincronizado' },
+    error:  { bg:'rgba(255,107,53,.12)', color:'#ff6b35', border:'rgba(255,107,53,.3)', txt:'\u26a0\ufe0f Sin conexi\u00f3n \u2014 local' },
+    loading:{ bg:'rgba(0,102,170,.12)',  color:'#448AFF', border:'rgba(0,102,170,.3)',  txt:'\u2b07\ufe0f Cargando...' },
   };
-  const s = S[state]||S.saved;
-  el.style.background=s.bg; el.style.color=s.color; el.style.borderColor=s.border;
-  el.textContent=s.txt; el.style.opacity='1';
-  if(state==='saved') setTimeout(()=>{el.style.opacity='0';},3000);
-}
-
-async function createBin(data){
-  const res = await fetch(JBIN_BASE,{
-    method:'POST',
-    headers:{'Content-Type':'application/json','X-Master-Key':JBIN_KEY,'X-Bin-Name':'GemFit','X-Bin-Private':'true'},
-    body:JSON.stringify(data)
-  });
-  if(!res.ok) throw new Error('createBin '+res.status);
-  return (await res.json()).metadata.id;
-}
-
-async function updateBin(data){
-  const res = await fetch(JBIN_BASE+'/'+_binId,{
-    method:'PUT',
-    headers:{'Content-Type':'application/json','X-Master-Key':JBIN_KEY},
-    body:JSON.stringify(data)
-  });
-  if(!res.ok) throw new Error('updateBin '+res.status);
-}
-
-async function readBin(){
-  const res = await fetch(JBIN_BASE+'/'+_binId+'/latest',{headers:{'X-Master-Key':JBIN_KEY}});
-  if(!res.ok) throw new Error('readBin '+res.status);
-  return (await res.json()).record;
+  const s = S[state] || S.saved;
+  el.style.background = s.bg; el.style.color = s.color; el.style.borderColor = s.border;
+  el.textContent = s.txt; el.style.opacity = '1';
+  if(state === 'saved') setTimeout(()=>{ el.style.opacity = '0'; }, 3000);
 }
 
 function cloudSave(){
   if(_saveTimer) clearTimeout(_saveTimer);
-  _saveTimer = setTimeout(async()=>{
-    if(_saving){_pendingSave=true;return;}
-    _saving=true; showSyncStatus('saving');
-    try{
-      const payload=buildPayload();
-      if(!_binId){ _binId=await createBin(payload); localStorage.setItem(JBIN_BIN_KEY,_binId); }
-      else await updateBin(payload);
+  _saveTimer = setTimeout(async () => {
+    if(_saving){ _pendingSave = true; return; }
+    _saving = true;
+    showSyncStatus('saving');
+    try {
+      await initFirebase();
+      for(const profileId of ['deivis','yona']){
+        const profileData = {
+          AD: AD[profileId] || {},
+          WD: WD[profileId] || [],
+          SC: SC[profileId] || {},
+          CALS: CALS[profileId] || {},
+          EXLIB: EXLIB[profileId] || [],
+          updatedAt: new Date().toISOString()
+        };
+        await _db.collection('gemfit').doc(profileId).set(profileData, { merge: true });
+      }
       showSyncStatus('saved');
-    }catch(e){ console.warn('CloudSave:',e); showSyncStatus('error'); }
-    finally{ _saving=false; if(_pendingSave){_pendingSave=false;cloudSave();} }
-  },2000);
+    } catch(e) {
+      console.warn('CloudSave error:', e);
+      showSyncStatus('error');
+    } finally {
+      _saving = false;
+      if(_pendingSave){ _pendingSave = false; cloudSave(); }
+    }
+  }, 2000);
 }
 
 async function cloudLoad(){
-  if(!_binId) return false;
-  try{
+  try {
     showSyncStatus('loading');
-    const data=await readBin(); if(!data) return false;
-    if(data.AD)      Object.assign(AD,data.AD);
-    if(data.WD)      Object.assign(WD,data.WD);
-    if(data.SC)      Object.assign(SC,data.SC);
-    if(data.PD)      Object.assign(PD,data.PD);
-    if(data.CALS)    Object.assign(CALS,data.CALS);
-    if(data.AVATARS) Object.assign(AVATARS,data.AVATARS);
-    if(data.EXLIB)   Object.assign(EXLIB,data.EXLIB);
-    localStorage.setItem('gemfit_v1',JSON.stringify(data));
+    await initFirebase();
+    for(const profileId of ['deivis','yona']){
+      const doc = await _db.collection('gemfit').doc(profileId).get();
+      if(!doc.exists) continue;
+      const data = doc.data();
+      if(data.AD)    AD[profileId]    = data.AD;
+      if(data.WD)    WD[profileId]    = data.WD;
+      if(data.SC)    SC[profileId]    = data.SC;
+      if(data.CALS)  CALS[profileId]  = data.CALS;
+      if(data.EXLIB) EXLIB[profileId] = data.EXLIB;
+    }
+    localStorage.setItem('gemfit_v1', JSON.stringify({ AD, WD, SC, PD, CALS, AVATARS, EXLIB }));
     showSyncStatus('saved');
     return true;
-  }catch(e){ console.warn('CloudLoad:',e); showSyncStatus('error'); return false; }
+  } catch(e) {
+    console.warn('CloudLoad error:', e);
+    showSyncStatus('error');
+    return false;
+  }
 }
-
-
 </script>
 
 <!-- ═══════════════ EXERCISE PICKER MODAL ═══════════════ -->
