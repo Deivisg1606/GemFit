@@ -19,14 +19,14 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --bg:#fff5ee;--card:rgba(255,255,255,0.82);--card2:rgba(255,255,255,0.62);--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.13);
-  --text:#1a1020;--muted:#7a6070;--muted2:#999;
-  --push:#dd0060;--pull:#0066aa;--legs:#6600bb;--done:#007a40;--skip:#555;
-  --accent:#cc5500;--yona:#6a00b8;
+  --bg:#0a0a0a;--card:#111111;--card2:#161616;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --text:#e8e8e8;--muted:#666;--muted2:#444;
+  --push:#cc5500;--pull:#2277cc;--legs:#7733cc;--done:#22aa66;--skip:#444;
+  --accent:#cc5500;--yona:#7733cc;
 }
 html{height:100%;}
 body{
-  background:var(--bg);color:var(--text);
+  background:#0a0a0a;color:var(--text);
   font-family:'DM Sans',sans-serif;font-size:14px;
   height:100%;overflow:hidden;
   display:flex;flex-direction:column;
@@ -37,7 +37,7 @@ body{
 .screen.active{display:flex;}
 
 /* ── PROFILE SCREEN ── */
-#s-profiles{align-items:center;justify-content:center;padding:24px;gap:24px;overflow-y:auto;background:transparent;}
+#s-profiles{align-items:center;justify-content:center;padding:24px;gap:0;overflow-y:auto;background:#0a0a0a;}
 .gem-logo-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;}
 .gem-title{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:.15em;
   background:linear-gradient(135deg,#ff8c42,#c0006e,#7209b7);-webkit-background-clip:text;
@@ -56,7 +56,7 @@ body{
 /* ── TOPBAR ── */
 .topbar{
   display:flex;align-items:center;gap:10px;padding:10px 14px;
-  background:rgba(255,238,245,0.96);border-bottom:1px solid var(--border);
+  background:rgba(10,10,10,0.97);border-bottom:1px solid rgba(255,255,255,0.06);
   flex-shrink:0;z-index:10;
 }
 .tlogo{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
@@ -80,7 +80,7 @@ body{
 /* ── BOTTOM NAV ── */
 .bnav{
   flex-shrink:0;
-  background:rgba(255,245,238,0.97);border-top:1px solid rgba(0,0,0,.1);
+  background:rgba(10,10,10,0.97);border-top:1px solid rgba(255,255,255,0.06);
   display:none;height:62px;z-index:10;
 }
 .bnav.on{display:flex;}
@@ -285,171 +285,107 @@ body{
 
 <!-- ═══════════════ PROFILE SCREEN ═══════════════ -->
 <div id="s-profiles" class="screen active">
-
-  <!-- Logo compacto -->
-  <div class="gem-logo-wrap" style="margin-bottom:6px;">
-    <svg width="180" height="180" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="bgW" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#ff8c42" stop-opacity="0.18"/>
-          <stop offset="40%" stop-color="#ff4081" stop-opacity="0.10"/>
-          <stop offset="75%" stop-color="#7209b7" stop-opacity="0.05"/>
-          <stop offset="100%" stop-color="#000" stop-opacity="0"/>
-        </radialGradient>
-        <linearGradient id="symW" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#ffb347"/>
-          <stop offset="45%" stop-color="#ff6b6b"/>
-          <stop offset="100%" stop-color="#cc88ff"/>
-        </linearGradient>
-        <linearGradient id="ringW" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#ff8c42"/>
-          <stop offset="50%" stop-color="#ff4081"/>
-          <stop offset="100%" stop-color="#9b5de5"/>
-        </linearGradient>
-        <filter id="glowW1" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="2.5" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <filter id="glowW2" x="-60%" y="-60%" width="220%" height="220%">
-          <feGaussianBlur stdDeviation="5" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <filter id="glowW3" x="-100%" y="-100%" width="300%" height="300%">
-          <feGaussianBlur stdDeviation="11" result="blur"/>
-          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-      <circle cx="120" cy="120" r="118" fill="url(#bgW)"/>
-      <circle cx="120" cy="120" r="100" stroke="#ff8c42" stroke-width="10" fill="none" opacity="0.09" filter="url(#glowW3)"/>
-      <circle cx="120" cy="120" r="100" stroke="url(#ringW)" stroke-width="2.5" fill="none" opacity="0.45" filter="url(#glowW2)"/>
-      <path d="M 50 120 A 70 70 0 0 1 190 120" stroke="#ff8c42" stroke-width="5" fill="none" opacity="0.55" filter="url(#glowW2)"/>
-      <path d="M 50 120 A 70 70 0 0 0 190 120" stroke="#9b5de5" stroke-width="5" fill="none" opacity="0.45" filter="url(#glowW2)"/>
-      <circle cx="120" cy="120" r="100" stroke="url(#ringW)" stroke-width="1.5" fill="none" opacity="0.9"/>
-      <line x1="120" y1="18"  x2="120" y2="2"   stroke="#ffb347" stroke-width="3"   stroke-linecap="round" opacity="1"    filter="url(#glowW2)"/>
-      <line x1="120" y1="14"  x2="120" y2="9"   stroke="#fff"    stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
-      <line x1="120" y1="222" x2="120" y2="238"  stroke="#cc88ff" stroke-width="3"   stroke-linecap="round" opacity="0.95" filter="url(#glowW2)"/>
-      <line x1="18"  y1="120" x2="2"   y2="120"  stroke="#ff8c42" stroke-width="2"   stroke-linecap="round" opacity="0.7"/>
-      <line x1="222" y1="120" x2="238" y2="120"  stroke="#9b5de5" stroke-width="2"   stroke-linecap="round" opacity="0.7"/>
-      <line x1="149" y1="27"  x2="158" y2="14"  stroke="#ffb347" stroke-width="2.5" stroke-linecap="round" opacity="0.9"  filter="url(#glowW1)"/>
-      <line x1="91"  y1="27"  x2="82"  y2="14"  stroke="#ff6b6b" stroke-width="2.5" stroke-linecap="round" opacity="0.9"  filter="url(#glowW1)"/>
-      <line x1="199" y1="73"  x2="210" y2="62"  stroke="#ff8c42" stroke-width="2"   stroke-linecap="round" opacity="0.75"/>
-      <line x1="41"  y1="73"  x2="30"  y2="62"  stroke="#ff4081" stroke-width="2"   stroke-linecap="round" opacity="0.75"/>
-      <line x1="215" y1="149" x2="228" y2="157" stroke="#9b5de5" stroke-width="2"   stroke-linecap="round" opacity="0.7"/>
-      <line x1="25"  y1="149" x2="12"  y2="157" stroke="#ff8c42" stroke-width="2"   stroke-linecap="round" opacity="0.7"/>
-      <line x1="199" y1="167" x2="210" y2="178" stroke="#ff4081" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-      <line x1="41"  y1="167" x2="30"  y2="178" stroke="#cc88ff" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
-      <line x1="170" y1="19"  x2="175" y2="11"  stroke="#ffb347" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>
-      <line x1="70"  y1="19"  x2="65"  y2="11"  stroke="#ff6b6b" stroke-width="1.2" stroke-linecap="round" opacity="0.65"/>
-      <line x1="218" y1="91"  x2="228" y2="86"  stroke="#ff4081" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
-      <line x1="22"  y1="91"  x2="12"  y2="86"  stroke="#ffb347" stroke-width="1.2" stroke-linecap="round" opacity="0.55"/>
-      <circle cx="120" cy="20"  r="5"   fill="#ffb347" filter="url(#glowW3)" opacity="1"/>
-      <circle cx="120" cy="20"  r="2.5" fill="white"   opacity="0.95"/>
-      <circle cx="120" cy="220" r="4.5" fill="#cc88ff"  filter="url(#glowW2)" opacity="0.95"/>
-      <circle cx="120" cy="220" r="2"   fill="white"    opacity="0.7"/>
-      <circle cx="20"  cy="120" r="3.5" fill="#ff8c42"  filter="url(#glowW1)" opacity="0.8"/>
-      <circle cx="220" cy="120" r="3.5" fill="#9b5de5"  filter="url(#glowW1)" opacity="0.8"/>
-      <circle cx="191" cy="49"  r="3"   fill="#ff6b6b"  opacity="0.85"/>
-      <circle cx="49"  cy="49"  r="3"   fill="#ffb347"  opacity="0.85"/>
-      <circle cx="191" cy="191" r="3"   fill="#cc88ff"  opacity="0.85"/>
-      <circle cx="49"  cy="191" r="3"   fill="#ff4081"  opacity="0.85"/>
-      <line x1="58" y1="62"  x2="182" y2="62"  stroke="url(#symW)" stroke-width="6" stroke-linecap="round" filter="url(#glowW1)"/>
-      <line x1="58" y1="178" x2="182" y2="178" stroke="url(#symW)" stroke-width="6" stroke-linecap="round" filter="url(#glowW1)"/>
-      <line x1="82" y1="62"  x2="82"  y2="178" stroke="url(#symW)" stroke-width="6" stroke-linecap="round" filter="url(#glowW1)"/>
-      <line x1="158" y1="62" x2="158" y2="178" stroke="url(#symW)" stroke-width="6" stroke-linecap="round" filter="url(#glowW1)"/>
-      <path d="M 82 90 Q 120 66 158 90"  stroke="#ffb347" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#glowW1)"/>
-      <path d="M 82 150 Q 120 174 158 150" stroke="#cc88ff" stroke-width="5" fill="none" stroke-linecap="round" filter="url(#glowW1)"/>
-      <line x1="58" y1="62"  x2="182" y2="62"  stroke="#ffb347" stroke-width="2" opacity="0.3" stroke-linecap="round"/>
-      <line x1="58" y1="178" x2="182" y2="178" stroke="#cc88ff" stroke-width="2" opacity="0.3" stroke-linecap="round"/>
-      <path d="M 82 90 Q 120 66 158 90"  stroke="#ff8c42" stroke-width="2" fill="none" opacity="0.3"/>
-      <path d="M 82 150 Q 120 174 158 150" stroke="#9b5de5" stroke-width="2" fill="none" opacity="0.3"/>
-    </svg>
-    <div class="gem-title">GEMFIT</div>
-    <div class="gem-sub">¿Quién entrena hoy?</div>
+  <!-- Logo -->
+  <div style="text-align:center;padding:40px 24px 28px;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:.2em;color:#e8e8e8;">GEMFIT</div>
+    <div style="font-size:10px;color:#333;letter-spacing:.2em;text-transform:uppercase;margin-top:2px;">¿Quién entrena hoy?</div>
   </div>
 
-  <!-- Cards divididas concepto 2 -->
-  <div class="prof-cards">
+  <!-- Cards -->
+  <div style="display:flex;flex-direction:column;gap:10px;padding:0 20px 40px;width:100%;max-width:420px;margin:0 auto;">
 
     <!-- DEIVIS -->
-    <div class="pcard" style="border-color:rgba(204,85,0,.2);" onclick="selectProfile('deivis')">
-      <!-- Banda superior con gradiente -->
-      <div style="height:6px;background:linear-gradient(90deg,#ff8c42,#ffb347);"></div>
-      <div style="padding:18px 12px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;">
-        <!-- Avatar con gradiente -->
+    <div onclick="selectProfile('deivis')" style="
+      background:#111;border:0.5px solid #1e1e1e;border-radius:16px;
+      overflow:hidden;cursor:pointer;transition:border-color .2s;"
+      onmouseover="this.style.borderColor='#cc5500'" onmouseout="this.style.borderColor='#1e1e1e'">
+      <div style="height:3px;background:#cc5500;"></div>
+      <div style="padding:18px 16px;display:flex;align-items:center;gap:14px;">
         <div id="pav-deivis" onclick="event.stopPropagation();avatarTap('deivis')"
-          style="width:80px;height:80px;border-radius:50%;
-            background:linear-gradient(135deg,#ff8c42,#ffb347);
-            display:flex;align-items:center;justify-content:center;
-            font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:#fff;
-            cursor:pointer;overflow:hidden;position:relative;
-            box-shadow:0 6px 20px rgba(255,140,66,.35);flex-shrink:0;"
-          title="Ver o cambiar foto">
+          style="width:64px;height:64px;border-radius:50%;background:#1a1a1a;border:1.5px solid #2a2a2a;
+          display:flex;align-items:center;justify-content:center;
+          font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#cc5500;
+          cursor:pointer;overflow:hidden;position:relative;flex-shrink:0;">
           <span id="pav-txt-deivis">D</span>
           <img id="pav-img-deivis" src="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%;">
-          <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.4);font-size:9px;color:#fff;text-align:center;padding:3px 0;">📷</div>
+          <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);font-size:8px;color:#fff;text-align:center;padding:2px 0;">📷</div>
         </div>
-        <div>
-          <div class="pname" style="color:#cc5500;">DEIVIS</div>
-          <div class="pmeta">33 años · 1.68m<br>88kg · Géminis ♊</div>
-          <div class="imc-chip" style="background:rgba(204,85,0,.12);color:#cc5500;">IMC 31.2</div>
-        </div>
-        <!-- Barra progreso semanal dinámica -->
-        <div style="width:100%;">
-          <div style="display:flex;justify-content:space-between;font-size:9px;color:#8899aa;margin-bottom:4px;">
-            <span>Semana actual</span>
-            <span id="dp-pct-deivis" style="font-weight:700;color:#cc5500;">0%</span>
+        <div style="flex:1;min-width:0;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;color:#e8e8e8;line-height:1;">DEIVIS</div>
+          <div style="font-size:10px;color:#444;margin-top:2px;margin-bottom:10px;">33 años · 88kg · Géminis ♊</div>
+          <div style="display:flex;gap:6px;">
+            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#cc5500;" id="dp-streak-deivis-val">0</div>
+              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">Racha</div>
+            </div>
+            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#e8e8e8;" id="dp-sess-deivis-val">0/6</div>
+              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">Semana</div>
+            </div>
+            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#e8e8e8;" id="dp-kg-deivis-val">88</div>
+              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">kg</div>
+            </div>
           </div>
-          <div style="height:5px;background:rgba(0,153,77,.12);border-radius:99px;overflow:hidden;">
-            <div id="dp-bar-deivis" style="height:100%;background:linear-gradient(90deg,#ff8c42,#ffb347);border-radius:99px;width:0%;transition:width .6s ease;"></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:9px;color:#aabbcc;margin-top:3px;">
-            <span id="dp-deivis">0/6 sesiones</span>
-            <span id="dp-streak-deivis">🔥 0 días</span>
+          <div style="margin-top:8px;">
+            <div style="height:2px;background:#1a1a1a;border-radius:99px;overflow:hidden;">
+              <div id="dp-bar-deivis" style="height:100%;background:#cc5500;border-radius:99px;width:0%;transition:width .6s;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px;">
+              <span style="font-size:8px;color:#333;">Semana actual</span>
+              <span id="dp-pct-deivis" style="font-size:8px;color:#cc5500;font-weight:600;">0%</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- YONA -->
-    <div class="pcard" style="border-color:rgba(106,0,184,.2);" onclick="selectProfile('yona')">
-      <div style="height:6px;background:linear-gradient(90deg,#c0006e,#9b5de5);"></div>
-      <div style="padding:18px 12px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;">
+    <div onclick="selectProfile('yona')" style="
+      background:#111;border:0.5px solid #1e1e1e;border-radius:16px;
+      overflow:hidden;cursor:pointer;transition:border-color .2s;"
+      onmouseover="this.style.borderColor='#7733cc'" onmouseout="this.style.borderColor='#1e1e1e'">
+      <div style="height:3px;background:#7733cc;"></div>
+      <div style="padding:18px 16px;display:flex;align-items:center;gap:14px;">
         <div id="pav-yona" onclick="event.stopPropagation();avatarTap('yona')"
-          style="width:80px;height:80px;border-radius:50%;
-            background:linear-gradient(135deg,#c0006e,#9b5de5);
-            display:flex;align-items:center;justify-content:center;
-            font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:#fff;
-            cursor:pointer;overflow:hidden;position:relative;
-            box-shadow:0 6px 20px rgba(221,0,96,.3);flex-shrink:0;"
-          title="Ver o cambiar foto">
+          style="width:64px;height:64px;border-radius:50%;background:#1a1a1a;border:1.5px solid #2a2a2a;
+          display:flex;align-items:center;justify-content:center;
+          font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#7733cc;
+          cursor:pointer;overflow:hidden;position:relative;flex-shrink:0;">
           <span id="pav-txt-yona">Y</span>
           <img id="pav-img-yona" src="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%;">
-          <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.4);font-size:9px;color:#fff;text-align:center;padding:3px 0;">📷</div>
+          <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);font-size:8px;color:#fff;text-align:center;padding:2px 0;">📷</div>
         </div>
-        <div>
-          <div class="pname" style="color:#6a00b8;">YONA</div>
-          <div class="pmeta">29 años · 1.68m<br>88kg · Géminis ♊</div>
-          <div class="imc-chip" style="background:rgba(106,0,184,.12);color:#6a00b8;">IMC 31.2</div>
-        </div>
-        <div style="width:100%;">
-          <div style="display:flex;justify-content:space-between;font-size:9px;color:#8899aa;margin-bottom:4px;">
-            <span>Semana actual</span>
-            <span id="dp-pct-yona" style="font-weight:700;color:#6a00b8;">0%</span>
+        <div style="flex:1;min-width:0;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;color:#e8e8e8;line-height:1;">YONA</div>
+          <div style="font-size:10px;color:#444;margin-top:2px;margin-bottom:10px;">29 años · 88kg · Géminis ♊</div>
+          <div style="display:flex;gap:6px;">
+            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#7733cc;" id="dp-streak-yona-val">0</div>
+              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">Racha</div>
+            </div>
+            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#e8e8e8;" id="dp-sess-yona-val">0/6</div>
+              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">Semana</div>
+            </div>
+            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#e8e8e8;" id="dp-kg-yona-val">88</div>
+              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">kg</div>
+            </div>
           </div>
-          <div style="height:5px;background:rgba(0,136,187,.12);border-radius:99px;overflow:hidden;">
-            <div id="dp-bar-yona" style="height:100%;background:linear-gradient(90deg,#c0006e,#9b5de5);border-radius:99px;width:0%;transition:width .6s ease;"></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:9px;color:#aabbcc;margin-top:3px;">
-            <span id="dp-yona">0/6 sesiones</span>
-            <span id="dp-streak-yona">🔥 0 días</span>
+          <div style="margin-top:8px;">
+            <div style="height:2px;background:#1a1a1a;border-radius:99px;overflow:hidden;">
+              <div id="dp-bar-yona" style="height:100%;background:#7733cc;border-radius:99px;width:0%;transition:width .6s;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px;">
+              <span style="font-size:8px;color:#333;">Semana actual</span>
+              <span id="dp-pct-yona" style="font-size:8px;color:#7733cc;font-weight:600;">0%</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-  </div>
-  <div style="font-size:11px;color:#8899aa;text-align:center;max-width:280px;line-height:1.6;margin-top:8px;">
-    Toca tu tarjeta para entrar
   </div>
 </div>
 
@@ -503,169 +439,125 @@ const PROFS = {
 // Ejercicios seleccionados por ratio estímulo/fatiga
 // ═══════════════════════════════════════════════════════════════
 const SESSIONS = {
-  upperA: {
-    id:'upperA', lbl:'Upper A', type:'push', emoji:'💪',
-    title:'LUNES — Upper A · Fuerza + Hipertrofia Pecho/Espalda',
-    dur:'~100 min', focus:'Compuestos pesados. RPE 8-9. Baja el peso si la técnica falla.',
+  // MARTES & SÁBADO — Bíceps, Tríceps, Hombros
+  brazoA: {
+    id:'brazoA', lbl:'Brazos A', type:'push', emoji:'💪',
+    title:'MARTES — Bíceps · Tríceps · Hombros',
+    dur:'~90 min', focus:'Empieza con bíceps mientras tienes más fuerza. Descansa 60-90s entre series.',
     sections: [
-      { t:'Pecho — Prioridad', ex:[
-        {id:'ua1',n:'Press de Banca con Barra',s:'4×4-6',note:'El rey del pecho. Agarre a 81cm. Baja 2 seg, explota arriba.',why:'Mayor activación pectoral absoluta. Permite mayor carga progresiva.',star:true},
-        {id:'ua2',n:'Press Inclinado con Mancuernas',s:'3×8-10',note:'Ángulo 30°. Codos a 45° del cuerpo. Stretch completo abajo.',why:'Pecho clavicular. Mancuernas permiten mayor rango de movimiento.'},
-      ]},
-      { t:'Espalda — Grosor', ex:[
-        {id:'ua3',n:'Remo con Barra Pendlay',s:'4×6-8',note:'Barra al suelo entre reps. Espalda paralela. Tirón explosivo.',why:'Mayor activación dorsal e isquios que remo tradicional. Carga máxima.',star:true},
-        {id:'ua4',n:'Remo con Mancuerna a Una Mano',s:'3×10-12',note:'Codo hacia el techo. Rango completo. Rotación escapular.',why:'Corrección de asimetría. Aislamiento dorsal unilateral.'},
-      ]},
-      { t:'Hombro', ex:[
-        {id:'ua5',n:'Press Militar Barra De Pie',s:'3×6-8',note:'Core braced. No hiperextiendas lumbar. Barra pasa por la oreja.',why:'Activación total del deltoides. Involucra core y trapecio.'},
-        {id:'ua6',n:'Facepulls con Polea Alta',s:'4×15-20',note:'Codos arriba. Lleva las manos a las orejas. Salud rotator cuff.',why:'Hombro posterior y manguito rotador. Previene lesiones.'},
-      ]},
-      { t:'Cardio LISS', ex:[
-        {id:'ua7',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% inclinación · 5.5 km/h · LISS',cardio:true,why:'Máxima quema calórica con mínima fatiga muscular.'},
-      ]},
-    ]
-  },
-
-  lowerA: {
-    id:'lowerA', lbl:'Lower A', type:'legs', emoji:'🦵',
-    title:'MARTES — Lower A · Cuádriceps Dominante',
-    dur:'~95 min', focus:'Día de pierna más duro. Empieza bien descansado. Descansos de 3 min en sentadilla.',
-    sections: [
-      { t:'Cuádriceps — Prioridad', ex:[
-        {id:'la1',n:'Sentadilla Trasera con Barra (High Bar)',s:'5×4-6',note:'Profundidad completa. Rodillas siguen pies. Pecho arriba.',why:'El ejercicio con mayor anabolismo sistémico. Activa más músculo que cualquier otro.',star:true},
-        {id:'la2',n:'Prensa de Piernas 45°',s:'3×10-12',note:'Pies bajos y juntos para cuádriceps. Rango completo. Sin bloquear rodillas.',why:'Volumen adicional de cuádriceps con menor fatiga de espalda baja.'},
-        {id:'la3',n:'Extensión de Cuádriceps (Máquina)',s:'3×12-15',note:'Pausa 1 seg arriba. Bajada controlada 3 seg. Aislamiento total.',why:'Único ejercicio que trabaja recto femoral en extensión total de rodilla.'},
-      ]},
-      { t:'Isquiotibiales', ex:[
-        {id:'la4',n:'Curl Femoral Tumbado (Máquina)',s:'3×10-12',note:'Bajada lenta 3 seg. No levantes caderas. Contracción completa.',why:'Isquiotibiales en posición acortada. Complementa al peso muerto rumano.'},
-      ]},
-      { t:'Gemelos', ex:[
-        {id:'la5',n:'Elevación de Talones en Prensa',s:'5×12-15',note:'Rango completo. Pausa 2 seg abajo en estiramiento. Bajada lenta.',why:'Mayor carga posible para gemelos. Gastrocnemio e isquiotibial.'},
-      ]},
-      { t:'Core', ex:[
-        {id:'la6',n:'Ab Wheel (Rueda Abdominal)',s:'4×8-12',note:'Espalda plana. Caderas no caigan. Progresa a rodillas primero.',why:'Mayor activación de recto abdominal que cualquier crunch.'},
-      ]},
-      { t:'Cardio LISS', ex:[
-        {id:'la7',n:'Caminata Inclinada en Cinta',s:'15 min',note:'10% · 5.5 km/h',cardio:true,why:'Post-piernas para maximizar oxidación de ácidos grasos.'},
-      ]},
-    ]
-  },
-
-  pushA: {
-    id:'pushA', lbl:'Push A', type:'push', emoji:'🔴',
-    title:'MIÉRCOLES — Push A · Hombros y Tríceps',
-    dur:'~90 min', focus:'Sesión de hombro y tríceps. Técnica sobre ego. Descansa 90 seg entre series.',
-    sections: [
-      { t:'Hombro — Prioridad', ex:[
-        {id:'pua1',n:'Press Arnold con Mancuernas',s:'4×8-10',note:'Rotación completa del hombro. Codos bajos al inicio. Control total.',why:'Activa las 3 cabezas del deltoides simultáneamente. Superior al press militar.',star:true},
-        {id:'pua2',n:'Elevaciones Laterales en Polea',s:'5×15-20',note:'Polea baja lateral. Codo ligeramente flexionado. Pausa arriba.',why:'Tensión constante vs mancuernas. Óptimo para deltoides lateral.'},
-        {id:'pua3',n:'Pájaros en Polea (Hombro Posterior)',s:'4×15',note:'Polea alta. Brazos alineados con los hombros. No gires el tronco.',why:'Deltoides posterior. Equilibrio y salud del hombro.'},
+      { t:'Bíceps', ex:[
+        {id:'ba1',n:'Curl con Barra Z',s:'4×8-10',note:'Codos fijos al cuerpo. Sin balanceo. Bajada controlada 2s.',why:'Mayor carga posible para bíceps.'},
+        {id:'ba2',n:'Curl Inclinado con Mancuernas',s:'3×10-12',note:'Banco 45°. Stretch completo abajo. Supina la muñeca.',why:'Cabeza larga en posición elongada. Máxima hipertrofia.'},
+        {id:'ba3',n:'Curl Martillo',s:'3×12',note:'Agarre neutro. Braquial y braquiorradial. Grosor del brazo.',why:'Añade grosor al brazo y antebrazo.'},
       ]},
       { t:'Tríceps', ex:[
-        {id:'pua4',n:'Fondos en Paralelas (Tríceps)',s:'4×8-12',note:'Cuerpo vertical. Codos cerca del cuerpo. Si no puedes: polea.',why:'Mayor activación de la cabeza larga del tríceps. El más potente.',star:true},
-        {id:'pua5',n:'Extensiones Polea Alta (Cuerda)',s:'3×12-15',note:'Separa la cuerda al final. Codos fijos. Bajada controlada.',why:'Tensión en estiramiento. Cabeza larga del tríceps.'},
-        {id:'pua6',n:'Copa de Tríceps (Mancuerna)',s:'3×12',note:'Agarre neutro. Codos apuntan al techo. Rango completo.',why:'Aislamiento de cabeza larga. Stretch en posición extendida.'},
+        {id:'ba4',n:'Fondos en Paralelas (Tríceps)',s:'4×8-12',note:'Cuerpo vertical. Codos cerca del cuerpo. Si no puedes, usa polea.',why:'Mayor activación de cabeza larga del tríceps.'},
+        {id:'ba5',n:'Extensiones Polea Alta (Cuerda)',s:'3×12-15',note:'Separa la cuerda al final. Codos fijos. Bajada controlada.',why:'Tensión constante en todo el rango.'},
+        {id:'ba6',n:'Copa de Tríceps (Mancuerna)',s:'3×12',note:'Agarre neutro. Codos apuntan al techo. Rango completo.',why:'Aislamiento de cabeza larga.'},
       ]},
-      { t:'Cardio LISS', ex:[
-        {id:'pua7',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% · 5.5 km/h',cardio:true,why:''},
-      ]},
-    ]
-  },
-
-  pullA: {
-    id:'pullA', lbl:'Pull A', type:'pull', emoji:'🔵',
-    title:'JUEVES — Pull A · Espalda Amplitud + Bíceps',
-    dur:'~90 min', focus:'Amplitud de espalda y V-taper. Cada rep con contracción escapular completa.',
-    sections: [
-      { t:'Espalda — Amplitud', ex:[
-        {id:'pla1',n:'Dominadas con Lastre (Agarre Pronado)',s:'4×6-8',note:'Rango completo. Pecho al bar. Bajada controlada 2 seg.',why:'El mejor ejercicio para el dorsal ancho. Difícil de superar.',star:true},
-        {id:'pla2',n:'Jalón al Pecho Agarre Neutro',s:'3×10-12',note:'Pecho hacia la barra. Agarre neutro mayor activación dorsal.',why:'Agarre neutro supera al prono en activación de dorsal ancho.'},
-        {id:'pla3',n:'Pull-over en Polea (Brazos Rectos)',s:'3×15',note:'Brazos rectos. Arco amplio. Aprieta el dorsal al bajar.',why:'Aísla el dorsal sin involucrar bíceps. Perfecto para V-taper.'},
-      ]},
-      { t:'Espalda — Grosor', ex:[
-        {id:'pla4',n:'Remo en Polea Baja (Agarre Ancho)',s:'3×10-12',note:'Agarre ancho. Tira al pecho bajo. Aprieta escápulas.',why:'Romboides y trapecio medio. Espalda densa.'},
-      ]},
-      { t:'Bíceps', ex:[
-        {id:'pla5',n:'Curl con Barra Z (Bíceps)',s:'3×8-10',note:'Codos fijos. Sin balanceo. Bajada controlada 2 seg.',why:'Mayor carga que con mancuernas. Máximo estímulo bicipital.'},
-        {id:'pla6',n:'Curl Inclinado con Mancuernas',s:'3×10-12',note:'Banco a 45°. Stretch completo en abajo. Supina la muñeca.',why:'Posición inclinada estira la cabeza larga al máximo. Mayor hipertrofia.'},
-        {id:'pla7',n:'Curl Martillo (Mancuernas)',s:'2×12',note:'Agarre neutro. Braquial y braquiorradial. Grosor del brazo.',why:'Grosor del brazo y antebrazo. Diferente a curl estándar.'},
-      ]},
-      { t:'Cardio LISS', ex:[
-        {id:'pla8',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% · 5.5 km/h',cardio:true,why:''},
+      { t:'Hombros', ex:[
+        {id:'ba7',n:'Press Arnold con Mancuernas',s:'4×10-12',note:'Rotación completa del hombro. Codos bajos al inicio.',why:'Activa las 3 cabezas del deltoides.'},
+        {id:'ba8',n:'Elevaciones Laterales en Polea',s:'4×15-20',note:'Polea baja. Codo ligeramente flexionado. Pausa arriba.',why:'Tensión constante vs mancuernas.'},
+        {id:'ba9',n:'Facepulls con Polea Alta',s:'3×15-20',note:'Codos arriba. Lleva las manos a las orejas.',why:'Hombro posterior. Previene lesiones.'},
       ]},
     ]
   },
 
-  upperB: {
-    id:'upperB', lbl:'Upper B', type:'push', emoji:'💪',
-    title:'VIERNES — Upper B · Hipertrofia Pecho Alto + Espalda',
-    dur:'~95 min', focus:'Más volumen, menos carga que Upper A. Rango 8-12 reps. Conexión mente-músculo.',
+  // MIÉRCOLES & DOMINGO — Espalda
+  espaldaA: {
+    id:'espaldaA', lbl:'Espalda', type:'pull', emoji:'🔵',
+    title:'MIÉRCOLES — Espalda Completa',
+    dur:'~90 min', focus:'Contracción escapular completa en cada rep. Olvídate del peso, piensa en el músculo.',
     sections: [
-      { t:'Pecho Alto — Prioridad', ex:[
-        {id:'ub1',n:'Press Inclinado con Barra (30°)',s:'4×8-10',note:'Agarre ligeramente más estrecho. Baja a la clavícula.',why:'Pecho clavicular. Complementa el press plano del lunes.',star:true},
-        {id:'ub2',n:'Aperturas en Polea a Media Altura',s:'4×12-15',note:'Ligera flexión de codos. Contracción 1 seg. Recorrido en D.',why:'Tensión constante en todo el recorrido. Superior a las mancuernas.'},
-        {id:'ub3',n:'Fondos en Paralelas (Pecho)',s:'3×10-12',note:'Inclínate adelante. Codos salen afuera. Profundidad máxima.',why:'Pecho inferior y serrato anterior. Stretch máximo en pectoral.'},
+      { t:'Amplitud — Dorsal', ex:[
+        {id:'ea1',n:'Dominadas (o Jalón al Pecho)',s:'4×6-10',note:'Rango completo. Pecho al bar. Bajada controlada 2s.',why:'El mejor ejercicio para dorsal ancho.',star:true},
+        {id:'ea2',n:'Jalón al Pecho Agarre Neutro',s:'3×10-12',note:'Agarre neutro mayor activación dorsal. Pecho hacia la barra.',why:'Mayor activación dorsal que agarre prono.'},
+        {id:'ea3',n:'Pull-over en Polea (Brazos Rectos)',s:'3×15',note:'Brazos rectos. Arco amplio. Aprieta el dorsal al bajar.',why:'Aísla el dorsal sin involucrar bíceps.'},
       ]},
-      { t:'Espalda — Amplitud', ex:[
-        {id:'ub4',n:'Jalón al Pecho Agarre Ancho',s:'4×10-12',note:'Arquea ligeramente. Pecho hacia la barra. Codos hacia el suelo.',why:'Complementa las dominadas del jueves. Frecuencia 2x dorsal.'},
-        {id:'ub5',n:'Remo con Mancuerna en Banco',s:'3×10-12',note:'Apoyo de codo en banco. Mayor estabilidad. Más rango.',why:'Variante estabilizada. Permite más volumen con buena técnica.'},
-      ]},
-      { t:'Hombro y Trapecio', ex:[
-        {id:'ub6',n:'Elevaciones Laterales Mancuernas',s:'4×15-20',note:'Movimiento de arco. No más de 90°. Codos ligeramente flexionados.',why:'Segunda sesión semanal de deltoides lateral.'},
-        {id:'ub7',n:'Encogimientos con Mancuernas (Trapecio)',s:'3×12',note:'Sin rotar el hombro. Solo sube y baja. Pausa arriba.',why:'Trapecio superior. Aspecto de hombros poderosos.'},
+      { t:'Grosor — Romboides y Trapecios', ex:[
+        {id:'ea4',n:'Remo con Barra',s:'4×8-10',note:'Espalda paralela. Tirón al ombligo. Aprieta escápulas.',why:'Mayor activación dorsal e isquios.',star:true},
+        {id:'ea5',n:'Remo con Mancuerna a Una Mano',s:'3×10-12',note:'Codo hacia el techo. Rango completo. Rotación escapular.',why:'Corrección de asimetría. Aislamiento dorsal.'},
+        {id:'ea6',n:'Remo en Polea Baja (Agarre Ancho)',s:'3×12',note:'Tira al pecho bajo. Aprieta escápulas arriba.',why:'Romboides y trapecio medio.'},
       ]},
       { t:'Cardio LISS', ex:[
-        {id:'ub8',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% · 5.5 km/h',cardio:true,why:''},
+        {id:'ea7',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% inclinación · 5.5 km/h',cardio:true,why:'Quema calórica con mínima fatiga muscular.'},
       ]},
     ]
   },
 
-  lowerB: {
-    id:'lowerB', lbl:'Lower B', type:'legs', emoji:'🦵',
-    title:'SÁBADO — Lower B · Cadena Posterior Dominante',
-    dur:'~95 min', focus:'Glúteos, isquiotibiales, fuerza funcional. El día más importante para la postura.',
+  // JUEVES — Pecho
+  pechoA: {
+    id:'pechoA', lbl:'Pecho', type:'push', emoji:'🔴',
+    title:'JUEVES — Pecho Completo',
+    dur:'~85 min', focus:'RPE 8-9 en compuestos. Mente-músculo en aislamientos. Codos a 45° siempre.',
     sections: [
-      { t:'Cadena Posterior — Prioridad', ex:[
-        {id:'lb1',n:'Peso Muerto Convencional',s:'4×4-6',note:'Espalda neutra. Empuja el suelo. Bloqueo completo arriba.',why:'El ejercicio más anabólico del mundo. Fuerza total de cadena posterior.',star:true},
-        {id:'lb2',n:'Sentadilla Búlgara (Mancuernas)',s:'3×8-10',note:'Pie trasero en banco. Torso ligeramente inclinado. Rodilla no pasa el pie.',why:'Unilateral. Glúteo e isquio. Corrige desequilibrios y mayor ROM.',star:true},
-        {id:'lb3',n:'Hip Thrust con Barra',s:'4×10-12',note:'Banco al omóplato. Barbilla al pecho. Aprieta glúteo arriba.',why:'Mayor activación de glúteo mayor que cualquier otro ejercicio.',star:true},
+      { t:'Pecho Plano', ex:[
+        {id:'pa1',n:'Press de Banca con Barra',s:'4×6-8',note:'Agarre a 81cm. Baja 2s, explota arriba. Codos a 45°.',why:'Mayor activación pectoral absoluta.',star:true},
+        {id:'pa2',n:'Press Plano con Mancuernas',s:'3×10-12',note:'Stretch completo abajo. Mancuernas permiten mayor ROM.',why:'Complementa el press de banca.'},
       ]},
-      { t:'Isquiotibiales', ex:[
-        {id:'lb4',n:'Peso Muerto Rumano (Mancuernas)',s:'3×10-12',note:'Bajada lenta. Siente el estiramiento. Caderas atrás no abajo.',why:'Isquiotibiales en posición elongada. Máxima hipertrofia.'},
-        {id:'lb5',n:'Curl Femoral Sentado (Máquina)',s:'3×12-15',note:'Posición sentado mayor stretch que tumbado. Bajada 3 seg.',why:'Isquiotibiales en posición larga. Mayor daño muscular y crecimiento.'},
+      { t:'Pecho Alto', ex:[
+        {id:'pa3',n:'Press Inclinado con Barra (30°)',s:'4×8-10',note:'Ángulo 30°. Baja a la clavícula. No hiperextiendas.',why:'Pecho clavicular. Equilibra el desarrollo.',star:true},
+        {id:'pa4',n:'Press Inclinado con Mancuernas',s:'3×10-12',note:'Ángulo 30°. Stretch completo. Codos a 45°.',why:'Mayor rango de movimiento.'},
+      ]},
+      { t:'Aislamiento', ex:[
+        {id:'pa5',n:'Aperturas en Polea a Media Altura',s:'4×12-15',note:'Ligera flexión de codos. Contracción 1s. Recorrido en D.',why:'Tensión constante en todo el recorrido.'},
+        {id:'pa6',n:'Fondos en Paralelas (Pecho)',s:'3×10-12',note:'Inclínate adelante. Codos afuera. Profundidad máxima.',why:'Pecho inferior y serrato anterior.'},
+      ]},
+      { t:'Cardio LISS', ex:[
+        {id:'pa7',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% · 5.5 km/h',cardio:true,why:''},
+      ]},
+    ]
+  },
+
+  // VIERNES — Pierna Completa
+  piernaA: {
+    id:'piernaA', lbl:'Pierna', type:'legs', emoji:'🦵',
+    title:'VIERNES — Pierna Completa',
+    dur:'~100 min', focus:'El día más duro. 3 min de descanso en sentadilla y peso muerto. Hidratación doble.',
+    sections: [
+      { t:'Cuádriceps', ex:[
+        {id:'pia1',n:'Sentadilla Trasera con Barra',s:'5×5-6',note:'Profundidad completa. Rodillas siguen pies. Pecho arriba.',why:'El ejercicio más anabólico. Activa más músculo que cualquier otro.',star:true},
+        {id:'pia2',n:'Prensa de Piernas 45°',s:'3×10-12',note:'Pies bajos y juntos para cuádriceps. Rango completo.',why:'Volumen extra de cuádriceps sin fatiga de espalda.'},
+        {id:'pia3',n:'Extensión de Cuádriceps (Máquina)',s:'3×12-15',note:'Pausa 1s arriba. Bajada controlada 3s.',why:'Único ejercicio que trabaja recto femoral en extensión total.'},
+      ]},
+      { t:'Glúteo e Isquiotibiales', ex:[
+        {id:'pia4',n:'Hip Thrust con Barra',s:'4×10-12',note:'Banco al omóplato. Barbilla al pecho. Aprieta glúteo arriba.',why:'Mayor activación de glúteo mayor.',star:true},
+        {id:'pia5',n:'Peso Muerto Rumano (Mancuernas)',s:'3×10-12',note:'Bajada lenta. Siente el estiramiento. Caderas atrás.',why:'Isquiotibiales en posición elongada.'},
+        {id:'pia6',n:'Curl Femoral Tumbado (Máquina)',s:'3×12-15',note:'Bajada lenta 3s. No levantes caderas.',why:'Isquiotibiales en posición acortada.'},
       ]},
       { t:'Gemelos', ex:[
-        {id:'lb6',n:'Elevación de Talones De Pie (Máquina)',s:'5×10-12',note:'Bajada muy lenta 4 seg. Pausa 2 seg abajo. Rango completo.',why:'Gastrocnemio: más efectivo de pie que en prensa. Doble flexión.'},
+        {id:'pia7',n:'Elevación de Talones en Prensa',s:'5×12-15',note:'Rango completo. Pausa 2s abajo en estiramiento.',why:'Mayor carga posible para gemelos.'},
       ]},
       { t:'Core', ex:[
-        {id:'lb7',n:'Plancha con Elevación Alternada',s:'3×10 c/lado',note:'Estabilidad total. Sin rotar caderas. Columna neutra.',why:'Core antirotación. Funcional y preventivo de lesiones lumbares.'},
-        {id:'lb8',n:'Elevación de Piernas Colgando',s:'3×10-15',note:'Piernas rectas si puedes. Sin balanceo. Flexión de cadera.',why:'Flexores de cadera y recto abdominal inferior. Muy difícil de aislar.'},
-      ]},
-      { t:'Cardio LISS', ex:[
-        {id:'lb9',n:'Caminata Inclinada en Cinta',s:'15 min',note:'10% · 5.5 km/h',cardio:true,why:''},
+        {id:'pia8',n:'Ab Wheel (Rueda Abdominal)',s:'4×8-12',note:'Espalda plana. Caderas no caigan.',why:'Mayor activación de recto abdominal.'},
       ]},
     ]
-  }
+  },
+
+  skip: {
+    id:'skip', lbl:'Descanso', type:'rest', emoji:'💤',
+    title:'DESCANSO',
+    dur:'', focus:'La recuperación también es entrenamiento.',
+    sections:[]
+  },
 };
 
 const SESS_LIST = [
-  {id:'upperA',lbl:'Pecho / Espalda',type:'push'},
-  {id:'lowerA',lbl:'Cuádriceps',type:'legs'},
-  {id:'pushA', lbl:'Hombros / Tríceps',type:'push'},
-  {id:'pullA', lbl:'Espalda / Bíceps',type:'pull'},
-  {id:'upperB',lbl:'Pecho Alto / Espalda',type:'push'},
-  {id:'lowerB',lbl:'Glúteo / Isquios',type:'legs'},
-  {id:'skip',  lbl:'Descanso',type:'skip'},
+  {id:'brazoA', lbl:'Bíceps · Tríceps · Hombros', type:'push'},
+  {id:'espaldaA',lbl:'Espalda', type:'pull'},
+  {id:'pechoA',  lbl:'Pecho', type:'push'},
+  {id:'piernaA', lbl:'Pierna Completa', type:'legs'},
+  {id:'skip',    lbl:'Descanso', type:'skip'},
 ];
 
 const WEEK_PLAN = [
-  {day:'Lun',id:'upperA',type:'push',lbl:'Upper A'},
-  {day:'Mar',id:'lowerA',type:'legs',lbl:'Lower A'},
-  {day:'Mié',id:'pushA', type:'push',lbl:'Push A'},
-  {day:'Jue',id:'pullA', type:'pull',lbl:'Pull A'},
-  {day:'Vie',id:'upperB',type:'push',lbl:'Upper B'},
-  {day:'Sáb',id:'lowerB',type:'legs',lbl:'Lower B'},
-  {day:'Dom',id:'skip',  type:'rest',lbl:'Rest'},
+  {day:'Lun',id:'skip',     type:'rest', lbl:'Descanso'},
+  {day:'Mar',id:'brazoA',   type:'push', lbl:'Brazos'},
+  {day:'Mié',id:'espaldaA', type:'pull', lbl:'Espalda'},
+  {day:'Jue',id:'pechoA',   type:'push', lbl:'Pecho'},
+  {day:'Vie',id:'piernaA',  type:'legs', lbl:'Pierna'},
+  {day:'Sáb',id:'brazoA',   type:'push', lbl:'Brazos'},
+  {day:'Dom',id:'espaldaA', type:'pull', lbl:'Espalda'},
 ];
 
 // ═══════════════════════════════════════════════════════════════
@@ -768,7 +660,7 @@ const EXLIB   = _stored.EXLIB   || {deivis:[], yona:[]};  // Personal exercise l
 // CP always starts null — user must select profile on every open
 
 function dk(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
-function texs(sid){ if(!SESSIONS[sid])return 0; return SESSIONS[sid].sections.reduce((a,s)=>a+s.ex.length,0); }
+function texs(sid){ if(!SESSIONS[sid]||!SESSIONS[sid].sections)return 0; return SESSIONS[sid].sections.reduce((a,s)=>a+s.ex.length,0); }
 function gd(){ return AD[CP]; }
 function sd(d){ AD[CP]=d; lsSave(); }
 function gw(){ return WD[CP]; }
@@ -1167,29 +1059,35 @@ function updateProfileStats(){
     for(let d=0;d<7;d++){
       const day = new Date(monday); day.setDate(monday.getDate()+d);
       const k = day.getFullYear()+'-'+String(day.getMonth()+1).padStart(2,'0')+'-'+String(day.getDate()).padStart(2,'0');
-      if(data[k]&&data[k].session&&data[k].session!=='skip'&&SESSIONS[data[k].session]) count++;
+      if(data[k]&&data[k].session&&data[k].session!=='skip') count++;
     }
     const pct = Math.round((count/6)*100);
 
-    // Streak (consecutive days trained)
+    // Streak
     let streak = 0;
     for(let i=0;i<365;i++){
       const d2 = new Date(now); d2.setDate(now.getDate()-i);
       const k = d2.getFullYear()+'-'+String(d2.getMonth()+1).padStart(2,'0')+'-'+String(d2.getDate()).padStart(2,'0');
-      if(data[k]&&data[k].session&&data[k].session!=='skip'&&SESSIONS[data[k].session]) streak++;
+      if(data[k]&&data[k].session&&data[k].session!=='skip') streak++;
       else if(i>0) break;
     }
 
-    // Update DOM
-    const lbl    = document.getElementById('dp-'+id);
+    // Last known weight
+    const wl = WD[id]||[];
+    const lastKg = wl.length>0?wl[wl.length-1].val:88;
+
+    // Update DOM — new IDs
     const bar    = document.getElementById('dp-bar-'+id);
     const pctEl  = document.getElementById('dp-pct-'+id);
-    const strEl  = document.getElementById('dp-streak-'+id);
+    const strEl  = document.getElementById('dp-streak-'+id+'-val');
+    const sessEl = document.getElementById('dp-sess-'+id+'-val');
+    const kgEl   = document.getElementById('dp-kg-'+id+'-val');
 
-    if(lbl)   lbl.textContent   = count+'/6 sesiones';
-    if(pctEl) pctEl.textContent = pct+'%';
-    if(strEl) strEl.textContent = '🔥 '+streak+' días';
-    if(bar)   setTimeout(()=>bar.style.width=pct+'%', 300);
+    if(pctEl)  pctEl.textContent  = pct+'%';
+    if(strEl)  strEl.textContent  = streak;
+    if(sessEl) sessEl.textContent = count+'/6';
+    if(kgEl)   kgEl.textContent   = lastKg;
+    if(bar)    setTimeout(()=>bar.style.width=pct+'%', 300);
   });
 }
 
@@ -1420,7 +1318,39 @@ function selDay(k){ SK=k; renderCal(); }
 
 function setSess(sid){
   const data=gd(); data[SK]=data[SK]||{}; data[SK].session=sid; data[SK].checked=data[SK].checked||{};
+  // Auto-load learned exercises from last time this session type was done
+  if(sid&&sid!=='skip'&&SESSIONS[sid]){
+    const learned = getLearnedExercises(sid);
+    if(learned){
+      // Restore extra exercises per section from last time
+      Object.keys(learned).forEach(secKey=>{
+        if(!data[secKey]) data[secKey]=learned[secKey].map(e=>({...e,sets:'',reps:'',kg:''}));
+      });
+    }
+  }
   sd(data); renderCal();
+}
+
+// Get exercises saved last time this session type was done
+function getLearnedExercises(sessId){
+  const data=gd();
+  // Find most recent day with this session type (not today)
+  const days = Object.keys(data).filter(k=>/^\d{4}-/.test(k)&&k!==SK&&data[k]&&data[k].session===sessId);
+  if(!days.length) return null;
+  days.sort(); const lastDay = days[days.length-1];
+  const lastData = data[lastDay];
+  // Extract all secKeys for this session
+  const result={};
+  if(SESSIONS[sessId]&&SESSIONS[sessId].sections){
+    SESSIONS[sessId].sections.forEach(sec=>{
+      const secKey='extra_'+lastDay+'_'+sec.t.replace(/\s+/g,'_');
+      if(lastData[secKey]&&lastData[secKey].length>0){
+        const newSecKey='extra_'+SK+'_'+sec.t.replace(/\s+/g,'_');
+        result[newSecKey]=lastData[secKey];
+      }
+    });
+  }
+  return Object.keys(result).length?result:null;
 }
 
 function togEx(eid){
@@ -1440,6 +1370,7 @@ function renderDayPanel(){
   const parts=SK.split('-');
   const sd2=new Date(+parts[0],+parts[1]-1,+parts[2]);
   const ds=sd2.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
+  const MUSCLE_MAP={brazoA:'BÍCEPS · TRÍCEPS · HOMBROS',espaldaA:'ESPALDA',pechoA:'PECHO',piernaA:'PIERNA COMPLETA',skip:'DESCANSO'};
   let btns=SESS_LIST.map(s=>{
     const isA=dd.session===s.id; const c=TC[s.type]||'#555';
     return `<button class="sess-btn" onclick="setSess('${s.id}')" style="${isA?`background:${c}18;border-color:${c};color:${c}`:''}">${s.lbl}</button>`;
@@ -3155,7 +3086,7 @@ function renderDieta(){
 
   DIAS.forEach((d,i)=>{
     const isToday = i===todayIdx;
-    h+=`<div onclick="renderDietaDay('${d}')" style="
+    h+=`<div id="diet-day-btn-${d}" onclick="selectDietaDay('${d}')" style="
       padding:6px 2px;border-radius:8px;text-align:center;cursor:pointer;
       border:1px solid ${isToday?p.color:'var(--border)'};
       background:${isToday?p.color+'18':'transparent'};">
@@ -3169,7 +3100,31 @@ function renderDieta(){
   </div>`;
 
   document.getElementById('tab-dieta').innerHTML = h;
-  renderDietaDay(todayKey);
+  selectDietaDay(todayKey);
+}
+
+let _selectedDietaDay = null;
+
+function selectDietaDay(dayKey){
+  const p = pr();
+  const DIAS = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
+  const todayIdx = new Date().getDay();
+  const todayKey = DIAS[todayIdx];
+  _selectedDietaDay = dayKey;
+
+  // Update button styles
+  DIAS.forEach(d=>{
+    const btn = document.getElementById('diet-day-btn-'+d);
+    if(!btn) return;
+    const isSelected = d===dayKey;
+    const isToday = d===todayKey;
+    btn.style.border = isSelected ? '1px solid '+p.color : '1px solid var(--border)';
+    btn.style.background = isSelected ? p.color+'25' : 'transparent';
+    const labels = btn.querySelectorAll('div');
+    labels.forEach(l => l.style.color = isSelected ? p.color : isToday ? p.color+'99' : 'var(--muted)');
+  });
+
+  renderDietaDay(dayKey);
 }
 
 function renderDietaDay(dayKey){
