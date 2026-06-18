@@ -1275,39 +1275,77 @@ function renderVolumen(){
 // ═══════════════════════════════════════════════════════════════
 // TRACKER TAB
 // ═══════════════════════════════════════════════════════════════
-function changeMonth(d){ VM+=d; if(VM>11){VM=0;VY++;} if(VM<0){VM=11;VY--;} renderCal(); }
+// Week offset for weekly tracker (0 = current week)
+let _weekOffset = 0;
+
+function changeMonth(d){ _weekOffset += d; renderCal(); }
+
+function getWeekDays(){
+  const now = new Date();
+  // Monday of current week
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - ((now.getDay()+6)%7) + (_weekOffset*7));
+  monday.setHours(0,0,0,0);
+  const days = [];
+  for(let i=0;i<7;i++){
+    const d = new Date(monday);
+    d.setDate(monday.getDate()+i);
+    days.push(d);
+  }
+  return days;
+}
 
 function renderCal(){
   const p = pr(); const data = gd();
-  let h = `<div class="month-nav">
-    <button class="month-btn" onclick="changeMonth(-1)">‹</button>
-    <div class="month-label">${MONTHS[VM]} ${VY}</div>
-    <button class="month-btn" onclick="changeMonth(1)">›</button>
-  </div>
-  <div style="padding:0 14px 10px;">
-    <div class="cal-grid" style="margin-bottom:3px;">
-      <div class="cal-wd">LUN</div><div class="cal-wd">MAR</div><div class="cal-wd">MIÉ</div>
-      <div class="cal-wd">JUE</div><div class="cal-wd">VIE</div><div class="cal-wd">SÁB</div><div class="cal-wd">DOM</div>
-    </div>
-    <div class="cal-grid">`;
+  const weekDays = getWeekDays();
+  const DAY_NAMES = ['LUN','MAR','MIÉ','JUE','VIE','SÁB','DOM'];
 
-  const first = new Date(VY,VM,1).getDay(), off = first===0?6:first-1;
-  const dim = new Date(VY,VM+1,0).getDate();
-  for(let i=0;i<off;i++) h+='<div class="cal-cell empty"></div>';
-  for(let d=1;d<=dim;d++){
-    const k = dk(new Date(VY,VM,d)); const dd = data[k]||{};
-    const isTod = VY===NOW.getFullYear()&&VM===NOW.getMonth()&&d===NOW.getDate();
+  // Week label
+  const first = weekDays[0], last = weekDays[6];
+  const weekLabel = first.getDate()+' '+['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][first.getMonth()]
+    +' – '+last.getDate()+' '+['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][last.getMonth()];
+  const isCurrentWeek = _weekOffset === 0;
+
+  let h = `<div class="month-nav" style="padding:10px 14px 8px;">
+    <button class="month-btn" onclick="changeMonth(-1)" style="font-size:18px;">‹</button>
+    <div style="text-align:center;">
+      <div class="month-label" style="font-size:1.1rem;">${weekLabel}</div>
+      ${isCurrentWeek?`<div style="font-size:9px;color:${p.color};text-transform:uppercase;letter-spacing:.1em;margin-top:1px;">Esta semana</div>`:'<div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:1px;cursor:pointer;" onclick="_weekOffset=0;renderCal();">← Volver a hoy</div>'}
+    </div>
+    <button class="month-btn" onclick="changeMonth(1)" style="font-size:18px;">›</button>
+  </div>
+  <div style="padding:0 14px 12px;">
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;">`;
+
+  weekDays.forEach((day,i)=>{
+    const k = dk(day);
+    const dd2 = data[k]||{};
+    const isToday = dk(day)===dk(NOW);
     const isSel = k===SK;
-    const st = dd.session&&dd.session!=='skip'?SESSIONS[dd.session]?.type:null;
-    const tot = dd.session&&dd.session!=='skip'?texs(dd.session):0;
-    const dn = Object.values(dd.checked||{}).filter(Boolean).length;
-    let cls = 'cal-cell'+(isTod?' today':'')+(isSel?' selected':'')+(dd.session==='skip'?' skipped':'');
-    let inner = `<span class="cal-num" style="${(isTod||isSel)?'color:'+p.color:''}">${d}</span>`;
-    if(st) inner+=`<div class="cal-dot" style="background:${TC[st]}"></div>`;
-    if(dd.session==='skip') inner+=`<div class="cal-dot" style="background:var(--skip)"></div>`;
-    if(dn>0) inner+=`<span class="cal-chk">${dn===tot?'✓':dn+'/'+tot}</span>`;
-    h+=`<div class="${cls}" onclick="selDay('${k}')">${inner}</div>`;
-  }
+    const st = dd2.session&&dd2.session!=='skip'?SESSIONS[dd2.session]?.type:null;
+    const tot = dd2.session&&dd2.session!=='skip'?texs(dd2.session):0;
+    const dn = Object.values(dd2.checked||{}).filter(Boolean).length;
+    const MUSCLE_SHORT={brazoA:'Brazos',espaldaA:'Espalda',pechoA:'Pecho',piernaA:'Pierna',skip:'Desc'};
+    const sessLbl = dd2.session?MUSCLE_SHORT[dd2.session]||'':'';
+    const borderCol = isSel?p.color:isToday?p.color+'55':'var(--border)';
+    const bgCol = isSel?p.color+'20':isToday?p.color+'08':'var(--card)';
+
+    h+=`<div onclick="selDay('${k}')" style="
+      border-radius:10px;border:1px solid ${borderCol};
+      background:${bgCol};cursor:pointer;
+      padding:8px 4px;text-align:center;transition:all .12s;
+      min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;">
+      <div style="font-size:9px;color:${isSel||isToday?p.color:'var(--muted)'};text-transform:uppercase;letter-spacing:.06em;font-weight:600;">${DAY_NAMES[i]}</div>
+      <div style="font-size:16px;font-weight:700;color:${isSel?p.color:isToday?p.color:'var(--text)'};">${day.getDate()}</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+        ${st?`<div style="width:6px;height:6px;border-radius:50%;background:${TC[st]};"></div>`:''}
+        ${dd2.session==='skip'?`<div style="font-size:8px;color:var(--muted);">💤</div>`:''}
+        ${sessLbl&&dd2.session!=='skip'?`<div style="font-size:7px;color:${st?TC[st]:'var(--muted)'};font-weight:600;letter-spacing:.04em;">${sessLbl}</div>`:''}
+        ${dn>0?`<div style="font-size:8px;color:var(--done);">${dn===tot?'✓':dn+'/'+tot}</div>`:''}
+      </div>
+    </div>`;
+  });
+
   h+=`</div></div>`;
   h+=renderDayPanel();
   h+=renderStats();
@@ -1413,41 +1451,64 @@ function renderDayPanel(){
         const lastTxt=last&&(last.kg||last.sets||last.reps)
           ?`Última: ${last.sets||'?'}×${last.reps||'?'} · ${last.kg||'?'}kg${last.date?' ('+last.date+')':''}`
           :'';
+        // Parse default sets count from ex.s e.g. "4×8-10" → 4
+        const defaultSets = parseInt((ex.s||'3').match(/^(\d+)/)?.[1]||'3');
+        // Load saved series for this exercise
+        const seriesKey = 'series_'+SK+'_'+ex.id;
+        const savedSeries = (gd()[seriesKey])||[];
+        // Last performance text
+        const lastPerfShort = last&&last.kg ? `Última: ${last.sets||'?'}×${last.reps||'?'} · ${last.kg}kg` : '';
+
         h+=`<div style="border-bottom:1px solid var(--border);${ex.star?'border-left:2px solid gold;':''}${ex.cardio?'background:rgba(200,241,53,.03);':''}">
-          <div style="display:grid;grid-template-columns:18px 18px 1fr auto;gap:8px;align-items:start;padding:9px 13px;cursor:pointer;${done?'opacity:.55;':''}" onclick="togEx('${ex.id}')">
-            <div class="chkbox${done?' on':''}" style="margin-top:2px;">${done?'<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 7L9 1" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>
-            <span style="font-size:10px;color:${ex.star?'gold':'var(--muted)'};padding-top:2px;font-family:'DM Mono',monospace;">${num}</span>
-            <div>
-              <div style="font-size:12px;font-weight:500;${done?'text-decoration:line-through;color:var(--muted)':''}">${ex.n}</div>
-              <div style="font-size:10px;color:var(--muted);margin-top:2px;">${ex.note}</div>
-              ${lastTxt?`<div style="font-size:10px;color:${p.color}40;margin-top:3px;font-family:'DM Mono',monospace;">↩ ${lastTxt}</div>`:''}
+          <!-- Header del ejercicio -->
+          <div style="display:flex;align-items:center;gap:8px;padding:9px 13px 4px;cursor:pointer;" onclick="togEx('${ex.id}')">
+            <div class="chkbox${done?' on':''}" style="flex-shrink:0;">${done?'<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 7L9 1" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:13px;font-weight:600;${done?'text-decoration:line-through;color:var(--muted)':''}">${ex.n}</div>
+              ${lastPerfShort?`<div style="font-size:10px;color:${p.color};margin-top:1px;font-family:'DM Mono',monospace;">↩ ${lastPerfShort}</div>`:''}
+              ${!lastPerfShort?`<div style="font-size:10px;color:var(--muted);margin-top:1px;">${ex.note}</div>`:''}
             </div>
-            <span style="font-family:'DM Mono',monospace;font-size:10px;color:${p.color};white-space:nowrap;padding-top:2px;">${ex.s}</span>
+            <span style="font-family:'DM Mono',monospace;font-size:10px;color:${p.color};white-space:nowrap;flex-shrink:0;">${ex.s}</span>
           </div>
-          ${!ex.cardio?`<div style="display:grid;grid-template-columns:1fr 1fr 1fr 60px;gap:6px;padding:0 13px 10px 48px;align-items:end;">
-            <div>
-              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Series ${last&&last.sets?'<span style=\"color:var(--muted);font-weight:400;\">·'+last.sets+'</span>':''}</div>
-              <input type="number" min="1" max="20" value="${log.sets||''}" placeholder="${last&&last.sets?last.sets:'-'}"
-                onchange="saveLog('${ex.id}','sets',this.value)"
-                style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
+          ${!ex.cardio?`
+          <!-- Series individuales -->
+          <div style="padding:4px 13px 8px;">
+            <!-- Cabecera columnas -->
+            <div style="display:grid;grid-template-columns:32px 1fr 1fr 1fr 28px;gap:4px;margin-bottom:4px;padding:0 2px;">
+              <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">N°</div>
+              <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Reps</div>
+              <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Kg</div>
+              <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Vol</div>
+              <div></div>
             </div>
-            <div>
-              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Reps ${last&&last.reps?'<span style=\"color:var(--muted);font-weight:400;\">·'+last.reps+'</span>':''}</div>
-              <input type="number" min="1" max="100" value="${log.reps||''}" placeholder="${last&&last.reps?last.reps:'-'}"
-                onchange="saveLog('${ex.id}','reps',this.value)"
-                style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
+            <div id="series-rows-${ex.id}">
+              ${(savedSeries.length>0?savedSeries:Array(defaultSets).fill(null)).map((s,si)=>{
+                const sv = s||{reps:'',kg:''};
+                const vol2 = sv.reps&&sv.kg?Math.round(sv.reps*sv.kg):'—';
+                const lastKg = last&&last.kg?last.kg:'';
+                const border = sv.kg&&last&&last.kg?(+sv.kg>+last.kg?'#4ade80':+sv.kg<+last.kg?'#ff6b35':'var(--border2)'):'var(--border2)';
+                return `<div style="display:grid;grid-template-columns:32px 1fr 1fr 1fr 28px;gap:4px;margin-bottom:4px;align-items:center;">
+                  <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--muted);text-align:center;">${si+1}</div>
+                  <input type="number" min="1" max="100" value="${sv.reps||''}" placeholder="${last&&last.reps?last.reps:'reps'}"
+                    oninput="saveSerie('${ex.id}',${si},'reps',this.value)"
+                    style="background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 6px;outline:none;width:100%;text-align:center;">
+                  <input type="number" min="0" max="500" step="0.5" value="${sv.kg||''}" placeholder="${lastKg||'kg'}"
+                    oninput="saveSerie('${ex.id}',${si},'kg',this.value)"
+                    style="background:var(--card2);border:1px solid ${border};border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 6px;outline:none;width:100%;text-align:center;">
+                  <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:${p.color};text-align:center;">${vol2!=='—'?vol2+'kg':'—'}</div>
+                  <button onclick="deleteSerie('${ex.id}',${si})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0;text-align:center;line-height:1;">×</button>
+                </div>`;
+              }).join('')}
             </div>
-            <div>
-              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Peso kg ${last&&last.kg?'<span style=\"color:'+p.color+'40;font-weight:400;\">·'+last.kg+'</span>':''}</div>
-              <input type="number" min="0" max="500" step="0.5" value="${log.kg||''}" placeholder="${last&&last.kg?last.kg:'-'}"
-                onchange="saveLog('${ex.id}','kg',this.value)"
-                style="width:100%;background:var(--card2);border:1px solid ${log.kg&&last&&last.kg&&log.kg>last.kg?'#4ade80':log.kg&&last&&last.kg&&log.kg<last.kg?'#ff6b35':'var(--border2)'};border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
-            </div>
-            <div style="text-align:center;">
-              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Volumen</div>
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:${p.color};">${vol?vol+'kg':'—'}</div>
-              ${last&&last.kg&&log.kg?`<div style="font-size:9px;color:${log.kg>last.kg?'#4ade80':log.kg<last.kg?'#ff6b35':'var(--muted)'};">${log.kg>last.kg?'▲ PR':log.kg<last.kg?'▼':'='}</div>`:''}
-            </div>
+            <!-- Botón añadir serie -->
+            <button onclick="addSerie('${ex.id}','${ex.s}')" style="
+              display:flex;align-items:center;justify-content:center;gap:5px;
+              width:100%;padding:5px;margin-top:2px;
+              background:${p.color}10;border:1px dashed ${p.color}40;
+              border-radius:6px;cursor:pointer;color:${p.color};
+              font-size:10px;font-family:'DM Sans',sans-serif;">
+              + Añadir serie
+            </button>
           </div>`:''}
         </div>`;
       });
@@ -1520,37 +1581,80 @@ function renderDayPanel(){
   return h;
 }
 
+// ── Series individuales por ejercicio ──
+function saveSerie(exId, idx, field, value){
+  const data=gd(); data[SK]=data[SK]||{};
+  const key='series_'+SK+'_'+exId;
+  if(!data[key]) data[key]=[];
+  while(data[key].length<=idx) data[key].push({reps:'',kg:''});
+  data[key][idx][field]=value;
+  // Update lastPerf with best kg across all series
+  if(!data._lastPerf) data._lastPerf={};
+  const series=data[key].filter(s=>s.kg);
+  if(series.length){
+    const maxKg=Math.max(...series.map(s=>parseFloat(s.kg)||0));
+    const bestSerie=series.find(s=>parseFloat(s.kg)===maxKg)||series[0];
+    const prev=data._lastPerf[exId];
+    if(!prev||maxKg>=(prev.kg||0)){
+      data._lastPerf[exId]={sets:data[key].length,reps:bestSerie.reps,kg:maxKg,date:SK};
+    }
+  }
+  sd(data);
+  // Update volume cell inline without full re-render
+  const vol=series.reduce((a,s)=>a+(parseFloat(s.reps)||0)*(parseFloat(s.kg)||0),0);
+}
+
+function addSerie(exId, sStr){
+  const data=gd(); data[SK]=data[SK]||{};
+  const key='series_'+SK+'_'+exId;
+  if(!data[key]){
+    const defaultSets=parseInt((sStr||'3').match(/^(\d+)/)?.[1]||'3');
+    data[key]=Array(defaultSets).fill(null).map(()=>({reps:'',kg:''}));
+  }
+  data[key].push({reps:'',kg:''});
+  sd(data); renderCal();
+}
+
+function deleteSerie(exId, idx){
+  const data=gd(); data[SK]=data[SK]||{};
+  const key='series_'+SK+'_'+exId;
+  if(!data[key]||data[key].length<=1) return; // keep at least 1
+  data[key].splice(idx,1);
+  sd(data); renderCal();
+}
+
 function saveLog(exId, field, value){
+  // Legacy — kept for compatibility
   const data=gd(); data[SK]=data[SK]||{};
   data[SK].logs=data[SK].logs||{};
   data[SK].logs[exId]=data[SK].logs[exId]||{};
   data[SK].logs[exId][field]=parseFloat(value)||0;
-  // Save as best known performance for this exercise across all days
-  if(!data._lastPerf) data._lastPerf={};
-  const log=data[SK].logs[exId];
-  if(log.kg||log.sets||log.reps){
-    const prev=data._lastPerf[exId];
-    // Update if heavier or first entry
-    if(!prev||(log.kg&&log.kg>=(prev.kg||0))){
-      data._lastPerf[exId]={sets:log.sets,reps:log.reps,kg:log.kg,date:SK};
-    }
-  }
   sd(data);
 }
 
 function getLastPerf(exId){
   const data=gd();
-  if(!data._lastPerf||!data._lastPerf[exId]) return null;
-  const lp=data._lastPerf[exId];
-  if(lp.date===SK) {
-    // Find a previous day entry
-    const keys=Object.keys(data).filter(k=>/^\d{4}-/.test(k)&&k!==SK&&data[k]&&data[k].logs&&data[k].logs[exId]&&data[k].logs[exId].kg);
-    if(!keys.length) return null;
-    keys.sort(); keys.reverse();
-    const prev=data[keys[0]].logs[exId];
-    return prev.kg||prev.sets||prev.reps?{...prev,date:keys[0]}:null;
+  // First try new series-based lastPerf
+  if(data._lastPerf&&data._lastPerf[exId]){
+    const lp=data._lastPerf[exId];
+    if(lp.date!==SK) return lp;
+    // Today's entry — find previous
+    const keys=Object.keys(data).filter(k=>/^\d{4}-/.test(k)&&k!==SK&&data[k]&&data['series_'+k+'_'+exId]);
+    if(keys.length){
+      keys.sort(); keys.reverse();
+      const prevKey='series_'+keys[0]+'_'+exId;
+      const prevSeries=(data[prevKey]||[]).filter(s=>s.kg);
+      if(prevSeries.length){
+        const maxKg=Math.max(...prevSeries.map(s=>parseFloat(s.kg)||0));
+        const best=prevSeries.find(s=>parseFloat(s.kg)===maxKg)||prevSeries[0];
+        return{sets:data[prevKey].length,reps:best.reps,kg:maxKg,date:keys[0]};
+      }
+    }
+    return null;
   }
-  return lp;
+  // Fallback to old logs
+  if(!data._lastPerf||!data._lastPerf[exId]) return null;
+  return data._lastPerf[exId];
 }
 
 
