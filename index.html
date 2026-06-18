@@ -1524,7 +1524,7 @@ function renderDayPanel(){
     const sess=SESSIONS[dd.session]; const chk=dd.checked||{};
     // Count plan exercises (not hidden)
     const planTot = sess.sections?sess.sections.reduce((a,sec)=>a+sec.ex.filter(ex=>!(dd._hidden||{})[ex.id]).length,0):0;
-    // Count extra exercises that have at least 1 serie logged
+    // Count extra exercises — done = checked via checkbox (consistent with plan exercises)
     let extraDone=0, extraTot=0;
     if(sess.sections){
       sess.sections.forEach(sec=>{
@@ -1532,9 +1532,8 @@ function renderDayPanel(){
         const extras=data[secKey]||[];
         extras.forEach((ex,xi)=>{
           extraTot++;
-          const sk2='series_'+SK+'_extra_'+xi+'_'+sec.t.replace(/\s+/g,'_');
-          const series=data[sk2]||[];
-          if(series.some(s=>s.kg)) extraDone++;
+          const extraExId='extra_'+xi+'_'+sec.t.replace(/\s+/g,'_');
+          if((chk||{})[extraExId]) extraDone++;
         });
       });
     }
@@ -1649,39 +1648,57 @@ function renderDayPanel(){
       const secKey = 'extra_'+SK+'_'+sec.t.replace(/\s+/g,'_');
       const extras = (gd()[secKey])||[];
       extras.forEach((ex,xi)=>{
-        const vol2=ex.kg&&ex.sets&&ex.reps?Math.round(ex.kg*ex.sets*ex.reps):null;
+        const extraExId = 'extra_'+xi+'_'+sec.t.replace(/\s+/g,'_');
+        const extraDone = (dd.checked||{})[extraExId];
+        const extraDefaultSets = ex.sets ? parseInt(ex.sets) : 3;
+        const extraSeriesKey = 'series_'+SK+'_'+extraExId;
+        const extraSavedSeries = (gd()[extraSeriesKey])||[];
+        const extraSeriesList = extraSavedSeries.length>0 ? extraSavedSeries : Array(extraDefaultSets).fill(null);
+
         h+=`<div style="border-bottom:1px solid var(--border);border-left:2px solid ${tc2}60;background:${tc2}05;">
-          <div style="display:grid;grid-template-columns:18px 18px 1fr auto;gap:8px;align-items:start;padding:8px 13px;">
-            <div style="width:18px;height:18px;border-radius:4px;background:${tc2}25;display:flex;align-items:center;justify-content:center;margin-top:2px;">
-              <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M4 1v6M1 4h6" stroke="${tc2}" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <!-- Header del ejercicio extra -->
+          <div style="display:flex;align-items:center;gap:8px;padding:9px 13px 4px;">
+            <div class="chkbox${extraDone?' on':''}" style="flex-shrink:0;cursor:pointer;" onclick="togEx('${extraExId}')">${extraDone?'<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 7L9 1" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>
+            <div style="flex:1;min-width:0;cursor:pointer;" onclick="togEx('${extraExId}')">
+              <div style="font-size:13px;font-weight:600;${extraDone?'text-decoration:line-through;color:var(--muted)':''}">${ex.name||'Ejercicio extra'}</div>
+              <div style="font-size:9px;color:${tc2};margin-top:1px;">EXTRA · E${xi+1}</div>
             </div>
-            <span style="font-size:9px;color:${tc2};padding-top:3px;font-family:'DM Mono',monospace;">E${xi+1}</span>
-            <div style="font-size:12px;font-weight:500;color:var(--text);">${ex.name||'Ejercicio extra'}</div>
-            <button onclick="deleteExtra('${secKey}',${xi})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0 2px;" title="Eliminar">✕</button>
+            <button onclick="deleteExtra('${secKey}',${xi})" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:14px;padding:0 2px;line-height:1;" title="Eliminar">×</button>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 60px;gap:6px;padding:0 13px 10px 48px;align-items:end;">
-            <div>
-              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Series</div>
-              <input type="number" min="1" max="20" value="${ex.sets||''}" placeholder="-"
-                onchange="updateExtra('${secKey}',${xi},'sets',this.value)"
-                style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
+          <!-- Series individuales -->
+          <div style="padding:4px 13px 8px;">
+            <div style="display:grid;grid-template-columns:32px 1fr 1fr 1fr 28px;gap:4px;margin-bottom:4px;padding:0 2px;">
+              <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">N°</div>
+              <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Reps</div>
+              <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Kg</div>
+              <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Vol</div>
+              <div></div>
             </div>
-            <div>
-              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Reps</div>
-              <input type="number" min="1" max="100" value="${ex.reps||''}" placeholder="-"
-                onchange="updateExtra('${secKey}',${xi},'reps',this.value)"
-                style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
+            <div id="series-rows-${extraExId}">
+              ${extraSeriesList.map((s,si)=>{
+                const sv = s||{reps:'',kg:''};
+                const vol2 = sv.reps&&sv.kg?Math.round(sv.reps*sv.kg):'—';
+                return `<div style="display:grid;grid-template-columns:32px 1fr 1fr 1fr 28px;gap:4px;margin-bottom:4px;align-items:center;">
+                  <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--muted);text-align:center;">${si+1}</div>
+                  <input type="number" min="1" max="100" value="${sv.reps||''}" placeholder="reps"
+                    oninput="saveSerie('${extraExId}',${si},'reps',this.value)"
+                    style="background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 6px;outline:none;width:100%;text-align:center;">
+                  <input type="number" min="0" max="500" step="0.5" value="${sv.kg||''}" placeholder="kg"
+                    oninput="saveSerie('${extraExId}',${si},'kg',this.value)"
+                    style="background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 6px;outline:none;width:100%;text-align:center;">
+                  <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:${tc2};text-align:center;">${vol2!=='—'?vol2+'kg':'—'}</div>
+                  <button onclick="deleteSerie('${extraExId}',${si})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0;text-align:center;line-height:1;">×</button>
+                </div>`;
+              }).join('')}
             </div>
-            <div>
-              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Peso (kg)</div>
-              <input type="number" min="0" max="500" step="0.5" value="${ex.kg||''}" placeholder="-"
-                onchange="updateExtra('${secKey}',${xi},'kg',this.value)"
-                style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 7px;outline:none;">
-            </div>
-            <div style="text-align:center;">
-              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Volumen</div>
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:${tc2};">${vol2?vol2+'kg':'—'}</div>
-            </div>
+            <button onclick="addSerie('${extraExId}','${extraDefaultSets}')" style="
+              display:flex;align-items:center;justify-content:center;gap:5px;
+              width:100%;padding:5px;margin-top:2px;
+              background:${tc2}10;border:1px dashed ${tc2}40;
+              border-radius:6px;cursor:pointer;color:${tc2};
+              font-size:10px;font-family:'DM Sans',sans-serif;">
+              + Añadir serie
+            </button>
           </div>
         </div>`;
       });
