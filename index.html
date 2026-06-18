@@ -284,6 +284,7 @@ body{
 <body>
 
 <!-- ═══════════════ PROFILE SCREEN ═══════════════ -->
+<input type="file" id="iosPhotoInput" accept="image/*" style="display:none">
 <div id="s-profiles" class="screen active">
   <!-- Logo -->
   <div style="text-align:center;padding:40px 24px 28px;">
@@ -409,16 +410,33 @@ body{
     <div id="tab-dieta" class="tab"></div>
   </div>
 
+  <!-- More menu overlay -->
+  <div id="moreMenu" style="display:none;position:fixed;inset:0;z-index:500;" onclick="closeMoreMenu()">
+    <div onclick="event.stopPropagation()" style="
+      position:absolute;bottom:62px;left:0;right:0;
+      background:#111;border-top:1px solid rgba(255,255,255,.08);
+      padding:8px 0;">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;">
+        <button class="nbtn" id="nb-volumen" onclick="closeMoreMenu();goTab('volumen')" style="padding:14px 0;">
+          <span class="nbtn-icon">📊</span>Volumen</button>
+        <button class="nbtn" id="nb-progreso" onclick="closeMoreMenu();goTab('progreso')" style="padding:14px 0;">
+          <span class="nbtn-icon">📈</span>Progreso</button>
+        <button class="nbtn" id="nb-fotos" onclick="closeMoreMenu();goTab('fotos')" style="padding:14px 0;">
+          <span class="nbtn-icon">📸</span>Fotos</button>
+        <button class="nbtn" id="nb-suplementos" onclick="closeMoreMenu();goTab('suplementos')" style="padding:14px 0;">
+          <span class="nbtn-icon">💊</span>Suplem.</button>
+        <button class="nbtn" id="nb-perfil" onclick="closeMoreMenu();goTab('perfil')" style="padding:14px 0;">
+          <span class="nbtn-icon">👤</span>Perfil</button>
+      </div>
+    </div>
+  </div>
+
   <nav class="bnav" id="bnav">
-    <button class="nbtn active" id="nb-plan"        onclick="goTab('plan')">       <span class="nbtn-icon">📋</span>Plan</button>
-    <button class="nbtn"        id="nb-tracker"     onclick="goTab('tracker')">    <span class="nbtn-icon">✅</span>Tracker</button>
-    <button class="nbtn"        id="nb-volumen"     onclick="goTab('volumen')">    <span class="nbtn-icon">📊</span>Volumen</button>
-    <button class="nbtn"        id="nb-perfil"      onclick="goTab('perfil')">     <span class="nbtn-icon">👤</span>Perfil</button>
-    <button class="nbtn"        id="nb-progreso"    onclick="goTab('progreso')">   <span class="nbtn-icon">📈</span>Progreso</button>
-    <button class="nbtn" id="nb-calorias" onclick="goTab('calorias')"><span class="nbtn-icon">🍎</span>Calorías</button>
-    <button class="nbtn" id="nb-fotos" onclick="goTab('fotos')"><span class="nbtn-icon">📸</span>Fotos</button>
-    <button class="nbtn" id="nb-suplementos" onclick="goTab('suplementos')"><span class="nbtn-icon">💊</span>Suplem.</button>
-    <button class="nbtn" id="nb-dieta" onclick="goTab('dieta')"><span class="nbtn-icon">🥗</span>Dieta</button>
+    <button class="nbtn active" id="nb-plan"     onclick="goTab('plan')">    <span class="nbtn-icon">📋</span>Plan</button>
+    <button class="nbtn"        id="nb-tracker"  onclick="goTab('tracker')"> <span class="nbtn-icon">✅</span>Tracker</button>
+    <button class="nbtn"        id="nb-dieta"    onclick="goTab('dieta')">   <span class="nbtn-icon">🥗</span>Dieta</button>
+    <button class="nbtn"        id="nb-calorias" onclick="goTab('calorias')"><span class="nbtn-icon">🍎</span>Calorías</button>
+    <button class="nbtn"        id="nb-more"     onclick="toggleMoreMenu()"> <span class="nbtn-icon">⋯</span>Más</button>
   </nav>
 </div>
 
@@ -1098,6 +1116,15 @@ function goTab(t){
     if(tabEl) tabEl.classList.toggle('active', tab===t);
     if(nbEl)  nbEl.classList.toggle('active', tab===t);
   });
+  // Main nav buttons
+  ['plan','tracker','dieta','calorias'].forEach(tab=>{
+    const nbEl=document.getElementById('nb-'+tab);
+    if(nbEl) nbEl.classList.toggle('active', tab===t);
+  });
+  // More button active if on a secondary tab
+  const moreTabs=['volumen','perfil','progreso','fotos','suplementos'];
+  const moreBtn=document.getElementById('nb-more');
+  if(moreBtn) moreBtn.classList.toggle('active', moreTabs.includes(t));
   document.getElementById('tRight').textContent = t.toUpperCase();
   if(t==='plan')        renderPlan();
   if(t==='tracker')     { renderCal(); renderStats(); }
@@ -1107,7 +1134,16 @@ function goTab(t){
   if(t==='fotos')       renderFotos();
   if(t==='calorias')    renderCalorias();
   if(t==='suplementos') renderSups('stack');
-  if(t==='dieta') renderDieta();
+  if(t==='dieta')       renderDieta();
+}
+
+function toggleMoreMenu(){
+  const m=document.getElementById('moreMenu');
+  m.style.display=m.style.display==='none'?'block':'none';
+}
+function closeMoreMenu(){
+  const m=document.getElementById('moreMenu');
+  if(m) m.style.display='none';
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1438,11 +1474,34 @@ function renderDayPanel(){
     h+=`<div class="prog-wrap"><div class="prog-bg"><div class="prog-fill" style="width:${pct}%;background:${p.color}"></div></div>
     <span class="prog-txt">${dn}/${tot}</span><span class="prog-pct" style="color:${p.color}">${pct}%</span></div>`;
     const tc2=TC[sess.type]||'#888';
+
+    // ── Cronómetro de descanso ──
+    h+=`<div id="restTimerBar" style="padding:8px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+      <div style="flex:1;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Descanso</span>
+        <div id="restTimerDisplay" style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--muted);letter-spacing:.04em;line-height:1;">0:00</div>
+        <div id="restTimerDot" style="width:6px;height:6px;border-radius:50%;background:var(--muted);flex-shrink:0;"></div>
+      </div>
+      <div style="display:flex;gap:5px;">
+        <button onclick="startRestTimer()" style="padding:4px 10px;background:${p.color}18;border:1px solid ${p.color}40;border-radius:6px;color:${p.color};font-size:10px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">▶ Iniciar</button>
+        <button onclick="resetRestTimer()" style="padding:4px 8px;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--muted);font-size:10px;cursor:pointer;">↺</button>
+      </div>
+    </div>`;
+
     sess.sections.forEach(sec=>{
       h+=`<div style="display:flex;align-items:center;gap:8px;background:${tc2}10;border-bottom:1px solid ${tc2}28;padding:6px 13px;">
         <span style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:${tc2}22;color:${tc2};">${sec.t}</span>
       </div>`;
+      // Restore button if any hidden
+      const hiddenCount=Object.values(dd._hidden||{}).filter(Boolean).length;
+      if(hiddenCount>0){
+        h+=`<div style="padding:4px 13px;text-align:right;border-bottom:1px solid var(--border);">
+          <button onclick="restoreAllEx()" style="font-size:9px;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline;">Restaurar ejercicios ocultos (${hiddenCount})</button>
+        </div>`;
+      }
+
       sec.ex.forEach((ex,ei)=>{
+        if((dd._hidden||{})[ex.id]) return; // skip hidden
         const done=chk[ex.id];
         const log=dd.logs&&dd.logs[ex.id]||{};
         const last=getLastPerf(ex.id);
@@ -1461,14 +1520,17 @@ function renderDayPanel(){
 
         h+=`<div style="border-bottom:1px solid var(--border);${ex.star?'border-left:2px solid gold;':''}${ex.cardio?'background:rgba(200,241,53,.03);':''}">
           <!-- Header del ejercicio -->
-          <div style="display:flex;align-items:center;gap:8px;padding:9px 13px 4px;cursor:pointer;" onclick="togEx('${ex.id}')">
-            <div class="chkbox${done?' on':''}" style="flex-shrink:0;">${done?'<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 7L9 1" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>
-            <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:8px;padding:9px 13px 4px;">
+            <div class="chkbox${done?' on':''}" style="flex-shrink:0;cursor:pointer;" onclick="togEx('${ex.id}')">${done?'<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 7L9 1" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>
+            <div style="flex:1;min-width:0;cursor:pointer;" onclick="togEx('${ex.id}')">
               <div style="font-size:13px;font-weight:600;${done?'text-decoration:line-through;color:var(--muted)':''}">${ex.n}</div>
               ${lastPerfShort?`<div style="font-size:10px;color:${p.color};margin-top:1px;font-family:'DM Mono',monospace;">↩ ${lastPerfShort}</div>`:''}
               ${!lastPerfShort?`<div style="font-size:10px;color:var(--muted);margin-top:1px;">${ex.note}</div>`:''}
             </div>
-            <span style="font-family:'DM Mono',monospace;font-size:10px;color:${p.color};white-space:nowrap;flex-shrink:0;">${ex.s}</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+              <span style="font-family:'DM Mono',monospace;font-size:10px;color:${p.color};white-space:nowrap;">${ex.s}</span>
+              <button onclick="hidePlanEx('${dd.session}','${ex.id}')" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:14px;padding:0 2px;line-height:1;" title="Ocultar ejercicio">×</button>
+            </div>
           </div>
           ${!ex.cardio?`
           <!-- Series individuales -->
@@ -3332,6 +3394,69 @@ function renderDietaDay(dayKey){
 // PASO 5 — Pega TODO el código de arriba (MEAL_PLAN, PRE_ENTRENO,
 //   renderDieta, renderDietaDay) dentro del bloque <script>, junto
 //   al resto de funciones.
+
+// ═══════════════════════════════════════════════════════════════
+// CRONÓMETRO DE DESCANSO
+// ═══════════════════════════════════════════════════════════════
+let _restInterval = null;
+let _restSeconds = 0;
+let _restRunning = false;
+
+function startRestTimer(){
+  if(_restRunning){
+    // Pause
+    clearInterval(_restInterval);
+    _restRunning = false;
+    const dot = document.getElementById('restTimerDot');
+    if(dot) dot.style.background = 'var(--muted)';
+    return;
+  }
+  _restRunning = true;
+  _restSeconds = 0;
+  const p2 = CP ? pr() : {color:'#cc5500'};
+  const dot = document.getElementById('restTimerDot');
+  if(dot){ dot.style.background = p2.color; dot.style.animation = 'pulse 1s infinite'; }
+  clearInterval(_restInterval);
+  _restInterval = setInterval(()=>{
+    _restSeconds++;
+    const m = Math.floor(_restSeconds/60);
+    const s = String(_restSeconds%60).padStart(2,'0');
+    const disp = document.getElementById('restTimerDisplay');
+    if(disp){
+      disp.textContent = m+':'+s;
+      // Color warning after 2min
+      if(_restSeconds >= 120) disp.style.color = '#ff6b35';
+      else if(_restSeconds >= 90) disp.style.color = '#facc15';
+      else disp.style.color = p2.color;
+    }
+  }, 1000);
+}
+
+function resetRestTimer(){
+  clearInterval(_restInterval);
+  _restRunning = false;
+  _restSeconds = 0;
+  const disp = document.getElementById('restTimerDisplay');
+  const dot = document.getElementById('restTimerDot');
+  if(disp){ disp.textContent = '0:00'; disp.style.color = 'var(--muted)'; }
+  if(dot)  dot.style.background = 'var(--muted)';
+}
+
+
+// ── Ocultar/mostrar ejercicios del plan ──
+function hidePlanEx(sessId, exId){
+  const data=gd(); data[SK]=data[SK]||{};
+  if(!data[SK]._hidden) data[SK]._hidden={};
+  data[SK]._hidden[exId]=true;
+  sd(data); renderCal();
+}
+
+function restoreAllEx(){
+  const data=gd(); data[SK]=data[SK]||{};
+  data[SK]._hidden={};
+  sd(data); renderCal();
+}
+
 </script>
 
 <!-- ═══════════════ EXERCISE PICKER MODAL ═══════════════ -->
