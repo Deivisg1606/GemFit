@@ -1012,12 +1012,15 @@ function updateTopbarAvatar(){
   if(!CP) return;
   const tl = document.getElementById('tLogo');
   if(!tl) return;
+  const p = pr();
   if(AVATARS[CP]){
+    tl.style.backgroundColor = 'transparent';
     tl.style.backgroundImage = 'url('+AVATARS[CP]+')';
     tl.style.backgroundSize = 'cover';
     tl.style.backgroundPosition = 'center';
     tl.textContent = '';
   } else {
+    tl.style.backgroundColor = p.dim;
     tl.style.backgroundImage = 'none';
     tl.style.backgroundSize = '';
     tl.style.backgroundPosition = '';
@@ -1036,11 +1039,11 @@ function selectProfile(id){
   document.getElementById('s-main').classList.add('active');
   document.getElementById('bnav').classList.add('on');
   const tl = document.getElementById('tLogo');
-  tl.style.background = p.dim; tl.style.border = '1px solid '+p.color+'30'; tl.style.color = p.color;
+  tl.style.border = '1px solid '+p.color+'30'; tl.style.color = p.color;
   document.getElementById('tName').style.color = p.color;
   document.getElementById('tName').textContent = p.name;
-  updateTopbarAvatar();
   updateProfileAvatars();
+  updateTopbarAvatar(); // must run AFTER border/color reset, sets background-image last
   goTab('plan');
 }
 
@@ -1383,12 +1386,44 @@ function renderCal(){
   });
 
   h+=`</div></div>`;
+  // Auto-assign today if not set
+  if(!data[SK]||!data[SK].session){
+    const autoSess=getAutoSession(SK);
+    if(!data[SK]) data[SK]={};
+    data[SK].session=autoSess; data[SK].checked=data[SK].checked||{};
+    if(autoSess&&autoSess!=='skip'&&SESSIONS[autoSess]){
+      const learned=getLearnedExercises(autoSess);
+      if(learned){ Object.keys(learned).forEach(sk2=>{ if(!data[sk2]) data[sk2]=learned[sk2].map(e=>({...e,sets:'',reps:'',kg:''})); }); }
+    }
+    AD[CP]=data; lsSave();
+  }
   h+=renderDayPanel();
   h+=renderStats();
   document.getElementById('tab-tracker').innerHTML = h;
 }
 
-function selDay(k){ SK=k; renderCal(); }
+function selDay(k){
+  SK=k;
+  // Auto-assign session if not yet set
+  const data=gd();
+  if(!data[k]||!data[k].session){
+    const autoSess = getAutoSession(k);
+    if(!data[k]) data[k]={};
+    data[k].session = autoSess;
+    data[k].checked = data[k].checked||{};
+    // Auto-load learned exercises
+    if(autoSess&&autoSess!=='skip'&&SESSIONS[autoSess]){
+      const learned = getLearnedExercises(autoSess);
+      if(learned){
+        Object.keys(learned).forEach(secKey=>{
+          if(!data[secKey]) data[secKey]=learned[secKey].map(e=>({...e,sets:'',reps:'',kg:''}));
+        });
+      }
+    }
+    AD[CP]=data; lsSave();
+  }
+  renderCal();
+}
 
 function setSess(sid){
   const data=gd(); data[SK]=data[SK]||{}; data[SK].session=sid; data[SK].checked=data[SK].checked||{};
@@ -1425,6 +1460,24 @@ function getLearnedExercises(sessId){
     });
   }
   return Object.keys(result).length?result:null;
+}
+
+
+// ── Split automático por día de la semana ──
+const DAY_SPLIT = {
+  0: 'espaldaA', // Domingo
+  1: 'skip',     // Lunes
+  2: 'brazoA',   // Martes
+  3: 'espaldaA', // Miércoles
+  4: 'pechoA',   // Jueves
+  5: 'piernaA',  // Viernes
+  6: 'brazoA',   // Sábado
+};
+
+function getAutoSession(dateKey){
+  const parts = dateKey.split('-');
+  const d = new Date(+parts[0], +parts[1]-1, +parts[2]);
+  return DAY_SPLIT[d.getDay()] || 'skip';
 }
 
 function togEx(eid){
@@ -1469,7 +1522,24 @@ function renderDayPanel(){
     <div style="font-size:11px;color:var(--skip);margin-top:3px;">La recuperación también es entrenamiento.</div></div>`;
   } else if(SESSIONS[dd.session]){
     const sess=SESSIONS[dd.session]; const chk=dd.checked||{};
-    const tot=texs(dd.session); const dn=Object.keys(chk).filter(k=>chk[k]).length;
+    // Count plan exercises (not hidden)
+    const planTot = sess.sections?sess.sections.reduce((a,sec)=>a+sec.ex.filter(ex=>!(dd._hidden||{})[ex.id]).length,0):0;
+    // Count extra exercises that have at least 1 serie logged
+    let extraDone=0, extraTot=0;
+    if(sess.sections){
+      sess.sections.forEach(sec=>{
+        const secKey='extra_'+SK+'_'+sec.t.replace(/\s+/g,'_');
+        const extras=data[secKey]||[];
+        extras.forEach((ex,xi)=>{
+          extraTot++;
+          const sk2='series_'+SK+'_extra_'+xi+'_'+sec.t.replace(/\s+/g,'_');
+          const series=data[sk2]||[];
+          if(series.some(s=>s.kg)) extraDone++;
+        });
+      });
+    }
+    const tot = planTot + extraTot;
+    const dn = Object.keys(chk).filter(k=>chk[k]).length + extraDone;
     const pct=tot>0?Math.round((dn/tot)*100):0;
     h+=`<div class="prog-wrap"><div class="prog-bg"><div class="prog-fill" style="width:${pct}%;background:${p.color}"></div></div>
     <span class="prog-txt">${dn}/${tot}</span><span class="prog-pct" style="color:${p.color}">${pct}%</span></div>`;
@@ -1483,7 +1553,7 @@ function renderDayPanel(){
         <div id="restTimerDot" style="width:6px;height:6px;border-radius:50%;background:var(--muted);flex-shrink:0;"></div>
       </div>
       <div style="display:flex;gap:5px;">
-        <button onclick="startRestTimer()" style="padding:4px 10px;background:${p.color}18;border:1px solid ${p.color}40;border-radius:6px;color:${p.color};font-size:10px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">▶ Iniciar</button>
+        <button id="restTimerBtn" onclick="startRestTimer()" style="padding:4px 10px;background:${p.color}18;border:1px solid ${p.color}40;border-radius:6px;color:${p.color};font-size:10px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">▶ Iniciar</button>
         <button onclick="resetRestTimer()" style="padding:4px 8px;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--muted);font-size:10px;cursor:pointer;">↺</button>
       </div>
     </div>`;
@@ -3403,19 +3473,22 @@ let _restSeconds = 0;
 let _restRunning = false;
 
 function startRestTimer(){
+  const btn = document.getElementById('restTimerBtn');
+  const dot = document.getElementById('restTimerDot');
+  const p2 = CP ? pr() : {color:'#cc5500'};
   if(_restRunning){
     // Pause
     clearInterval(_restInterval);
     _restRunning = false;
-    const dot = document.getElementById('restTimerDot');
     if(dot) dot.style.background = 'var(--muted)';
+    if(btn){ btn.textContent = '▶ Iniciar'; btn.style.background = p2.color+'18'; }
     return;
   }
+  // Start — reset seconds and begin
   _restRunning = true;
   _restSeconds = 0;
-  const p2 = CP ? pr() : {color:'#cc5500'};
-  const dot = document.getElementById('restTimerDot');
-  if(dot){ dot.style.background = p2.color; dot.style.animation = 'pulse 1s infinite'; }
+  if(dot){ dot.style.background = p2.color; }
+  if(btn){ btn.textContent = '⏸ Pausar'; btn.style.background = p2.color+'30'; }
   clearInterval(_restInterval);
   _restInterval = setInterval(()=>{
     _restSeconds++;
@@ -3424,7 +3497,6 @@ function startRestTimer(){
     const disp = document.getElementById('restTimerDisplay');
     if(disp){
       disp.textContent = m+':'+s;
-      // Color warning after 2min
       if(_restSeconds >= 120) disp.style.color = '#ff6b35';
       else if(_restSeconds >= 90) disp.style.color = '#facc15';
       else disp.style.color = p2.color;
@@ -3437,9 +3509,11 @@ function resetRestTimer(){
   _restRunning = false;
   _restSeconds = 0;
   const disp = document.getElementById('restTimerDisplay');
-  const dot = document.getElementById('restTimerDot');
+  const dot  = document.getElementById('restTimerDot');
+  const btn  = document.getElementById('restTimerBtn');
   if(disp){ disp.textContent = '0:00'; disp.style.color = 'var(--muted)'; }
   if(dot)  dot.style.background = 'var(--muted)';
+  if(btn){ btn.textContent = '▶ Iniciar'; }
 }
 
 
