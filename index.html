@@ -457,26 +457,21 @@ const PROFS = {
 // Ejercicios seleccionados por ratio estímulo/fatiga
 // ═══════════════════════════════════════════════════════════════
 const SESSIONS = {
-  // MARTES & SÁBADO — Bíceps, Tríceps, Hombros
+  // MARTES & SÁBADO — Hombros · Bíceps · Tríceps
   brazoA: {
     id:'brazoA', lbl:'Brazos A', type:'push', emoji:'💪',
-    title:'MARTES — Bíceps · Tríceps · Hombros',
-    dur:'~90 min', focus:'Empieza con bíceps mientras tienes más fuerza. Descansa 60-90s entre series.',
+    title:'MARTES — Hombros · Bíceps · Tríceps',
+    dur:'~90 min', focus:'Descansa 180s en compuestos pesados, 90s en aislamientos.',
     sections: [
-      { t:'Bíceps', ex:[
-        {id:'ba1',n:'Curl con Barra Z',s:'4×8-10',note:'Codos fijos al cuerpo. Sin balanceo. Bajada controlada 2s.',why:'Mayor carga posible para bíceps.'},
-        {id:'ba2',n:'Curl Inclinado con Mancuernas',s:'3×10-12',note:'Banco 45°. Stretch completo abajo. Supina la muñeca.',why:'Cabeza larga en posición elongada. Máxima hipertrofia.'},
-        {id:'ba3',n:'Curl Martillo',s:'3×12',note:'Agarre neutro. Braquial y braquiorradial. Grosor del brazo.',why:'Añade grosor al brazo y antebrazo.'},
-      ]},
-      { t:'Tríceps', ex:[
-        {id:'ba4',n:'Fondos en Paralelas (Tríceps)',s:'4×8-12',note:'Cuerpo vertical. Codos cerca del cuerpo. Si no puedes, usa polea.',why:'Mayor activación de cabeza larga del tríceps.'},
-        {id:'ba5',n:'Extensiones Polea Alta (Cuerda)',s:'3×12-15',note:'Separa la cuerda al final. Codos fijos. Bajada controlada.',why:'Tensión constante en todo el rango.'},
-        {id:'ba6',n:'Copa de Tríceps (Mancuerna)',s:'3×12',note:'Agarre neutro. Codos apuntan al techo. Rango completo.',why:'Aislamiento de cabeza larga.'},
-      ]},
-      { t:'Hombros', ex:[
-        {id:'ba7',n:'Press Arnold con Mancuernas',s:'4×10-12',note:'Rotación completa del hombro. Codos bajos al inicio.',why:'Activa las 3 cabezas del deltoides.'},
-        {id:'ba8',n:'Elevaciones Laterales en Polea',s:'4×15-20',note:'Polea baja. Codo ligeramente flexionado. Pausa arriba.',why:'Tensión constante vs mancuernas.'},
-        {id:'ba9',n:'Facepulls con Polea Alta',s:'3×15-20',note:'Codos arriba. Lleva las manos a las orejas.',why:'Hombro posterior. Previene lesiones.'},
+      { t:'Hombros · Bíceps · Tríceps', ex:[
+        {id:'ba1',n:'Face Pull',s:'4×10',rest:180,note:'Codos arriba, lleva las manos a las orejas.',why:'Hombro posterior y salud del manguito rotador.',star:true},
+        {id:'ba2',n:'Elevaciones Laterales en Máquina',s:'3×10',rest:90,note:'Rango controlado, sin impulso.',why:'Deltoides lateral con tensión constante.'},
+        {id:'ba3',n:'Elevaciones Frontales con Mancuernas (Unilateral)',s:'3×8',rest:90,note:'Una mano a la vez, controla el descenso.',why:'Deltoides anterior aislado.'},
+        {id:'ba4',n:'Encogimiento con Mancuernas',s:'3×10',rest:90,note:'Sin rotar el hombro, solo sube y baja.',why:'Trapecio superior.'},
+        {id:'ba5',n:'Predicador en Máquina',s:'3×10',rest:90,note:'Descendente: 12 reps · 10 reps · 8 reps (sube el peso en cada serie).',why:'Sobrecarga progresiva intra-serie para bíceps.',star:true},
+        {id:'ba6',n:'Martillo con Mancuerna (Unilateral)',s:'3×10',rest:90,note:'Agarre neutro, una mano a la vez.',why:'Braquial y antebrazo.'},
+        {id:'ba7',n:'Tirones en Polea',s:'3×10',rest:90,note:'Codos fijos, extensión completa.',why:'Tríceps con tensión constante.'},
+        {id:'ba8',n:'Tirones tras Nuca con Cuerda',s:'3×10',rest:90,note:'Separa la cuerda al final del recorrido.',why:'Cabeza larga del tríceps en estiramiento.'},
       ]},
     ]
   },
@@ -484,18 +479,16 @@ const SESSIONS = {
   // MIÉRCOLES & DOMINGO — Espalda
   espaldaA: {
     id:'espaldaA', lbl:'Espalda', type:'pull', emoji:'🔵',
-    title:'MIÉRCOLES — Espalda Completa',
-    dur:'~90 min', focus:'Contracción escapular completa en cada rep. Olvídate del peso, piensa en el músculo.',
+    title:'MIÉRCOLES — Espalda',
+    dur:'~90 min', focus:'Contracción escapular completa en cada rep. Descansa 180s en pesados.',
     sections: [
-      { t:'Amplitud — Dorsal', ex:[
-        {id:'ea1',n:'Dominadas (o Jalón al Pecho)',s:'4×6-10',note:'Rango completo. Pecho al bar. Bajada controlada 2s.',why:'El mejor ejercicio para dorsal ancho.',star:true},
-        {id:'ea2',n:'Jalón al Pecho Agarre Neutro',s:'3×10-12',note:'Agarre neutro mayor activación dorsal. Pecho hacia la barra.',why:'Mayor activación dorsal que agarre prono.'},
-        {id:'ea3',n:'Pull-over en Polea (Brazos Rectos)',s:'3×15',note:'Brazos rectos. Arco amplio. Aprieta el dorsal al bajar.',why:'Aísla el dorsal sin involucrar bíceps.'},
-      ]},
-      { t:'Grosor — Romboides y Trapecios', ex:[
-        {id:'ea4',n:'Remo con Barra',s:'4×8-10',note:'Espalda paralela. Tirón al ombligo. Aprieta escápulas.',why:'Mayor activación dorsal e isquios.',star:true},
-        {id:'ea5',n:'Remo con Mancuerna a Una Mano',s:'3×10-12',note:'Codo hacia el techo. Rango completo. Rotación escapular.',why:'Corrección de asimetría. Aislamiento dorsal.'},
-        {id:'ea6',n:'Remo en Polea Baja (Agarre Ancho)',s:'3×12',note:'Tira al pecho bajo. Aprieta escápulas arriba.',why:'Romboides y trapecio medio.'},
+      { t:'Espalda', ex:[
+        {id:'ea1',n:'Pull Over en Polea',s:'4×10',rest:180,note:'Brazos rectos, arco amplio, aprieta el dorsal al bajar.',why:'Aísla el dorsal sin involucrar bíceps.',star:true},
+        {id:'ea2',n:'Jalón al Pecho',s:'4×8',rest:180,note:'Pecho hacia la barra, codos hacia el suelo.',why:'Amplitud del dorsal ancho.',star:true},
+        {id:'ea3',n:'Remo Gironda',s:'4×14-12-10-8',rest:180,note:'Piramidal: sube el peso y baja las reps en cada serie.',why:'Sobrecarga progresiva. Grosor de espalda media.'},
+        {id:'ea4',n:'Jalón Inverso al Pecho',s:'4×12',rest:90,note:'Agarre supino, codos pegados al cuerpo.',why:'Mayor activación de dorsal y bíceps.'},
+        {id:'ea5',n:'Remo al Pecho Agarre Neutro',s:'4×8',rest:90,note:'Tira al pecho, aprieta escápulas arriba.',why:'Romboides y trapecio medio.'},
+        {id:'ea6',n:'Remo con Mancuerna',s:'3×8',rest:90,note:'Codo hacia el techo, rango completo.',why:'Aislamiento dorsal unilateral, corrige asimetrías.'},
       ]},
       { t:'Cardio LISS', ex:[
         {id:'ea7',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% inclinación · 5.5 km/h',cardio:true,why:'Quema calórica con mínima fatiga muscular.'},
@@ -503,23 +496,19 @@ const SESSIONS = {
     ]
   },
 
-  // JUEVES — Pecho
+  // JUEVES — Pectoral
   pechoA: {
     id:'pechoA', lbl:'Pecho', type:'push', emoji:'🔴',
-    title:'JUEVES — Pecho Completo',
-    dur:'~85 min', focus:'RPE 8-9 en compuestos. Mente-músculo en aislamientos. Codos a 45° siempre.',
+    title:'JUEVES — Pectoral',
+    dur:'~90 min', focus:'RPE 8-9 en compuestos. Mente-músculo en aislamientos. Descansa 180s en pesados.',
     sections: [
-      { t:'Pecho Plano', ex:[
-        {id:'pa1',n:'Press de Banca con Barra',s:'4×6-8',note:'Agarre a 81cm. Baja 2s, explota arriba. Codos a 45°.',why:'Mayor activación pectoral absoluta.',star:true},
-        {id:'pa2',n:'Press Plano con Mancuernas',s:'3×10-12',note:'Stretch completo abajo. Mancuernas permiten mayor ROM.',why:'Complementa el press de banca.'},
-      ]},
-      { t:'Pecho Alto', ex:[
-        {id:'pa3',n:'Press Inclinado con Barra (30°)',s:'4×8-10',note:'Ángulo 30°. Baja a la clavícula. No hiperextiendas.',why:'Pecho clavicular. Equilibra el desarrollo.',star:true},
-        {id:'pa4',n:'Press Inclinado con Mancuernas',s:'3×10-12',note:'Ángulo 30°. Stretch completo. Codos a 45°.',why:'Mayor rango de movimiento.'},
-      ]},
-      { t:'Aislamiento', ex:[
-        {id:'pa5',n:'Aperturas en Polea a Media Altura',s:'4×12-15',note:'Ligera flexión de codos. Contracción 1s. Recorrido en D.',why:'Tensión constante en todo el recorrido.'},
-        {id:'pa6',n:'Fondos en Paralelas (Pecho)',s:'3×10-12',note:'Inclínate adelante. Codos afuera. Profundidad máxima.',why:'Pecho inferior y serrato anterior.'},
+      { t:'Pectoral', ex:[
+        {id:'pa1',n:'Press Declinado en Máquina',s:'4×10',rest:180,note:'Controla el descenso, no bloquees codos arriba.',why:'Pecho inferior con mayor estabilidad.',star:true},
+        {id:'pa2',n:'Press Plano en Máquina',s:'4×8',rest:180,note:'Codos a 45°, recorrido completo.',why:'Pecho medio con carga progresiva segura.',star:true},
+        {id:'pa3',n:'Aperturas en Banco Inclinado',s:'4×10',rest:90,note:'Ligera flexión de codos, stretch completo abajo.',why:'Pecho clavicular en estiramiento máximo.'},
+        {id:'pa4',n:'Press Inclinado en Máquina',s:'4×10',rest:180,note:'Ángulo 30°, baja a la clavícula.',why:'Pecho alto.'},
+        {id:'pa5',n:'Apertura en Máquina',s:'3×12',rest:90,note:'Contracción 1s al cerrar, recorrido completo.',why:'Aislamiento de pecho con tensión constante.'},
+        {id:'pa6',n:'Pull Over con Mancuerna',s:'4×10',rest:90,note:'Brazos semi-rígidos, arco amplio sobre el pecho.',why:'Pecho superior y serrato anterior.'},
       ]},
       { t:'Cardio LISS', ex:[
         {id:'pa7',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% · 5.5 km/h',cardio:true,why:''},
@@ -531,23 +520,17 @@ const SESSIONS = {
   piernaA: {
     id:'piernaA', lbl:'Pierna', type:'legs', emoji:'🦵',
     title:'VIERNES — Pierna Completa',
-    dur:'~100 min', focus:'El día más duro. 3 min de descanso en sentadilla y peso muerto. Hidratación doble.',
+    dur:'~100 min', focus:'El día más duro. Descansa 180s en compuestos, 90s en aislamientos.',
     sections: [
-      { t:'Cuádriceps', ex:[
-        {id:'pia1',n:'Sentadilla Trasera con Barra',s:'5×5-6',note:'Profundidad completa. Rodillas siguen pies. Pecho arriba.',why:'El ejercicio más anabólico. Activa más músculo que cualquier otro.',star:true},
-        {id:'pia2',n:'Prensa de Piernas 45°',s:'3×10-12',note:'Pies bajos y juntos para cuádriceps. Rango completo.',why:'Volumen extra de cuádriceps sin fatiga de espalda.'},
-        {id:'pia3',n:'Extensión de Cuádriceps (Máquina)',s:'3×12-15',note:'Pausa 1s arriba. Bajada controlada 3s.',why:'Único ejercicio que trabaja recto femoral en extensión total.'},
-      ]},
-      { t:'Glúteo e Isquiotibiales', ex:[
-        {id:'pia4',n:'Hip Thrust con Barra',s:'4×10-12',note:'Banco al omóplato. Barbilla al pecho. Aprieta glúteo arriba.',why:'Mayor activación de glúteo mayor.',star:true},
-        {id:'pia5',n:'Peso Muerto Rumano (Mancuernas)',s:'3×10-12',note:'Bajada lenta. Siente el estiramiento. Caderas atrás.',why:'Isquiotibiales en posición elongada.'},
-        {id:'pia6',n:'Curl Femoral Tumbado (Máquina)',s:'3×12-15',note:'Bajada lenta 3s. No levantes caderas.',why:'Isquiotibiales en posición acortada.'},
-      ]},
-      { t:'Gemelos', ex:[
-        {id:'pia7',n:'Elevación de Talones en Prensa',s:'5×12-15',note:'Rango completo. Pausa 2s abajo en estiramiento.',why:'Mayor carga posible para gemelos.'},
-      ]},
-      { t:'Core', ex:[
-        {id:'pia8',n:'Ab Wheel (Rueda Abdominal)',s:'4×8-12',note:'Espalda plana. Caderas no caigan.',why:'Mayor activación de recto abdominal.'},
+      { t:'Pierna', ex:[
+        {id:'pia1',n:'Extensión de Cuádriceps',s:'4×10',rest:90,note:'Pausa 1s arriba, bajada controlada.',why:'Aislamiento de cuádriceps en extensión total.',star:true},
+        {id:'pia2',n:'Prensa 45°',s:'3×8',rest:180,note:'Pies bajos y juntos para cuádriceps. Rango completo.',why:'Volumen de cuádriceps con menor fatiga de espalda.',star:true},
+        {id:'pia3',n:'Sentadilla Hack',s:'3×8',rest:180,note:'Profundidad completa, rodillas siguen los pies.',why:'Cuádriceps con buena estabilidad de espalda.'},
+        {id:'pia4',n:'Femoral Sentado',s:'4×10',rest:90,note:'Bajada lenta 3s, contracción completa.',why:'Isquiotibial en posición de mayor stretch.'},
+        {id:'pia5',n:'Femoral de Pie',s:'3×10',rest:90,note:'Una pierna a la vez, controla el negativo.',why:'Isquiotibial en aislamiento unilateral.'},
+        {id:'pia6',n:'Gemelo Sentado',s:'4×10',rest:90,note:'Rango completo, pausa abajo en el estiramiento.',why:'Sóleo principalmente.'},
+        {id:'pia7',n:'Aductor en Máquina',s:'3×10',rest:60,note:'Movimiento controlado, sin rebote.',why:'Aductores — estabilidad de cadera.'},
+        {id:'pia8',n:'Abductor en Máquina',s:'3×10',rest:60,note:'Movimiento controlado, sin rebote.',why:'Glúteo medio — estabilidad de cadera.'},
       ]},
     ]
   },
@@ -1587,18 +1570,32 @@ function renderDayPanel(){
         // Last performance text
         const lastPerfShort = last&&last.kg ? `Última: ${last.sets||'?'}×${last.reps||'?'} · ${last.kg}kg` : '';
 
-        h+=`<div style="border-bottom:1px solid var(--border);${ex.star?'border-left:2px solid gold;':''}${ex.cardio?'background:rgba(200,241,53,.03);':''}">
+        const exRest = ex.rest || 90;
+        h+=`<div style="border-bottom:1px solid var(--border);${ex.star?'border-left:2px solid gold;':''}${ex.cardio?'background:rgba(200,241,53,.03);':''}${done?'opacity:.6;':''}">
           <!-- Header del ejercicio -->
-          <div style="display:flex;align-items:center;gap:8px;padding:9px 13px 4px;">
-            <div class="chkbox${done?' on':''}" style="flex-shrink:0;cursor:pointer;" onclick="togEx('${ex.id}')">${done?'<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 7L9 1" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>
-            <div style="flex:1;min-width:0;cursor:pointer;" onclick="togEx('${ex.id}')">
-              <div style="font-size:13px;font-weight:600;${done?'text-decoration:line-through;color:var(--muted)':''}">${ex.n}</div>
-              ${lastPerfShort?`<div style="font-size:10px;color:${p.color};margin-top:1px;font-family:'DM Mono',monospace;">↩ ${lastPerfShort}</div>`:''}
-              ${!lastPerfShort?`<div style="font-size:10px;color:var(--muted);margin-top:1px;">${ex.note}</div>`:''}
+          <div style="padding:11px 13px 6px;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:14px;font-weight:700;${done?'text-decoration:line-through;color:var(--muted)':''}">${ex.n}</div>
+                ${lastPerfShort?`<div style="font-size:10px;color:${p.color};margin-top:2px;font-family:'DM Mono',monospace;">↩ ${lastPerfShort}</div>`:''}
+              </div>
+              <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
+                <button onclick="openExHistory('${ex.id}','${ex.n.replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Histórico">📈</button>
+                <button onclick="openRMCalc('${ex.id}','${ex.n.replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Calculadora RM">🔢</button>
+                <button onclick="hidePlanEx('${dd.session}','${ex.id}')" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:15px;padding:0 2px;line-height:1;" title="Ocultar ejercicio">×</button>
+              </div>
             </div>
-            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-              <span style="font-family:'DM Mono',monospace;font-size:10px;color:${p.color};white-space:nowrap;">${ex.s}</span>
-              <button onclick="hidePlanEx('${dd.session}','${ex.id}')" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:14px;padding:0 2px;line-height:1;" title="Ocultar ejercicio">×</button>
+            ${ex.note?`<div style="font-size:10px;color:var(--muted);margin-top:4px;line-height:1.4;">${ex.note}</div>`:''}
+            <!-- Objetivo + descanso -->
+            <div style="display:flex;align-items:center;gap:14px;margin-top:8px;">
+              <div style="display:flex;align-items:center;gap:5px;">
+                <span style="font-size:11px;">🚩</span>
+                <span style="font-family:'DM Mono',monospace;font-size:11px;color:${p.color};font-weight:600;">${ex.s}</span>
+              </div>
+              ${!ex.cardio?`<div style="display:flex;align-items:center;gap:5px;">
+                <span style="font-size:11px;">⏱</span>
+                <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);">${exRest}" descanso</span>
+              </div>`:''}
             </div>
           </div>
           ${!ex.cardio?`
@@ -1634,11 +1631,22 @@ function renderDayPanel(){
             <!-- Botón añadir serie -->
             <button onclick="addSerie('${ex.id}','${ex.s}')" style="
               display:flex;align-items:center;justify-content:center;gap:5px;
-              width:100%;padding:5px;margin-top:2px;
+              width:100%;padding:5px;margin-top:2px;margin-bottom:8px;
               background:${p.color}10;border:1px dashed ${p.color}40;
               border-radius:6px;cursor:pointer;color:${p.color};
               font-size:10px;font-family:'DM Sans',sans-serif;">
               + Añadir serie
+            </button>
+            <!-- Botón Completar grande -->
+            <button onclick="togEx('${ex.id}')" style="
+              display:flex;align-items:center;justify-content:center;gap:7px;
+              width:100%;padding:11px;
+              background:${done?'#22aa6622':p.color};
+              border:${done?'1px solid #22aa66':'none'};
+              border-radius:10px;cursor:pointer;
+              color:${done?'#22aa66':'#0a0a0a'};
+              font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;">
+              ${done?'✓ Completado':'Completar'}
             </button>
           </div>`:''}
         </div>`;
@@ -1658,12 +1666,15 @@ function renderDayPanel(){
         h+=`<div style="border-bottom:1px solid var(--border);border-left:2px solid ${tc2}60;background:${tc2}05;">
           <!-- Header del ejercicio extra -->
           <div style="display:flex;align-items:center;gap:8px;padding:9px 13px 4px;">
-            <div class="chkbox${extraDone?' on':''}" style="flex-shrink:0;cursor:pointer;" onclick="togEx('${extraExId}')">${extraDone?'<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 7L9 1" stroke="#0a0a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>':''}</div>
-            <div style="flex:1;min-width:0;cursor:pointer;" onclick="togEx('${extraExId}')">
-              <div style="font-size:13px;font-weight:600;${extraDone?'text-decoration:line-through;color:var(--muted)':''}">${ex.name||'Ejercicio extra'}</div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:14px;font-weight:700;${extraDone?'text-decoration:line-through;color:var(--muted)':''}">${ex.name||'Ejercicio extra'}</div>
               <div style="font-size:9px;color:${tc2};margin-top:1px;">EXTRA · E${xi+1}</div>
             </div>
-            <button onclick="deleteExtra('${secKey}',${xi})" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:14px;padding:0 2px;line-height:1;" title="Eliminar">×</button>
+            <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
+              <button onclick="openExHistory('${extraExId}','${(ex.name||'Ejercicio extra').replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Histórico">📈</button>
+              <button onclick="openRMCalc('${extraExId}','${(ex.name||'Ejercicio extra').replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Calculadora RM">🔢</button>
+              <button onclick="deleteExtra('${secKey}',${xi})" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:15px;padding:0 2px;line-height:1;" title="Eliminar">×</button>
+            </div>
           </div>
           <!-- Series individuales -->
           <div style="padding:4px 13px 8px;">
@@ -1693,11 +1704,21 @@ function renderDayPanel(){
             </div>
             <button onclick="addSerie('${extraExId}','${extraDefaultSets}')" style="
               display:flex;align-items:center;justify-content:center;gap:5px;
-              width:100%;padding:5px;margin-top:2px;
+              width:100%;padding:5px;margin-top:2px;margin-bottom:8px;
               background:${tc2}10;border:1px dashed ${tc2}40;
               border-radius:6px;cursor:pointer;color:${tc2};
               font-size:10px;font-family:'DM Sans',sans-serif;">
               + Añadir serie
+            </button>
+            <button onclick="togEx('${extraExId}')" style="
+              display:flex;align-items:center;justify-content:center;gap:7px;
+              width:100%;padding:11px;
+              background:${extraDone?'#22aa6622':tc2};
+              border:${extraDone?'1px solid #22aa66':'none'};
+              border-radius:10px;cursor:pointer;
+              color:${extraDone?'#22aa66':'#0a0a0a'};
+              font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;">
+              ${extraDone?'✓ Completado':'Completar'}
             </button>
           </div>
         </div>`;
@@ -3636,6 +3657,133 @@ function restoreAllEx(){
   sd(data); renderCal();
 }
 
+
+// ═══════════════════════════════════════════════════════════════
+// HISTÓRICO DE EJERCICIO — gráfico de progreso
+// ═══════════════════════════════════════════════════════════════
+function openExHistory(exId, exName){
+  const data = gd();
+  // Find all days with series for this exercise, get max kg per day
+  const keys = Object.keys(data).filter(k=>/^\d{4}-\d{2}-\d{2}$/.test(k) || k.startsWith('series_'));
+  const seriesKeys = Object.keys(data).filter(k=>k.startsWith('series_') && k.endsWith('_'+exId));
+  const points = [];
+  seriesKeys.forEach(sk=>{
+    // key format: series_YYYY-MM-DD_exId
+    const m = sk.match(/^series_(\d{4}-\d{2}-\d{2})_/);
+    if(!m) return;
+    const date = m[1];
+    const series = (data[sk]||[]).filter(s=>s&&s.kg);
+    if(!series.length) return;
+    const maxKg = Math.max(...series.map(s=>parseFloat(s.kg)||0));
+    points.push({date, kg:maxKg});
+  });
+  points.sort((a,b)=>a.date.localeCompare(b.date));
+
+  const p = pr();
+  const modal = document.getElementById('exHistoryModal');
+  const content = document.getElementById('exHistoryContent');
+
+  if(points.length===0){
+    content.innerHTML = `<div style="padding:40px 20px;text-align:center;">
+      <div style="font-size:2rem;opacity:.3;margin-bottom:10px;">📈</div>
+      <div style="font-size:13px;color:var(--muted);">Aún no hay registros de este ejercicio</div>
+    </div>`;
+  } else {
+    const maxKg = Math.max(...points.map(pt=>pt.kg));
+    const minKg = Math.min(...points.map(pt=>pt.kg));
+    const range = maxKg-minKg || 1;
+    const H = 100;
+
+    let chartHtml = `<div style="display:flex;align-items:flex-end;gap:4px;height:${H}px;padding:10px 4px 0;border-bottom:1px solid var(--border2);">`;
+    points.forEach((pt,i)=>{
+      const h = Math.max(8, Math.round(((pt.kg-minKg)/range)*(H-20))+20);
+      const isLast = i===points.length-1;
+      chartHtml += `<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;">
+        <div style="font-size:9px;color:${isLast?p.color:'var(--muted)'};font-family:'DM Mono',monospace;margin-bottom:3px;">${pt.kg}</div>
+        <div style="width:70%;height:${h}px;background:${isLast?p.color:'var(--border2)'};border-radius:3px 3px 0 0;"></div>
+      </div>`;
+    });
+    chartHtml += `</div>
+    <div style="display:flex;gap:4px;padding:4px 4px 0;">
+      ${points.map(pt=>`<div style="flex:1;text-align:center;font-size:7px;color:var(--muted2);">${pt.date.slice(5)}</div>`).join('')}
+    </div>`;
+
+    let listHtml = points.slice().reverse().map((pt,i)=>{
+      const prev = points[points.length-2-i];
+      const diff = prev ? +(pt.kg-prev.kg).toFixed(1) : null;
+      const diffTxt = diff!==null ? `<span style="font-size:10px;color:${diff>0?'#4ade80':diff<0?'#ff6b35':'var(--muted)'};margin-left:6px;">${diff>0?'▲':diff<0?'▼':'='} ${diff>0?'+':''}${diff}kg</span>` : '';
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:11px;color:var(--muted);">${pt.date}</span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:${p.color};">${pt.kg} kg${diffTxt}</span>
+      </div>`;
+    }).join('');
+
+    content.innerHTML = `
+      <div style="padding:14px;background:var(--card2);border-radius:10px;margin-bottom:14px;">
+        ${chartHtml}
+      </div>
+      <div>${listHtml}</div>
+    `;
+  }
+
+  document.getElementById('exHistoryTitle').textContent = exName;
+  modal.style.display = 'flex';
+}
+
+function closeExHistory(){
+  document.getElementById('exHistoryModal').style.display = 'none';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CALCULADORA DE RM (Repetición Máxima) — fórmula Epley
+// ═══════════════════════════════════════════════════════════════
+function openRMCalc(exId, exName){
+  document.getElementById('rmCalcTitle').textContent = exName;
+  document.getElementById('rmCalcWeight').value = '';
+  document.getElementById('rmCalcReps').value = '';
+  document.getElementById('rmCalcResult').innerHTML = '';
+  document.getElementById('rmCalcModal').style.display = 'flex';
+}
+
+function closeRMCalc(){
+  document.getElementById('rmCalcModal').style.display = 'none';
+}
+
+function calcRM(){
+  const w = parseFloat(document.getElementById('rmCalcWeight').value);
+  const r = parseFloat(document.getElementById('rmCalcReps').value);
+  const result = document.getElementById('rmCalcResult');
+  if(!w || !r || w<=0 || r<=0){
+    result.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:12px;padding:16px;">Añade el peso y las repeticiones para calcular tu RM</div>`;
+    return;
+  }
+  const p = pr();
+  // Epley formula
+  const rm = r===1 ? w : w * (1 + r/30);
+  const pcts = [100,95,90,85,80,75,70,65,60,50];
+  let rows = pcts.map(pct=>{
+    const kg = (rm*pct/100).toFixed(1);
+    // estimate reps for that %1RM (inverse Epley approx)
+    const estReps = pct===100?1:Math.round(30*(100/pct-1)+1);
+    return `<div style="display:grid;grid-template-columns:50px 1fr 60px;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);">
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:${pct===100?p.color:'var(--muted)'};">${pct}%</span>
+      <div style="height:4px;background:var(--border);border-radius:99px;overflow:hidden;">
+        <div style="height:100%;width:${pct}%;background:${pct===100?p.color:'var(--border2)'};"></div>
+      </div>
+      <span style="font-family:'DM Mono',monospace;font-size:12px;text-align:right;color:${pct===100?p.color:'var(--text)'};">${kg}kg</span>
+    </div>`;
+  }).join('');
+
+  result.innerHTML = `
+    <div style="text-align:center;padding:14px;background:var(--card2);border-radius:10px;margin-bottom:14px;">
+      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;">RM estimado (Epley)</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:${p.color};line-height:1.1;">${rm.toFixed(1)} kg</div>
+    </div>
+    <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Tabla de porcentajes</div>
+    ${rows}
+  `;
+}
+
 </script>
 
 <!-- ═══════════════ EXERCISE PICKER MODAL ═══════════════ -->
@@ -3765,6 +3913,44 @@ function restoreAllEx(){
     color:#555;font-size:11px;cursor:pointer;flex-shrink:0;">
     Restablecer
   </button>
+</div>
+
+
+<!-- ═══════════════ HISTÓRICO DE EJERCICIO MODAL ═══════════════ -->
+<div id="exHistoryModal" style="display:none;position:fixed;inset:0;z-index:2100;background:rgba(0,0,0,.93);backdrop-filter:blur(8px);flex-direction:column;">
+  <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;">
+    <button onclick="closeExHistory()" style="background:none;border:1px solid #333;border-radius:7px;color:#888;font-size:12px;padding:4px 10px;cursor:pointer;">‹ Atrás</button>
+    <div style="flex:1;">
+      <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;">Histórico</div>
+      <div id="exHistoryTitle" style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.04em;color:#e8e8e8;">—</div>
+    </div>
+  </div>
+  <div id="exHistoryContent" style="flex:1;overflow-y:auto;padding:16px;"></div>
+</div>
+
+<!-- ═══════════════ CALCULADORA RM MODAL ═══════════════ -->
+<div id="rmCalcModal" style="display:none;position:fixed;inset:0;z-index:2100;background:rgba(0,0,0,.93);backdrop-filter:blur(8px);flex-direction:column;">
+  <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;">
+    <button onclick="closeRMCalc()" style="background:none;border:1px solid #333;border-radius:7px;color:#888;font-size:12px;padding:4px 10px;cursor:pointer;">‹ Atrás</button>
+    <div style="flex:1;">
+      <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;">Calculadora RM</div>
+      <div id="rmCalcTitle" style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.04em;color:#e8e8e8;">—</div>
+    </div>
+  </div>
+  <div style="padding:16px;flex-shrink:0;">
+    <div style="font-size:11px;color:#666;line-height:1.6;margin-bottom:14px;">Calcula el peso máximo orientativo que puedes levantar por repetición (fórmula Epley).</div>
+    <div style="display:flex;gap:8px;">
+      <div style="flex:1;">
+        <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">Peso (kg)</div>
+        <input id="rmCalcWeight" type="number" step="0.5" placeholder="0" oninput="calcRM()" style="width:100%;background:#161616;border:1px solid #2a2a2a;border-radius:8px;color:#e8e8e8;font-family:'DM Mono',monospace;font-size:14px;padding:9px 10px;outline:none;">
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;">Reps</div>
+        <input id="rmCalcReps" type="number" placeholder="0" oninput="calcRM()" style="width:100%;background:#161616;border:1px solid #2a2a2a;border-radius:8px;color:#e8e8e8;font-family:'DM Mono',monospace;font-size:14px;padding:9px 10px;outline:none;">
+      </div>
+    </div>
+  </div>
+  <div id="rmCalcResult" style="flex:1;overflow-y:auto;padding:0 16px 16px;"></div>
 </div>
 
 </body>
