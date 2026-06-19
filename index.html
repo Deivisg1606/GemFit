@@ -392,10 +392,34 @@ body{
 
 <!-- ═══════════════ MAIN APP ═══════════════ -->
 <div id="s-main" class="screen">
-  <div class="topbar">
+  <div class="topbar" style="position:relative;">
     <div class="tlogo" id="tLogo" onclick="goProfiles()">♊</div>
-    <div class="tname" id="tName">GEMFIT</div>
-    <div class="tright" id="tRight">PLAN</div>
+    <div style="flex:1;cursor:pointer;" onclick="goProfiles()">
+      <div class="tname" id="tName" style="line-height:1.1;">GEMFIT</div>
+      <div id="tStreak" style="font-size:9px;color:var(--muted);margin-top:1px;">🔥 0 días de racha</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;cursor:pointer;" onclick="goProfiles()">
+      <span style="font-size:10px;color:var(--muted);">⇄ cambiar</span>
+    </div>
+    <div class="tright" id="tRight" style="display:none;">PLAN</div>
+
+    <!-- Quick profile switcher dropdown -->
+    <div id="profileSwitcher" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:200;background:#111;border:1px solid rgba(255,255,255,.1);border-radius:0 0 12px 12px;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,.4);">
+      <div onclick="switchToProfile('deivis')" style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.06);">
+        <div id="sw-av-deivis" style="width:32px;height:32px;border-radius:50%;background:#1a1a1a;border:1.5px solid #cc550040;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:#cc5500;overflow:hidden;flex-shrink:0;">D</div>
+        <div style="flex:1;">
+          <div style="font-size:12px;font-weight:600;color:#e8e8e8;">Deivis</div>
+        </div>
+        <span id="sw-check-deivis" style="font-size:12px;color:#cc5500;"></span>
+      </div>
+      <div onclick="switchToProfile('yona')" style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;">
+        <div id="sw-av-yona" style="width:32px;height:32px;border-radius:50%;background:#1a1a1a;border:1.5px solid #7733cc40;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:#7733cc;overflow:hidden;flex-shrink:0;">Y</div>
+        <div style="flex:1;">
+          <div style="font-size:12px;font-weight:600;color:#e8e8e8;">Yona</div>
+        </div>
+        <span id="sw-check-yona" style="font-size:12px;color:#7733cc;"></span>
+      </div>
+    </div>
   </div>
 
   <div class="main-area">
@@ -415,19 +439,29 @@ body{
     <div onclick="event.stopPropagation()" style="
       position:absolute;bottom:62px;left:0;right:0;
       background:#111;border-top:1px solid rgba(255,255,255,.08);
-      padding:8px 0;">
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;">
-        <button class="nbtn" id="nb-volumen" onclick="closeMoreMenu();goTab('volumen')" style="padding:14px 0;">
-          <span class="nbtn-icon">📊</span>Volumen</button>
-        <button class="nbtn" id="nb-progreso" onclick="closeMoreMenu();goTab('progreso')" style="padding:14px 0;">
-          <span class="nbtn-icon">📈</span>Progreso</button>
-        <button class="nbtn" id="nb-fotos" onclick="closeMoreMenu();goTab('fotos')" style="padding:14px 0;">
-          <span class="nbtn-icon">📸</span>Fotos</button>
-        <button class="nbtn" id="nb-suplementos" onclick="closeMoreMenu();goTab('suplementos')" style="padding:14px 0;">
-          <span class="nbtn-icon">💊</span>Suplem.</button>
-        <button class="nbtn" id="nb-perfil" onclick="closeMoreMenu();goTab('perfil')" style="padding:14px 0;">
-          <span class="nbtn-icon">👤</span>Perfil</button>
-      </div>
+      border-radius:16px 16px 0 0;
+      padding:6px 0 10px;">
+      <div style="width:34px;height:3px;background:#333;border-radius:99px;margin:8px auto 4px;"></div>
+      <button id="nb-volumen" onclick="closeMoreMenu();goTab('volumen')" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 18px;background:none;border:none;cursor:pointer;text-align:left;">
+        <span style="font-size:18px;">📊</span>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Volumen semanal</div><div style="font-size:10px;color:var(--muted);">Series por músculo, MEV/MRV</div></div>
+      </button>
+      <button id="nb-progreso" onclick="closeMoreMenu();goTab('progreso')" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 18px;background:none;border:none;cursor:pointer;text-align:left;">
+        <span style="font-size:18px;">📈</span>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Progreso</div><div style="font-size:10px;color:var(--muted);">Peso corporal, racha, proyección</div></div>
+      </button>
+      <button id="nb-fotos" onclick="closeMoreMenu();goTab('fotos')" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 18px;background:none;border:none;cursor:pointer;text-align:left;">
+        <span style="font-size:18px;">📸</span>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Fotos de progreso</div><div style="font-size:10px;color:var(--muted);">Comparador antes/después</div></div>
+      </button>
+      <button id="nb-suplementos" onclick="closeMoreMenu();goTab('suplementos')" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 18px;background:none;border:none;cursor:pointer;text-align:left;">
+        <span style="font-size:18px;">💊</span>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Suplementos</div><div style="font-size:10px;color:var(--muted);">Stack, horario, checklist diario</div></div>
+      </button>
+      <button id="nb-perfil" onclick="closeMoreMenu();goTab('perfil')" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 18px;background:none;border:none;cursor:pointer;text-align:left;">
+        <span style="font-size:18px;">👤</span>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Perfil</div><div style="font-size:10px;color:var(--muted);">IMC, macros, copia de seguridad</div></div>
+      </button>
     </div>
   </div>
 
@@ -1027,18 +1061,55 @@ function selectProfile(id){
   document.getElementById('tName').textContent = p.name;
   updateProfileAvatars();
   updateTopbarAvatar(); // must run AFTER border/color reset, sets background-image last
+  updateSwitcherCheck();
+  updateTopbarStreak();
   goTab('plan');
 }
 
-function goProfiles(){
-  CP = null;
-  lsSave(); // CP=null so next open shows profile screen
-  document.getElementById('s-main').classList.remove('active');
-  document.getElementById('s-profiles').classList.add('active');
-  document.getElementById('bnav').classList.remove('on');
+function updateSwitcherCheck(){
+  ['deivis','yona'].forEach(id=>{
+    const chk = document.getElementById('sw-check-'+id);
+    if(chk) chk.textContent = id===CP ? '✓' : '';
+    const av = document.getElementById('sw-av-'+id);
+    if(av && AVATARS[id]){
+      av.innerHTML = `<img src="${AVATARS[id]}" style="width:100%;height:100%;object-fit:cover;">`;
+    }
+  });
 }
 
-// On load — only restore avatars on profile screen, never auto-login
+function updateTopbarStreak(){
+  if(!CP) return;
+  const data = AD[CP]||{};
+  const now = new Date();
+  let streak = 0;
+  for(let i=0;i<365;i++){
+    const d2 = new Date(now); d2.setDate(now.getDate()-i);
+    const k = d2.getFullYear()+'-'+String(d2.getMonth()+1).padStart(2,'0')+'-'+String(d2.getDate()).padStart(2,'0');
+    if(data[k]&&data[k].session&&data[k].session!=='skip') streak++;
+    else if(i>0) break;
+  }
+  const el = document.getElementById('tStreak');
+  if(el) el.textContent = streak>0 ? `🔥 ${streak} día${streak===1?'':'s'} de racha` : 'Sin racha activa';
+}
+
+function goProfiles(){
+  // Quick switcher instead of full screen — toggle the dropdown
+  toggleProfileSwitcher();
+}
+
+function toggleProfileSwitcher(){
+  const sw = document.getElementById('profileSwitcher');
+  if(!sw) return;
+  const isOpen = sw.style.display === 'block';
+  sw.style.display = isOpen ? 'none' : 'block';
+}
+
+function switchToProfile(id){
+  document.getElementById('profileSwitcher').style.display = 'none';
+  selectProfile(id);
+}
+
+// On load — auto-enter last used profile if one exists
 window.addEventListener('DOMContentLoaded', async ()=>{
   updateProfileAvatars();
   updateProfileStats();
@@ -1046,6 +1117,12 @@ window.addEventListener('DOMContentLoaded', async ()=>{
   if(cloudLoaded){
     updateProfileAvatars();
     updateProfileStats();
+  }
+  // Auto-login to last used profile
+  if(CP && PROFS[CP]){
+    selectProfile(CP);
+  } else {
+    document.getElementById('s-profiles').classList.add('active');
   }
 });
 
@@ -1571,12 +1648,13 @@ function renderDayPanel(){
         const lastPerfShort = last&&last.kg ? `Última: ${last.sets||'?'}×${last.reps||'?'} · ${last.kg}kg` : '';
 
         const exRest = ex.rest || 90;
-        h+=`<div style="border-bottom:1px solid var(--border);${ex.star?'border-left:2px solid gold;':''}${ex.cardio?'background:rgba(200,241,53,.03);':''}${done?'opacity:.6;':''}">
+        h+=`<div style="border-bottom:1px solid var(--border);${ex.star?'border-left:3px solid '+p.color+';background:'+p.color+'08;':''}${ex.cardio?'background:rgba(200,241,53,.03);':''}${done?'opacity:.6;':''}">
           <!-- Header del ejercicio -->
           <div style="padding:11px 13px 6px;">
+            ${ex.star?`<div style="display:inline-flex;align-items:center;gap:4px;background:${p.color};color:#0a0a0a;font-size:8px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:5px;text-transform:uppercase;margin-bottom:6px;">★ Principal</div>`:''}
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
               <div style="flex:1;min-width:0;">
-                <div style="font-size:14px;font-weight:700;${done?'text-decoration:line-through;color:var(--muted)':''}">${ex.n}</div>
+                <div style="font-size:${ex.star?'15':'14'}px;font-weight:700;${done?'text-decoration:line-through;color:var(--muted)':''}">${ex.n}</div>
                 ${lastPerfShort?`<div style="font-size:10px;color:${p.color};margin-top:2px;font-family:'DM Mono',monospace;">↩ ${lastPerfShort}</div>`:''}
               </div>
               <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
@@ -1618,10 +1696,10 @@ function renderDayPanel(){
                 return `<div style="display:grid;grid-template-columns:32px 1fr 1fr 1fr 28px;gap:4px;margin-bottom:4px;align-items:center;">
                   <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--muted);text-align:center;">${si+1}</div>
                   <input type="number" min="1" max="100" value="${sv.reps||''}" placeholder="${last&&last.reps?last.reps:'reps'}"
-                    oninput="saveSerie('${ex.id}',${si},'reps',this.value)"
+                    oninput="saveSerie('${ex.id}',${si},'reps',this.value)" onblur="flashSaved(this)"
                     style="background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 6px;outline:none;width:100%;text-align:center;">
                   <input type="number" min="0" max="500" step="0.5" value="${sv.kg||''}" placeholder="${lastKg||'kg'}"
-                    oninput="saveSerie('${ex.id}',${si},'kg',this.value)"
+                    oninput="saveSerie('${ex.id}',${si},'kg',this.value)" onblur="flashSaved(this)"
                     style="background:var(--card2);border:1px solid ${border};border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 6px;outline:none;width:100%;text-align:center;">
                   <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:${p.color};text-align:center;">${vol2!=='—'?vol2+'kg':'—'}</div>
                   <button onclick="deleteSerie('${ex.id}',${si})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0;text-align:center;line-height:1;">×</button>
@@ -1692,10 +1770,10 @@ function renderDayPanel(){
                 return `<div style="display:grid;grid-template-columns:32px 1fr 1fr 1fr 28px;gap:4px;margin-bottom:4px;align-items:center;">
                   <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--muted);text-align:center;">${si+1}</div>
                   <input type="number" min="1" max="100" value="${sv.reps||''}" placeholder="reps"
-                    oninput="saveSerie('${extraExId}',${si},'reps',this.value)"
+                    oninput="saveSerie('${extraExId}',${si},'reps',this.value)" onblur="flashSaved(this)"
                     style="background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 6px;outline:none;width:100%;text-align:center;">
                   <input type="number" min="0" max="500" step="0.5" value="${sv.kg||''}" placeholder="kg"
-                    oninput="saveSerie('${extraExId}',${si},'kg',this.value)"
+                    oninput="saveSerie('${extraExId}',${si},'kg',this.value)" onblur="flashSaved(this)"
                     style="background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 6px;outline:none;width:100%;text-align:center;">
                   <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:${tc2};text-align:center;">${vol2!=='—'?vol2+'kg':'—'}</div>
                   <button onclick="deleteSerie('${extraExId}',${si})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0;text-align:center;line-height:1;">×</button>
@@ -3783,6 +3861,33 @@ function calcRM(){
     ${rows}
   `;
 }
+
+
+// ═══════════════════════════════════════════════════════════════
+// MICRO-FEEDBACK al guardar una serie
+// ═══════════════════════════════════════════════════════════════
+function flashSaved(el){
+  if(!el || !el.value) return;
+  const p2 = CP ? pr() : {color:'#cc5500'};
+  el.style.transition = 'border-color .15s, background .15s';
+  const prevBorder = el.style.borderColor;
+  const prevBg = el.style.background;
+  el.style.borderColor = '#4ade80';
+  el.style.background = 'rgba(74,222,128,.12)';
+  if(navigator.vibrate) navigator.vibrate(8);
+  setTimeout(()=>{
+    el.style.borderColor = prevBorder;
+    el.style.background = prevBg;
+  }, 350);
+}
+
+// Close profile switcher when tapping outside
+document.addEventListener('click', (e)=>{
+  const sw = document.getElementById('profileSwitcher');
+  if(!sw || sw.style.display!=='block') return;
+  const topbar = e.target.closest('.topbar');
+  if(!topbar) sw.style.display='none';
+});
 
 </script>
 
