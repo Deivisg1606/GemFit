@@ -3889,6 +3889,153 @@ document.addEventListener('click', (e)=>{
   if(!topbar) sw.style.display='none';
 });
 
+
+// ═══════════════════════════════════════════════════════════════
+// PROYECCIÓN DE PROGRESO — regresión lineal simple
+// ═══════════════════════════════════════════════════════════════
+function getExerciseSeriesPoints(exId){
+  const data = gd();
+  const seriesKeys = Object.keys(data).filter(k=>k.startsWith('series_') && k.endsWith('_'+exId));
+  const points = [];
+  seriesKeys.forEach(sk=>{
+    const m = sk.match(/^series_(\d{4}-\d{2}-\d{2})_/);
+    if(!m) return;
+    const date = m[1];
+    const series = (data[sk]||[]).filter(s=>s&&s.kg);
+    if(!series.length) return;
+    const maxKg = Math.max(...series.map(s=>parseFloat(s.kg)||0));
+    const bestSerie = series.find(s=>parseFloat(s.kg)===maxKg)||series[0];
+    points.push({date, kg:maxKg, reps:bestSerie.reps||'', sets:series.length});
+  });
+  points.sort((a,b)=>a.date.localeCompare(b.date));
+  return points;
+}
+
+// Simple linear regression: x = days since first session, y = kg
+function linearRegression(points){
+  const first = new Date(points[0].date);
+  const xs = points.map(pt=>(new Date(pt.date)-first)/(1000*60*60*24)); // days
+  const ys = points.map(pt=>pt.kg);
+  const n = xs.length;
+  const sumX = xs.reduce((a,b)=>a+b,0);
+  const sumY = ys.reduce((a,b)=>a+b,0);
+  const sumXY = xs.reduce((a,x,i)=>a+x*ys[i],0);
+  const sumX2 = xs.reduce((a,x)=>a+x*x,0);
+  const denom = (n*sumX2 - sumX*sumX);
+  if(denom===0) return null; // all same date, can't regress
+  const slope = (n*sumXY - sumX*sumY) / denom; // kg per day
+  const intercept = (sumY - slope*sumX) / n;
+  return {slope, intercept, firstDate:first};
+}
+
+function openProjection(exId, exName){
+  const p = pr();
+  const modal = document.getElementById('projectionModal');
+  const content = document.getElementById('projectionContent');
+  document.getElementById('projectionTitle').textContent = exName;
+
+  const points = getExerciseSeriesPoints(exId);
+
+  if(points.length < 3){
+    content.innerHTML = `<div style="padding:40px 20px;text-align:center;">
+      <div style="font-size:2rem;opacity:.3;margin-bottom:10px;">📊</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;">Necesitas al menos 3 sesiones registradas de este ejercicio para generar una proyección confiable.</div>
+      <div style="font-size:11px;color:var(--muted2);margin-top:8px;">Llevas ${points.length} sesión${points.length===1?'':'es'} registrada${points.length===1?'':'s'}.</div>
+    </div>`;
+    modal.style.display = 'flex';
+    return;
+  }
+
+  const reg = linearRegression(points);
+  const last = points[points.length-1];
+  const lastDate = new Date(last.date);
+
+  if(!reg || reg.slope <= 0){
+    // No clear upward trend
+    content.innerHTML = `<div style="padding:30px 20px;text-align:center;">
+      <div style="font-size:2rem;opacity:.3;margin-bottom:10px;">📉</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;">
+        ${!reg ? 'Todos tus registros son del mismo día, necesitamos más sesiones en fechas distintas.' : 'Tu peso se ha mantenido estable o ha bajado últimamente — no hay una tendencia de crecimiento clara para proyectar.'}
+      </div>
+      <div style="margin-top:16px;padding:12px;background:var(--card2);border-radius:10px;">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Último registro</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:${p.color};">${last.kg} kg</div>
+        <div style="font-size:10px;color:var(--muted);">${last.sets}×${last.reps||'?'} · ${last.date}</div>
+      </div>
+    </div>`;
+    modal.style.display = 'flex';
+    return;
+  }
+
+  // Weekly rate
+  const kgPerWeek = reg.slope * 7;
+
+  // Project 2 and 4 weeks from last session date
+  const proj2w = new Date(lastDate); proj2w.setDate(proj2w.getDate()+14);
+  const proj4w = new Date(lastDate); proj4w.setDate(proj4w.getDate()+28);
+  const daysFromStart2w = (proj2w - reg.firstDate)/(1000*60*60*24);
+  const daysFromStart4w = (proj4w - reg.firstDate)/(1000*60*60*24);
+  const kg2w = reg.intercept + reg.slope*daysFromStart2w;
+  const kg4w = reg.intercept + reg.slope*daysFromStart4w;
+
+  // Round to nearest 0.5 or 1.25 (typical plate increments)
+  const roundKg = v => Math.round(v*2)/2;
+
+  // Confidence note based on data span
+  const spanDays = (lastDate - reg.firstDate)/(1000*60*60*24);
+  const confidence = points.length>=6 && spanDays>=21 ? 'alta' : points.length>=4 ? 'media' : 'baja';
+  const confColor = confidence==='alta'?'#4ade80':confidence==='media'?'#facc15':'#ff6b35';
+
+  content.innerHTML = `
+    <div style="padding:14px;background:var(--card2);border-radius:10px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;">Tendencia actual</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#4ade80;line-height:1.1;">+${roundKg(kgPerWeek)} kg / semana</div>
+      <div style="font-size:10px;color:var(--muted2);margin-top:4px;">Basado en ${points.length} sesiones · ${Math.round(spanDays)} días de historial</div>
+      <div style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:3px 10px;background:${confColor}18;border-radius:20px;">
+        <div style="width:6px;height:6px;border-radius:50%;background:${confColor};"></div>
+        <span style="font-size:9px;color:${confColor};font-weight:600;text-transform:uppercase;letter-spacing:.05em;">Confianza ${confidence}</span>
+      </div>
+    </div>
+
+    <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Proyección de peso</div>
+
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <div style="flex:1;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;text-align:center;">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Hoy</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:var(--text);">${last.kg} kg</div>
+        <div style="font-size:9px;color:var(--muted2);">${last.sets}×${last.reps||'?'}</div>
+      </div>
+      <div style="flex:1;padding:12px;background:${p.color}10;border:1px solid ${p.color}40;border-radius:10px;text-align:center;">
+        <div style="font-size:9px;color:${p.color};text-transform:uppercase;letter-spacing:.06em;">En 2 semanas</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:${p.color};">${roundKg(kg2w)} kg</div>
+        <div style="font-size:9px;color:var(--muted2);">${last.sets}×${last.reps||'?'} aprox.</div>
+      </div>
+      <div style="flex:1;padding:12px;background:${p.color}18;border:1px solid ${p.color}60;border-radius:10px;text-align:center;">
+        <div style="font-size:9px;color:${p.color};text-transform:uppercase;letter-spacing:.06em;">En 4 semanas</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:${p.color};">${roundKg(kg4w)} kg</div>
+        <div style="font-size:9px;color:var(--muted2);">${last.sets}×${last.reps||'?'} aprox.</div>
+      </div>
+    </div>
+
+    <div style="padding:10px 13px;background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);border-radius:9px;font-size:11px;color:var(--muted2);line-height:1.6;margin-bottom:14px;">
+      💡 A este ritmo, podrías alcanzar <strong style="color:#4ade80">${roundKg(kg4w)} kg</strong> en aproximadamente <strong style="color:#4ade80">4 semanas</strong> manteniendo tu progresión actual. Sube el peso solo cuando completes todas las series en el rango alto de reps.
+    </div>
+
+    <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;">Historial usado para el cálculo</div>
+    ${points.slice().reverse().slice(0,8).map(pt=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:10px;color:var(--muted);">${pt.date}</span>
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text);">${pt.sets}×${pt.reps||'?'} · ${pt.kg}kg</span>
+      </div>`).join('')}
+  `;
+
+  modal.style.display = 'flex';
+}
+
+function closeProjection(){
+  document.getElementById('projectionModal').style.display = 'none';
+}
+
 </script>
 
 <!-- ═══════════════ EXERCISE PICKER MODAL ═══════════════ -->
@@ -4056,6 +4203,19 @@ document.addEventListener('click', (e)=>{
     </div>
   </div>
   <div id="rmCalcResult" style="flex:1;overflow-y:auto;padding:0 16px 16px;"></div>
+</div>
+
+
+<!-- ═══════════════ PROYECCIÓN DE PROGRESO MODAL ═══════════════ -->
+<div id="projectionModal" style="display:none;position:fixed;inset:0;z-index:2100;background:rgba(0,0,0,.93);backdrop-filter:blur(8px);flex-direction:column;">
+  <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;">
+    <button onclick="closeProjection()" style="background:none;border:1px solid #333;border-radius:7px;color:#888;font-size:12px;padding:4px 10px;cursor:pointer;">‹ Atrás</button>
+    <div style="flex:1;">
+      <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;">Proyección</div>
+      <div id="projectionTitle" style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.04em;color:#e8e8e8;">—</div>
+    </div>
+  </div>
+  <div id="projectionContent" style="flex:1;overflow-y:auto;padding:16px;"></div>
 </div>
 
 </body>
