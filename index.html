@@ -31,7 +31,7 @@
 :root{
   --bg:#0a0a0a;--card:#111111;--card2:#161616;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
   --text:#e8e8e8;--muted:#666;--muted2:#444;
-  --push:#cc5500;--pull:#2277cc;--legs:#7733cc;--arms:#00bcd4;--done:#22aa66;--skip:#444;
+  --push:#e0a526;--pull:#dd0060;--legs:#7733cc;--arms:#00bcd4;--done:#22aa66;--skip:#444;
   --accent:#cc5500;--yona:#7733cc;
 }
 html{height:100%;}
@@ -588,7 +588,7 @@ const SESSIONS = {
 };
 
 const SESS_LIST = [
-  {id:'brazoA', lbl:'Bíceps · Tríceps · Hombros', type:'push'},
+  {id:'brazoA', lbl:'Bíceps · Tríceps · Hombros', type:'arms'},
   {id:'espaldaA',lbl:'Espalda', type:'pull'},
   {id:'pechoA',  lbl:'Pecho', type:'push'},
   {id:'piernaA', lbl:'Pierna Completa', type:'legs'},
@@ -597,11 +597,11 @@ const SESS_LIST = [
 
 const WEEK_PLAN = [
   {day:'Lun',id:'skip',     type:'rest', lbl:'Descanso'},
-  {day:'Mar',id:'brazoA',   type:'push', lbl:'Brazos'},
+  {day:'Mar',id:'brazoA',   type:'arms', lbl:'Brazos'},
   {day:'Mié',id:'espaldaA', type:'pull', lbl:'Espalda'},
   {day:'Jue',id:'pechoA',   type:'push', lbl:'Pecho'},
   {day:'Vie',id:'piernaA',  type:'legs', lbl:'Pierna'},
-  {day:'Sáb',id:'brazoA',   type:'push', lbl:'Brazos'},
+  {day:'Sáb',id:'brazoA',   type:'arms', lbl:'Brazos'},
   {day:'Dom',id:'espaldaA', type:'pull', lbl:'Espalda'},
 ];
 
@@ -610,9 +610,9 @@ const WEEK_PLAN = [
 // MEV = Mínimo Efectivo, REC = Recomendado, MRV = Máximo Recuperable
 // ═══════════════════════════════════════════════════════════════
 const VOLUME_DATA = [
-  {m:'Pecho',mev:10,rec:16,mrv:22,plan:16,freq:2,reps:'8-12',color:'#dd0060'},
-  {m:'X',     mev:10,rec:16,mrv:22,plan:16,freq:2,reps:'8-12',color:'#dd0060'},
-  {m:'Espalda',   mev:10,rec:18,mrv:25,plan:18,freq:2,reps:'6-12',color:'#0066aa'},
+  {m:'Pecho',mev:10,rec:16,mrv:22,plan:16,freq:2,reps:'8-12',color:'#e0a526'},
+  {m:'X',     mev:10,rec:16,mrv:22,plan:16,freq:2,reps:'8-12',color:'#e0a526'},
+  {m:'Espalda',   mev:10,rec:18,mrv:25,plan:18,freq:2,reps:'6-12',color:'#dd0060'},
   {m:'Deltoides Lat.',mev:6,rec:16,mrv:22,plan:16,freq:2,reps:'15-20',color:'#4CC9F0'},
   {m:'Deltoides Post.',mev:6,rec:12,mrv:20,plan:12,freq:2,reps:'15-20',color:'#dd0060'},
   {m:'Cuádriceps',mev:8,rec:16,mrv:20,plan:16,freq:2,reps:'6-15',color:'#6600bb'},
@@ -663,7 +663,7 @@ const CHK_ITEMS = [
 // ═══════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════
-const TC = {push:'#dd0060',pull:'#0066aa',legs:'#6600bb',arms:'#00bcd4',skip:'#c0a0b0',rest:'#c0a0b0'};
+const TC = {push:'#e0a526',pull:'#dd0060',legs:'#6600bb',arms:'#00bcd4',skip:'#c0a0b0',rest:'#c0a0b0'};
 const MONTHS = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
 const DAYS_ES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const MONTHS_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
@@ -1222,6 +1222,27 @@ function closeMoreMenu(){
 // ═══════════════════════════════════════════════════════════════
 // PLAN TAB
 // ═══════════════════════════════════════════════════════════════
+function togglePlanBlock(sessId){
+  const block = document.getElementById('planBlock-'+sessId);
+  const chevron = document.getElementById('planChevron-'+sessId);
+  if(!block) return;
+  const isOpen = block.style.display !== 'none';
+  block.style.display = isOpen ? 'none' : 'block';
+  if(chevron) chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+
+function openPlanBlockAndScroll(sessId){
+  const block = document.getElementById('planBlock-'+sessId);
+  const chevron = document.getElementById('planChevron-'+sessId);
+  if(!block) return;
+  block.style.display = 'block';
+  if(chevron) chevron.style.transform = 'rotate(180deg)';
+  setTimeout(()=>{
+    const header = chevron ? chevron.closest('.day-hdr') : null;
+    if(header) header.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 50);
+}
+
 function renderPlan(){
   const p = pr(); const m = getMacros();
   let h = `<div class="inner">
@@ -1251,22 +1272,25 @@ function renderPlan(){
 
   WEEK_PLAN.forEach(d=>{
     const tc = d.type==='rest'?'#555':TC[d.type];
-    h+=`<div class="wpill" style="background:${tc}10;border-color:${tc}30">
+    const clickAttr = d.id!=='skip' ? `onclick="openPlanBlockAndScroll('${d.id}')" style="background:${tc}10;border-color:${tc}30;cursor:pointer;"` : `style="background:${tc}10;border-color:${tc}30;"`;
+    h+=`<div class="wpill" ${clickAttr}>
       <div class="wpill-day">${d.day}</div>
       <div class="wpill-type" style="color:${tc}">${d.lbl}</div>
     </div>`;
   });
   h+=`</div>`;
 
-  // Sessions
+  // Sessions — collapsible, all closed by default
   Object.values(SESSIONS).forEach(sess=>{
     const tc2 = TC[sess.type];
     h+=`<div class="day-block">
-      <div class="day-hdr" style="background:${tc2}09;border-color:${tc2}28;">
+      <div class="day-hdr" onclick="togglePlanBlock('${sess.id}')" style="background:${tc2}09;border-color:${tc2}28;cursor:pointer;">
         <span class="day-badge" style="background:${tc2}22;color:${tc2}">${sess.emoji} ${sess.type.toUpperCase()}</span>
         <span class="day-title">${sess.title}</span>
-        <span class="day-dur">${sess.dur}</span>
-      </div>`;
+        <span class="day-dur" style="margin-right:6px;">${sess.dur}</span>
+        <span id="planChevron-${sess.id}" style="color:${tc2};font-size:13px;transition:transform .25s;display:inline-block;transform:rotate(0deg);">▾</span>
+      </div>
+      <div id="planBlock-${sess.id}" style="display:none;">`;
     if(sess.focus){
       h+=`<div style="padding:7px 13px;background:rgba(200,241,53,.04);border:1px solid var(--border);border-top:none;border-bottom:none;font-size:10px;color:var(--muted);line-height:1.5;font-style:italic;">💡 ${sess.focus}</div>`;
     }
@@ -1285,7 +1309,7 @@ function renderPlan(){
         </div>`;
       });
     });
-    h+=`</div></div>`;
+    h+=`</div></div></div>`;
   });
 
   if(m){
@@ -2066,8 +2090,8 @@ function renderStats(){
   Object.values(data).forEach(d=>{if(!d.session||d.session==='skip')return;const s=SESSIONS[d.session];if(!s)return;tot++;if(s.type==='push')push++;else if(s.type==='pull')pull++;else if(s.type==='legs')legs++;else if(s.type==='arms')arms++;});
   return `<div class="stats-grid" style="grid-template-columns:repeat(5,1fr);">
     <div class="stat-card"><div class="stat-val" style="color:#cc5500">${tot}</div><div class="stat-lbl">Total</div></div>
-    <div class="stat-card"><div class="stat-val" style="color:#dd0060">${push}</div><div class="stat-lbl">Pecho</div></div>
-    <div class="stat-card"><div class="stat-val" style="color:#0066aa">${pull}</div><div class="stat-lbl">Espalda</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#e0a526">${push}</div><div class="stat-lbl">Pecho</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#dd0060">${pull}</div><div class="stat-lbl">Espalda</div></div>
     <div class="stat-card"><div class="stat-val" style="color:#6600bb">${legs}</div><div class="stat-lbl">Pierna</div></div>
     <div class="stat-card"><div class="stat-val" style="color:#00bcd4">${arms}</div><div class="stat-lbl">Brazos</div></div>
   </div>`;
@@ -2328,8 +2352,8 @@ function renderProgreso(){
     <div class="section-label">Sesiones por semana</div>
     <div class="chart-area" id="chWrap"></div>
     <div class="chart-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#dd0060"></div>Pecho</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#0066aa"></div>Espalda</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#e0a526"></div>Pecho</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#dd0060"></div>Espalda</div>
       <div class="legend-item"><div class="legend-dot" style="background:#6600bb"></div>Pierna</div>
       <div class="legend-item"><div class="legend-dot" style="background:#00bcd4"></div>Brazos</div>
     </div>
@@ -2385,7 +2409,7 @@ function renderChart(){
   weeks.forEach(w=>{
     const col=document.createElement('div'); col.className='chart-col';
     const bars=document.createElement('div'); bars.className='chart-bars';
-    [[w.push,'#dd0060'],[w.pull,'#0066aa'],[w.legs,'#6600bb'],[w.arms,'#00bcd4']].forEach(([v,c])=>{
+    [[w.push,'#e0a526'],[w.pull,'#dd0060'],[w.legs,'#6600bb'],[w.arms,'#00bcd4']].forEach(([v,c])=>{
       const b=document.createElement('div'); b.className='chart-bar';
       b.style.background=c; b.style.height=(v>0?Math.round((v/mx)*H):0)+'px';
       bars.appendChild(b);
