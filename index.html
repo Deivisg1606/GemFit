@@ -15,13 +15,23 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="GemFit">
 <meta name="theme-color" content="#0a0a0a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="GemFit — Entrenamiento, nutrición y progreso para Deivis y Yona">
+
+<!-- Ícono de la app (SVG inline, sin archivos extra) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230a0a0a'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ff8c42'/%3E%3Cstop offset='100%25' stop-color='%237733cc'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='700' fill='url(%23g)' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0a'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ff8c42'/%3E%3Cstop offset='100%25' stop-color='%237733cc'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='700' fill='url(%23g)' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E">
+
+<!-- PWA Manifest (inline data URI — un solo archivo, sin manifest.json externo) -->
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22GemFit%22%2C%22short_name%22%3A%22GemFit%22%2C%22start_url%22%3A%22.%2Findex.html%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230a0a0a%22%2C%22theme_color%22%3A%22%230a0a0a%22%2C%22orientation%22%3A%22portrait%22%7D">
+
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
   --bg:#0a0a0a;--card:#111111;--card2:#161616;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
   --text:#e8e8e8;--muted:#666;--muted2:#444;
-  --push:#cc5500;--pull:#2277cc;--legs:#7733cc;--done:#22aa66;--skip:#444;
+  --push:#cc5500;--pull:#2277cc;--legs:#7733cc;--arms:#00bcd4;--done:#22aa66;--skip:#444;
   --accent:#cc5500;--yona:#7733cc;
 }
 html{height:100%;}
@@ -493,7 +503,7 @@ const PROFS = {
 const SESSIONS = {
   // MARTES & SÁBADO — Hombros · Bíceps · Tríceps
   brazoA: {
-    id:'brazoA', lbl:'Brazos A', type:'push', emoji:'💪',
+    id:'brazoA', lbl:'Brazos A', type:'arms', emoji:'💪',
     title:'MARTES — Hombros · Bíceps · Tríceps',
     dur:'~90 min', focus:'Descansa 180s en compuestos pesados, 90s en aislamientos.',
     sections: [
@@ -653,7 +663,7 @@ const CHK_ITEMS = [
 // ═══════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════
-const TC = {push:'#dd0060',pull:'#0066aa',legs:'#6600bb',skip:'#c0a0b0',rest:'#c0a0b0'};
+const TC = {push:'#dd0060',pull:'#0066aa',legs:'#6600bb',arms:'#00bcd4',skip:'#c0a0b0',rest:'#c0a0b0'};
 const MONTHS = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
 const DAYS_ES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const MONTHS_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
@@ -1605,15 +1615,19 @@ function renderDayPanel(){
     const tc2=TC[sess.type]||'#888';
 
     // ── Cronómetro de descanso ──
-    h+=`<div id="restTimerBar" style="padding:8px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
-      <div style="flex:1;display:flex;align-items:center;gap:8px;">
+    h+=`<div id="restTimerBar" style="padding:8px 13px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:8px;">
         <span style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Descanso</span>
         <div id="restTimerDisplay" style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--muted);letter-spacing:.04em;line-height:1;">0:00</div>
         <div id="restTimerDot" style="width:6px;height:6px;border-radius:50%;background:var(--muted);flex-shrink:0;"></div>
       </div>
-      <div style="display:flex;gap:5px;">
-        <button id="restTimerBtn" onclick="startRestTimer()" style="padding:4px 10px;background:${p.color}18;border:1px solid ${p.color}40;border-radius:6px;color:${p.color};font-size:10px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">▶ Iniciar</button>
-        <button onclick="resetRestTimer()" style="padding:4px 8px;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--muted);font-size:10px;cursor:pointer;">↺</button>
+      <div style="display:flex;gap:4px;margin-left:auto;">
+        <button id="restTimer90" onclick="setRestTarget(90)" style="padding:3px 7px;background:var(--card2);border:1px solid var(--border2);border-radius:5px;color:var(--muted);font-size:9px;font-family:'DM Mono',monospace;cursor:pointer;">90s</button>
+        <button id="restTimer180" onclick="setRestTarget(180)" style="padding:3px 7px;background:${p.color}18;border:1px solid ${p.color}40;border-radius:5px;color:${p.color};font-size:9px;font-family:'DM Mono',monospace;cursor:pointer;">180s</button>
+      </div>
+      <div style="display:flex;gap:5px;width:100%;">
+        <button id="restTimerBtn" onclick="startRestTimer(_restTargetSeconds)" style="flex:1;padding:6px 10px;background:${p.color}18;border:1px solid ${p.color}40;border-radius:6px;color:${p.color};font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">▶ Iniciar</button>
+        <button onclick="resetRestTimer()" style="padding:6px 12px;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--muted);font-size:11px;cursor:pointer;">↺</button>
       </div>
     </div>`;
 
@@ -2048,13 +2062,14 @@ function deleteExtra(secKey, idx){
 }
 
 function renderStats(){
-  const data=gd(); let tot=0,push=0,pull=0,legs=0;
-  Object.values(data).forEach(d=>{if(!d.session||d.session==='skip')return;const s=SESSIONS[d.session];if(!s)return;tot++;if(s.type==='push')push++;else if(s.type==='pull')pull++;else if(s.type==='legs')legs++;});
-  return `<div class="stats-grid">
+  const data=gd(); let tot=0,push=0,pull=0,legs=0,arms=0;
+  Object.values(data).forEach(d=>{if(!d.session||d.session==='skip')return;const s=SESSIONS[d.session];if(!s)return;tot++;if(s.type==='push')push++;else if(s.type==='pull')pull++;else if(s.type==='legs')legs++;else if(s.type==='arms')arms++;});
+  return `<div class="stats-grid" style="grid-template-columns:repeat(5,1fr);">
     <div class="stat-card"><div class="stat-val" style="color:#cc5500">${tot}</div><div class="stat-lbl">Total</div></div>
-    <div class="stat-card"><div class="stat-val" style="color:#dd0060">${push}</div><div class="stat-lbl">Push</div></div>
-    <div class="stat-card"><div class="stat-val" style="color:#0066aa">${pull}</div><div class="stat-lbl">Pull</div></div>
-    <div class="stat-card"><div class="stat-val" style="color:#6600bb">${legs}</div><div class="stat-lbl">Legs</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#dd0060">${push}</div><div class="stat-lbl">Pecho</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#0066aa">${pull}</div><div class="stat-lbl">Espalda</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#6600bb">${legs}</div><div class="stat-lbl">Pierna</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:#00bcd4">${arms}</div><div class="stat-lbl">Brazos</div></div>
   </div>`;
 }
 
@@ -2313,9 +2328,10 @@ function renderProgreso(){
     <div class="section-label">Sesiones por semana</div>
     <div class="chart-area" id="chWrap"></div>
     <div class="chart-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#dd0060"></div>Push/Upper</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#0066aa"></div>Pull</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#6600bb"></div>Lower/Legs</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#dd0060"></div>Pecho</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#0066aa"></div>Espalda</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6600bb"></div>Pierna</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#00bcd4"></div>Brazos</div>
     </div>
   </div></div>
 
@@ -2360,16 +2376,16 @@ function renderChart(){
   const weeks=[];
   for(let w=7;w>=0;w--){
     const ws=new Date(NOW); ws.setDate(NOW.getDate()-NOW.getDay()-w*7+1);
-    let push=0,pull=0,legs=0;
-    for(let d2=0;d2<7;d2++){const dd2=new Date(ws);dd2.setDate(ws.getDate()+d2);const k=dk(dd2);const kd=data[k];if(!kd?.session||kd.session==='skip')continue;const t=SESSIONS[kd.session]?.type;if(t==='push')push++;else if(t==='pull')pull++;else if(t==='legs')legs++;}
-    weeks.push({lbl:`${ws.getDate()}/${ws.getMonth()+1}`,push,pull,legs});
+    let push=0,pull=0,legs=0,arms=0;
+    for(let d2=0;d2<7;d2++){const dd2=new Date(ws);dd2.setDate(ws.getDate()+d2);const k=dk(dd2);const kd=data[k];if(!kd?.session||kd.session==='skip')continue;const t=SESSIONS[kd.session]?.type;if(t==='push')push++;else if(t==='pull')pull++;else if(t==='legs')legs++;else if(t==='arms')arms++;}
+    weeks.push({lbl:`${ws.getDate()}/${ws.getMonth()+1}`,push,pull,legs,arms});
   }
-  const mx=Math.max(2,...weeks.flatMap(w=>[w.push,w.pull,w.legs]));
+  const mx=Math.max(2,...weeks.flatMap(w=>[w.push,w.pull,w.legs,w.arms]));
   const H=115;
   weeks.forEach(w=>{
     const col=document.createElement('div'); col.className='chart-col';
     const bars=document.createElement('div'); bars.className='chart-bars';
-    [[w.push,'#dd0060'],[w.pull,'#0066aa'],[w.legs,'#6600bb']].forEach(([v,c])=>{
+    [[w.push,'#dd0060'],[w.pull,'#0066aa'],[w.legs,'#6600bb'],[w.arms,'#00bcd4']].forEach(([v,c])=>{
       const b=document.createElement('div'); b.className='chart-bar';
       b.style.background=c; b.style.height=(v>0?Math.round((v/mx)*H):0)+'px';
       bars.appendChild(b);
@@ -2722,7 +2738,8 @@ function renderCalorias(){
         <div style="font-size:11px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;">${type}</div>
         <div style="display:flex;align-items:center;gap:8px;">
           ${typeKcal>0?`<span style="font-family:'DM Mono',monospace;font-size:11px;color:${p.color};">${typeKcal} kcal</span>`:''}
-          <button onclick="openFoodSearch('${type}')" style="padding:3px 9px;background:${p.color}18;border:1px solid ${p.color}40;border-radius:6px;color:${p.color};font-size:10px;cursor:pointer;font-weight:600;">+ Añadir</button>
+          <button onclick="openFreeTextFood('${type}')" style="padding:3px 9px;background:${p.color};border:none;border-radius:6px;color:#0a0a0a;font-size:10px;cursor:pointer;font-weight:700;">✨ Escribir</button>
+          <button onclick="openFoodSearch('${type}')" style="padding:3px 9px;background:${p.color}18;border:1px solid ${p.color}40;border-radius:6px;color:${p.color};font-size:10px;cursor:pointer;font-weight:600;">+ Buscar</button>
         </div>
       </div>
       ${items.length===0?`<div style="font-size:11px;color:var(--muted);padding:6px 0;">Sin alimentos registrados</div>`
@@ -3428,10 +3445,46 @@ function renderDieta(){
   let totKcal=0, totP=0, totC=0, totF=0;
   plan.comidas.forEach(c=>c.items.forEach(i=>{totKcal+=i.kcal;totP+=i.p;totC+=i.c;totF+=i.f;}));
 
+  // ── Déficit calórico real de hoy ──
+  const todayLog = (CALS[CP]||{})[SK] || {meals:[]};
+  const todayMeals = todayLog.meals || [];
+  const consumedKcal = todayMeals.reduce((a,m)=>a+(m.kcal||0),0);
+  const consumedP = todayMeals.reduce((a,m)=>a+(m.p||0),0);
+  const objetivoKcal = 1980;
+  const remainingKcal = objetivoKcal - consumedKcal;
+  const pctConsumed = Math.min(100, Math.round((consumedKcal/objetivoKcal)*100));
+  const deficitColor = remainingKcal>=0 ? '#4ade80' : '#ff6b35';
+
   let h = `<div class="inner">
   <div style="font-size:10px;color:${p.color};text-transform:uppercase;letter-spacing:.18em;margin-bottom:4px;">Plan Team David Marmol</div>
   <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;line-height:1;margin-bottom:2px;">DIETA <span style="color:${p.color}">🥗</span></div>
   <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">1980 kcal · P:160g · C:196g · G:62g · Peso en crudo</div>
+
+  <!-- Déficit calórico real -->
+  <div style="padding:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:16px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Déficit calórico — hoy</div>
+      <button onclick="goTab('calorias')" style="font-size:9px;color:${p.color};background:none;border:none;cursor:pointer;text-decoration:underline;">Ver detalle →</button>
+    </div>
+    <div style="display:flex;align-items:flex-end;gap:12px;margin-bottom:8px;">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:${p.color};line-height:1;">${consumedKcal}</div>
+        <div style="font-size:9px;color:var(--muted);">kcal consumidas hoy</div>
+      </div>
+      <div style="flex:1;text-align:right;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:${deficitColor};line-height:1;">${remainingKcal>=0?remainingKcal+' kcal':'+'+Math.abs(remainingKcal)+' kcal'}</div>
+        <div style="font-size:9px;color:var(--muted);">${remainingKcal>=0?'restantes para el mínimo':'por encima del objetivo'}</div>
+      </div>
+    </div>
+    <div style="height:6px;background:var(--border);border-radius:99px;overflow:hidden;">
+      <div style="height:100%;width:${pctConsumed}%;background:${deficitColor};border-radius:99px;transition:width .4s;"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:4px;">
+      <span style="font-size:9px;color:var(--muted2);">0 kcal</span>
+      <span style="font-size:9px;color:var(--muted2);">${objetivoKcal} kcal objetivo</span>
+    </div>
+    ${consumedP>0?`<div style="margin-top:8px;font-size:10px;color:var(--muted);">Proteína hoy: <strong style="color:#ff6b35;">${Math.round(consumedP)}g</strong> / 160g objetivo</div>`:''}
+  </div>
 
   <!-- Selector de día -->
   <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:16px;">`;
@@ -3670,30 +3723,100 @@ function renderDietaDay(dayKey){
 //   al resto de funciones.
 
 // ═══════════════════════════════════════════════════════════════
-// CRONÓMETRO DE DESCANSO
+// CRONÓMETRO DE DESCANSO — con notificación push a los 3 min
 // ═══════════════════════════════════════════════════════════════
 let _restInterval = null;
 let _restSeconds = 0;
 let _restRunning = false;
+let _restEndTimestamp = null; // absolute time when rest target is reached
+let _restTargetSeconds = 180; // default 3 min, can be overridden by exercise rest value
+let _notifPermissionAsked = false;
 
-function startRestTimer(){
+async function requestNotifPermission(){
+  if(!('Notification' in window)) return false;
+  if(Notification.permission === 'granted') return true;
+  if(Notification.permission === 'denied') return false;
+  if(_notifPermissionAsked) return Notification.permission === 'granted';
+  _notifPermissionAsked = true;
+  try{
+    const perm = await Notification.requestPermission();
+    return perm === 'granted';
+  }catch(e){ return false; }
+}
+
+function scheduleRestNotification(targetSeconds){
+  // Clear any pending notification timer
+  if(window._restNotifTimeout) clearTimeout(window._restNotifTimeout);
+  const msLeft = targetSeconds*1000;
+  window._restNotifTimeout = setTimeout(()=>{
+    fireRestNotification();
+  }, msLeft);
+}
+
+function fireRestNotification(){
+  const p2 = CP ? pr() : {color:'#cc5500'};
+  // Vibrate + sound if app is in foreground
+  if(navigator.vibrate) navigator.vibrate([200,100,200]);
+  playRestBeep();
+  // System notification (works even if screen is off / app backgrounded, while tab stays alive)
+  if('Notification' in window && Notification.permission === 'granted'){
+    try{
+      if(navigator.serviceWorker && navigator.serviceWorker.ready){
+        navigator.serviceWorker.ready.then(reg=>{
+          reg.showNotification('⏱ Descanso terminado', {
+            body: 'Hora de la siguiente serie 💪',
+            icon: '/icon-192.png',
+            badge: '/icon-192.png',
+            tag: 'gemfit-rest',
+            vibrate: [200,100,200],
+            requireInteraction: false,
+          });
+        }).catch(()=>{
+          new Notification('⏱ Descanso terminado', { body: 'Hora de la siguiente serie 💪' });
+        });
+      } else {
+        new Notification('⏱ Descanso terminado', { body: 'Hora de la siguiente serie 💪' });
+      }
+    }catch(e){ console.warn('Notification failed:', e); }
+  }
+}
+
+function playRestBeep(){
+  try{
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.4);
+    osc.start(); osc.stop(ctx.currentTime+0.4);
+  }catch(e){}
+}
+
+async function startRestTimer(targetSeconds){
   const btn = document.getElementById('restTimerBtn');
   const dot = document.getElementById('restTimerDot');
   const p2 = CP ? pr() : {color:'#cc5500'};
   if(_restRunning){
     // Pause
     clearInterval(_restInterval);
+    if(window._restNotifTimeout) clearTimeout(window._restNotifTimeout);
     _restRunning = false;
     if(dot) dot.style.background = 'var(--muted)';
     if(btn){ btn.textContent = '▶ Iniciar'; btn.style.background = p2.color+'18'; }
     return;
   }
+  // Ask for notification permission on first use (non-blocking)
+  requestNotifPermission();
   // Start — reset seconds and begin
   _restRunning = true;
   _restSeconds = 0;
+  _restTargetSeconds = targetSeconds || 180;
   if(dot){ dot.style.background = p2.color; }
   if(btn){ btn.textContent = '⏸ Pausar'; btn.style.background = p2.color+'30'; }
   clearInterval(_restInterval);
+  scheduleRestNotification(_restTargetSeconds);
   _restInterval = setInterval(()=>{
     _restSeconds++;
     const m = Math.floor(_restSeconds/60);
@@ -3701,15 +3824,22 @@ function startRestTimer(){
     const disp = document.getElementById('restTimerDisplay');
     if(disp){
       disp.textContent = m+':'+s;
-      if(_restSeconds >= 120) disp.style.color = '#ff6b35';
-      else if(_restSeconds >= 90) disp.style.color = '#facc15';
+      if(_restSeconds >= _restTargetSeconds) disp.style.color = '#4ade80';
+      else if(_restSeconds >= _restTargetSeconds*0.75) disp.style.color = '#facc15';
       else disp.style.color = p2.color;
+    }
+    if(_restSeconds >= _restTargetSeconds && _restSeconds === _restTargetSeconds){
+      // Visual fallback flash if notification permission wasn't granted
+      if(!('Notification' in window) || Notification.permission !== 'granted'){
+        fireRestNotification(); // still vibrates + beeps
+      }
     }
   }, 1000);
 }
 
 function resetRestTimer(){
   clearInterval(_restInterval);
+  if(window._restNotifTimeout) clearTimeout(window._restNotifTimeout);
   _restRunning = false;
   _restSeconds = 0;
   const disp = document.getElementById('restTimerDisplay');
@@ -3718,6 +3848,22 @@ function resetRestTimer(){
   if(disp){ disp.textContent = '0:00'; disp.style.color = 'var(--muted)'; }
   if(dot)  dot.style.background = 'var(--muted)';
   if(btn){ btn.textContent = '▶ Iniciar'; }
+}
+
+function setRestTarget(secs){
+  _restTargetSeconds = secs;
+  const p2 = CP ? pr() : {color:'#cc5500'};
+  const b90 = document.getElementById('restTimer90');
+  const b180 = document.getElementById('restTimer180');
+  if(b90 && b180){
+    if(secs===90){
+      b90.style.background=p2.color+'18'; b90.style.borderColor=p2.color+'40'; b90.style.color=p2.color;
+      b180.style.background='var(--card2)'; b180.style.borderColor='var(--border2)'; b180.style.color='var(--muted)';
+    } else {
+      b180.style.background=p2.color+'18'; b180.style.borderColor=p2.color+'40'; b180.style.color=p2.color;
+      b90.style.background='var(--card2)'; b90.style.borderColor='var(--border2)'; b90.style.color='var(--muted)';
+    }
+  }
 }
 
 
@@ -4036,6 +4182,129 @@ function closeProjection(){
   document.getElementById('projectionModal').style.display = 'none';
 }
 
+
+// ═══════════════════════════════════════════════════════════════
+// SERVICE WORKER — notificaciones push + offline básico
+// ═══════════════════════════════════════════════════════════════
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('./sw.js').then(reg=>{
+      console.log('Service Worker registrado:', reg.scope);
+    }).catch(err=>{
+      console.warn('Service Worker no pudo registrarse:', err);
+    });
+  });
+}
+
+
+// ═══════════════════════════════════════════════════════════════
+// REGISTRO DE COMIDA POR TEXTO LIBRE + IA (Claude Haiku)
+// ⚠️ PENDIENTE: pega tu API key de Anthropic en ANTHROPIC_API_KEY
+// Consíguela en console.anthropic.com → API Keys
+// ═══════════════════════════════════════════════════════════════
+const ANTHROPIC_API_KEY = ''; // ← PEGA TU KEY AQUÍ (sk-ant-...)
+const ANTHROPIC_MODEL = 'claude-haiku-4-5-20251001';
+
+function openFreeTextFood(mealType){
+  _currentMealType = mealType;
+  document.getElementById('foodModal').style.display = 'none'; // close search modal if open
+  const modal = document.getElementById('freeTextFoodModal');
+  document.getElementById('freeTextFoodInput').value = '';
+  document.getElementById('freeTextFoodResult').innerHTML = '';
+  document.getElementById('freeTextMealLabel').textContent = mealType;
+  modal.style.display = 'flex';
+  setTimeout(()=>document.getElementById('freeTextFoodInput').focus(), 100);
+}
+
+function closeFreeTextFood(){
+  document.getElementById('freeTextFoodModal').style.display = 'none';
+}
+
+async function analyzeFreeTextFood(){
+  const input = document.getElementById('freeTextFoodInput').value.trim();
+  const resultEl = document.getElementById('freeTextFoodResult');
+  if(!input){
+    resultEl.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:12px;padding:16px;">Escribe lo que comiste, ej: "200g de arroz cocido y una pechuga de pollo de 150g"</div>`;
+    return;
+  }
+  if(!ANTHROPIC_API_KEY){
+    resultEl.innerHTML = `<div style="text-align:center;color:#ff6b35;font-size:12px;padding:16px;line-height:1.6;">⚠️ Falta configurar la API key de Anthropic en el código.<br><br>Mientras tanto usa el buscador de alimentos normal.</div>`;
+    return;
+  }
+
+  resultEl.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:12px;padding:16px;">⏳ Calculando...</div>`;
+
+  try{
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: ANTHROPIC_MODEL,
+        max_tokens: 500,
+        system: `Eres un asistente nutricional. El usuario describe alimentos que comió, con cantidades en gramos COCIDOS (ya preparados). Devuelve SOLO un JSON válido, sin texto adicional, sin markdown, con este formato exacto:
+{"items":[{"name":"nombre del alimento","grams":150,"kcal":250,"protein":30,"carbs":0,"fat":12}]}
+Usa valores nutricionales realistas por la cantidad indicada (no por 100g, sino ya calculado para los gramos mencionados). Si menciona varios alimentos, incluye uno por cada item en el array. Sé preciso con alimentos comunes españoles/latinos.`,
+        messages: [{ role: 'user', content: input }]
+      })
+    });
+
+    if(!res.ok){
+      const errText = await res.text();
+      throw new Error('API error: '+res.status+' '+errText.slice(0,200));
+    }
+
+    const data = await res.json();
+    const textBlock = data.content.find(c=>c.type==='text');
+    if(!textBlock) throw new Error('Respuesta sin texto');
+
+    let parsed;
+    try{
+      const clean = textBlock.text.replace(/```json|```/g,'').trim();
+      parsed = JSON.parse(clean);
+    }catch(e){
+      throw new Error('No se pudo interpretar la respuesta');
+    }
+
+    if(!parsed.items || !parsed.items.length) throw new Error('Sin alimentos detectados');
+
+    window._pendingFreeTextItems = parsed.items;
+    const totKcal = parsed.items.reduce((a,i)=>a+(i.kcal||0),0);
+    const p2 = pr();
+
+    resultEl.innerHTML = `
+      <div style="margin-bottom:10px;">
+        ${parsed.items.map((item,i)=>`
+        <div style="padding:9px 12px;background:var(--card2);border-radius:8px;border:1px solid var(--border);margin-bottom:5px;">
+          <div style="font-size:12px;font-weight:500;">${item.name} <span style="color:var(--muted);font-weight:400;">· ${item.grams}g</span></div>
+          <div style="font-size:10px;color:var(--muted);margin-top:2px;">P:${item.protein}g · C:${item.carbs}g · G:${item.fat}g</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;color:${p2.color};margin-top:2px;">${item.kcal} kcal</div>
+        </div>`).join('')}
+      </div>
+      <div style="text-align:center;padding:8px;background:${p2.color}15;border-radius:8px;margin-bottom:10px;">
+        <span style="font-size:11px;color:var(--muted);">Total: </span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:${p2.color};">${totKcal} kcal</span>
+      </div>
+      <button onclick="confirmFreeTextFood()" style="width:100%;padding:11px;background:${p2.color};border:none;border-radius:10px;color:#0a0a0a;font-weight:700;font-size:13px;cursor:pointer;">Añadir al registro</button>
+    `;
+  }catch(e){
+    console.warn('AI food analysis error:', e);
+    resultEl.innerHTML = `<div style="text-align:center;color:#ff6b35;font-size:12px;padding:16px;line-height:1.6;">⚠️ No se pudo calcular: ${e.message}<br><br>Intenta de nuevo o usa el buscador normal.</div>`;
+  }
+}
+
+function confirmFreeTextFood(){
+  const items = window._pendingFreeTextItems || [];
+  items.forEach(item=>{
+    addFoodItem(item.name, item.kcal, item.protein, item.carbs, item.fat);
+  });
+  closeFreeTextFood();
+}
+
 </script>
 
 <!-- ═══════════════ EXERCISE PICKER MODAL ═══════════════ -->
@@ -4216,6 +4485,24 @@ function closeProjection(){
     </div>
   </div>
   <div id="projectionContent" style="flex:1;overflow-y:auto;padding:16px;"></div>
+</div>
+
+
+<!-- ═══════════════ ESCRIBIR COMIDA (IA) MODAL ═══════════════ -->
+<div id="freeTextFoodModal" style="display:none;position:fixed;inset:0;z-index:2100;background:rgba(0,0,0,.93);backdrop-filter:blur(8px);flex-direction:column;">
+  <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;">
+    <button onclick="closeFreeTextFood()" style="background:none;border:1px solid #333;border-radius:7px;color:#888;font-size:12px;padding:4px 10px;cursor:pointer;">‹ Atrás</button>
+    <div style="flex:1;">
+      <div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:.1em;">✨ Escribir comida — <span id="freeTextMealLabel">Comida</span></div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.04em;color:#e8e8e8;">Describe lo que comiste</div>
+    </div>
+  </div>
+  <div style="padding:16px;flex-shrink:0;">
+    <div style="font-size:11px;color:#666;line-height:1.6;margin-bottom:10px;">Escribe los alimentos con su peso en gramos <strong style="color:#999;">ya cocidos</strong>. Ej: "200g de arroz, 150g de pechuga de pollo a la plancha"</div>
+    <textarea id="freeTextFoodInput" placeholder="Ej: 200g de arroz cocido y una pechuga de pollo de 150g..." style="width:100%;min-height:80px;background:#161616;border:1px solid #2a2a2a;border-radius:10px;color:#e8e8e8;font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;resize:none;line-height:1.5;"></textarea>
+    <button onclick="analyzeFreeTextFood()" style="width:100%;margin-top:10px;padding:11px;background:#cc5500;border:none;border-radius:10px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;">✨ Calcular calorías</button>
+  </div>
+  <div id="freeTextFoodResult" style="flex:1;overflow-y:auto;padding:0 16px 16px;"></div>
 </div>
 
 </body>
