@@ -18,18 +18,20 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="description" content="GemFit — Entrenamiento, nutrición y progreso para Deivis y Yona">
 
+<!-- Ícono de la app (SVG inline, sin archivos extra) -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230a0a0a'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ff8c42'/%3E%3Cstop offset='100%25' stop-color='%237733cc'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='700' fill='url(%23g)' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0a'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23ff8c42'/%3E%3Cstop offset='100%25' stop-color='%237733cc'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ctext x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='700' fill='url(%23g)' text-anchor='middle'%3EG%3C/text%3E%3C/svg%3E">
 
+<!-- PWA Manifest (inline data URI — un solo archivo, sin manifest.json externo) -->
 <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22GemFit%22%2C%22short_name%22%3A%22GemFit%22%2C%22start_url%22%3A%22.%2Findex.html%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230a0a0a%22%2C%22theme_color%22%3A%22%230a0a0a%22%2C%22orientation%22%3A%22portrait%22%7D">
 
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --bg:#0a0a0a;--card:#121212;--card2:#1a1a1a;--border:rgba(255,255,255,0.12);--border2:rgba(255,255,255,0.22);
-  --text:#f0f0f0;--muted:#b0b0b0;--muted2:#888888;
-  --push:#e0a526;--pull:#dd0060;--legs:#7733cc;--arms:#00bcd4;--done:#22aa66;--skip:#666;
+  --bg:#0a0a0a;--card:#111111;--card2:#161616;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --text:#e8e8e8;--muted:#666;--muted2:#444;
+  --push:#e0a526;--pull:#dd0060;--legs:#7733cc;--arms:#00bcd4;--done:#22aa66;--skip:#444;
   --accent:#cc5500;--yona:#7733cc;
 }
 html{height:100%;}
@@ -50,7 +52,7 @@ body{
 .gem-title{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:.15em;
   background:linear-gradient(135deg,#ff8c42,#c0006e,#7209b7);-webkit-background-clip:text;
   -webkit-text-fill-color:transparent;background-clip:text;}
-.gem-sub{font-size:11px;color:#a0a0a0;letter-spacing:.15em;text-transform:uppercase;font-weight:600;}
+.gem-sub{font-size:11px;color:#5a6a7a;letter-spacing:.15em;text-transform:uppercase;}
 .prof-cards{display:flex;gap:12px;width:100%;max-width:340px;}
 .pcard{flex:1;padding:20px 14px;border-radius:16px;border:1px solid var(--border);
   background:var(--card);cursor:pointer;text-align:center;transition:all .2s;}
@@ -63,14 +65,14 @@ body{
 
 /* ── TOPBAR ── */
 .topbar{
-  display:flex;align-items:center;gap:10px;padding:12px 16px;
-  background:rgba(10,10,10,0.97);border-bottom:1px solid rgba(255,255,255,0.12);
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  background:rgba(10,10,10,0.97);border-bottom:1px solid rgba(255,255,255,0.06);
   flex-shrink:0;z-index:10;
 }
-.tlogo{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;
-  justify-content:center;cursor:pointer;font-size:15px;border:1.5px solid;flex-shrink:0;}
-.tname{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:.08em;flex:1;}
-.tright{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}
+.tlogo{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;cursor:pointer;font-size:14px;border:1px solid;flex-shrink:0;}
+.tname{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:.08em;flex:1;}
+.tright{font-size:10px;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;}
 
 /* ── MAIN CONTENT AREA ── */
 .main-area{flex:1;overflow:hidden;position:relative;}
@@ -81,28 +83,28 @@ body{
   -webkit-overflow-scrolling:touch;
 }
 .tab.active{display:block;}
-.tab::-webkit-scrollbar{width:4px;}
+.tab::-webkit-scrollbar{width:3px;}
 .tab::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-.inner{padding:14px 14px 85px;max-width:900px;margin:0 auto;}
+.inner{padding:14px 14px 80px;max-width:900px;margin:0 auto;}
 
 /* ── BOTTOM NAV ── */
 .bnav{
   flex-shrink:0;
-  background:rgba(10,10,10,0.97);border-top:1px solid rgba(255,255,255,0.12);
-  display:none;height:64px;z-index:10;
+  background:rgba(10,10,10,0.97);border-top:1px solid rgba(255,255,255,0.06);
+  display:none;height:62px;z-index:10;
 }
 .bnav.on{display:flex;}
 .nbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:3px;border:none;background:none;cursor:pointer;color:var(--muted);
-  font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;transition:color .2s;padding:0;}
+  font-size:9px;letter-spacing:.06em;text-transform:uppercase;transition:color .2s;padding:0;}
 .nbtn.active{color:var(--accent);}
-.nbtn-icon{font-size:18px;line-height:1;transition:transform .2s;}
+.nbtn-icon{font-size:16px;line-height:1;transition:transform .2s;}
 .nbtn.active .nbtn-icon{transform:translateY(-2px);}
 
 /* ── SHARED ── */
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:14px;}
-.card-body{padding:16px;}
-.section-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-bottom:10px;font-weight:600;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;}
+.card-body{padding:14px 16px;}
+.section-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-bottom:10px;}
 .h1{font-family:'Bebas Neue',sans-serif;letter-spacing:.02em;line-height:.9;}
 .mono{font-family:'DM Mono',monospace;}
 .bebas{font-family:'Bebas Neue',sans-serif;}
@@ -110,38 +112,37 @@ body{
 /* ── PLAN TAB ── */
 .week-pills{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:16px;}
 .wpill{padding:6px 2px;border-radius:8px;text-align:center;border:1px solid var(--border);}
-.wpill-day{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;font-weight:600;}
+.wpill-day{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
 .wpill-type{font-family:'Bebas Neue',sans-serif;font-size:11px;}
-.day-block{margin-bottom:16px;}
-.day-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px 12px 0 0;border:1px solid;border-bottom:none;}
-.day-badge{font-size:10px;text-transform:uppercase;letter-spacing:.1em;padding:3px 8px;border-radius:4px;font-weight:700;}
-.day-title{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:.04em;flex:1;}
-.day-dur{font-size:11px;color:var(--muted);font-weight:500;}
-.ex-table{border:1px solid var(--border);border-radius:0 0 12px 12px;overflow:hidden;}
-.ex-section{padding:6px 14px;background:rgba(255,255,255,.03);font-size:10px;
-  color:var(--muted);text-transform:uppercase;letter-spacing:.12em;border-bottom:1px solid var(--border);font-weight:700;}
-.ex-row{display:grid;grid-template-columns:24px 1fr auto;gap:10px;align-items:start;
-  padding:12px 14px;border-bottom:1px solid var(--border);}
+.day-block{margin-bottom:14px;}
+.day-hdr{display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:10px 10px 0 0;border:1px solid;border-bottom:none;}
+.day-badge{font-size:9px;text-transform:uppercase;letter-spacing:.1em;padding:2px 7px;border-radius:3px;font-weight:600;}
+.day-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.04em;flex:1;}
+.day-dur{font-size:10px;color:var(--muted);}
+.ex-table{border:1px solid var(--border);border-radius:0 0 10px 10px;overflow:hidden;}
+.ex-section{padding:4px 13px;background:rgba(255,255,255,.025);font-size:9px;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.12em;border-bottom:1px solid var(--border);}
+.ex-row{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:start;
+  padding:8px 13px;border-bottom:1px solid var(--border);}
 .ex-row:last-child{border-bottom:none;}
 .ex-row.cardio-row{background:rgba(200,241,53,.04);}
-.ex-row.star-row{border-left:3px solid gold;background:rgba(255,215,0,0.03);}
-.ex-row.rec-row{border-left:3px solid #00bcd4;background:rgba(0,188,212,0.05);}
-.ex-num{font-size:11px;color:var(--muted);padding-top:2px;font-weight:600;}
-.ex-name{font-size:14px;font-weight:700;line-height:1.3;color:#ffffff;}
-.ex-note{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4;}
-.ex-why{font-size:11px;color:#ff8c33;margin-top:3px;font-style:italic;}
-.ex-sets{font-family:'DM Mono',monospace;font-size:11px;white-space:nowrap;padding-top:2px;color:var(--accent);font-weight:600;}
+.ex-row.star-row{border-left:2px solid gold;}
+.ex-num{font-size:10px;color:var(--muted);padding-top:2px;}
+.ex-name{font-size:12px;font-weight:500;line-height:1.3;}
+.ex-note{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.4;}
+.ex-why{font-size:10px;color:#cc5500;margin-top:2px;font-style:italic;}
+.ex-sets{font-family:'DM Mono',monospace;font-size:10px;white-space:nowrap;padding-top:2px;}
 
-/* Tabla de Series Piramidales / Cargas */
-.series-table{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
-.series-row{display:grid;grid-template-columns:35px 1fr 1fr;gap:8px;align-items:center;}
-.series-lbl{font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--muted);}
-.inp-serie{
-  background:var(--card2);border:1px solid var(--border2);border-radius:8px;
-  color:#ffffff;font-family:'DM Mono',monospace;font-size:13px;font-weight:600;
-  padding:8px;outline:none;width:100%;text-align:center;
-}
-.inp-serie:focus{border-color:var(--accent);}
+/* ── VOLUME TABLE ── */
+.vol-grid{display:grid;grid-template-columns:1fr auto auto auto;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.vol-hdr{background:rgba(255,255,255,.04);padding:7px 10px;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid var(--border);}
+.vol-cell{padding:8px 10px;border-bottom:1px solid var(--border);font-size:12px;}
+.vol-cell:nth-last-child(-n+4){border-bottom:none;}
+.vol-muscle{font-weight:500;}
+.vol-bar-wrap{display:flex;align-items:center;gap:6px;padding:8px 10px;border-bottom:1px solid var(--border);}
+.vol-bar-wrap:nth-last-child(-n+4){border-bottom:none;}
+.vol-bar-bg{flex:1;height:4px;background:var(--border);border-radius:99px;overflow:hidden;}
+.vol-bar-fill{height:100%;border-radius:99px;}
 
 /* ── TRACKER TAB ── */
 .month-nav{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 6px;}
@@ -172,6 +173,21 @@ body{
 .prog-fill{height:100%;border-radius:99px;transition:width .3s;}
 .prog-txt{font-size:10px;color:var(--muted);white-space:nowrap;}
 .prog-pct{font-family:'Bebas Neue',sans-serif;font-size:13px;min-width:34px;text-align:right;}
+.t-section{padding:4px 13px;background:rgba(255,255,255,.02);font-size:9px;
+  color:var(--muted);text-transform:uppercase;letter-spacing:.12em;border-bottom:1px solid var(--border);}
+.t-ex{display:flex;align-items:flex-start;gap:9px;padding:8px 13px;
+  border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;user-select:none;}
+.t-ex:last-child{border-bottom:none;}
+.t-ex:hover{background:rgba(255,255,255,.02);}
+.t-ex.done{opacity:.42;}
+.t-ex.cardio{background:rgba(200,241,53,.03);}
+.chkbox{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);
+  background:var(--card2);display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:2px;transition:all .12s;}
+.chkbox.on{background:#007a40;border-color:#007a40;}
+.t-ex-name{font-size:12px;font-weight:500;line-height:1.3;}
+.t-ex-note{font-size:10px;color:var(--muted);margin-top:2px;}
+.t-ex-sets{font-family:'DM Mono',monospace;font-size:10px;white-space:nowrap;padding-top:2px;flex-shrink:0;}
 .notes-wrap{padding:11px 13px;border-top:1px solid var(--border);}
 .notes-ta{width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:8px;
   color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;
@@ -215,6 +231,29 @@ body{
 .macro-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:2px;}
 .macro-s{font-size:10px;color:var(--muted);margin-top:2px;}
 
+/* ── PROGRESO TAB ── */
+.streak-wrap{display:flex;align-items:center;gap:14px;padding:13px 15px;}
+.streak-num{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;line-height:1;}
+.w-input-row{display:flex;gap:8px;margin-bottom:10px;}
+.w-inp{flex:1;background:var(--card2);border:1px solid var(--border2);border-radius:8px;
+  color:var(--text);font-size:13px;padding:7px 10px;}
+.w-inp:focus{outline:none;border-color:var(--accent);}
+.w-add-btn{padding:7px 14px;background:#cc5500;color:#ffffff;border:none;
+  border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:.06em;cursor:pointer;}
+.w-entry{display:flex;justify-content:space-between;align-items:center;
+  padding:7px 10px;background:var(--card2);border-radius:7px;border:1px solid var(--border);margin-bottom:4px;}
+.w-date{font-size:11px;color:var(--muted);}
+.w-val{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;}
+.w-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:2px 4px;}
+.chart-area{height:140px;display:flex;align-items:flex-end;gap:3px;padding-bottom:20px;position:relative;}
+.chart-col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;position:relative;}
+.chart-bars{display:flex;gap:1px;align-items:flex-end;width:100%;justify-content:center;}
+.chart-bar{width:30%;border-radius:2px 2px 0 0;min-height:0;transition:height .3s;}
+.chart-label{position:absolute;bottom:0;font-size:8px;color:var(--muted);text-align:center;line-height:1;white-space:nowrap;}
+.chart-legend{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);}
+.legend-dot{width:7px;height:7px;border-radius:50%;}
+
 /* ── SUPLEMENTOS TAB ── */
 .sup-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
 .sup-tab{padding:5px 12px;border-radius:7px;border:1px solid var(--border2);
@@ -230,73 +269,227 @@ body{
 .sup-why{font-size:11px;color:var(--muted);line-height:1.6;background:var(--card2);
   border-radius:7px;padding:8px 10px;border-left:2px solid;}
 .sup-tag{font-size:10px;padding:2px 7px;border-radius:5px;margin-right:4px;margin-bottom:5px;display:inline-block;}
+.tl-row{display:grid;grid-template-columns:90px 1fr;border-bottom:1px solid var(--border);}
+.tl-row:last-child{border-bottom:none;}
+.tl-time{padding:12px 10px 12px 0;font-size:11px;font-weight:500;color:var(--muted);padding-top:14px;}
+.tl-items{padding:8px 0;display:flex;flex-direction:column;gap:5px;}
+.tl-item{display:flex;align-items:center;gap:7px;padding:5px 9px;border-radius:7px;background:var(--card2);}
+.tl-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.tl-name{font-size:12px;flex:1;}
+.tl-dose{font-size:10px;color:var(--muted);white-space:nowrap;}
+.chk-item{display:flex;align-items:center;gap:9px;padding:8px 11px;background:var(--card);
+  border:1px solid var(--border);border-radius:99px;cursor:pointer;margin-bottom:6px;}
+.chk-box{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--border2);
+  background:var(--card2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.chk-box.on{background:#007a40;border-color:#007a40;}
+.chk-name{font-size:12px;font-weight:500;flex:1;}
+.chk-sub{font-size:10px;color:var(--muted);}
+.chk-badge{font-size:10px;padding:2px 7px;border-radius:5px;white-space:nowrap;}
+.prog-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.prog-bar-bg{flex:1;height:5px;background:var(--border);border-radius:99px;overflow:hidden;}
+.prog-bar-fill{height:100%;border-radius:99px;background:var(--done);transition:width .3s;}
+.prog-bar-lbl{font-size:11px;color:var(--muted);white-space:nowrap;}
 </style>
 </head>
 <body>
 
+<!-- ═══════════════ PROFILE SCREEN ═══════════════ -->
 <input type="file" id="iosPhotoInput" accept="image/*" style="display:none">
 <div id="s-profiles" class="screen active">
+  <!-- Logo -->
   <div style="text-align:center;padding:40px 24px 28px;">
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:3rem;letter-spacing:.2em;color:#e8e8e8;">GEMFIT ♊</div>
-    <div style="font-size:11px;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin-top:2px;font-weight:600;">¿Quién entrena hoy?</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:.2em;color:#e8e8e8;">GEMFIT</div>
+    <div style="font-size:10px;color:#333;letter-spacing:.2em;text-transform:uppercase;margin-top:2px;">¿Quién entrena hoy?</div>
   </div>
 
-  <div style="display:flex;flex-direction:column;gap:12px;padding:0 20px 40px;width:100%;max-width:420px;margin:0 auto;">
-    <div onclick="selectProfile('deivis')" style="background:#121212;border:1px solid #2a2a2a;border-radius:16px;overflow:hidden;cursor:pointer;">
-      <div style="height:4px;background:#cc5500;"></div>
+  <!-- Cards -->
+  <div style="display:flex;flex-direction:column;gap:10px;padding:0 20px 40px;width:100%;max-width:420px;margin:0 auto;">
+
+    <!-- DEIVIS -->
+    <div onclick="selectProfile('deivis')" style="
+      background:#111;border:0.5px solid #1e1e1e;border-radius:16px;
+      overflow:hidden;cursor:pointer;transition:border-color .2s;"
+      onmouseover="this.style.borderColor='#cc5500'" onmouseout="this.style.borderColor='#1e1e1e'">
+      <div style="height:3px;background:#cc5500;"></div>
       <div style="padding:18px 16px;display:flex;align-items:center;gap:14px;">
-        <div style="width:64px;height:64px;border-radius:50%;background:#1a1a1a;border:2px solid #cc5500;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#cc5500;">D</div>
-        <div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:#e8e8e8;">DEIVIS</div>
-          <div style="font-size:11px;color:var(--muted);">33 años · 88kg · Géminis ♊</div>
+        <div id="pav-deivis" onclick="event.stopPropagation();avatarTap('deivis')"
+          style="width:64px;height:64px;border-radius:50%;background:#1a1a1a;border:1.5px solid #2a2a2a;
+          display:flex;align-items:center;justify-content:center;
+          font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#cc5500;
+          cursor:pointer;overflow:hidden;position:relative;flex-shrink:0;">
+          <span id="pav-txt-deivis">D</span>
+          <img id="pav-img-deivis" src="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%;">
+          <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);font-size:8px;color:#fff;text-align:center;padding:2px 0;">📷</div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;color:#e8e8e8;line-height:1;">DEIVIS</div>
+          <div style="font-size:10px;color:#444;margin-top:2px;margin-bottom:10px;">33 años · 88kg · Géminis ♊</div>
+          <div style="display:flex;gap:6px;">
+            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#cc5500;" id="dp-streak-deivis-val">0</div>
+              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">Racha</div>
+            </div>
+            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#e8e8e8;" id="dp-sess-deivis-val">0/6</div>
+              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">Semana</div>
+            </div>
+            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#e8e8e8;" id="dp-kg-deivis-val">88</div>
+              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">kg</div>
+            </div>
+          </div>
+          <div style="margin-top:8px;">
+            <div style="height:2px;background:#1a1a1a;border-radius:99px;overflow:hidden;">
+              <div id="dp-bar-deivis" style="height:100%;background:#cc5500;border-radius:99px;width:0%;transition:width .6s;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px;">
+              <span style="font-size:8px;color:#333;">Semana actual</span>
+              <span id="dp-pct-deivis" style="font-size:8px;color:#cc5500;font-weight:600;">0%</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div onclick="selectProfile('yona')" style="background:#121212;border:1px solid #2a2a2a;border-radius:16px;overflow:hidden;cursor:pointer;">
-      <div style="height:4px;background:#7733cc;"></div>
+
+    <!-- YONA -->
+    <div onclick="selectProfile('yona')" style="
+      background:#111;border:0.5px solid #1e1e1e;border-radius:16px;
+      overflow:hidden;cursor:pointer;transition:border-color .2s;"
+      onmouseover="this.style.borderColor='#7733cc'" onmouseout="this.style.borderColor='#1e1e1e'">
+      <div style="height:3px;background:#7733cc;"></div>
       <div style="padding:18px 16px;display:flex;align-items:center;gap:14px;">
-        <div style="width:64px;height:64px;border-radius:50%;background:#1a1a1a;border:2px solid #7733cc;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#7733cc;">Y</div>
-        <div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:#e8e8e8;">YONA</div>
-          <div style="font-size:11px;color:var(--muted);">29 años · 88kg · Géminis ♊</div>
+        <div id="pav-yona" onclick="event.stopPropagation();avatarTap('yona')"
+          style="width:64px;height:64px;border-radius:50%;background:#1a1a1a;border:1.5px solid #2a2a2a;
+          display:flex;align-items:center;justify-content:center;
+          font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#7733cc;
+          cursor:pointer;overflow:hidden;position:relative;flex-shrink:0;">
+          <span id="pav-txt-yona">Y</span>
+          <img id="pav-img-yona" src="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%;">
+          <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);font-size:8px;color:#fff;text-align:center;padding:2px 0;">📷</div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;color:#e8e8e8;line-height:1;">YONA</div>
+          <div style="font-size:10px;color:#444;margin-top:2px;margin-bottom:10px;">29 años · 88kg · Géminis ♊</div>
+          <div style="display:flex;gap:6px;">
+            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#7733cc;" id="dp-streak-yona-val">0</div>
+              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">Racha</div>
+            </div>
+            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#e8e8e8;" id="dp-sess-yona-val">0/6</div>
+              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">Semana</div>
+            </div>
+            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
+              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#e8e8e8;" id="dp-kg-yona-val">88</div>
+              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">kg</div>
+            </div>
+          </div>
+          <div style="margin-top:8px;">
+            <div style="height:2px;background:#1a1a1a;border-radius:99px;overflow:hidden;">
+              <div id="dp-bar-yona" style="height:100%;background:#7733cc;border-radius:99px;width:0%;transition:width .6s;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:3px;">
+              <span style="font-size:8px;color:#333;">Semana actual</span>
+              <span id="dp-pct-yona" style="font-size:8px;color:#7733cc;font-weight:600;">0%</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 </div>
 
+<!-- ═══════════════ MAIN APP ═══════════════ -->
 <div id="s-main" class="screen">
-  <div class="topbar">
+  <div class="topbar" style="position:relative;">
     <div class="tlogo" id="tLogo" onclick="goProfiles()">♊</div>
     <div style="flex:1;cursor:pointer;" onclick="goProfiles()">
-      <div class="tname" id="tName">GEMFIT</div>
-      <div id="tStreak" style="font-size:10px;color:var(--muted);font-weight:500;">🔥 Fase 2 Pro Activa</div>
+      <div class="tname" id="tName" style="line-height:1.1;">GEMFIT</div>
+      <div id="tStreak" style="font-size:9px;color:var(--muted);margin-top:1px;">🔥 0 días de racha</div>
     </div>
-    <div class="tright" id="tRight">FASE 2</div>
+    <div style="display:flex;align-items:center;gap:6px;cursor:pointer;" onclick="goProfiles()">
+      <span style="font-size:10px;color:var(--muted);">⇄ cambiar</span>
+    </div>
+    <div class="tright" id="tRight" style="display:none;">PLAN</div>
+
+    <!-- Quick profile switcher dropdown -->
+    <div id="profileSwitcher" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:200;background:#111;border:1px solid rgba(255,255,255,.1);border-radius:0 0 12px 12px;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,.4);">
+      <div onclick="switchToProfile('deivis')" style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.06);">
+        <div id="sw-av-deivis" style="width:32px;height:32px;border-radius:50%;background:#1a1a1a;border:1.5px solid #cc550040;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:#cc5500;overflow:hidden;flex-shrink:0;">D</div>
+        <div style="flex:1;">
+          <div style="font-size:12px;font-weight:600;color:#e8e8e8;">Deivis</div>
+        </div>
+        <span id="sw-check-deivis" style="font-size:12px;color:#cc5500;"></span>
+      </div>
+      <div onclick="switchToProfile('yona')" style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;">
+        <div id="sw-av-yona" style="width:32px;height:32px;border-radius:50%;background:#1a1a1a;border:1.5px solid #7733cc40;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:#7733cc;overflow:hidden;flex-shrink:0;">Y</div>
+        <div style="flex:1;">
+          <div style="font-size:12px;font-weight:600;color:#e8e8e8;">Yona</div>
+        </div>
+        <span id="sw-check-yona" style="font-size:12px;color:#7733cc;"></span>
+      </div>
+    </div>
   </div>
 
   <div class="main-area">
-    <div id="tab-plan" class="tab active"></div>
-    <div id="tab-tracker" class="tab"></div>
-    <div id="tab-dieta" class="tab"></div>
+    <div id="tab-plan"        class="tab active"></div>
+    <div id="tab-tracker"     class="tab"></div>
+    <div id="tab-volumen"     class="tab"></div>
+    <div id="tab-perfil"      class="tab"></div>
+    <div id="tab-progreso"    class="tab"></div>
+    <div id="tab-fotos" class="tab"></div>
     <div id="tab-calorias" class="tab"></div>
     <div id="tab-suplementos" class="tab"></div>
-    <div id="tab-perfil" class="tab"></div>
+    <div id="tab-dieta" class="tab"></div>
+  </div>
+
+  <!-- More menu overlay -->
+  <div id="moreMenu" style="display:none;position:fixed;inset:0;z-index:500;" onclick="closeMoreMenu()">
+    <div onclick="event.stopPropagation()" style="
+      position:absolute;bottom:62px;left:0;right:0;
+      background:#111;border-top:1px solid rgba(255,255,255,.08);
+      border-radius:16px 16px 0 0;
+      padding:6px 0 10px;">
+      <div style="width:34px;height:3px;background:#333;border-radius:99px;margin:8px auto 4px;"></div>
+      <button id="nb-volumen" onclick="closeMoreMenu();goTab('volumen')" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 18px;background:none;border:none;cursor:pointer;text-align:left;">
+        <span style="font-size:18px;">📊</span>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Volumen semanal</div><div style="font-size:10px;color:var(--muted);">Series por músculo, MEV/MRV</div></div>
+      </button>
+      <button id="nb-progreso" onclick="closeMoreMenu();goTab('progreso')" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 18px;background:none;border:none;cursor:pointer;text-align:left;">
+        <span style="font-size:18px;">📈</span>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Progreso</div><div style="font-size:10px;color:var(--muted);">Peso corporal, racha, proyección</div></div>
+      </button>
+      <button id="nb-fotos" onclick="closeMoreMenu();goTab('fotos')" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 18px;background:none;border:none;cursor:pointer;text-align:left;">
+        <span style="font-size:18px;">📸</span>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Fotos de progreso</div><div style="font-size:10px;color:var(--muted);">Comparador antes/después</div></div>
+      </button>
+      <button id="nb-suplementos" onclick="closeMoreMenu();goTab('suplementos')" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 18px;background:none;border:none;cursor:pointer;text-align:left;">
+        <span style="font-size:18px;">💊</span>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Suplementos</div><div style="font-size:10px;color:var(--muted);">Stack, horario, checklist diario</div></div>
+      </button>
+      <button id="nb-perfil" onclick="closeMoreMenu();goTab('perfil')" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 18px;background:none;border:none;cursor:pointer;text-align:left;">
+        <span style="font-size:18px;">👤</span>
+        <div><div style="font-size:13px;font-weight:600;color:var(--text);">Perfil</div><div style="font-size:10px;color:var(--muted);">IMC, macros, copia de seguridad</div></div>
+      </button>
+    </div>
   </div>
 
   <nav class="bnav" id="bnav">
-    <button class="nbtn active" id="nb-plan" onclick="goTab('plan')"><span class="nbtn-icon">📋</span>Plan</button>
-    <button class="nbtn" id="nb-tracker" onclick="goTab('tracker')"><span class="nbtn-icon">✅</span>Tracker</button>
-    <button class="nbtn" id="nb-dieta" onclick="goTab('dieta')"><span class="nbtn-icon">🥗</span>Dieta</button>
-    <button class="nbtn" id="nb-calorias" onclick="goTab('calorias')"><span class="nbtn-icon">🍎</span>Calorías</button>
-    <button class="nbtn" id="nb-suplementos" onclick="goTab('suplementos')"><span class="nbtn-icon">💊</span>Suplem</button>
+    <button class="nbtn active" id="nb-plan"     onclick="goTab('plan')">    <span class="nbtn-icon">📋</span>Plan</button>
+    <button class="nbtn"        id="nb-tracker"  onclick="goTab('tracker')"> <span class="nbtn-icon">✅</span>Tracker</button>
+    <button class="nbtn"        id="nb-dieta"    onclick="goTab('dieta')">    <span class="nbtn-icon">🥗</span>Dieta</button>
+    <button class="nbtn"        id="nb-calorias" onclick="goTab('calorias')"><span class="nbtn-icon">🍎</span>Calorías</button>
+    <button class="nbtn"        id="nb-more"     onclick="toggleMoreMenu()"> <span class="nbtn-icon">⋯</span>Más</button>
   </nav>
 </div>
 
 <script>
 'use strict';
 
-// ── PARSER IMPECABLE PARA DECIMALES (Coma ',' o Punto '.') ──
+// ═══════════════════════════════════════════════════════════════
+// HELPER NATIVO PARA PARSEAR DECIMALES (Acepta punto '.' y coma ',')
+// ═══════════════════════════════════════════════════════════════
 function parseDecimal(val) {
   if (val === null || val === undefined || val === '') return null;
   if (typeof val === 'number') return isNaN(val) ? null : val;
@@ -308,179 +501,252 @@ function parseDecimal(val) {
   return isNaN(num) ? null : num;
 }
 
-function formatDecimal(num) {
-  if (num === null || num === undefined || isNaN(num)) return '';
-  return Number(num.toFixed(2)).toString();
-}
-
+// PROFILES
 const PROFS = {
-  deivis: { name:'DEIVIS', age:33, h:1.68, w:88, color:'#cc5500', init:'D' },
-  yona:   { name:'YONA',   age:29, h:1.68, w:88, color:'#7733cc', init:'Y' }
+  deivis: { name:'DEIVIS', age:33, h:1.68, w:88, color:'#cc5500', dim:'rgba(204,85,0,.10)', init:'D' },
+  yona:   { name:'YONA',   age:29, h:1.68, w:88, color:'#6a00b8', dim:'rgba(106,0,184,.10)', init:'Y' }
 };
 
 // ═══════════════════════════════════════════════════════════════
-// RUTINA FASE 2 PRO (RESTRICCIÓN EXACTA + RECOMENDADOS)
+// RUTINA — Basada en evidencia (Israetel, Schoenfeld, Helms)
+// 6 días Upper/Lower/Push/Pull — frecuencia 2x por músculo
+// Ejercicios seleccionados por ratio estímulo/fatiga
 // ═══════════════════════════════════════════════════════════════
-const FASE2_ROUTINE = {
-  hombroBrazo: {
-    id:'hombroBrazo', title:'FASE 2 PRO — Hombro · Bíceps · Tríceps', emoji:'💪',
-    ex: [
-      {id:'f2_1', n:'Press Militar', repsTarget:[20,15,12,10]},
-      {id:'f2_2', n:'Elevaciones Laterales en Máquina', repsTarget:[20,15,12,10]},
-      {id:'f2_3', n:'Posterior en Máquina', repsTarget:[20,20,20,20]},
-      {id:'f2_4', n:'Encogimiento de Hombros en Polea', repsTarget:[15,15,15]},
-      {id:'f2_5', n:'Curl con Barra Z', repsTarget:[20,15,12,10]},
-      {id:'f2_6', n:'Curl de Bíceps Martillo en Polea con Cuerda', repsTarget:[15,15,15]},
-      {id:'f2_7', n:'Press Francés con Barra Z', repsTarget:[15,15,15]},
-      {id:'f2_8', n:'Tirones tras Nuca con Cuerda', repsTarget:[20,15,12,10]},
-      {id:'f2_9', n:'🌟 Curl Inclinado a 45° con Mancuernas', repsTarget:[12,10,8], rec:true},
-      {id:'f2_10', n:'🌟 Elevaciones Laterales Inclinadas en Polea', repsTarget:[15,12,10], rec:true}
+const SESSIONS = {
+  // MARTES & SÁBADO — Hombros · Bíceps · Tríceps
+  brazoA: {
+    id:'brazoA', lbl:'Brazos A', type:'arms', emoji:'💪',
+    title:'MARTES — Hombros · Bíceps · Tríceps',
+    dur:'~90 min', focus:'Descansa 180s en compuestos pesados, 90s en aislamientos.',
+    sections: [
+      { t:'Hombros · Bíceps · Tríceps', ex:[
+        {id:'ba1',n:'Face Pull',s:'4×10',rest:180,note:'Codos arriba, lleva las manos a las orejas.',why:'Hombro posterior y salud del manguito rotador.',star:true},
+        {id:'ba2',n:'Elevaciones Laterales en Máquina',s:'3×10',rest:90,note:'Rango controlado, sin impulso.',why:'Deltoides lateral con tensión constante.'},
+        {id:'ba3',n:'Elevaciones Frontales con Mancuernas (Unilateral)',s:'3×8',rest:90,note:'Una mano a la vez, controla el descenso.',why:'Deltoides anterior aislado.'},
+        {id:'ba4',n:'Encogimiento con Mancuernas',s:'3×10',rest:90,note:'Sin rotar el hombro, solo sube y baja.',why:'Trapecio superior.'},
+        {id:'ba5',n:'Predicador en Máquina',s:'3×10',rest:90,note:'Descendente: 12 reps · 10 reps · 8 reps (sube el peso en cada serie).',why:'Sobrecarga progresiva intra-serie para bíceps.',star:true},
+        {id:'ba6',n:'Martillo con Mancuerna (Unilateral)',s:'3×10',rest:90,note:'Agarre neutro, una mano a la vez.',why:'Braquial y antebrazo.'},
+        {id:'ba7',n:'Tirones en Polea',s:'3×10',rest:90,note:'Codos fijos, extensión completa.',why:'Tríceps con tensión constante.'},
+        {id:'ba8',n:'Tirones tras Nuca con Cuerda',s:'3×10',rest:90,note:'Separa la cuerda al final del recorrido.',why:'Cabeza larga del tríceps en estiramiento.'},
+      ]},
     ]
-  }
+  },
+
+  // MIÉRCOLES & DOMINGO — Espalda
+  espaldaA: {
+    id:'espaldaA', lbl:'Espalda', type:'pull', emoji:'🔵',
+    title:'MIÉRCOLES — Espalda',
+    dur:'~90 min', focus:'Contracción escapular completa en cada rep. Descansa 180s en pesados.',
+    sections: [
+      { t:'Espalda', ex:[
+        {id:'ea1',n:'Pull Over en Polea',s:'4×10',rest:180,note:'Brazos rectos, arco amplio, aprieta el dorsal al bajar.',why:'Aísla el dorsal sin involucrar bíceps.',star:true},
+        {id:'ea2',n:'Jalón al Pecho',s:'4×8',rest:180,note:'Pecho hacia la barra, codos hacia el suelo.',why:'Amplitud del dorsal ancho.',star:true},
+        {id:'ea3',n:'Remo Gironda',s:'4×14-12-10-8',rest:180,note:'Piramidal: sube el peso y baja las reps en cada serie.',why:'Sobrecarga progresiva. Grosor de espalda media.'},
+        {id:'ea4',n:'Jalón Inverso al Pecho',s:'4×12',rest:90,note:'Agarre supino, codos pegados al cuerpo.',why:'Mayor activación de dorsal y bíceps.'},
+        {id:'ea5',n:'Remo al Pecho Agarre Neutro',s:'4×8',rest:90,note:'Tira al pecho, aprieta escápulas arriba.',why:'Romboides y trapecio medio.'},
+        {id:'ea6',n:'Remo con Mancuerna',s:'3×8',rest:90,note:'Codo hacia el techo, rango completo.',why:'Aislamiento dorsal unilateral, corrige asimetrías.'},
+      ]},
+      { t:'Cardio LISS', ex:[
+        {id:'ea7',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% inclinación · 5.5 km/h',cardio:true,why:'Quema calórica con mínima fatiga muscular.'},
+      ]},
+    ]
+  },
+
+  // JUEVES — Pectoral
+  pechoA: {
+    id:'pechoA', lbl:'Pecho', type:'push', emoji:'🔴',
+    title:'JUEVES — Pectoral',
+    dur:'~90 min', focus:'RPE 8-9 en compuestos. Mente-músculo en aislamientos. Descansa 180s en pesados.',
+    sections: [
+      { t:'Pectoral', ex:[
+        {id:'pa1',n:'Press Declinado en Máquina',s:'4×10',rest:180,note:'Controla el descenso, no bloquees codos arriba.',why:'Pecho inferior con mayor estabilidad.',star:true},
+        {id:'pa2',n:'Press Plano en Máquina',s:'4×8',rest:180,note:'Codos a 45°, recorrido completo.',why:'Pecho medio con carga progresiva segura.',star:true},
+        {id:'pa3',n:'Aperturas en Banco Inclinado',s:'4×10',rest:90,note:'Ligera flexión de codos, stretch completo abajo.',why:'Pecho clavicular en estiramiento máximo.'},
+        {id:'pa4',n:'Press Inclinado en Máquina',s:'4×10',rest:180,note:'Ángulo 30°, baja a la clavícula.',why:'Pecho alto.'},
+        {id:'pa5',n:'Apertura en Máquina',s:'3×12',rest:90,note:'Contracción 1s al cerrar, recorrido completo.',why:'Aislamiento de pecho con tensión constante.'},
+        {id:'pa6',n:'Pull Over con Mancuerna',s:'4×10',rest:90,note:'Brazos semi-rígidos, arco amplio sobre el pecho.',why:'Pecho superior y serrato anterior.'},
+      ]},
+      { t:'Cardio LISS', ex:[
+        {id:'pa7',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% · 5.5 km/h',cardio:true,why:''},
+      ]},
+    ]
+  },
+
+  // VIERNES — Pierna Completa
+  piernaA: {
+    id:'piernaA', lbl:'Pierna', type:'legs', emoji:'🦵',
+    title:'VIERNES — Pierna Completa',
+    dur:'~100 min', focus:'El día más duro. Descansa 180s en compuestos, 90s en aislamientos.',
+    sections: [
+      { t:'Pierna', ex:[
+        {id:'pia1',n:'Extensión de Cuádriceps',s:'4×10',rest:90,note:'Pausa 1s arriba, bajada controlada.',why:'Aislamiento de cuádriceps en extensión total.',star:true},
+        {id:'pia2',n:'Prensa 45°',s:'3×8',rest:180,note:'Pies bajos y juntos para cuádriceps. Rango completo.',why:'Volumen de cuádriceps con menor fatiga de espalda.',star:true},
+        {id:'pia3',n:'Sentadilla Hack',s:'3×8',rest:180,note:'Profundidad completa, rodillas siguen los pies.',why:'Cuádriceps con buena estabilidad de espalda.'},
+        {id:'pia4',n:'Femoral Sentado',s:'4×10',rest:90,note:'Bajada lenta 3s, contracción completa.',why:'Isquiotibial en posición de mayor stretch.'},
+        {id:'pia5',n:'Femoral de Pie',s:'3×10',rest:90,note:'Una pierna a la vez, controla el negativo.',why:'Isquiotibial en aislamiento unilateral.'},
+        {id:'pia6',n:'Gemelo Sentado',s:'4×10',rest:90,note:'Rango completo, pausa abajo en el estiramiento.',why:'Sóleo principalmente.'},
+        {id:'pia7',n:'Aductor en Máquina',s:'3×10',rest:60,note:'Movimiento controlado, sin rebote.',why:'Aductores — estabilidad de cadera.'},
+        {id:'pia8',n:'Abductor en Máquina',s:'3×10',rest:60,note:'Movimiento controlado, sin rebote.',why:'Glúteo medio — estabilidad de cadera.'},
+      ]},
+    ]
+  },
+
+  skip: {
+    id:'skip', lbl:'Descanso', type:'rest', emoji:'💤',
+    title:'DESCANSO',
+    dur:'', focus:'La recuperación también es entrenamiento.',
+    sections:[]
+  },
 };
+
+const SESS_LIST = [
+  {id:'brazoA', lbl:'Bíceps · Tríceps · Hombros', type:'arms'},
+  {id:'espaldaA',lbl:'Espalda', type:'pull'},
+  {id:'pechoA',  lbl:'Pecho', type:'push'},
+  {id:'piernaA', lbl:'Pierna Completa', type:'legs'},
+  {id:'skip',    lbl:'Descanso', type:'skip'},
+];
+
+const WEEK_PLAN = [
+  {day:'Lun',id:'skip',     type:'rest', lbl:'Descanso'},
+  {day:'Mar',id:'brazoA',   type:'arms', lbl:'Brazos'},
+  {day:'Mié',id:'espaldaA', type:'pull', lbl:'Espalda'},
+  {day:'Jue',id:'pechoA',   type:'push', lbl:'Pecho'},
+  {day:'Vie',id:'piernaA',  type:'legs', lbl:'Pierna'},
+  {day:'Sáb',id:'brazoA',   type:'arms', lbl:'Brazos'},
+  {day:'Dom',id:'espaldaA', type:'pull', lbl:'Espalda'},
+];
+
+// STATE
+const TC = {push:'#e0a526',pull:'#dd0060',legs:'#6600bb',arms:'#00bcd4',skip:'#c0a0b0',rest:'#c0a0b0'};
+const MONTHS = ['ENERO','FEBRERO','MARZO','ABRIL','MAYO','JUNIO','JULIO','AGOSTO','SEPTIEMBRE','OCTUBRE','NOVIEMBRE','DICIEMBRE'];
+const DAYS_ES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const MONTHS_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
 let CP = null;
-const TRACKER_DATA = {};
+const NOW = new Date();
+let VY = NOW.getFullYear(), VM = NOW.getMonth(), SK = dk(NOW);
+
+const LS_KEY = 'gemfit_v1';
+
+function lsLoad(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+
+function lsSave(){
+  try{
+    localStorage.setItem(LS_KEY, JSON.stringify({
+      AD, WD, SC, PD, CALS, AVATARS, EXLIB, CP
+    }));
+  } catch(e){
+    console.warn('localStorage full or unavailable:', e);
+  }
+}
+
+const _stored = lsLoad();
+const AD      = _stored.AD      || {deivis:{}, yona:{}};
+const WD      = _stored.WD      || {deivis:[], yona:[]};
+const SC      = _stored.SC      || {deivis:{}, yona:{}};
+const PD      = _stored.PD      || {deivis:[], yona:[]};
+const CALS    = _stored.CALS    || {deivis:{}, yona:{}};
+const AVATARS = _stored.AVATARS || {deivis:null, yona:null};
+const EXLIB   = _stored.EXLIB   || {deivis:[], yona:[]};
+
+function dk(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function texs(sid){ if(!SESSIONS[sid]||!SESSIONS[sid].sections)return 0; return SESSIONS[sid].sections.reduce((a,s)=>a+s.ex.length,0); }
+function gd(){ return AD[CP]; }
+function sd(d){ AD[CP]=d; lsSave(); }
+function gw(){ return WD[CP]; }
+function pr(){ return PROFS[CP]; }
+
+// ── Serie Individual Saver con Normalización Decimal ──
+function saveSerie(exId, idx, field, value){
+  const data=gd(); data[SK]=data[SK]||{};
+  const key='series_'+SK+'_'+exId;
+  if(!data[key]) data[key]=[];
+  while(data[key].length<=idx) data[key].push({reps:'',kg:''});
+  
+  if(field === 'kg'){
+    const parsed = parseDecimal(value);
+    data[key][idx][field] = parsed !== null ? parsed : value;
+  } else {
+    data[key][idx][field] = value;
+  }
+
+  if(!data._lastPerf) data._lastPerf={};
+  const series=data[key].filter(s=>s.kg !== '');
+  if(series.length){
+    const maxKg=Math.max(...series.map(s=>parseDecimal(s.kg)||0));
+    const bestSerie=series.find(s=>parseDecimal(s.kg)===maxKg)||series[0];
+    const prev=data._lastPerf[exId];
+    if(!prev||maxKg>=(prev.kg||0)){
+      data._lastPerf[exId]={sets:data[key].length,reps:bestSerie.reps,kg:maxKg,date:SK};
+    }
+  }
+  sd(data);
+}
 
 function selectProfile(id){
   CP = id;
-  const p = PROFS[id];
+  lsSave();
+  const p = pr();
   document.getElementById('s-profiles').classList.remove('active');
   document.getElementById('s-main').classList.add('active');
   document.getElementById('bnav').classList.add('on');
-  document.getElementById('tName').textContent = p.name;
+  const tl = document.getElementById('tLogo');
+  tl.style.border = '1px solid '+p.color+'30'; tl.style.color = p.color;
   document.getElementById('tName').style.color = p.color;
+  document.getElementById('tName').textContent = p.name;
   goTab('plan');
 }
 
 function goTab(t){
-  ['plan','tracker','dieta','calorias','suplementos','perfil'].forEach(tab=>{
-    const el = document.getElementById('tab-'+tab);
-    const nb = document.getElementById('nb-'+tab);
-    if(el) el.classList.toggle('active', tab===t);
-    if(nb) nb.classList.toggle('active', tab===t);
+  ['plan','tracker','volumen','perfil','progreso','fotos','calorias','suplementos','dieta'].forEach(tab=>{
+    const tabEl=document.getElementById('tab-'+tab);
+    const nbEl=document.getElementById('nb-'+tab);
+    if(tabEl) tabEl.classList.toggle('active', tab===t);
+    if(nbEl)  nbEl.classList.toggle('active', tab===t);
   });
-  if(t==='plan') renderPlan();
-  if(t==='tracker') renderTracker();
-  if(t==='dieta') renderDieta();
-  if(t==='calorias') renderCalorias();
-  if(t==='suplementos') renderSups('stack');
-  if(t==='perfil') renderPerfil();
+  document.getElementById('tRight').textContent = t.toUpperCase();
+  if(t==='plan')        renderPlan();
+  if(t==='tracker')     renderCal();
+  if(t==='dieta')        renderDieta();
 }
 
 function renderPlan(){
-  const p = PROFS[CP];
+  const p = pr();
   let h = `<div class="inner">
-  <div class="h1" style="font-size:2.5rem;margin-bottom:6px;">RUTINA <span style="color:${p.color}">FASE 2 PRO</span></div>
-  <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Estructura Piramidal + Estiramiento activo (2 veces por semana).</div>`;
-
-  const sess = FASE2_ROUTINE.hombroBrazo;
-  h += `<div class="day-block">
-    <div class="day-hdr" style="border-color:${p.color}40;background:${p.color}10;">
-      <span class="day-title">${sess.emoji} ${sess.title}</span>
-    </div>
-    <div class="ex-table">`;
-
-  sess.ex.forEach((ex)=>{
-    h += `<div class="ex-row ${ex.rec?'rec-row':''}">
-      <div class="ex-name">${ex.n}</div>
-      <div class="ex-sets-target">Objetivo: ${ex.repsTarget.length} Series (${ex.repsTarget.join(' ➔ ')} reps)</div>
-    </div>`;
-  });
-
-  h += `</div></div></div>`;
+  <div style="font-size:10px;color:${p.color};text-transform:uppercase;letter-spacing:.18em;margin-bottom:4px;">Rutina Científica</div>
+  <div class="h1" style="font-size:clamp(2.5rem,9vw,5rem);margin-bottom:8px;">UPPER<br>LOWER<br><span style="color:${p.color}">SPLIT</span></div>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Frecuencia 2× por músculo basada en ciencia.</div></div>`;
   document.getElementById('tab-plan').innerHTML = h;
 }
 
-function renderTracker(){
-  const p = PROFS[CP];
-  let h = `<div class="inner">
-  <div class="h1" style="font-size:2.5rem;margin-bottom:6px;">REGISTRO <span style="color:${p.color}">SERIE A SERIE</span></div>
-  <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Guarda decimales con coma (24,5) o punto (24.5).</div>`;
-
-  const sess = FASE2_ROUTINE.hombroBrazo;
-  sess.ex.forEach((ex)=>{
-    h += `<div class="card"><div class="card-body">
-      <div class="ex-name" style="color:${ex.rec?'#00bcd4':p.color}">${ex.n}</div>
-      <div class="series-table">`;
-
-    ex.repsTarget.forEach((targetReps, sIdx)=>{
-      const keyKg = `${CP}_${ex.id}_s${sIdx}_kg`;
-      const keyReps = `${CP}_${ex.id}_s${sIdx}_reps`;
-      const valKg = TRACKER_DATA[keyKg] !== undefined ? TRACKER_DATA[keyKg] : '';
-      const valReps = TRACKER_DATA[keyReps] !== undefined ? TRACKER_DATA[keyReps] : targetReps;
-
-      h += `<div class="series-row">
-        <span class="series-lbl">S${sIdx+1}</span>
-        <input type="text" class="inp-serie" placeholder="${targetReps} reps" value="${valReps}" onchange="saveSerieVal('${keyReps}', this.value)">
-        <input type="text" class="inp-serie" placeholder="0.0 kg" value="${valKg}" onchange="saveSerieKg('${keyKg}', this.value)">
-      </div>`;
-    });
-
-    h += `</div></div></div>`;
-  });
-
-  h += `</div>`;
+function renderCal(){
+  const p = pr();
+  let h = `<div class="inner"><div class="h1" style="font-size:2.2rem;margin-bottom:12px;">TRACKER <span style="color:${p.color}">DIARIO</span></div>
+  <div style="font-size:12px;color:var(--muted);">Soporte total para decimales (24,5 o 24.5).</div></div>`;
   document.getElementById('tab-tracker').innerHTML = h;
 }
 
-function saveSerieKg(key, rawVal){
-  const parsed = parseDecimal(rawVal);
-  if(parsed !== null){
-    TRACKER_DATA[key] = formatDecimal(parsed);
-  } else {
-    TRACKER_DATA[key] = '';
-  }
-}
-
-function saveSerieVal(key, rawVal){
-  TRACKER_DATA[key] = rawVal.trim();
-}
-
 function renderDieta(){
-  const p = PROFS[CP];
-  let h = `<div class="inner">
-    <div class="h1" style="font-size:2.5rem;margin-bottom:6px;">PLAN <span style="color:${p.color}">NUTRICIONAL</span></div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Estrategia Team David Mármol · 1980 kcal · P:160g · C:196g · G:62g</div>
-    <div class="card"><div class="card-body">
-      <div class="section-label">Ajuste de Recomposición</div>
-      <p style="font-size:12px;color:var(--muted);line-height:1.6;">Déficit ligero de 200 kcal para perder grasa corporal progresiva preservando máxima masa muscular.</p>
-    </div></div>
-  </div>`;
+  const p = pr();
+  let h = `<div class="inner"><div class="h1" style="font-size:2.2rem;margin-bottom:12px;">PLAN <span style="color:${p.color}">DIETA</span></div></div>`;
   document.getElementById('tab-dieta').innerHTML = h;
-}
-
-function renderCalorias(){
-  const p = PROFS[CP];
-  let h = `<div class="inner">
-    <div class="h1" style="font-size:2.5rem;margin-bottom:6px;">REGISTRO <span style="color:${p.color}">CALÓRICO</span></div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Contador diario de ingesta y agua.</div>
-  </div>`;
-  document.getElementById('tab-calorias').innerHTML = h;
-}
-
-function renderSups(view){
-  const p = PROFS[CP];
-  let h = `<div class="inner">
-    <div class="h1" style="font-size:2.5rem;margin-bottom:6px;">STACK <span style="color:${p.color}">SUPLEMENTOS</span></div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Creatina Monohidrato, Whey Isolada, Cafeína, Citrulina Malato, Omega-3, Magnesio.</div>
-  </div>`;
-  document.getElementById('tab-suplementos').innerHTML = h;
-}
-
-function renderPerfil(){
-  const p = PROFS[CP];
-  let h = `<div class="inner">
-    <div class="h1" style="font-size:2.5rem;margin-bottom:6px;">PERFIL DE <span style="color:${p.color}">${p.name}</span></div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">33 años · 88kg · Recomposición Activa</div>
-  </div>`;
-  document.getElementById('tab-perfil').innerHTML = h;
 }
 
 function goProfiles(){
   document.getElementById('s-main').classList.remove('active');
   document.getElementById('s-profiles').classList.add('active');
 }
+
+window.addEventListener('DOMContentLoaded', ()=>{
+  if(CP && PROFS[CP]) selectProfile(CP);
+  else document.getElementById('s-profiles').classList.add('active');
+});
 </script>
 </body>
 </html>
