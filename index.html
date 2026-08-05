@@ -487,6 +487,28 @@ body{
 <script>
 'use strict';
 
+// Acepta decimales escritos con coma o punto sin convertir 24,9 en 249.
+function parseDecimal(value){
+  if(typeof value==='number') return Number.isFinite(value)?value:NaN;
+  let v=String(value??'').trim().replace(/\s+/g,'');
+  if(!v) return NaN;
+  if(v.includes(',') && v.includes('.')){
+    // El último separador se considera decimal; los anteriores, miles.
+    const lastComma=v.lastIndexOf(','), lastDot=v.lastIndexOf('.');
+    const dec=Math.max(lastComma,lastDot);
+    v=v.slice(0,dec).replace(/[.,]/g,'')+'.'+v.slice(dec+1).replace(/[.,]/g,'');
+  } else {
+    v=v.replace(',','.');
+  }
+  const n=Number(v);
+  return Number.isFinite(n)?n:NaN;
+}
+function normalizeDecimalInput(el){
+  const n=parseDecimal(el.value);
+  if(Number.isFinite(n)) el.value=String(Math.round(n*100)/100).replace('.',',');
+  flashSaved(el);
+}
+
 // ═══════════════════════════════════════════════════════════════
 // PROFILES
 // ═══════════════════════════════════════════════════════════════
@@ -508,14 +530,14 @@ const SESSIONS = {
     dur:'~90 min', focus:'Descansa 180s en compuestos pesados, 90s en aislamientos.',
     sections: [
       { t:'Hombros · Bíceps · Tríceps', ex:[
-        {id:'ba1',n:'Face Pull',s:'4×10',rest:180,note:'Codos arriba, lleva las manos a las orejas.',why:'Hombro posterior y salud del manguito rotador.',star:true},
-        {id:'ba2',n:'Elevaciones Laterales en Máquina',s:'3×10',rest:90,note:'Rango controlado, sin impulso.',why:'Deltoides lateral con tensión constante.'},
-        {id:'ba3',n:'Elevaciones Frontales con Mancuernas (Unilateral)',s:'3×8',rest:90,note:'Una mano a la vez, controla el descenso.',why:'Deltoides anterior aislado.'},
-        {id:'ba4',n:'Encogimiento con Mancuernas',s:'3×10',rest:90,note:'Sin rotar el hombro, solo sube y baja.',why:'Trapecio superior.'},
-        {id:'ba5',n:'Predicador en Máquina',s:'3×10',rest:90,note:'Descendente: 12 reps · 10 reps · 8 reps (sube el peso en cada serie).',why:'Sobrecarga progresiva intra-serie para bíceps.',star:true},
-        {id:'ba6',n:'Martillo con Mancuerna (Unilateral)',s:'3×10',rest:90,note:'Agarre neutro, una mano a la vez.',why:'Braquial y antebrazo.'},
-        {id:'ba7',n:'Tirones en Polea',s:'3×10',rest:90,note:'Codos fijos, extensión completa.',why:'Tríceps con tensión constante.'},
-        {id:'ba8',n:'Tirones tras Nuca con Cuerda',s:'3×10',rest:90,note:'Separa la cuerda al final del recorrido.',why:'Cabeza larga del tríceps en estiramiento.'},
+        {id:'ba_press_militar',n:'Press Militar',s:'20 · 15 · 12 · 10',reps:[20,15,12,10],rest:180,note:'Aumenta progresivamente la carga manteniendo la técnica.',why:'Deltoides anterior.',star:true},
+        {id:'ba_laterales_maquina_v2',n:'Elevaciones Laterales en Máquina',s:'20 · 15 · 12 · 10',reps:[20,15,12,10],rest:90,note:'Rango controlado, sin impulso.',why:'Deltoides lateral.'},
+        {id:'ba_posterior_maquina',n:'Posterior en Máquina',s:'20 · 20 · 20 · 20',reps:[20,20,20,20],rest:90,note:'Controla el regreso y mantén el pecho apoyado.',why:'Deltoides posterior.'},
+        {id:'ba_encogimiento_polea',n:'Encogimiento de Hombros en Polea',s:'15 · 15 · 15',reps:[15,15,15],rest:90,note:'Eleva los hombros sin rotarlos.',why:'Trapecio.'},
+        {id:'ba_curl_barra_z',n:'Curl con Barra Z',s:'20 · 15 · 12 · 10',reps:[20,15,12,10],rest:90,note:'Codos estables y descenso controlado.',why:'Bíceps.',star:true},
+        {id:'ba_martillo_polea_cuerda',n:'Curl Martillo en Polea con Cuerda',s:'15 · 15 · 15',reps:[15,15,15],rest:90,note:'Agarre neutro y codos pegados al cuerpo.',why:'Braquial y braquiorradial.'},
+        {id:'ba_press_frances_z',n:'Press Francés con Barra Z',s:'15 · 15 · 15',reps:[15,15,15],rest:90,note:'Mantén los codos apuntando al frente.',why:'Tríceps.'},
+        {id:'ba_tirones_tras_nuca_v2',n:'Tirones Tras Nuca con Cuerda',s:'20 · 15 · 12 · 10',reps:[20,15,12,10],rest:90,note:'Separa la cuerda al final del recorrido.',why:'Tríceps, con énfasis en la cabeza larga.'},
       ]},
     ]
   },
@@ -586,6 +608,19 @@ const SESSIONS = {
     sections:[]
   },
 };
+
+
+// IDs anteriores conservados para que sus registros históricos permanezcan en localStorage.
+const ARCHIVED_EXERCISES = [
+  {id:'ba1',n:'Face Pull'},
+  {id:'ba2',n:'Elevaciones Laterales en Máquina (rutina anterior)'},
+  {id:'ba3',n:'Elevaciones Frontales con Mancuernas (Unilateral)'},
+  {id:'ba4',n:'Encogimiento con Mancuernas'},
+  {id:'ba5',n:'Predicador en Máquina'},
+  {id:'ba6',n:'Martillo con Mancuerna (Unilateral)'},
+  {id:'ba7',n:'Tirones en Polea'},
+  {id:'ba8',n:'Tirones tras Nuca con Cuerda (rutina anterior)'}
+];
 
 const SESS_LIST = [
   {id:'brazoA', lbl:'Bíceps · Tríceps · Hombros', type:'arms'},
@@ -1678,7 +1713,7 @@ function renderDayPanel(){
           ?`Última: ${last.sets||'?'}×${last.reps||'?'} · ${last.kg||'?'}kg${last.date?' ('+last.date+')':''}`
           :'';
         // Parse default sets count from ex.s e.g. "4×8-10" → 4
-        const defaultSets = parseInt((ex.s||'3').match(/^(\d+)/)?.[1]||'3');
+        const defaultSets = Array.isArray(ex.reps)?ex.reps.length:parseInt((ex.s||'3').match(/^(\d+)/)?.[1]||'3');
         // Load saved series for this exercise
         const seriesKey = 'series_'+SK+'_'+ex.id;
         const savedSeries = (gd()[seriesKey])||[];
@@ -1727,7 +1762,7 @@ function renderDayPanel(){
             </div>
             <div id="series-rows-${ex.id}">
               ${(savedSeries.length>0?savedSeries:Array(defaultSets).fill(null)).map((s,si)=>{
-                const sv = s||{reps:'',kg:''};
+                const sv = s||{reps:(Array.isArray(ex.reps)?ex.reps[si]||'':''),kg:''};
                 const vol2 = sv.reps&&sv.kg?Math.round(sv.reps*sv.kg):'—';
                 const lastKg = last&&last.kg?last.kg:'';
                 const border = sv.kg&&last&&last.kg?(+sv.kg>+last.kg?'#4ade80':+sv.kg<+last.kg?'#ff6b35':'var(--border2)'):'var(--border2)';
@@ -1736,8 +1771,8 @@ function renderDayPanel(){
                   <input type="number" min="1" max="100" value="${sv.reps||''}" placeholder="${last&&last.reps?last.reps:'reps'}"
                     oninput="saveSerie('${ex.id}',${si},'reps',this.value)" onblur="flashSaved(this)"
                     style="background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 6px;outline:none;width:100%;text-align:center;">
-                  <input type="number" min="0" max="500" step="0.5" value="${sv.kg||''}" placeholder="${lastKg||'kg'}"
-                    oninput="saveSerie('${ex.id}',${si},'kg',this.value)" onblur="flashSaved(this)"
+                  <input type="text" inputmode="decimal" value="${sv.kg||''}" placeholder="${lastKg||'kg'}"
+                    oninput="saveSerie('${ex.id}',${si},'kg',this.value)" onblur="normalizeDecimalInput(this);saveSerie('${ex.id}',${si},'kg',this.value)"
                     style="background:var(--card2);border:1px solid ${border};border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 6px;outline:none;width:100%;text-align:center;">
                   <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:${p.color};text-align:center;">${vol2!=='—'?vol2+'kg':'—'}</div>
                   <button onclick="deleteSerie('${ex.id}',${si})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0;text-align:center;line-height:1;">×</button>
@@ -1803,7 +1838,7 @@ function renderDayPanel(){
             </div>
             <div id="series-rows-${extraExId}">
               ${extraSeriesList.map((s,si)=>{
-                const sv = s||{reps:'',kg:''};
+                const sv = s||{reps:(Array.isArray(ex.reps)?ex.reps[si]||'':''),kg:''};
                 const vol2 = sv.reps&&sv.kg?Math.round(sv.reps*sv.kg):'—';
                 return `<div style="display:grid;grid-template-columns:32px 1fr 1fr 1fr 28px;gap:4px;margin-bottom:4px;align-items:center;">
                   <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--muted);text-align:center;">${si+1}</div>
@@ -1878,7 +1913,7 @@ function saveSerie(exId, idx, field, value){
   if(!data._lastPerf) data._lastPerf={};
   const series=data[key].filter(s=>s.kg);
   if(series.length){
-    const maxKg=Math.max(...series.map(s=>parseFloat(s.kg)||0));
+    const maxKg=Math.max(...series.map(s=>parseDecimal(s.kg)||0));
     const bestSerie=series.find(s=>parseFloat(s.kg)===maxKg)||series[0];
     const prev=data._lastPerf[exId];
     if(!prev||maxKg>=(prev.kg||0)){
@@ -1887,7 +1922,7 @@ function saveSerie(exId, idx, field, value){
   }
   sd(data);
   // Update volume cell inline without full re-render
-  const vol=series.reduce((a,s)=>a+(parseFloat(s.reps)||0)*(parseFloat(s.kg)||0),0);
+  const vol=series.reduce((a,s)=>a+(parseDecimal(s.reps)||0)*(parseDecimal(s.kg)||0),0);
 }
 
 function addSerie(exId, sStr){
@@ -1914,7 +1949,7 @@ function saveLog(exId, field, value){
   const data=gd(); data[SK]=data[SK]||{};
   data[SK].logs=data[SK].logs||{};
   data[SK].logs[exId]=data[SK].logs[exId]||{};
-  data[SK].logs[exId][field]=parseFloat(value)||0;
+  data[SK].logs[exId][field]=parseDecimal(value)||0;
   sd(data);
 }
 
@@ -1931,7 +1966,7 @@ function getLastPerf(exId){
       const prevKey='series_'+keys[0]+'_'+exId;
       const prevSeries=(data[prevKey]||[]).filter(s=>s.kg);
       if(prevSeries.length){
-        const maxKg=Math.max(...prevSeries.map(s=>parseFloat(s.kg)||0));
+        const maxKg=Math.max(...prevSeries.map(s=>parseDecimal(s.kg)||0));
         const best=prevSeries.find(s=>parseFloat(s.kg)===maxKg)||prevSeries[0];
         return{sets:data[prevKey].length,reps:best.reps,kg:maxKg,date:keys[0]};
       }
@@ -2282,7 +2317,7 @@ function renderProgreso(){
 
     <!-- Input -->
     <div class="w-input-row">
-      <input class="w-inp" id="wInp" type="number" step="0.1" placeholder="Peso de hoy (kg)" onkeydown="if(event.key==='Enter')addW()">
+      <input class="w-inp" id="wInp" type="text" inputmode="decimal" placeholder="Peso de hoy (kg)" onkeydown="if(event.key==='Enter')addW()">
       <button class="w-add-btn" onclick="addW()">+ Añadir</button>
     </div>
 
@@ -2359,6 +2394,15 @@ function renderProgreso(){
     </div>
   </div></div>
 
+  <!-- EJERCICIOS ARCHIVADOS -->
+  <div class="card" style="margin-top:12px;"><div class="card-body">
+    <div class="section-label">Historial de ejercicios anteriores</div>
+    <div style="font-size:10px;color:var(--muted);line-height:1.5;margin-bottom:9px;">Los registros antiguos se conservan aunque estos ejercicios ya no estén en la rutina activa.</div>
+    <div style="display:flex;flex-direction:column;gap:5px;">
+      ${ARCHIVED_EXERCISES.map(ex=>`<button onclick="openExHistory('${ex.id}','${ex.n.replace(/'/g,"\\'")}')" style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:8px 10px;background:var(--card2);border:1px solid var(--border);border-radius:7px;color:var(--text);cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;font-size:11px;"><span>${ex.n}</span><span style="color:${p.color};">Ver 📈</span></button>`).join('')}
+    </div>
+  </div></div>
+
   </div>`;
 
   // Render weight mini chart
@@ -2384,7 +2428,7 @@ function renderProgreso(){
 }
 
 function addW(){
-  const v=parseFloat(document.getElementById('wInp').value);
+  const v=parseDecimal(document.getElementById('wInp').value);
   if(!v||v<30||v>300)return;
   const now2=new Date();
   const d=now2.toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'});
@@ -3922,7 +3966,7 @@ function openExHistory(exId, exName){
     const date = m[1];
     const series = (data[sk]||[]).filter(s=>s&&s.kg);
     if(!series.length) return;
-    const maxKg = Math.max(...series.map(s=>parseFloat(s.kg)||0));
+    const maxKg = Math.max(...series.map(s=>parseDecimal(s.kg)||0));
     points.push({date, kg:maxKg});
   });
   points.sort((a,b)=>a.date.localeCompare(b.date));
@@ -4073,7 +4117,7 @@ function getExerciseSeriesPoints(exId){
     const date = m[1];
     const series = (data[sk]||[]).filter(s=>s&&s.kg);
     if(!series.length) return;
-    const maxKg = Math.max(...series.map(s=>parseFloat(s.kg)||0));
+    const maxKg = Math.max(...series.map(s=>parseDecimal(s.kg)||0));
     const bestSerie = series.find(s=>parseFloat(s.kg)===maxKg)||series[0];
     points.push({date, kg:maxKg, reps:bestSerie.reps||'', sets:series.length});
   });
