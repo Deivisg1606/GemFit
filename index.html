@@ -503,11 +503,6 @@ function parseDecimal(value){
   const n=Number(v);
   return Number.isFinite(n)?n:NaN;
 }
-
-// PWA: la caché offline se activa al publicar la app en HTTPS o localhost.
-if('serviceWorker' in navigator && location.protocol !== 'file:'){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(e=>console.warn('PWA no disponible:',e)));
-}
 function normalizeDecimalInput(el){
   const n=parseDecimal(el.value);
   if(Number.isFinite(n)) el.value=String(Math.round(n*100)/100).replace('.',',');
@@ -554,12 +549,15 @@ const SESSIONS = {
     dur:'~90 min', focus:'Contracción escapular completa en cada rep. Descansa 180s en pesados.',
     sections: [
       { t:'Espalda', ex:[
-        {id:'esp_dominadas',n:'Dominadas',s:'3×8-10',repTargets:['8-10','8-10','8-10'],rest:180,note:'Controla el descenso y completa el rango.',why:'Dorsal ancho y fuerza vertical.',star:true},
-        {id:'esp_remo_multipower_supino',n:'Remo en Multipower con Agarre Supino',s:'3×12-15',repTargets:['12-15','12-15','12-15'],rest:180,note:'Pecho alto y codos hacia atrás.',why:'Grosor de dorsal y espalda media.'},
-        {id:'esp_jalon_unilateral',n:'Jalón al Pecho Unilateral',s:'4×12-15',repTargets:['12-15','12-15','12-15','12-15'],rest:90,note:'Mantén el torso estable y baja el codo.',why:'Dorsal unilateral.'},
-        {id:'ea5',n:'Remo al Pecho Agarre Neutro',s:'12 · 10 · 10',repTargets:[12,10,10],rest:90,note:'Tira al pecho y aprieta las escápulas.',why:'Romboides y trapecio medio.'},
-        {id:'esp_remo_bajo_maquina_unilateral',n:'Remo Bajo en Máquina Unilateral',s:'12 · 10 · 10 · 8',repTargets:[12,10,10,8],rest:90,note:'Controla ambos lados por igual.',why:'Dorsal y espalda media.'},
-        {id:'ea1',n:'Pull Over en Polea',s:'3×15-20',repTargets:['15-20','15-20','15-20'],rest:90,note:'Brazos rectos y dorsal contraído al bajar.',why:'Aislamiento del dorsal.'},
+        {id:'ea1',n:'Pull Over en Polea',s:'4×10',rest:180,note:'Brazos rectos, arco amplio, aprieta el dorsal al bajar.',why:'Aísla el dorsal sin involucrar bíceps.',star:true},
+        {id:'ea2',n:'Jalón al Pecho',s:'4×8',rest:180,note:'Pecho hacia la barra, codos hacia el suelo.',why:'Amplitud del dorsal ancho.',star:true},
+        {id:'ea3',n:'Remo Gironda',s:'4×14-12-10-8',rest:180,note:'Piramidal: sube el peso y baja las reps en cada serie.',why:'Sobrecarga progresiva. Grosor de espalda media.'},
+        {id:'ea4',n:'Jalón Inverso al Pecho',s:'4×12',rest:90,note:'Agarre supino, codos pegados al cuerpo.',why:'Mayor activación de dorsal y bíceps.'},
+        {id:'ea5',n:'Remo al Pecho Agarre Neutro',s:'4×8',rest:90,note:'Tira al pecho, aprieta escápulas arriba.',why:'Romboides y trapecio medio.'},
+        {id:'ea6',n:'Remo con Mancuerna',s:'3×8',rest:90,note:'Codo hacia el techo, rango completo.',why:'Aislamiento dorsal unilateral, corrige asimetrías.'},
+      ]},
+      { t:'Cardio LISS', ex:[
+        {id:'ea7',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% inclinación · 5.5 km/h',cardio:true,why:'Quema calórica con mínima fatiga muscular.'},
       ]},
     ]
   },
@@ -571,12 +569,15 @@ const SESSIONS = {
     dur:'~90 min', focus:'RPE 8-9 en compuestos. Mente-músculo en aislamientos. Descansa 180s en pesados.',
     sections: [
       { t:'Pectoral', ex:[
-        {id:'pec_press_plano_libre',n:'Press Plano Barra / Mancuerna',s:'4×6-8',repTargets:['6-8','6-8','6-8','6-8'],rest:180,note:'Controla el descenso y mantén los codos a 45°.',why:'Fuerza y masa de pectoral.',star:true},
-        {id:'pec_press_inclinado_libre',n:'Press Inclinado Barra / Mancuerna',s:'15 · 12 · 10+10',repTargets:[15,12,'10+10'],rest:180,note:'La última serie es una serie extendida 10+10.',why:'Pecho superior.'},
-        {id:'pec_press_declinado_libre',n:'Press Declinado Barra / Mancuerna',s:'3×8-10',repTargets:['8-10','8-10','8-10'],rest:180,note:'Recorrido controlado y hombros estables.',why:'Pectoral inferior.'},
-        {id:'pa2',n:'Press Plano en Máquina',s:'3×10-12',repTargets:['10-12','10-12','10-12'],rest:90,note:'Recorrido completo y sin bloquear codos.',why:'Pectoral medio.'},
-        {id:'pec_cruces_cables',n:'Cruces de Cables',s:'15 · 12 · 10',repTargets:[15,12,10],rest:90,note:'Cierra con control y mantén la tensión.',why:'Aislamiento de pectoral.'},
-        {id:'pec_aperturas_maquina',n:'Aperturas en Máquina',s:'3×15-20',repTargets:['15-20','15-20','15-20'],rest:90,note:'Pausa breve al cerrar.',why:'Aislamiento con tensión constante.'},
+        {id:'pa1',n:'Press Declinado en Máquina',s:'4×10',rest:180,note:'Controla el descenso, no bloquees codos arriba.',why:'Pecho inferior con mayor estabilidad.',star:true},
+        {id:'pa2',n:'Press Plano en Máquina',s:'4×8',rest:180,note:'Codos a 45°, recorrido completo.',why:'Pecho medio con carga progresiva segura.',star:true},
+        {id:'pa3',n:'Aperturas en Banco Inclinado',s:'4×10',rest:90,note:'Ligera flexión de codos, stretch completo abajo.',why:'Pecho clavicular en estiramiento máximo.'},
+        {id:'pa4',n:'Press Inclinado en Máquina',s:'4×10',rest:180,note:'Ángulo 30°, baja a la clavícula.',why:'Pecho alto.'},
+        {id:'pa5',n:'Apertura en Máquina',s:'3×12',rest:90,note:'Contracción 1s al cerrar, recorrido completo.',why:'Aislamiento de pecho con tensión constante.'},
+        {id:'pa6',n:'Pull Over con Mancuerna',s:'4×10',rest:90,note:'Brazos semi-rígidos, arco amplio sobre el pecho.',why:'Pecho superior y serrato anterior.'},
+      ]},
+      { t:'Cardio LISS', ex:[
+        {id:'pa7',n:'Caminata Inclinada en Cinta',s:'20 min',note:'10% · 5.5 km/h',cardio:true,why:''},
       ]},
     ]
   },
@@ -588,13 +589,14 @@ const SESSIONS = {
     dur:'~100 min', focus:'El día más duro. Descansa 180s en compuestos, 90s en aislamientos.',
     sections: [
       { t:'Pierna', ex:[
-        {id:'pie_peso_muerto_rumano',n:'Peso Muerto Rumano',s:'20 · 15 · 12 · 10',repTargets:[20,15,12,10],rest:180,note:'Cadera atrás y espalda neutra.',why:'Isquiotibiales y glúteo.',star:true},
-        {id:'pie_sentadilla_bulgara',n:'Sentadilla Búlgara',s:'3×12',repTargets:[12,12,12],rest:120,note:'Controla la rodilla y el equilibrio.',why:'Trabajo unilateral de pierna.'},
-        {id:'pie_zancadas_mancuernas',n:'Zancadas con Mancuernas',s:'3×15',repTargets:[15,15,15],rest:120,note:'Paso estable y torso erguido.',why:'Cuádriceps y glúteo.'},
-        {id:'pie_femoral_tumbado',n:'Femoral Tumbado',s:'20 · 15 · 12 · 10',repTargets:[20,15,12,10],rest:90,note:'Controla el descenso completo.',why:'Isquiotibiales.'},
-        {id:'pia1',n:'Extensiones de Cuádriceps',s:'20 · 15 · 12 · 10',repTargets:[20,15,12,10],rest:90,note:'Pausa arriba y bajada controlada.',why:'Aislamiento de cuádriceps.',star:true},
-        {id:'pie_gemelos_multipower',n:'Gemelos en Multipower',s:'3×20',repTargets:[20,20,20],rest:90,note:'Rango completo y pausa abajo.',why:'Gemelos.'},
-        {id:'pia8',n:'Abductor en Máquina',s:'3×20',repTargets:[20,20,20],rest:60,note:'Movimiento controlado, sin rebote.',why:'Glúteo medio.'},
+        {id:'pia1',n:'Extensión de Cuádriceps',s:'4×10',rest:90,note:'Pausa 1s arriba, bajada controlada.',why:'Aislamiento de cuádriceps en extensión total.',star:true},
+        {id:'pia2',n:'Prensa 45°',s:'3×8',rest:180,note:'Pies bajos y juntos para cuádriceps. Rango completo.',why:'Volumen de cuádriceps con menor fatiga de espalda.',star:true},
+        {id:'pia3',n:'Sentadilla Hack',s:'3×8',rest:180,note:'Profundidad completa, rodillas siguen los pies.',why:'Cuádriceps con buena estabilidad de espalda.'},
+        {id:'pia4',n:'Femoral Sentado',s:'4×10',rest:90,note:'Bajada lenta 3s, contracción completa.',why:'Isquiotibial en posición de mayor stretch.'},
+        {id:'pia5',n:'Femoral de Pie',s:'3×10',rest:90,note:'Una pierna a la vez, controla el negativo.',why:'Isquiotibial en aislamiento unilateral.'},
+        {id:'pia6',n:'Gemelo Sentado',s:'4×10',rest:90,note:'Rango completo, pausa abajo en el estiramiento.',why:'Sóleo principalmente.'},
+        {id:'pia7',n:'Aductor en Máquina',s:'3×10',rest:60,note:'Movimiento controlado, sin rebote.',why:'Aductores — estabilidad de cadera.'},
+        {id:'pia8',n:'Abductor en Máquina',s:'3×10',rest:60,note:'Movimiento controlado, sin rebote.',why:'Glúteo medio — estabilidad de cadera.'},
       ]},
     ]
   },
@@ -617,24 +619,7 @@ const ARCHIVED_EXERCISES = [
   {id:'ba5',n:'Predicador en Máquina'},
   {id:'ba6',n:'Martillo con Mancuerna (Unilateral)'},
   {id:'ba7',n:'Tirones en Polea'},
-  {id:'ba8',n:'Tirones tras Nuca con Cuerda (rutina anterior)'},
-  {id:'ea2',n:'Jalón al Pecho (rutina anterior)'},
-  {id:'ea3',n:'Remo Gironda (rutina anterior)'},
-  {id:'ea4',n:'Jalón Inverso al Pecho (rutina anterior)'},
-  {id:'ea6',n:'Remo con Mancuerna (rutina anterior)'},
-  {id:'ea7',n:'Caminata Inclinada en Cinta (espalda anterior)'},
-  {id:'pa1',n:'Press Declinado en Máquina (rutina anterior)'},
-  {id:'pa3',n:'Aperturas en Banco Inclinado (rutina anterior)'},
-  {id:'pa4',n:'Press Inclinado en Máquina (rutina anterior)'},
-  {id:'pa5',n:'Apertura en Máquina (rutina anterior)'},
-  {id:'pa6',n:'Pull Over con Mancuerna (rutina anterior)'},
-  {id:'pa7',n:'Caminata Inclinada en Cinta (pecho anterior)'},
-  {id:'pia2',n:'Prensa 45° (rutina anterior)'},
-  {id:'pia3',n:'Sentadilla Hack (rutina anterior)'},
-  {id:'pia4',n:'Femoral Sentado (rutina anterior)'},
-  {id:'pia5',n:'Femoral de Pie (rutina anterior)'},
-  {id:'pia6',n:'Gemelo Sentado (rutina anterior)'},
-  {id:'pia7',n:'Aductor en Máquina (rutina anterior)'}
+  {id:'ba8',n:'Tirones tras Nuca con Cuerda (rutina anterior)'}
 ];
 
 const SESS_LIST = [
@@ -1722,22 +1707,18 @@ function renderDayPanel(){
         const done=chk[ex.id];
         const log=dd.logs&&dd.logs[ex.id]||{};
         const last=getLastPerf(ex.id);
-        const best=getBestPerf(ex.id);
-        const coach=getExerciseCoach(ex);
         const num=ex.cardio?'🏃':ex.star?'★':String(ei+1).padStart(2,'0');
         const vol=log.kg&&log.sets&&log.reps?Math.round(log.kg*log.sets*log.reps):null;
         const lastTxt=last&&(last.kg||last.sets||last.reps)
           ?`Última: ${last.sets||'?'}×${last.reps||'?'} · ${last.kg||'?'}kg${last.date?' ('+last.date+')':''}`
           :'';
         // Parse default sets count from ex.s e.g. "4×8-10" → 4
-        const seriesTargets = Array.isArray(ex.repTargets)?ex.repTargets:(Array.isArray(ex.reps)?ex.reps:[]);
-        const defaultSets = seriesTargets.length||parseInt((ex.s||'3').match(/^(\d+)/)?.[1]||'3');
+        const defaultSets = Array.isArray(ex.reps)?ex.reps.length:parseInt((ex.s||'3').match(/^(\d+)/)?.[1]||'3');
         // Load saved series for this exercise
         const seriesKey = 'series_'+SK+'_'+ex.id;
         const savedSeries = (gd()[seriesKey])||[];
         // Last performance text
         const lastPerfShort = last&&last.kg ? `Última: ${last.sets||'?'}×${last.reps||'?'} · ${last.kg}kg` : '';
-        const bestPerfShort = best&&best.kg ? `Mejor: ${best.kg}kg × ${best.reps||'?'}${best.date?' · '+best.date:''}` : '';
 
         const exRest = ex.rest || 90;
         h+=`<div style="border-bottom:1px solid var(--border);${ex.star?'border-left:3px solid '+p.color+';background:'+p.color+'08;':''}${ex.cardio?'background:rgba(200,241,53,.03);':''}${done?'opacity:.6;':''}">
@@ -1748,12 +1729,9 @@ function renderDayPanel(){
               <div style="flex:1;min-width:0;">
                 <div style="font-size:${ex.star?'15':'14'}px;font-weight:700;${done?'text-decoration:line-through;color:var(--muted)':''}">${ex.n}</div>
                 ${lastPerfShort?`<div style="font-size:10px;color:${p.color};margin-top:2px;font-family:'DM Mono',monospace;">↩ ${lastPerfShort}</div>`:''}
-                ${bestPerfShort?`<div style="font-size:10px;color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace;">★ ${bestPerfShort}</div>`:''}
-                ${coach.message?`<div style="font-size:10px;color:${coach.stalled?'#ffb454':'#7ed9ff'};margin-top:4px;line-height:1.35;">${coach.stalled?'⚠':'✦'} ${coach.message}</div>`:''}
               </div>
               <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
                 <button onclick="openExHistory('${ex.id}','${ex.n.replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Histórico">📈</button>
-                <button onclick="openTechniqueGuide('${ex.n.replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Técnica en vídeo">▶</button>
                 <button onclick="openRMCalc('${ex.id}','${ex.n.replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Calculadora RM">🔢</button>
                 <button onclick="hidePlanEx('${dd.session}','${ex.id}')" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:15px;padding:0 2px;line-height:1;" title="Ocultar ejercicio">×</button>
               </div>
@@ -1784,15 +1762,13 @@ function renderDayPanel(){
             </div>
             <div id="series-rows-${ex.id}">
               ${(savedSeries.length>0?savedSeries:Array(defaultSets).fill(null)).map((s,si)=>{
-                const targetRep=seriesTargets[si]??'';
-                const sv = s||{reps:(typeof targetRep==='number'?targetRep:''),kg:''};
+                const sv = s||{reps:(Array.isArray(ex.reps)?ex.reps[si]||'':''),kg:''};
                 const vol2 = sv.reps&&sv.kg?Math.round(sv.reps*sv.kg):'—';
                 const lastKg = last&&last.kg?last.kg:'';
-                const currentKg=parseDecimal(sv.kg), lastKgNum=parseDecimal(last&&last.kg);
-                const border = sv.kg&&last&&last.kg?(currentKg>lastKgNum?'#4ade80':currentKg<lastKgNum?'#ff6b35':'var(--border2)'):'var(--border2)';
+                const border = sv.kg&&last&&last.kg?(+sv.kg>+last.kg?'#4ade80':+sv.kg<+last.kg?'#ff6b35':'var(--border2)'):'var(--border2)';
                 return `<div style="display:grid;grid-template-columns:32px 1fr 1fr 1fr 28px;gap:4px;margin-bottom:4px;align-items:center;">
                   <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--muted);text-align:center;">${si+1}</div>
-                  <input type="number" min="1" max="100" value="${sv.reps||''}" placeholder="${targetRep||last&&last.reps||'reps'}"
+                  <input type="number" min="1" max="100" value="${sv.reps||''}" placeholder="${last&&last.reps?last.reps:'reps'}"
                     oninput="saveSerie('${ex.id}',${si},'reps',this.value)" onblur="flashSaved(this)"
                     style="background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 6px;outline:none;width:100%;text-align:center;">
                   <input type="text" inputmode="decimal" value="${sv.kg||''}" placeholder="${lastKg||'kg'}"
@@ -1938,7 +1914,7 @@ function saveSerie(exId, idx, field, value){
   const series=data[key].filter(s=>s.kg);
   if(series.length){
     const maxKg=Math.max(...series.map(s=>parseDecimal(s.kg)||0));
-    const bestSerie=series.find(s=>parseDecimal(s.kg)===maxKg)||series[0];
+    const bestSerie=series.find(s=>parseFloat(s.kg)===maxKg)||series[0];
     const prev=data._lastPerf[exId];
     if(!prev||maxKg>=(prev.kg||0)){
       data._lastPerf[exId]={sets:data[key].length,reps:bestSerie.reps,kg:maxKg,date:SK};
@@ -1979,96 +1955,27 @@ function saveLog(exId, field, value){
 
 function getLastPerf(exId){
   const data=gd();
-  const sessions=Object.entries(data).map(([key,series])=>{
-    const match=key.match(/^series_(\d{4}-\d{2}-\d{2})_(.+)$/);
-    return match&&match[2]===exId&&match[1]!==SK&&Array.isArray(series)?{date:match[1],series}:null;
-  }).filter(Boolean).sort((a,b)=>b.date.localeCompare(a.date));
-  if(sessions.length){
-    const latest=sessions[0];
-    const completed=latest.series.filter(s=>s&&s.kg!==''&&Number.isFinite(parseDecimal(s.kg)));
-    if(completed.length){
-      const maxKg=Math.max(...completed.map(s=>parseDecimal(s.kg)));
-      const best=completed.find(s=>parseDecimal(s.kg)===maxKg)||completed[0];
-      return {sets:latest.series.length,reps:best.reps,kg:maxKg,date:latest.date};
+  // First try new series-based lastPerf
+  if(data._lastPerf&&data._lastPerf[exId]){
+    const lp=data._lastPerf[exId];
+    if(lp.date!==SK) return lp;
+    // Today's entry — find previous
+    const keys=Object.keys(data).filter(k=>/^\d{4}-/.test(k)&&k!==SK&&data[k]&&data['series_'+k+'_'+exId]);
+    if(keys.length){
+      keys.sort(); keys.reverse();
+      const prevKey='series_'+keys[0]+'_'+exId;
+      const prevSeries=(data[prevKey]||[]).filter(s=>s.kg);
+      if(prevSeries.length){
+        const maxKg=Math.max(...prevSeries.map(s=>parseDecimal(s.kg)||0));
+        const best=prevSeries.find(s=>parseFloat(s.kg)===maxKg)||prevSeries[0];
+        return{sets:data[prevKey].length,reps:best.reps,kg:maxKg,date:keys[0]};
+      }
     }
+    return null;
   }
-  return data._lastPerf&&data._lastPerf[exId] ? data._lastPerf[exId] : null;
-}
-
-function getBestPerf(exId){
-  const data=gd(); let best=null;
-  Object.entries(data).forEach(([key,series])=>{
-    const match=key.match(/^series_(\d{4}-\d{2}-\d{2})_(.+)$/);
-    if(!match||match[2]!==exId||!Array.isArray(series)) return;
-    series.forEach(s=>{
-      const kg=parseDecimal(s&&s.kg);
-      if(Number.isFinite(kg)&&(!best||kg>best.kg||kg===best.kg&&match[1]>best.date)) best={kg,reps:s.reps,date:match[1]};
-    });
-  });
-  return best||(data._lastPerf&&data._lastPerf[exId]||null);
-}
-
-function getTargetReps(ex){
-  if(Array.isArray(ex.repTargets)) return ex.repTargets;
-  if(Array.isArray(ex.reps)) return ex.reps;
-  const match=String(ex.s||'').match(/^(\d+)×(.+)$/);
-  if(!match) return [];
-  const sets=Number(match[1]);
-  const values=match[2].split('-').map(v=>Number(v.trim())).filter(Number.isFinite);
-  if(values.length===sets) return values;
-  return values.length ? Array(sets).fill(values[values.length-1]) : [];
-}
-
-function getBlockComparison(){
-  const data=gd(); const today=new Date(); today.setHours(0,0,0,0);
-  const current={sessions:new Set(),volume:0}, previous={sessions:new Set(),volume:0};
-  Object.entries(data).forEach(([key,series])=>{
-    const match=key.match(/^series_(\d{4}-\d{2}-\d{2})_/);
-    if(!match||!Array.isArray(series)) return;
-    const date=new Date(match[1]+'T00:00:00');
-    const age=Math.floor((today-date)/86400000);
-    const block=age>=0&&age<28?current:age>=28&&age<56?previous:null;
-    if(!block) return;
-    block.sessions.add(match[1]);
-    block.volume+=series.reduce((sum,s)=>sum+(parseDecimal(s&&s.kg)||0)*(parseDecimal(s&&s.reps)||0),0);
-  });
-  const previousVolume=previous.volume;
-  const volumeChange=previousVolume?Math.round(((current.volume-previousVolume)/previousVolume)*100):0;
-  return {current:{sessions:current.sessions.size,volume:current.volume},previous:{sessions:previous.sessions.size,volume:previous.volume},volumeChange};
-}
-
-function getExerciseSessions(exId){
-  const data=gd();
-  return Object.entries(data).map(([key,series])=>{
-    const match=key.match(/^series_(\d{4}-\d{2}-\d{2})_(.+)$/);
-    if(!match||match[2]!==exId||!Array.isArray(series)) return null;
-    const completed=series.filter(s=>s&&s.kg!==''&&Number.isFinite(parseDecimal(s.kg)));
-    if(!completed.length) return null;
-    const maxKg=Math.max(...completed.map(s=>parseDecimal(s.kg)));
-    const volume=completed.reduce((sum,s)=>sum+(parseDecimal(s.kg)||0)*(parseDecimal(s.reps)||0),0);
-    return {date:match[1],series,completed,maxKg,volume};
-  }).filter(Boolean).sort((a,b)=>b.date.localeCompare(a.date));
-}
-
-function getExerciseCoach(ex){
-  const sessions=getExerciseSessions(ex.id);
-  if(!sessions.length) return {message:'Registra esta primera sesión para activar tus recomendaciones.',stalled:false};
-  const latest=sessions[0]; const targets=getTargetReps(ex);
-  const completedTarget=targets.length>0&&targets.every((target,i)=>{
-    const set=latest.series[i];
-    const minTarget=parseDecimal(String(target).match(/\d+/)?.[0]);
-    return set&&parseDecimal(set.kg)>0&&parseDecimal(set.reps)>=minTarget;
-  });
-  const stalled=sessions.length>=3&&sessions.slice(0,3).every(s=>s.maxKg===sessions[0].maxKg);
-  if(stalled) return {message:`Estancamiento: llevas 3 sesiones en ${latest.maxKg} kg. Mantén técnica y prueba +1 repetición o +2,5 kg.`,stalled:true};
-  if(completedTarget) return {message:`Objetivo completado. Próxima sesión: prueba ${Number((latest.maxKg+2.5).toFixed(2))} kg en la serie más pesada.`,stalled:false};
-  return {message:`Mantén ${latest.maxKg} kg y busca completar todas las repeticiones objetivo antes de subir carga.`,stalled:false};
-}
-
-function openTechniqueGuide(exName){
-  const url='https://www.youtube.com/results?search_query='+encodeURIComponent(exName+' técnica correcta gimnasio');
-  const win=window.open(url,'_blank','noopener');
-  if(win) win.opener=null;
+  // Fallback to old logs
+  if(!data._lastPerf||!data._lastPerf[exId]) return null;
+  return data._lastPerf[exId];
 }
 
 
@@ -2245,26 +2152,6 @@ function renderPerfil(){
       <div style="font-size:11px;color:var(--muted);margin-top:2px;">${p.age} años · ${p.h}m · Géminis ♊ · Recomposición Corporal</div>
     </div>
   </div></div>
-  <div class="card" style="margin-bottom:12px;overflow:hidden;border-color:${p.color}45;">
-    <div style="padding:13px 14px;background:linear-gradient(135deg,${p.color}24,rgba(119,51,204,.16));border-bottom:1px solid ${p.color}35;">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:.07em;color:${p.color};">🚀 GEMFIT ROADMAP</div>
-        <span style="font-size:9px;font-weight:700;letter-spacing:.09em;padding:4px 7px;border-radius:20px;background:${p.color};color:#0a0a0a;">v2.1</span>
-      </div>
-      <div style="font-size:11px;color:var(--text);line-height:1.5;margin-top:5px;">Una app de entrenamiento que evoluciona contigo, sin perder tu historial.</div>
-    </div>
-    <div class="card-body" style="padding:12px 14px;">
-      <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px;"><span style="font-size:10px;font-weight:700;color:#4ade80;">● SPRINT 1 · COMPLETADO</span></div>
-      <div style="font-size:10px;color:var(--muted);line-height:1.75;">✓ Nueva rutina de hombros, bíceps y tríceps<br>✓ Repeticiones diferentes por serie<br>✓ Pesos con coma o punto<br>✓ Historial compatible y desacoplado de la rutina</div>
-      <div style="height:1px;background:var(--border);margin:10px 0;"></div>
-      <div style="display:grid;gap:6px;">
-        <div style="padding:8px 9px;background:var(--card2);border-radius:7px;border-left:2px solid #00bcd4;"><strong style="font-size:11px;color:#00bcd4;">✓ v2.2 · Historial activo</strong><div style="font-size:10px;color:var(--muted);margin-top:2px;">PR, última sesión, fecha y volumen.</div></div>
-        <div style="padding:8px 9px;background:var(--card2);border-radius:7px;border-left:2px solid #7733cc;"><strong style="font-size:11px;color:#a879e8;">✓ v2.3 · Dashboard activo</strong><div style="font-size:10px;color:var(--muted);margin-top:2px;">Gráficas, estadísticas y comparación entre bloques.</div></div>
-        <div style="padding:8px 9px;background:var(--card2);border-radius:7px;border-left:2px solid #cc5500;"><strong style="font-size:11px;color:#ff9a61;">v3.0 · Sincronización</strong><div style="font-size:10px;color:var(--muted);margin-top:2px;">Exportar/importar y sincronización opcional ya disponibles.</div></div>
-      </div>
-      <div style="font-size:9px;color:var(--muted2);line-height:1.55;margin-top:10px;">Coach inteligente activo: recomendación de pesos, detección de estancamientos, vídeos de técnica y comparación entre bloques.</div>
-    </div>
-  </div>
   <div class="card"><div class="card-body">
     <div class="section-label">Índice de Masa Corporal</div>
     <div class="imc-inputs">
@@ -2407,7 +2294,6 @@ function renderProgreso(){
   // ── Sesiones totales ──
   let totSess=0;
   Object.values(data).forEach(d=>{if(d.session&&d.session!=='skip'&&SESSIONS[d.session])totSess++;});
-  const blocks=getBlockComparison();
 
   document.getElementById('tab-progreso').innerHTML=`<div class="inner">
   <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(255,238,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
@@ -2506,16 +2392,6 @@ function renderProgreso(){
       <div class="legend-item"><div class="legend-dot" style="background:#6600bb"></div>Pierna</div>
       <div class="legend-item"><div class="legend-dot" style="background:#00bcd4"></div>Brazos</div>
     </div>
-  </div></div>
-
-  <div class="card" style="margin-top:12px;"><div class="card-body">
-    <div class="section-label">Comparación entre bloques</div>
-    <div style="font-size:10px;color:var(--muted);margin-bottom:9px;">Últimos 28 días frente a los 28 anteriores.</div>
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:7px;">
-      <div style="padding:9px;background:${p.color}10;border:1px solid ${p.color}35;border-radius:8px;"><div style="font-size:9px;color:${p.color};text-transform:uppercase;letter-spacing:.06em;">Bloque actual</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.45rem;color:${p.color};">${blocks.current.sessions}</div><div style="font-size:9px;color:var(--muted);">sesiones · ${Math.round(blocks.current.volume)} kg vol.</div></div>
-      <div style="padding:9px;background:var(--card2);border:1px solid var(--border);border-radius:8px;"><div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Bloque anterior</div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.45rem;color:var(--text);">${blocks.previous.sessions}</div><div style="font-size:9px;color:var(--muted);">sesiones · ${Math.round(blocks.previous.volume)} kg vol.</div></div>
-    </div>
-    <div style="font-size:10px;color:${blocks.volumeChange>0?'#4ade80':blocks.volumeChange<0?'#ffb454':'var(--muted)'};margin-top:8px;">${blocks.previous.sessions||blocks.previous.volume?`${blocks.volumeChange>0?'▲ +':blocks.volumeChange<0?'▼ ':''}${blocks.volumeChange}% de volumen respecto al bloque anterior.`:'Añade sesiones para generar tu primera comparación.'}</div>
   </div></div>
 
   <!-- EJERCICIOS ARCHIVADOS -->
@@ -4080,9 +3956,9 @@ function restoreAllEx(){
 function openExHistory(exId, exName){
   const data = gd();
   // Find all days with series for this exercise, get max kg per day
+  const keys = Object.keys(data).filter(k=>/^\d{4}-\d{2}-\d{2}$/.test(k) || k.startsWith('series_'));
   const seriesKeys = Object.keys(data).filter(k=>k.startsWith('series_') && k.endsWith('_'+exId));
   const points = [];
-  const seriesDates = new Set();
   seriesKeys.forEach(sk=>{
     // key format: series_YYYY-MM-DD_exId
     const m = sk.match(/^series_(\d{4}-\d{2}-\d{2})_/);
@@ -4092,17 +3968,8 @@ function openExHistory(exId, exName){
     if(!series.length) return;
     const maxKg = Math.max(...series.map(s=>parseDecimal(s.kg)||0));
     points.push({date, kg:maxKg});
-    seriesDates.add(date);
-  });
-  // Compatibilidad con los registros creados antes del sistema por series.
-  Object.entries(data).forEach(([date,day])=>{
-    const log=/^\d{4}-\d{2}-\d{2}$/.test(date)&&day&&day.logs&&day.logs[exId];
-    const kg=log&&parseDecimal(log.kg);
-    if(!seriesDates.has(date)&&Number.isFinite(kg)&&kg>0) points.push({date,kg});
   });
   points.sort((a,b)=>a.date.localeCompare(b.date));
-  const sessionStats=getExerciseSessions(exId);
-  const totalVolume=sessionStats.reduce((sum,s)=>sum+s.volume,0);
 
   const p = pr();
   const modal = document.getElementById('exHistoryModal');
@@ -4144,11 +4011,6 @@ function openExHistory(exId, exName){
     }).join('');
 
     content.innerHTML = `
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;">
-        <div style="padding:8px 6px;background:var(--card2);border-radius:8px;text-align:center;"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:${p.color};">${points[points.length-1].kg}kg</div><div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Última</div></div>
-        <div style="padding:8px 6px;background:var(--card2);border-radius:8px;text-align:center;"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#facc15;">${maxKg}kg</div><div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">PR</div></div>
-        <div style="padding:8px 6px;background:var(--card2);border-radius:8px;text-align:center;"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#7ed9ff;">${Math.round(totalVolume)}</div><div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">Vol. kg</div></div>
-      </div>
       <div style="padding:14px;background:var(--card2);border-radius:10px;margin-bottom:14px;">
         ${chartHtml}
       </div>
@@ -4256,7 +4118,7 @@ function getExerciseSeriesPoints(exId){
     const series = (data[sk]||[]).filter(s=>s&&s.kg);
     if(!series.length) return;
     const maxKg = Math.max(...series.map(s=>parseDecimal(s.kg)||0));
-    const bestSerie = series.find(s=>parseDecimal(s.kg)===maxKg)||series[0];
+    const bestSerie = series.find(s=>parseFloat(s.kg)===maxKg)||series[0];
     points.push({date, kg:maxKg, reps:bestSerie.reps||'', sets:series.length});
   });
   points.sort((a,b)=>a.date.localeCompare(b.date));
