@@ -37,7 +37,7 @@
 body.light-theme{
   --bg:#f5f6f8;--card:#ffffff;--card2:#eceff3;
   --border:rgba(20,27,38,.12);--border2:rgba(20,27,38,.22);
-  --text:#19202a;--muted:#657080;--muted2:#8b95a3;--skip:#7a8491;
+  --text:#19202a;--muted:#4f5d6c;--muted2:#667383;--skip:#657080;
 }
 html{height:100%;}
 body{
@@ -48,8 +48,13 @@ body{
 }
 body.light-theme #s-profiles,body.light-theme .topbar,body.light-theme .bnav{background:var(--bg);}
 body.light-theme [style*="background:rgba(10,10,10"]{background:rgba(245,246,248,.96)!important;}
+body.light-theme [style*="background:#111"],body.light-theme [style*="background:#1a1a1a"]{background:var(--card)!important;}
+body.light-theme [style*="color:#e8e8e8"]{color:var(--text)!important;}
+body.light-theme [style*="color:#333"],body.light-theme [style*="color:#444"],body.light-theme [style*="color:#666"],body.light-theme [style*="color:#888"]{color:#4f5d6c!important;}
+body.light-theme #moreMenu > div,body.light-theme #profileSwitcher{border-color:var(--border2)!important;box-shadow:0 8px 20px rgba(20,27,38,.12)!important;}
 body.light-theme .nbtn{color:var(--muted);}
 body.light-theme .nbtn.active{color:var(--accent);}
+.theme-quick{width:36px;height:36px;border-radius:10px;border:1px solid var(--border2);background:var(--card2);color:var(--text);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 
 @supports (padding: max(0px)){
   .topbar{padding-top:max(10px,env(safe-area-inset-top));}
@@ -431,6 +436,7 @@ body.light-theme .nbtn.active{color:var(--accent);}
       <span style="font-size:10px;color:var(--muted);">⇄ cambiar</span>
     </div>
     <div class="tright" id="tRight" style="display:none;">PLAN</div>
+    <button class="theme-quick" id="themeQuickToggle" onclick="cycleQuickTheme()" aria-label="Cambiar entre modo claro y oscuro" title="Cambiar tema">☀</button>
 
     <!-- Quick profile switcher dropdown -->
     <div id="profileSwitcher" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:200;background:#111;border:1px solid rgba(255,255,255,.1);border-radius:0 0 12px 12px;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,.4);">
@@ -758,10 +764,19 @@ function applyTheme(preference=getThemePreference()){
     button.style.background=selected?'var(--accent)18':'var(--card2)';
     button.style.color=selected?'var(--accent)':'var(--muted)';
   });
+  const quickButton=document.getElementById('themeQuickToggle');
+  if(quickButton){
+    quickButton.textContent=useLight?'☾':'☀';
+    quickButton.title=useLight?'Usar modo oscuro':'Usar modo claro';
+    quickButton.setAttribute('aria-label',quickButton.title);
+  }
 }
 function setThemePreference(preference){
   try{localStorage.setItem(THEME_KEY,preference);}catch(e){}
   applyTheme(preference);
+}
+function cycleQuickTheme(){
+  setThemePreference(document.body.classList.contains('light-theme')?'dark':'light');
 }
 
 function lsLoad(){
@@ -774,7 +789,7 @@ function lsLoad(){
 function lsSave(){
   try{
     localStorage.setItem(LS_KEY, JSON.stringify({
-      AD, WD, SC, PD, CALS, AVATARS, EXLIB, NUTRITION, CP
+      AD, WD, SC, PD, CALS, AVATARS, EXLIB, NUTRITION, MEASUREMENTS, CP
     }));
 } catch(e){
     console.warn('localStorage full or unavailable:', e);
@@ -783,10 +798,29 @@ function lsSave(){
 }
 
 function exportData(){
-  const backup={version:'2.4',exportedAt:new Date().toISOString(),theme:getThemePreference(),data:{AD,WD,SC,PD,CALS,AVATARS,EXLIB,CP}};
+  const backup={version:'2.5',exportedAt:new Date().toISOString(),theme:getThemePreference(),data:{AD,WD,SC,PD,CALS,AVATARS,EXLIB,NUTRITION,MEASUREMENTS,CP}};
   const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob); const link=document.createElement('a');
   link.href=url; link.download='gemfit-backup-'+dk(new Date())+'.json'; link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function exportCSV(){
+  const esc=value=>'"'+String(value??'').replace(/"/g,'""')+'"';
+  const rows=[['Fecha','Ejercicio','Serie','Repeticiones','Peso (kg)','RIR','Volumen (kg)']];
+  Object.entries(gd()||{}).forEach(([key,series])=>{
+    const match=key.match(/^series_(\d{4}-\d{2}-\d{2})_(.+)$/);
+    if(!match||!Array.isArray(series)) return;
+    const exercise=getExerciseName(match[2]);
+    series.forEach((set,index)=>{
+      if(!set||(!set.reps&&!set.kg)) return;
+      const volume=(parseDecimal(set.reps)||0)*(parseDecimal(set.kg)||0);
+      rows.push([match[1],exercise,index+1,set.reps||'',set.kg||'',set.rir??'',Math.round(volume)]);
+    });
+  });
+  const blob=new Blob(['\uFEFF'+rows.map(row=>row.map(esc).join(';')).join('\n')],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob), link=document.createElement('a');
+  link.href=url; link.download='gemfit-entrenamiento-'+dk(new Date())+'.csv'; link.click();
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
@@ -798,9 +832,9 @@ function importData(input){
       const parsed=JSON.parse(event.target.result); const incoming=parsed.data||parsed;
       if(!incoming||typeof incoming!=='object'||!incoming.AD||!incoming.WD) throw new Error('Formato no reconocido');
       if(!confirm('Esto reemplazará los datos actuales de GemFit en este dispositivo. ¿Continuar?')) return;
-      ['AD','WD','SC','PD','CALS','AVATARS','EXLIB'].forEach(key=>{
+      ['AD','WD','SC','PD','CALS','AVATARS','EXLIB','NUTRITION','MEASUREMENTS'].forEach(key=>{
         if(incoming[key]&&typeof incoming[key]==='object'){
-          const target={AD,WD,SC,PD,CALS,AVATARS,EXLIB}[key];
+          const target={AD,WD,SC,PD,CALS,AVATARS,EXLIB,NUTRITION,MEASUREMENTS}[key];
           Object.keys(target).forEach(k=>delete target[k]); Object.assign(target,incoming[key]);
         }
       });
@@ -825,6 +859,7 @@ const CALS    = _stored.CALS    || {deivis:{}, yona:{}};
 const AVATARS = _stored.AVATARS || {deivis:null, yona:null};
 const EXLIB   = _stored.EXLIB   || {deivis:[], yona:[]};  // Personal exercise library
 const NUTRITION = _stored.NUTRITION || {deivis:null, yona:null};
+const MEASUREMENTS = _stored.MEASUREMENTS || {deivis:[], yona:[]};
 // CP always starts null — user must select profile on every open
 
 function dk(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
@@ -833,6 +868,14 @@ function gd(){ return AD[CP]; }
 function sd(d){ AD[CP]=d; lsSave(); }
 function gw(){ return WD[CP]; }
 function pr(){ return PROFS[CP]; }
+function gm(){ return MEASUREMENTS[CP]||(MEASUREMENTS[CP]=[]); }
+function getExerciseName(exerciseId){
+  for(const session of Object.values(SESSIONS)) for(const section of session.sections||[]){
+    const found=(section.ex||[]).find(ex=>ex.id===exerciseId); if(found) return found.n;
+  }
+  const archived=(typeof ARCHIVED_EXERCISES!=='undefined'?ARCHIVED_EXERCISES:[]).find(ex=>ex.id===exerciseId);
+  return archived?.n||exerciseId.replace(/^extra_\d+_/, 'Ejercicio extra ');
+}
 
 
 // ═══════════════════════════════════════════════════════════════
@@ -1893,10 +1936,11 @@ function renderDayPanel(){
           <!-- Series individuales -->
           <div style="padding:4px 13px 8px;">
             <!-- Cabecera columnas -->
-            <div style="display:grid;grid-template-columns:32px 1fr 1fr 1fr 28px;gap:4px;margin-bottom:4px;padding:0 2px;">
+            <div style="display:grid;grid-template-columns:28px 1fr 1fr 38px 1fr 24px;gap:4px;margin-bottom:4px;padding:0 2px;">
               <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">N°</div>
               <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Reps</div>
               <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Kg</div>
+              <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;text-align:center;">RIR</div>
               <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Vol</div>
               <div></div>
             </div>
@@ -1908,7 +1952,7 @@ function renderDayPanel(){
                 const lastKg = last&&last.kg?last.kg:'';
                 const currentKg=parseDecimal(sv.kg), lastKgNum=parseDecimal(last&&last.kg);
                 const border = sv.kg&&last&&last.kg?(currentKg>lastKgNum?'#4ade80':currentKg<lastKgNum?'#ff6b35':'var(--border2)'):'var(--border2)';
-                return `<div style="display:grid;grid-template-columns:32px 1fr 1fr 1fr 28px;gap:4px;margin-bottom:4px;align-items:center;">
+                return `<div style="display:grid;grid-template-columns:28px 1fr 1fr 38px 1fr 24px;gap:4px;margin-bottom:4px;align-items:center;">
                   <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--muted);text-align:center;">${si+1}</div>
                   <input type="number" min="1" max="100" value="${sv.reps||''}" placeholder="${targetRep||last&&last.reps||'reps'}"
                     oninput="saveSerie('${ex.id}',${si},'reps',this.value)" onblur="flashSaved(this)"
@@ -1916,6 +1960,7 @@ function renderDayPanel(){
                   <input type="text" inputmode="decimal" value="${sv.kg||''}" placeholder="${lastKg||'kg'}"
                     oninput="saveSerie('${ex.id}',${si},'kg',this.value)" onblur="normalizeDecimalInput(this);saveSerie('${ex.id}',${si},'kg',this.value)"
                     style="background:var(--card2);border:1px solid ${border};border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 6px;outline:none;width:100%;text-align:center;">
+                  <select aria-label="RIR serie ${si+1}" onchange="saveSerie('${ex.id}',${si},'rir',this.value)" style="background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:5px 1px;outline:none;width:100%;text-align:center;"><option value="" ${sv.rir==null||sv.rir===''?'selected':''}>—</option>${[0,1,2,3,4,5].map(r=>`<option value="${r}" ${String(sv.rir)===String(r)?'selected':''}>${r}</option>`).join('')}</select>
                   <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:${p.color};text-align:center;">${vol2!=='—'?vol2+'kg':'—'}</div>
                   <button onclick="deleteSerie('${ex.id}',${si})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0;text-align:center;line-height:1;">×</button>
                 </div>`;
@@ -1973,10 +2018,11 @@ function renderDayPanel(){
           </div>
           ${isExtraOpen?`<!-- Series individuales -->
           <div style="padding:4px 13px 8px;">
-            <div style="display:grid;grid-template-columns:32px 1fr 1fr 1fr 28px;gap:4px;margin-bottom:4px;padding:0 2px;">
+            <div style="display:grid;grid-template-columns:28px 1fr 1fr 38px 1fr 24px;gap:4px;margin-bottom:4px;padding:0 2px;">
               <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">N°</div>
               <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Reps</div>
               <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Kg</div>
+              <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;text-align:center;">RIR</div>
               <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Vol</div>
               <div></div>
             </div>
@@ -1984,7 +2030,7 @@ function renderDayPanel(){
               ${extraSeriesList.map((s,si)=>{
                 const sv = s||{reps:(Array.isArray(ex.reps)?ex.reps[si]||'':''),kg:''};
                 const vol2 = sv.reps&&sv.kg?Math.round(sv.reps*sv.kg):'—';
-                return `<div style="display:grid;grid-template-columns:32px 1fr 1fr 1fr 28px;gap:4px;margin-bottom:4px;align-items:center;">
+                return `<div style="display:grid;grid-template-columns:28px 1fr 1fr 38px 1fr 24px;gap:4px;margin-bottom:4px;align-items:center;">
                   <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--muted);text-align:center;">${si+1}</div>
                   <input type="number" min="1" max="100" value="${sv.reps||''}" placeholder="reps"
                     oninput="saveSerie('${extraExId}',${si},'reps',this.value)" onblur="flashSaved(this)"
@@ -1992,6 +2038,7 @@ function renderDayPanel(){
                   <input type="number" min="0" max="500" step="0.5" value="${sv.kg||''}" placeholder="kg"
                     oninput="saveSerie('${extraExId}',${si},'kg',this.value)" onblur="flashSaved(this)"
                     style="background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 6px;outline:none;width:100%;text-align:center;">
+                  <select aria-label="RIR serie ${si+1}" onchange="saveSerie('${extraExId}',${si},'rir',this.value)" style="background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:5px 1px;outline:none;width:100%;text-align:center;"><option value="" ${sv.rir==null||sv.rir===''?'selected':''}>—</option>${[0,1,2,3,4,5].map(r=>`<option value="${r}" ${String(sv.rir)===String(r)?'selected':''}>${r}</option>`).join('')}</select>
                   <div style="font-family:'Bebas Neue',sans-serif;font-size:12px;color:${tc2};text-align:center;">${vol2!=='—'?vol2+'kg':'—'}</div>
                   <button onclick="deleteSerie('${extraExId}',${si})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0;text-align:center;line-height:1;">×</button>
                 </div>`;
@@ -2052,6 +2099,7 @@ function saveSerie(exId, idx, field, value){
   const key='series_'+SK+'_'+exId;
   if(!data[key]) data[key]=[];
   while(data[key].length<=idx) data[key].push({reps:'',kg:''});
+  const previousValue=data[key][idx][field];
   data[key][idx][field]=value;
   // Update lastPerf with best kg across all series
   if(!data._lastPerf) data._lastPerf={};
@@ -2065,6 +2113,10 @@ function saveSerie(exId, idx, field, value){
     }
   }
   sd(data);
+  // Al completar el peso de una serie se inicia el descanso seleccionado.
+  if(field==='kg'&&!previousValue&&parseDecimal(value)>0&&parseDecimal(data[key][idx].reps)>0){
+    startRestTimer(_restTargetSeconds);
+  }
   // Update volume cell inline without full re-render
   const vol=series.reduce((a,s)=>a+(parseDecimal(s.reps)||0)*(parseDecimal(s.kg)||0),0);
 }
@@ -2440,6 +2492,7 @@ function renderPerfil(){
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <button onclick="exportData()" style="padding:7px 14px;background:${p.color};color:#060d0a;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.06em;cursor:pointer;">⬇ Exportar datos</button>
+      <button onclick="exportCSV()" style="padding:7px 14px;background:transparent;color:${p.color};border:1px solid ${p.color}40;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.06em;cursor:pointer;">▤ Excel / CSV</button>
       <button onclick="document.getElementById('importFile').click()" style="padding:7px 14px;background:transparent;color:${p.color};border:1px solid ${p.color}40;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.06em;cursor:pointer;">⬆ Importar datos</button>
       <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(this)">
     </div>
@@ -2557,6 +2610,14 @@ function renderProgreso(){
   let totSess=0;
   Object.values(data).forEach(d=>{if(d.session&&d.session!=='skip'&&SESSIONS[d.session])totSess++;});
   const blocks=getBlockComparison();
+  const measureHistory=gm(); const lastMeasure=measureHistory.length?measureHistory[measureHistory.length-1]:null;
+  const adherence=Array.from({length:14},(_,i)=>{
+    const date=new Date(); date.setDate(date.getDate()-(13-i)); const key=dk(date);
+    const day=data[key]||{}; const calories=(CALS[CP]||{})[key]||{};
+    const trained=!!(day.session&&day.session!=='skip'&&SESSIONS[day.session]);
+    const fed=(calories.meals||[]).length>0;
+    return `<div title="${key}: ${trained?'entreno':'sin entreno'}${fed?' · comidas registradas':''}" style="height:34px;border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:${trained?p.color+'24':fed?'rgba(74,222,128,.12)':'var(--card2)'};border:1px solid ${trained?p.color+'55':fed?'rgba(74,222,128,.3)':'var(--border)'};font-size:9px;color:${trained?p.color:'var(--muted)'};font-weight:700;"><span>${date.getDate()}</span><span style="font-size:8px;line-height:1;">${trained?'✓':fed?'●':'·'}</span></div>`;
+  }).join('');
 
   document.getElementById('tab-progreso').innerHTML=`<div class="inner">
   <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
@@ -2572,6 +2633,21 @@ function renderProgreso(){
       <div style="font-size:11px;color:var(--muted);margin-top:3px;">${sub}</div>
       <div style="font-size:11px;color:var(--muted2);margin-top:2px;">${totSess} sesiones completadas en total</div>
     </div>
+  </div></div>
+
+  <div class="card" style="margin-top:12px;"><div class="card-body">
+    <div class="section-label">Adherencia · últimos 14 días</div>
+    <div style="font-size:10px;color:var(--muted);margin:-4px 0 9px;">✓ entrenaste · ● registraste comidas</div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px;">${adherence}</div>
+  </div></div>
+
+  <div class="card" style="margin-top:12px;"><div class="card-body">
+    <div class="section-label">Medidas corporales</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
+      ${[['measureWaist','Cintura','waist'],['measureChest','Pecho','chest'],['measureArm','Brazo','arm'],['measureLeg','Pierna','leg']].map(([id,label,key])=>`<div><div style="font-size:8px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;">${label}</div><input id="${id}" type="number" min="0" step="0.1" inputmode="decimal" placeholder="${lastMeasure?.[key]??'cm'}" style="width:100%;padding:7px 4px;border-radius:7px;border:1px solid var(--border2);background:var(--card2);color:var(--text);font-family:'DM Mono',monospace;text-align:center;font-size:12px;"></div>`).join('')}
+    </div>
+    <button onclick="addMeasurements()" style="width:100%;margin-top:9px;padding:8px;border:0;border-radius:8px;background:${p.color};color:#0a0a0a;font-weight:800;font-size:11px;cursor:pointer;">Guardar medidas de hoy</button>
+    ${lastMeasure?`<div style="font-size:10px;color:var(--muted);margin-top:8px;">Último registro · ${lastMeasure.date}: cintura ${lastMeasure.waist||'—'} cm · pecho ${lastMeasure.chest||'—'} cm · brazo ${lastMeasure.arm||'—'} cm · pierna ${lastMeasure.leg||'—'} cm</div>`:`<div style="font-size:10px;color:var(--muted);margin-top:8px;">Registra medidas para comparar tu evolución.</div>`}
   </div></div>
 
   <!-- PESO Y PROYECCIÓN -->
@@ -2710,6 +2786,15 @@ function addW(){
   renderProgreso();renderChart();
 }
 function delW(i){gw().splice(i,1);lsSave();renderProgreso();renderChart();}
+function addMeasurements(){
+  const read=id=>parseDecimal(document.getElementById(id)?.value);
+  const measurement={waist:read('measureWaist'),chest:read('measureChest'),arm:read('measureArm'),leg:read('measureLeg')};
+  if(!Object.values(measurement).some(Number.isFinite)) return;
+  Object.keys(measurement).forEach(key=>{if(!Number.isFinite(measurement[key])||measurement[key]<=0) measurement[key]='';});
+  measurement.date=new Date().toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'});
+  measurement.raw=new Date().toISOString(); gm().push(measurement);
+  lsSave(); renderProgreso();
+}
 
 function renderChart(){
   const data=gd(); const wrap=document.getElementById('chWrap'); if(!wrap)return;
