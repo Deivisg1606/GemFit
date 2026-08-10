@@ -774,12 +774,45 @@ function lsLoad(){
 function lsSave(){
   try{
     localStorage.setItem(LS_KEY, JSON.stringify({
-      AD, WD, SC, PD, CALS, AVATARS, EXLIB, CP
+      AD, WD, SC, PD, CALS, AVATARS, EXLIB, NUTRITION, CP
     }));
 } catch(e){
     console.warn('localStorage full or unavailable:', e);
   }
   cloudSave();
+}
+
+function exportData(){
+  const backup={version:'2.4',exportedAt:new Date().toISOString(),theme:getThemePreference(),data:{AD,WD,SC,PD,CALS,AVATARS,EXLIB,CP}};
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob); const link=document.createElement('a');
+  link.href=url; link.download='gemfit-backup-'+dk(new Date())+'.json'; link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function importData(input){
+  const file=input.files&&input.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=event=>{
+    try{
+      const parsed=JSON.parse(event.target.result); const incoming=parsed.data||parsed;
+      if(!incoming||typeof incoming!=='object'||!incoming.AD||!incoming.WD) throw new Error('Formato no reconocido');
+      if(!confirm('Esto reemplazará los datos actuales de GemFit en este dispositivo. ¿Continuar?')) return;
+      ['AD','WD','SC','PD','CALS','AVATARS','EXLIB'].forEach(key=>{
+        if(incoming[key]&&typeof incoming[key]==='object'){
+          const target={AD,WD,SC,PD,CALS,AVATARS,EXLIB}[key];
+          Object.keys(target).forEach(k=>delete target[k]); Object.assign(target,incoming[key]);
+        }
+      });
+      if(incoming.CP&&PROFS[incoming.CP]) CP=incoming.CP;
+      if(parsed.theme) setThemePreference(parsed.theme);
+      lsSave(); updateProfileAvatars(); updateProfileStats();
+      if(CP&&PROFS[CP]) selectProfile(CP); else document.getElementById('s-profiles').classList.add('active');
+      alert('Copia restaurada correctamente.');
+    }catch(e){alert('No se pudo importar esta copia: '+e.message);}
+    input.value='';
+  };
+  reader.readAsText(file);
 }
 
 // Load persisted data or use defaults
@@ -791,6 +824,7 @@ const PD      = _stored.PD      || {deivis:[], yona:[]};
 const CALS    = _stored.CALS    || {deivis:{}, yona:{}};
 const AVATARS = _stored.AVATARS || {deivis:null, yona:null};
 const EXLIB   = _stored.EXLIB   || {deivis:[], yona:[]};  // Personal exercise library
+const NUTRITION = _stored.NUTRITION || {deivis:null, yona:null};
 // CP always starts null — user must select profile on every open
 
 function dk(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
@@ -2315,7 +2349,7 @@ function renderStats(){
 // PERFIL TAB
 // ═══════════════════════════════════════════════════════════════
 function renderPerfil(){
-  const p=pr(); const lw=gw().length?gw()[gw().length-1].val:p.w; const themePref=getThemePreference();
+  const p=pr(); const lw=gw().length?gw()[gw().length-1].val:p.w; const themePref=getThemePreference(); const savedTargets=NUTRITION[CP]||getMacros();
   document.getElementById('tab-perfil').innerHTML=`<div class="inner">
   <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
     <button onclick="goTab('plan')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.1);border-radius:8px;color:#7a6070;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
@@ -2388,6 +2422,14 @@ function renderPerfil(){
         </select></div>
     </div>
     <div class="macro-result-grid" id="macroRes"></div>
+  </div></div>
+  <div class="card" style="margin-top:12px;"><div class="card-body">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;"><div class="section-label" style="margin:0;">Objetivos diarios personales</div><span style="font-size:9px;color:${NUTRITION[CP]?p.color:'var(--muted)'};font-weight:700;">${NUTRITION[CP]?'PERSONALIZADOS':'ESTIMADOS'}</span></div>
+    <div style="font-size:10px;color:var(--muted);line-height:1.5;margin-bottom:10px;">Estos valores alimentan Dieta y Calorías. Puedes ajustarlos según tu evolución o la indicación de un profesional.</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
+      ${[['targetKcal','Kcal',savedTargets?.kcal||0,p.color],['targetProtein','Prot.',savedTargets?.protein||0,'#ff6b35'],['targetCarbs','Carbos',savedTargets?.carbs||0,'#facc15'],['targetFat','Grasas',savedTargets?.fat||0,'#448AFF']].map(([id,label,value,color])=>`<div><div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;">${label}</div><input id="${id}" type="number" min="0" value="${Math.round(value)}" style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:7px;color:${color};font-family:'DM Mono',monospace;font-size:13px;padding:7px 5px;outline:none;text-align:center;"></div>`).join('')}
+    </div>
+    <div style="display:flex;gap:7px;margin-top:10px;"><button onclick="saveNutritionTargets()" style="flex:1;padding:8px;border:none;border-radius:8px;background:${p.color};color:#0a0a0a;font-weight:800;font-size:11px;cursor:pointer;">Guardar objetivos</button><button onclick="resetNutritionTargets()" style="padding:8px 10px;border:1px solid var(--border2);border-radius:8px;background:var(--card2);color:var(--muted);font-size:10px;cursor:pointer;">Usar estimación</button></div>
   </div></div></div>
 
   <!-- Backup section -->
@@ -2433,6 +2475,10 @@ function calcIMC(){
 function getMacros(){
   if(!CP)return null;
   const p=pr();
+  const manual=NUTRITION[CP];
+  if(manual&&[manual.kcal,manual.protein,manual.carbs,manual.fat].every(v=>Number(v)>0)){
+    return {kcal:Number(manual.kcal),protein:Number(manual.protein),carbs:Number(manual.carbs),fat:Number(manual.fat),tdee:Number(manual.kcal),peso:parseFloat(document.getElementById('imcP')?.value)||p.w||88,manual:true};
+  }
   const w=parseFloat(document.getElementById('imcP')?.value)||p.w||88;
   const act=parseFloat(document.getElementById('mAct')?.value)||1.725;
   const goal=document.getElementById('mGoal')?.value||'recomp';
@@ -2444,7 +2490,17 @@ function getMacros(){
   else if(goal==='maint'){kcal=tdee;protein=Math.round(w*2.0);fat=Math.round(w*0.9);}
   else{kcal=tdee-150;protein=Math.round(w*2.3);fat=Math.round(w*0.9);}
   const carbs=Math.max(80,Math.round((kcal-protein*4-fat*9)/4));
-  return{kcal,protein,carbs,fat,tdee,peso:w};
+  return{kcal,protein,carbs,fat,tdee,peso:w,manual:false};
+}
+
+function saveNutritionTargets(){
+  const read=id=>parseDecimal(document.getElementById(id)?.value);
+  const values={kcal:read('targetKcal'),protein:read('targetProtein'),carbs:read('targetCarbs'),fat:read('targetFat')};
+  if(!Object.values(values).every(v=>Number.isFinite(v)&&v>0)){alert('Introduce objetivos válidos mayores que cero.');return;}
+  NUTRITION[CP]=values; lsSave(); renderPerfil();
+}
+function resetNutritionTargets(){
+  NUTRITION[CP]=null; lsSave(); renderPerfil();
 }
 
 function calcMacros(){
@@ -2980,8 +3036,20 @@ const FOOD_DB = [
 ];
 
 function gcals(){ return CALS[CP]||(CALS[CP]={}); }
+function getLogForDate(dateKey){
+  const c=gcals(); if(!c[dateKey])c[dateKey]={meals:[],water:0}; return c[dateKey];
+}
 function getTodayLog(){
-  const c=gcals(); if(!c[SK])c[SK]={meals:[],water:0}; return c[SK];
+  return getLogForDate(SK);
+}
+function getNutritionWeekSummary(){
+  const logs=gcals(); let days=0,kcal=0,protein=0;
+  for(let i=0;i<7;i++){
+    const date=new Date(); date.setDate(date.getDate()-i);
+    const meals=logs[dk(date)]?.meals||[]; if(!meals.length)continue;
+    days++; kcal+=meals.reduce((sum,item)=>sum+(item.kcal||0),0); protein+=meals.reduce((sum,item)=>sum+(item.p||0),0);
+  }
+  return {days,kcal,protein,avgKcal:days?Math.round(kcal/days):0,avgProtein:days?Math.round(protein/days):0};
 }
 
 function renderCalorias(){
@@ -2989,6 +3057,7 @@ function renderCalorias(){
   const log=getTodayLog();
   const meals=log.meals||[];
   const water=log.water||0;
+  const week=getNutritionWeekSummary();
 
   const totKcal=meals.reduce((a,x)=>a+(x.kcal||0),0);
   const totP=meals.reduce((a,x)=>a+(x.p||0),0);
@@ -3005,7 +3074,8 @@ function renderCalorias(){
   const pctC=Math.min(100,Math.round((totC/goalC)*100));
   const pctF=Math.min(100,Math.round((totF/goalF)*100));
 
-  const today2=new Date();
+  const [logYear,logMonth,logDay]=SK.split('-').map(Number);
+  const today2=new Date(logYear,logMonth-1,logDay);
   const ds=`${DAYS_ES[today2.getDay()]} ${today2.getDate()} de ${MONTHS_ES[today2.getMonth()]}`;
 
   // Group meals by type
@@ -3053,7 +3123,7 @@ function renderCalorias(){
     <input id="foodSearch" type="text" placeholder="Buscar alimento o escribir nombre..."
       oninput="filterFoods()"
       style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-size:14px;padding:10px 14px;margin-bottom:12px;outline:none;">
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;">
       <div>
         <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Kcal</div>
         <input id="customKcal" type="number" placeholder="0" style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:6px 8px;outline:none;">
@@ -3066,6 +3136,14 @@ function renderCalorias(){
         <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Carbos g</div>
         <input id="customC" type="number" placeholder="0" style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:6px 8px;outline:none;">
       </div>
+      <div>
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;">Grasas g</div>
+        <input id="customF" type="number" placeholder="0" style="width:100%;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:6px 8px;outline:none;">
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin:-2px 0 10px;">
+      <span style="font-size:10px;color:var(--muted);">Cantidad de la porción:</span>
+      <input id="foodFactor" type="number" min="0.1" step="0.25" value="1" style="width:72px;background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:6px 8px;outline:none;">
     </div>
     <div id="foodList" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:5px;"></div>
   </div>
@@ -3132,6 +3210,11 @@ function renderCalorias(){
       </div>
     </div>
 
+    <div style="padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Resumen nutricional · 7 días</div><div style="font-size:10px;color:${p.color};font-weight:700;">${week.days}/7 registrados</div></div>
+      ${week.days?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div style="padding:8px;background:var(--card2);border-radius:8px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.35rem;color:${p.color};">${week.avgKcal}</div><div style="font-size:9px;color:var(--muted);">kcal / día</div></div><div style="padding:8px;background:var(--card2);border-radius:8px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.35rem;color:#ff6b35;">${week.avgProtein}g</div><div style="font-size:9px;color:var(--muted);">proteína / día</div></div></div>`:`<div style="font-size:11px;color:var(--muted);">Registra comidas durante varios días para ver tu media semanal.</div>`}
+    </div>
+
     <!-- Comidas -->
     <div style="padding:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;">
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.05em;margin-bottom:14px;">REGISTRO DEL DÍA</div>
@@ -3149,6 +3232,8 @@ function openFoodSearch(mealType){
   document.getElementById('customKcal').value='';
   document.getElementById('customP').value='';
   document.getElementById('customC').value='';
+  document.getElementById('customF').value='';
+  document.getElementById('foodFactor').value='1';
   filterFoods();
   document.getElementById('foodModal').style.display='flex';
 }
@@ -3181,8 +3266,9 @@ function filterFoods(){
   }
 }
 function addFoodItem(name,kcal,p2,c,f){
+  const factor=Math.max(.1,parseDecimal(document.getElementById('foodFactor')?.value)||1);
   const log=getTodayLog();
-  log.meals.push({name,kcal,p:p2,c,f,meal:_currentMealType});
+  log.meals.push({name:factor===1?name:name+' × '+factor,kcal:Math.round(kcal*factor),p:+(p2*factor).toFixed(1),c:+(c*factor).toFixed(1),f:+(f*factor).toFixed(1),meal:_currentMealType});
   lsSave(); closeFoodModal(); renderCalorias();
 }
 function addCustomFood(){
@@ -3190,7 +3276,7 @@ function addCustomFood(){
   const kcal=parseFloat(document.getElementById('customKcal').value)||0;
   const p2=parseFloat(document.getElementById('customP').value)||0;
   const c=parseFloat(document.getElementById('customC').value)||0;
-  const f=0;
+  const f=parseFloat(document.getElementById('customF').value)||0;
   addFoodItem(name,kcal,p2,c,f);
 }
 function removeMeal(idx){
@@ -3372,6 +3458,7 @@ function cloudSave(){
           SC: SC[profileId] || {},
           CALS: CALS[profileId] || {},
           EXLIB: EXLIB[profileId] || [],
+          NUTRITION: NUTRITION[profileId] || null,
           updatedAt: new Date().toISOString()
         };
         await _db.collection('gemfit').doc(profileId).set(profileData, { merge: true });
@@ -3400,8 +3487,9 @@ async function cloudLoad(){
       if(data.SC)    SC[profileId]    = data.SC;
       if(data.CALS)  CALS[profileId]  = data.CALS;
       if(data.EXLIB) EXLIB[profileId] = data.EXLIB;
+      if(data.NUTRITION) NUTRITION[profileId] = data.NUTRITION;
     }
-    localStorage.setItem('gemfit_v1', JSON.stringify({ AD, WD, SC, PD, CALS, AVATARS, EXLIB }));
+    localStorage.setItem('gemfit_v1', JSON.stringify({ AD, WD, SC, PD, CALS, AVATARS, EXLIB, NUTRITION }));
     showSyncStatus('saved');
     return true;
   } catch(e) {
@@ -3720,6 +3808,7 @@ const PRE_ENTRENO = {
 // ── Función que renderiza la tab de Dieta ──
 function renderDieta(){
   const p = pr();
+  const goals=getMacros();
   const DIAS = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
   const DIAS_ES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
   const todayIdx = new Date().getDay();
@@ -3731,11 +3820,14 @@ function renderDieta(){
   plan.comidas.forEach(c=>c.items.forEach(i=>{totKcal+=i.kcal;totP+=i.p;totC+=i.c;totF+=i.f;}));
 
   // ── Déficit calórico real de hoy ──
-  const todayLog = (CALS[CP]||{})[SK] || {meals:[]};
+  const todayLog = (CALS[CP]||{})[dk(new Date())] || {meals:[]};
   const todayMeals = todayLog.meals || [];
   const consumedKcal = todayMeals.reduce((a,m)=>a+(m.kcal||0),0);
   const consumedP = todayMeals.reduce((a,m)=>a+(m.p||0),0);
-  const objetivoKcal = 1980;
+  const objetivoKcal = goals?goals.kcal:1980;
+  const objetivoP = goals?goals.protein:160;
+  const objetivoC = goals?goals.carbs:196;
+  const objetivoF = goals?goals.fat:62;
   const remainingKcal = objetivoKcal - consumedKcal;
   const pctConsumed = Math.min(100, Math.round((consumedKcal/objetivoKcal)*100));
   const deficitColor = remainingKcal>=0 ? '#4ade80' : '#ff6b35';
@@ -3743,7 +3835,7 @@ function renderDieta(){
   let h = `<div class="inner">
   <div style="font-size:10px;color:${p.color};text-transform:uppercase;letter-spacing:.18em;margin-bottom:4px;">Plan Team David Marmol</div>
   <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;line-height:1;margin-bottom:2px;">DIETA <span style="color:${p.color}">🥗</span></div>
-  <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">1980 kcal · P:160g · C:196g · G:62g · Peso en crudo</div>
+  <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">${objetivoKcal} kcal · P:${objetivoP}g · C:${objetivoC}g · G:${objetivoF}g · Peso en crudo</div>
 
   <!-- Déficit calórico real -->
   <div style="padding:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:16px;">
@@ -3768,7 +3860,7 @@ function renderDieta(){
       <span style="font-size:9px;color:var(--muted2);">0 kcal</span>
       <span style="font-size:9px;color:var(--muted2);">${objetivoKcal} kcal objetivo</span>
     </div>
-    ${consumedP>0?`<div style="margin-top:8px;font-size:10px;color:var(--muted);">Proteína hoy: <strong style="color:#ff6b35;">${Math.round(consumedP)}g</strong> / 160g objetivo</div>`:''}
+    ${consumedP>0?`<div style="margin-top:8px;font-size:10px;color:var(--muted);">Proteína hoy: <strong style="color:#ff6b35;">${Math.round(consumedP)}g</strong> / ${objetivoP}g objetivo</div>`:''}
   </div>
 
   <!-- Selector de día -->
@@ -3839,12 +3931,12 @@ function renderAlimentosEvitar(p){
       ]
     },
     {
-      titulo: 'Aceites y grasas de mala calidad',
+      titulo: 'Fritos y grasas trans a limitar',
       color: '#22aa66',
       icono: '🛢️',
       items: [
-        {n:'Aceites vegetales refinados (girasol, palma)', why:'Alto omega-6, favorecen inflamación sistémica si se abusa.'},
-        {n:'Margarinas y grasas trans', why:'Directamente vinculadas a grasa visceral en estudios.'},
+        {n:'Fritos y rebozados frecuentes', why:'Suelen concentrar muchas calorías y grasas; mejor reservarlos para ocasiones.'},
+        {n:'Grasas trans industriales', why:'No forman parte de un patrón saludable; revisa etiquetas de bollería y fritos industriales.'},
       ]
     },
   ];
@@ -3852,10 +3944,10 @@ function renderAlimentosEvitar(p){
   let h = `<div style="margin-top:8px;">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
       <span style="font-size:1.1rem;">⚠️</span>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.05em;color:#ff6b35;">ALIMENTOS A EVITAR</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.05em;color:#ff6b35;">ALIMENTOS A LIMITAR</div>
     </div>
     <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:14px;">
-      Estos grupos favorecen inflamación, retención de líquidos y acumulación de grasa visceral (abdominal). No es necesario eliminarlos al 100%, pero minimizarlos marca la diferencia en la definición.
+      Priorizarlos menos ayuda a controlar calorías, azúcares libres, sodio y grasas saturadas. No hace falta prohibir alimentos: la frecuencia, la porción y el conjunto de la semana importan más.
     </div>`;
 
   GRUPOS.forEach(g=>{
@@ -3874,7 +3966,7 @@ function renderAlimentosEvitar(p){
   });
 
   h+=`<div style="padding:10px 13px;background:rgba(34,170,102,.07);border:1px solid rgba(34,170,102,.2);border-radius:9px;font-size:11px;color:var(--muted2);line-height:1.6;margin-top:4px;">
-    ✅ <strong style="color:#22aa66">Regla simple:</strong> si lo come tu bisabuela y viene de un solo ingrediente, probablemente está bien. Si tiene más de 5 ingredientes en la etiqueta, sospecha.
+    ✅ <strong style="color:#22aa66">Regla simple:</strong> basa la mayor parte de tus comidas en alimentos variados y poco procesados; deja espacio para flexibilidad sin buscar perfección.
   </div>
   </div>`;
 
@@ -3882,6 +3974,21 @@ function renderAlimentosEvitar(p){
 }
 
 let _selectedDietaDay = null;
+
+function registerDietMeal(dayKey,mealIndex){
+  const todayKey=dk(new Date());
+  const weekKeys=['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
+  if(dayKey!==weekKeys[new Date().getDay()]){alert('Solo puedes registrar automáticamente el plan del día de hoy.');return;}
+  const meal=MEAL_PLAN[dayKey]?.comidas?.[mealIndex]; if(!meal)return;
+  const log=getLogForDate(todayKey); const dietKey=dayKey+'_'+mealIndex;
+  log.meals=(log.meals||[]).filter(item=>item.dietKey!==dietKey);
+  const mealTypes=['Desayuno','Media mañana','Almuerzo','Merienda','Cena'];
+  meal.items.filter(item=>item.n).forEach(item=>log.meals.push({
+    name:item.n,kcal:item.kcal||0,p:item.p||0,c:item.c||0,f:item.f||0,
+    meal:mealTypes[Math.min(mealIndex,mealTypes.length-1)],dietKey
+  }));
+  lsSave(); renderDieta();
+}
 
 function selectDietaDay(dayKey){
   const p = pr();
@@ -3951,7 +4058,7 @@ function renderDietaDay(dayKey){
           <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:.06em;color:${mc};">${comida.nombre}</div>
           ${comida.nota?`<div style="font-size:10px;color:var(--muted);margin-top:1px;">${comida.nota}</div>`:''}
         </div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:${mc};">${Math.round(mKcal)} kcal</div>
+        <div style="display:flex;align-items:center;gap:8px;"><button onclick="registerDietMeal('${dayKey}',${ci})" style="padding:4px 7px;border:1px solid ${mc}55;border-radius:6px;background:${mc}12;color:${mc};font-size:9px;font-weight:700;cursor:pointer;">Registrar</button><div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:${mc};">${Math.round(mKcal)} kcal</div></div>
       </div>`;
 
     comida.items.forEach((item,ii)=>{
