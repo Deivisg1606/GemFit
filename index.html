@@ -34,12 +34,31 @@
   --push:#e0a526;--pull:#dd0060;--legs:#7733cc;--arms:#00bcd4;--done:#22aa66;--skip:#444;
   --accent:#cc5500;--yona:#7733cc;
 }
+body.light-theme{
+  --bg:#f5f6f8;--card:#ffffff;--card2:#eceff3;
+  --border:rgba(20,27,38,.12);--border2:rgba(20,27,38,.22);
+  --text:#19202a;--muted:#657080;--muted2:#8b95a3;--skip:#7a8491;
+}
 html{height:100%;}
 body{
-  background:#0a0a0a;color:var(--text);
+  background:var(--bg);color:var(--text);
   font-family:'DM Sans',sans-serif;font-size:14px;
   height:100%;overflow:hidden;
   display:flex;flex-direction:column;
+}
+body.light-theme #s-profiles,body.light-theme .topbar,body.light-theme .bnav{background:var(--bg);}
+body.light-theme [style*="background:rgba(10,10,10"]{background:rgba(245,246,248,.96)!important;}
+body.light-theme .nbtn{color:var(--muted);}
+body.light-theme .nbtn.active{color:var(--accent);}
+
+@supports (padding: max(0px)){
+  .topbar{padding-top:max(10px,env(safe-area-inset-top));}
+  .bnav{height:calc(62px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);}
+}
+@media (max-width:600px){
+  .nbtn{min-height:44px;}
+  .month-btn{min-width:44px;min-height:44px;}
+  input,select,textarea{font-size:max(16px,1em);}
 }
 
 /* ── SCREENS ── */
@@ -104,7 +123,7 @@ body{
 /* ── SHARED ── */
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;}
 .card-body{padding:14px 16px;}
-.section-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-bottom:10px;}
+.section-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px;}
 .h1{font-family:'Bebas Neue',sans-serif;letter-spacing:.02em;line-height:.9;}
 .mono{font-family:'DM Mono',monospace;}
 .bebas{font-family:'Bebas Neue',sans-serif;}
@@ -198,7 +217,7 @@ body{
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:12px 14px 0;}
 .stat-card{padding:8px;background:var(--card);border:1px solid var(--border);border-radius:8px;text-align:center;}
 .stat-val{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;line-height:1;}
-.stat-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+.stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:2px;}
 .done-banner{margin:0 14px 10px;padding:9px 12px;border-radius:9px;
   background:rgba(204,85,0,.07);border:1px solid rgba(204,85,0,.2);
   font-size:12px;color:#00994d;display:none;align-items:center;gap:8px;}
@@ -724,6 +743,26 @@ let VY = NOW.getFullYear(), VM = NOW.getMonth(), SK = dk(NOW);
 
 // ── localStorage helpers ──
 const LS_KEY = 'gemfit_v1';
+const THEME_KEY = 'gemfit_theme';
+
+function getThemePreference(){
+  try{return localStorage.getItem(THEME_KEY)||'system';}catch(e){return 'system';}
+}
+function applyTheme(preference=getThemePreference()){
+  const useLight=preference==='light'||(preference==='system'&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches);
+  document.body.classList.toggle('light-theme',useLight);
+  document.documentElement.style.colorScheme=useLight?'light':'dark';
+  document.querySelectorAll('[data-theme-choice]').forEach(button=>{
+    const selected=button.dataset.themeChoice===preference;
+    button.style.borderColor=selected?'var(--accent)':'var(--border2)';
+    button.style.background=selected?'var(--accent)18':'var(--card2)';
+    button.style.color=selected?'var(--accent)':'var(--muted)';
+  });
+}
+function setThemePreference(preference){
+  try{localStorage.setItem(THEME_KEY,preference);}catch(e){}
+  applyTheme(preference);
+}
 
 function lsLoad(){
   try{
@@ -1171,6 +1210,7 @@ function switchToProfile(id){
 
 // On load — auto-enter last used profile if one exists
 window.addEventListener('DOMContentLoaded', async ()=>{
+  applyTheme();
   updateProfileAvatars();
   updateProfileStats();
   const cloudLoaded = await cloudLoad();
@@ -1295,12 +1335,26 @@ function openPlanBlockAndScroll(sessId){
 
 function renderPlan(){
   const p = pr(); const m = getMacros();
+  const todayData=gd()[SK]||{};
+  const todaySessionId=todayData.session||getAutoSession(SK);
+  const todaySession=SESSIONS[todaySessionId]||SESSIONS.skip;
+  const todayTotal=texs(todaySessionId);
+  const todayDone=Object.values(todayData.checked||{}).filter(Boolean).length;
+  const todayPct=todayTotal?Math.min(100,Math.round(todayDone/todayTotal*100)):0;
   let h = `<div class="inner">
   <div style="font-size:10px;color:${p.color};text-transform:uppercase;letter-spacing:.18em;margin-bottom:4px;">Rutina Científica 2025</div>
   <div class="h1" style="font-size:clamp(2.5rem,9vw,5rem);margin-bottom:8px;">UPPER<br>LOWER<br><span style="color:${p.color}">SPLIT</span></div>
   <div style="font-size:12px;color:var(--muted);margin-bottom:4px;line-height:1.7;">
     Sistema Upper/Lower de 6 días · Frecuencia 2× por músculo · Basado en Israetel, Schoenfeld y Helms.<br>
     <strong style="color:var(--muted2)">★ = Ejercicio estrella — mayor ratio estímulo/fatiga.</strong>
+  </div>
+  <div style="margin:14px 0;padding:13px;border-radius:12px;background:linear-gradient(135deg,${p.color}22,rgba(255,255,255,.03));border:1px solid ${p.color}45;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:38px;height:38px;border-radius:10px;background:${p.color};display:flex;align-items:center;justify-content:center;font-size:19px;">${todaySession.emoji}</div>
+      <div style="flex:1;min-width:0;"><div style="font-size:9px;color:${p.color};font-weight:700;letter-spacing:.1em;text-transform:uppercase;">Entreno de hoy</div><div style="font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${todaySession.title}</div><div style="font-size:10px;color:var(--muted);margin-top:2px;">${todaySession.dur||'Recuperación y movilidad'}</div></div>
+      <button onclick="goTab('tracker')" style="padding:8px 10px;background:${p.color};border:none;border-radius:8px;color:#0a0a0a;font-weight:800;font-size:11px;cursor:pointer;">Abrir</button>
+    </div>
+    ${todayTotal?`<div style="display:flex;align-items:center;gap:8px;margin-top:11px;"><div style="height:5px;flex:1;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden;"><div style="height:100%;width:${todayPct}%;background:${p.color};border-radius:99px;"></div></div><span style="font-size:10px;color:${p.color};font-family:'DM Mono',monospace;">${todayDone}/${todayTotal}</span></div>`:''}
   </div>
   <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
     <button onclick="goTab('tracker')" style="padding:7px 14px;background:${p.color};color:#060d0a;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.08em;cursor:pointer;">✅ Tracker</button>
@@ -1383,7 +1437,7 @@ function renderPlan(){
 function renderVolumen(){
   const p = pr();
   let h = `<div class="inner">
-  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(255,238,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
     <button onclick="goTab('plan')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.1);border-radius:8px;color:#7a6070;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
     <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;color:${p.color};">VOLUMEN SEMANAL</span>
   </div>
@@ -1624,6 +1678,22 @@ function getAutoSession(dateKey){
   return DAY_SPLIT[d.getDay()] || 'skip';
 }
 
+let OPEN_TRACKER_EXERCISE = null;
+let ACTIVE_WORKOUT_MODE = false;
+let WORKOUT_WAKE_LOCK = null;
+function toggleTrackerExercise(exerciseId){
+  OPEN_TRACKER_EXERCISE = OPEN_TRACKER_EXERCISE===exerciseId ? null : exerciseId;
+  renderCal();
+}
+async function toggleActiveWorkoutMode(){
+  ACTIVE_WORKOUT_MODE=!ACTIVE_WORKOUT_MODE;
+  try{
+    if(ACTIVE_WORKOUT_MODE&&'wakeLock' in navigator) WORKOUT_WAKE_LOCK=await navigator.wakeLock.request('screen');
+    else if(WORKOUT_WAKE_LOCK){await WORKOUT_WAKE_LOCK.release();WORKOUT_WAKE_LOCK=null;}
+  }catch(e){console.warn('No se pudo mantener la pantalla activa:',e);}
+  renderCal();
+}
+
 function togEx(eid){
   const data=gd(); data[SK]=data[SK]||{}; data[SK].checked=data[SK].checked||{};
   data[SK].checked[eid]=!data[SK].checked[eid]; sd(data); renderCal();
@@ -1666,6 +1736,8 @@ function renderDayPanel(){
     <div style="font-size:11px;color:var(--skip);margin-top:3px;">La recuperación también es entrenamiento.</div></div>`;
   } else if(SESSIONS[dd.session]){
     const sess=SESSIONS[dd.session]; const chk=dd.checked||{};
+    const nextExercise=sess.sections.flatMap(sec=>sec.ex).find(ex=>!ex.cardio&&!(dd._hidden||{})[ex.id]&&!chk[ex.id]);
+    const activeExercise=nextExercise||null;
     // Count plan exercises (not hidden)
     const planTot = sess.sections?sess.sections.reduce((a,sec)=>a+sec.ex.filter(ex=>!(dd._hidden||{})[ex.id]).length,0):0;
     // Count extra exercises — done = checked via checkbox (consistent with plan exercises)
@@ -1686,6 +1758,14 @@ function renderDayPanel(){
     const pct=tot>0?Math.round((dn/tot)*100):0;
     h+=`<div class="prog-wrap"><div class="prog-bg"><div class="prog-fill" style="width:${pct}%;background:${p.color}"></div></div>
     <span class="prog-txt">${dn}/${tot}</span><span class="prog-pct" style="color:${p.color}">${pct}%</span></div>`;
+    h+=`<button onclick="toggleActiveWorkoutMode()" style="width:calc(100% - 26px);margin:10px 13px ${nextExercise?'2px':'10px'};padding:9px 12px;display:flex;align-items:center;justify-content:space-between;background:${ACTIVE_WORKOUT_MODE?p.color:'var(--card2)'};border:1px solid ${ACTIVE_WORKOUT_MODE?p.color:'var(--border2)'};border-radius:9px;color:${ACTIVE_WORKOUT_MODE?'#0a0a0a':'var(--text)'};font-size:11px;font-weight:700;cursor:pointer;">
+      <span>${ACTIVE_WORKOUT_MODE?'● Modo entrenamiento activo':'▶ Iniciar modo entrenamiento'}</span><span style="font-size:10px;opacity:.75;">${ACTIVE_WORKOUT_MODE?'Salir':'Sin distracciones'}</span>
+    </button>`;
+    if(nextExercise) h+=`<button onclick="toggleTrackerExercise('${nextExercise.id}')" style="width:calc(100% - 26px);margin:10px 13px 2px;padding:10px 12px;display:flex;align-items:center;gap:9px;text-align:left;background:${p.color}12;border:1px solid ${p.color}45;border-radius:10px;color:var(--text);cursor:pointer;">
+      <span style="width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:${p.color};color:#0a0a0a;font-weight:800;font-size:12px;">›</span>
+      <span style="flex:1;min-width:0;"><span style="display:block;font-size:9px;color:${p.color};font-weight:700;letter-spacing:.08em;text-transform:uppercase;">Siguiente ejercicio</span><span style="display:block;font-size:13px;font-weight:700;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${nextExercise.n}</span></span>
+      <span style="font-family:'DM Mono',monospace;font-size:10px;color:${p.color};">${nextExercise.s}</span>
+    </button>`;
     const tc2=TC[sess.type]||'#888';
 
     // ── Cronómetro de descanso ──
@@ -1706,6 +1786,7 @@ function renderDayPanel(){
     </div>`;
 
     sess.sections.forEach(sec=>{
+      if(ACTIVE_WORKOUT_MODE&&activeExercise&&!sec.ex.some(ex=>ex.id===activeExercise.id)) return;
       h+=`<div style="display:flex;align-items:center;gap:8px;background:${tc2}10;border-bottom:1px solid ${tc2}28;padding:6px 13px;">
         <span style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:${tc2}22;color:${tc2};">${sec.t}</span>
       </div>`;
@@ -1719,6 +1800,7 @@ function renderDayPanel(){
 
       sec.ex.forEach((ex,ei)=>{
         if((dd._hidden||{})[ex.id]) return; // skip hidden
+        if(ACTIVE_WORKOUT_MODE&&activeExercise&&ex.id!==activeExercise.id) return;
         const done=chk[ex.id];
         const log=dd.logs&&dd.logs[ex.id]||{};
         const last=getLastPerf(ex.id);
@@ -1738,27 +1820,29 @@ function renderDayPanel(){
         // Last performance text
         const lastPerfShort = last&&last.kg ? `Última: ${last.sets||'?'}×${last.reps||'?'} · ${last.kg}kg` : '';
         const bestPerfShort = best&&best.kg ? `Mejor: ${best.kg}kg × ${best.reps||'?'}${best.date?' · '+best.date:''}` : '';
+        const isOpen = OPEN_TRACKER_EXERCISE===ex.id||(ACTIVE_WORKOUT_MODE&&activeExercise?.id===ex.id);
 
         const exRest = ex.rest || 90;
         h+=`<div style="border-bottom:1px solid var(--border);${ex.star?'border-left:3px solid '+p.color+';background:'+p.color+'08;':''}${ex.cardio?'background:rgba(200,241,53,.03);':''}${done?'opacity:.6;':''}">
           <!-- Header del ejercicio -->
-          <div style="padding:11px 13px 6px;">
+          <div onclick="toggleTrackerExercise('${ex.id}')" style="padding:11px 13px 6px;cursor:pointer;">
             ${ex.star?`<div style="display:inline-flex;align-items:center;gap:4px;background:${p.color};color:#0a0a0a;font-size:8px;font-weight:700;letter-spacing:.06em;padding:2px 7px;border-radius:5px;text-transform:uppercase;margin-bottom:6px;">★ Principal</div>`:''}
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
               <div style="flex:1;min-width:0;">
                 <div style="font-size:${ex.star?'15':'14'}px;font-weight:700;${done?'text-decoration:line-through;color:var(--muted)':''}">${ex.n}</div>
                 ${lastPerfShort?`<div style="font-size:10px;color:${p.color};margin-top:2px;font-family:'DM Mono',monospace;">↩ ${lastPerfShort}</div>`:''}
-                ${bestPerfShort?`<div style="font-size:10px;color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace;">★ ${bestPerfShort}</div>`:''}
-                ${coach.message?`<div style="font-size:10px;color:${coach.stalled?'#ffb454':'#7ed9ff'};margin-top:4px;line-height:1.35;">${coach.stalled?'⚠':'✦'} ${coach.message}</div>`:''}
+                ${isOpen&&bestPerfShort?`<div style="font-size:10px;color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace;">★ ${bestPerfShort}</div>`:''}
+                ${isOpen&&coach.message?`<div style="font-size:10px;color:${coach.stalled?'#ffb454':'#7ed9ff'};margin-top:4px;line-height:1.35;">${coach.stalled?'⚠':'✦'} ${coach.message}</div>`:''}
               </div>
               <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
-                <button onclick="openExHistory('${ex.id}','${ex.n.replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Histórico">📈</button>
-                <button onclick="openTechniqueGuide('${ex.n.replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Técnica en vídeo">▶</button>
-                <button onclick="openRMCalc('${ex.id}','${ex.n.replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Calculadora RM">🔢</button>
-                <button onclick="hidePlanEx('${dd.session}','${ex.id}')" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:15px;padding:0 2px;line-height:1;" title="Ocultar ejercicio">×</button>
+                <button onclick="event.stopPropagation();openExHistory('${ex.id}','${ex.n.replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Histórico">📈</button>
+                <button onclick="event.stopPropagation();openTechniqueGuide('${ex.n.replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Técnica en vídeo">▶</button>
+                <button onclick="event.stopPropagation();openRMCalc('${ex.id}','${ex.n.replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Calculadora RM">🔢</button>
+                ${isOpen?`<button onclick="event.stopPropagation();hidePlanEx('${dd.session}','${ex.id}')" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:15px;padding:0 2px;line-height:1;" title="Ocultar ejercicio">×</button>`:''}
+                <span style="color:${p.color};font-size:14px;line-height:1;">${isOpen?'⌃':'⌄'}</span>
               </div>
             </div>
-            ${ex.note?`<div style="font-size:10px;color:var(--muted);margin-top:4px;line-height:1.4;">${ex.note}</div>`:''}
+            ${isOpen&&ex.note?`<div style="font-size:11px;color:var(--muted);margin-top:5px;line-height:1.45;">${ex.note}</div>`:''}
             <!-- Objetivo + descanso -->
             <div style="display:flex;align-items:center;gap:14px;margin-top:8px;">
               <div style="display:flex;align-items:center;gap:5px;">
@@ -1771,7 +1855,7 @@ function renderDayPanel(){
               </div>`:''}
             </div>
           </div>
-          ${!ex.cardio?`
+          ${!ex.cardio&&isOpen?`
           <!-- Series individuales -->
           <div style="padding:4px 13px 8px;">
             <!-- Cabecera columnas -->
@@ -1837,21 +1921,23 @@ function renderDayPanel(){
         const extraSeriesKey = 'series_'+SK+'_'+extraExId;
         const extraSavedSeries = (gd()[extraSeriesKey])||[];
         const extraSeriesList = extraSavedSeries.length>0 ? extraSavedSeries : Array(extraDefaultSets).fill(null);
+        const isExtraOpen = OPEN_TRACKER_EXERCISE===extraExId;
 
         h+=`<div style="border-bottom:1px solid var(--border);border-left:2px solid ${tc2}60;background:${tc2}05;">
           <!-- Header del ejercicio extra -->
-          <div style="display:flex;align-items:center;gap:8px;padding:9px 13px 4px;">
+          <div onclick="toggleTrackerExercise('${extraExId}')" style="display:flex;align-items:center;gap:8px;padding:9px 13px 4px;cursor:pointer;">
             <div style="flex:1;min-width:0;">
               <div style="font-size:14px;font-weight:700;${extraDone?'text-decoration:line-through;color:var(--muted)':''}">${ex.name||'Ejercicio extra'}</div>
               <div style="font-size:9px;color:${tc2};margin-top:1px;">EXTRA · E${xi+1}</div>
             </div>
             <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
-              <button onclick="openExHistory('${extraExId}','${(ex.name||'Ejercicio extra').replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Histórico">📈</button>
-              <button onclick="openRMCalc('${extraExId}','${(ex.name||'Ejercicio extra').replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Calculadora RM">🔢</button>
-              <button onclick="deleteExtra('${secKey}',${xi})" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:15px;padding:0 2px;line-height:1;" title="Eliminar">×</button>
+              <button onclick="event.stopPropagation();openExHistory('${extraExId}','${(ex.name||'Ejercicio extra').replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Histórico">📈</button>
+              <button onclick="event.stopPropagation();openRMCalc('${extraExId}','${(ex.name||'Ejercicio extra').replace(/'/g,"\\'")}')" style="background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:12px;" title="Calculadora RM">🔢</button>
+              <button onclick="event.stopPropagation();deleteExtra('${secKey}',${xi})" style="background:none;border:none;color:var(--muted2);cursor:pointer;font-size:15px;padding:0 2px;line-height:1;" title="Eliminar">×</button>
+              <span style="color:${tc2};font-size:14px;line-height:1;">${isExtraOpen?'⌃':'⌄'}</span>
             </div>
           </div>
-          <!-- Series individuales -->
+          ${isExtraOpen?`<!-- Series individuales -->
           <div style="padding:4px 13px 8px;">
             <div style="display:grid;grid-template-columns:32px 1fr 1fr 1fr 28px;gap:4px;margin-bottom:4px;padding:0 2px;">
               <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">N°</div>
@@ -1895,7 +1981,7 @@ function renderDayPanel(){
               font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;">
               ${extraDone?'✓ Completado':'Completar'}
             </button>
-          </div>
+          </div>`:''}
         </div>`;
       });
 
@@ -2229,9 +2315,9 @@ function renderStats(){
 // PERFIL TAB
 // ═══════════════════════════════════════════════════════════════
 function renderPerfil(){
-  const p=pr(); const lw=gw().length?gw()[gw().length-1].val:p.w;
+  const p=pr(); const lw=gw().length?gw()[gw().length-1].val:p.w; const themePref=getThemePreference();
   document.getElementById('tab-perfil').innerHTML=`<div class="inner">
-  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(255,238,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
     <button onclick="goTab('plan')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.1);border-radius:8px;color:#7a6070;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
     <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;color:${p.color};">${p.name} — PERFIL</span>
   </div>
@@ -2243,6 +2329,13 @@ function renderPerfil(){
     <div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.06em;color:${p.color}">${p.name}</div>
       <div style="font-size:11px;color:var(--muted);margin-top:2px;">${p.age} años · ${p.h}m · Géminis ♊ · Recomposición Corporal</div>
+    </div>
+  </div></div>
+  <div class="card" style="margin-bottom:12px;"><div class="card-body">
+    <div class="section-label">Apariencia</div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:10px;">Elige cómo quieres ver GemFit en este dispositivo.</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+      ${[['dark','☾','Oscuro'],['light','☀','Claro'],['system','◐','Auto']].map(([value,icon,label])=>`<button data-theme-choice="${value}" onclick="setThemePreference('${value}')" style="padding:9px 4px;border:1px solid ${themePref===value?'var(--accent)':'var(--border2)'};border-radius:9px;background:${themePref===value?'var(--accent)18':'var(--card2)'};color:${themePref===value?'var(--accent)':'var(--muted)'};cursor:pointer;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;"><span style="display:block;font-size:16px;line-height:1;margin-bottom:4px;">${icon}</span>${label}</button>`).join('')}
     </div>
   </div></div>
   <div class="card" style="margin-bottom:12px;overflow:hidden;border-color:${p.color}45;">
@@ -2410,7 +2503,7 @@ function renderProgreso(){
   const blocks=getBlockComparison();
 
   document.getElementById('tab-progreso').innerHTML=`<div class="inner">
-  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(255,238,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
     <button onclick="goTab('plan')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.1);border-radius:8px;color:#7a6070;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
     <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;color:${p.color};">PROGRESO</span>
   </div>
@@ -2652,7 +2745,7 @@ function renderFotos(){
   document.getElementById('tab-fotos').innerHTML = `
   ${lightbox}
   <div class="inner">
-  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(255,238,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
     <button onclick="goTab('progreso')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.1);border-radius:8px;color:#7a6070;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
     <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;color:${p.color};">FOTOS 📸</span>
   </div>
@@ -3115,7 +3208,7 @@ function renderSups(view){
   const today2=new Date();
   const ds=`${DAYS_ES[today2.getDay()]} ${today2.getDate()} de ${MONTHS_ES[today2.getMonth()]}`;
   let h=`<div class="inner">
-  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(255,238,245,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
+  <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
     <button onclick="goTab('plan')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.1);border-radius:8px;color:#7a6070;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
     <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;color:${p.color};">SUPLEMENTOS 💊</span>
   </div>
