@@ -549,7 +549,7 @@ function normalizeDecimalInput(el){
 const PROFS = {
   deivis: { name:'DEIVIS', age:33, h:1.68, w:88, color:'#cc5500', dim:'rgba(204,85,0,.10)', init:'D' },
   yona:   { name:'YONA',   age:29, h:1.68, w:88, color:'#6a00b8', dim:'rgba(106,0,184,.10)', init:'Y' },
-  accesible: { name:'PERFIL ACCESIBLE', age:0, h:1.70, w:70, color:'#0b8f83', dim:'rgba(11,143,131,.10)', init:'A', accessibilityMode:'screen-reader', guidedWorkout:true }
+  jose_papa: { name:'JOSÉ PAPÁ', age:0, h:1.70, w:70, color:'#0b8f83', dim:'rgba(11,143,131,.10)', init:'J', accessibilityMode:'screen-reader', guidedWorkout:true, autoStartGuidedWorkout:true }
 };
 
 // ═══════════════════════════════════════════════════════════════
@@ -1271,6 +1271,7 @@ function selectProfile(id){
   updateTopbarStreak();
   goTab('plan');
   announce(`Perfil seleccionado: ${p.name}.`);
+  if(p.autoStartGuidedWorkout) setTimeout(()=>startAutomaticGuidedWorkout(),80);
 }
 
 function updateSwitcherCheck(){
@@ -1350,21 +1351,21 @@ function enhanceAccessibility(){
 }
 
 function renderAccessibleProfileControls(){
-  const p=PROFS.accesible; if(!p)return;
+  const p=PROFS.jose_papa; if(!p)return;
   const cards=document.querySelector('#s-profiles > div:last-child');
-  if(cards&&!document.getElementById('profile-card-accesible')){
-    const card=document.createElement('button'); card.id='profile-card-accesible'; card.type='button';
-    card.setAttribute('aria-label','Seleccionar Perfil accesible, modo guiado y compatible con lector de pantalla');
-    card.onclick=()=>selectProfile('accesible');
+  if(cards&&!document.getElementById('profile-card-jose-papa')){
+    const card=document.createElement('button'); card.id='profile-card-jose-papa'; card.type='button';
+    card.setAttribute('aria-label','Seleccionar José Papá, entrenamiento guiado compatible con lector de pantalla');
+    card.onclick=()=>selectProfile('jose_papa');
     card.style.cssText=`background:var(--card);border:1px solid ${p.color}55;border-radius:16px;padding:17px 16px;text-align:left;color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;`;
-    card.innerHTML=`<div style="display:flex;align-items:center;gap:14px;"><div aria-hidden="true" style="width:56px;height:56px;border-radius:50%;background:${p.dim};border:1px solid ${p.color};display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:${p.color};">A</div><div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:.06em;color:${p.color};">${p.name}</div><div style="font-size:11px;color:var(--muted);margin-top:4px;">Entrenamiento guiado · lector de pantalla</div></div></div>`;
+    card.innerHTML=`<div style="display:flex;align-items:center;gap:14px;"><div aria-hidden="true" style="width:56px;height:56px;border-radius:50%;background:${p.dim};border:1px solid ${p.color};display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:${p.color};">${p.init}</div><div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:.06em;color:${p.color};">${p.name}</div><div style="font-size:11px;color:var(--muted);margin-top:4px;">Entrenamiento guiado · lector de pantalla</div></div></div>`;
     cards.appendChild(card);
   }
   const switcher=document.getElementById('profileSwitcher');
-  if(switcher&&!document.getElementById('sw-accessible-btn')){
-    const button=document.createElement('button'); button.id='sw-accessible-btn'; button.type='button'; button.onclick=()=>switchToProfile('accesible');
+  if(switcher&&!document.getElementById('sw-jose-papa-btn')){
+    const button=document.createElement('button'); button.id='sw-jose-papa-btn'; button.type='button'; button.onclick=()=>switchToProfile('jose_papa');
     button.style.cssText='width:100%;display:flex;align-items:center;gap:10px;padding:12px 16px;background:transparent;border:0;color:var(--text);cursor:pointer;text-align:left;font-family:DM Sans,sans-serif;';
-    button.innerHTML=`<span aria-hidden="true" style="width:32px;height:32px;border-radius:50%;background:${p.dim};border:1px solid ${p.color};display:flex;align-items:center;justify-content:center;color:${p.color};font-family:'Bebas Neue',sans-serif;">A</span><span style="flex:1;font-size:12px;font-weight:600;">${p.name}</span>`;
+    button.innerHTML=`<span aria-hidden="true" style="width:32px;height:32px;border-radius:50%;background:${p.dim};border:1px solid ${p.color};display:flex;align-items:center;justify-content:center;color:${p.color};font-family:'Bebas Neue',sans-serif;">${p.init}</span><span style="flex:1;font-size:12px;font-weight:600;">${p.name}</span>`;
     switcher.appendChild(button);
   }
 }
@@ -1825,48 +1826,121 @@ function getAutoSession(dateKey){
 let OPEN_TRACKER_EXERCISE = null;
 let ACTIVE_WORKOUT_MODE = false;
 let WORKOUT_WAKE_LOCK = null;
-let GUIDED_WORKOUT = {exerciseIndex:0,seriesIndex:0,returnFocus:null};
+let GUIDED_WORKOUT = {exerciseIndex:0,seriesIndex:0,returnFocus:null,resting:null};
+let _savingGuidedSeries = false;
 function guidedExercises(){
   const session=gd()?.[SK]?.session; return session&&SESSIONS[session]?SESSIONS[session].sections.flatMap(section=>section.ex||[]):[];
 }
-function openGuidedWorkout(){
+function getGuidedSeriesTotal(ex){
+  const targets=getTargetReps(ex); return targets.length||Math.max(1,parseInt(ex.s)||1);
+}
+function getGuidedPreviousText(exId, seriesIndex){
+  const previous=getPreviousSeriesContext(exId,seriesIndex);
+  if(!previous)return 'Sin registro anterior.';
+  return `Último registro ${previous.samePosition?'de esta misma serie':'general del ejercicio'}: ${previous.set.kg} kg por ${previous.set.reps||'—'} repeticiones${previous.set.rir!==''&&previous.set.rir!=null?`, RIR ${previous.set.rir}`:''}.`;
+}
+function getGuidedInstruction(exercises, ex, seriesIndex, prefix=''){
+  const total=getGuidedSeriesTotal(ex), target=getTargetReps(ex)[seriesIndex]??'sin objetivo';
+  return `${prefix}Ejercicio ${GUIDED_WORKOUT.exerciseIndex+1} de ${exercises.length}: ${ex.n}. Serie ${seriesIndex+1} de ${total}. Objetivo: ${target} repeticiones. ${getGuidedPreviousText(ex.id,seriesIndex)}`;
+}
+function prepareTodaySessionForGuidedWorkout(){
+  SK=dk(new Date());
+  const data=gd(); const sessionId=getAutoSession(SK);
+  data[SK]=data[SK]||{};
+  if(!data[SK].session) data[SK].session=sessionId;
+  data[SK].checked=data[SK].checked||{};
+  sd(data);
+  return data[SK].session;
+}
+function startAutomaticGuidedWorkout(){
+  if(CP!=='jose_papa'||!pr()?.autoStartGuidedWorkout)return;
+  const sessionId=prepareTodaySessionForGuidedWorkout();
+  if(!sessionId||sessionId==='skip'||!SESSIONS[sessionId]){
+    goTab('tracker');
+    announce('José Papá. Hoy es día de descanso.','assertive');
+    return;
+  }
+  goTab('tracker');
+  setTimeout(()=>openGuidedWorkout({automatic:true}),80);
+}
+function openGuidedWorkout(options={}){
   const exercises=guidedExercises();
   if(!exercises.length){announce('No hay entrenamiento asignado para este día.','assertive');return;}
-  GUIDED_WORKOUT={exerciseIndex:0,seriesIndex:0,returnFocus:document.activeElement};
-  document.getElementById('guidedWorkoutModal').style.display='flex'; renderGuidedWorkout();
-  setTimeout(()=>document.getElementById('guidedWorkoutTitle')?.focus(),30);
+  GUIDED_WORKOUT={exerciseIndex:0,seriesIndex:0,returnFocus:document.activeElement,resting:null};
+  document.getElementById('guidedWorkoutModal').style.display='flex'; renderGuidedWorkout({automatic:options.automatic});
+  setTimeout(()=>document.getElementById('guidedReps')?.focus(),50);
 }
 function closeGuidedWorkout(){
   const modal=document.getElementById('guidedWorkoutModal'); if(modal)modal.style.display='none';
+  // Si se sale durante el descanso, el temporizador sigue siendo el existente,
+  // pero ya no debe devolver foco a un modal cerrado.
+  if(GUIDED_WORKOUT.resting) GUIDED_WORKOUT.resting=null;
   GUIDED_WORKOUT.returnFocus?.focus?.(); announce('Modo de entrenamiento guiado cerrado.');
 }
 function guidedRepeatInstructions(){
+  if(GUIDED_WORKOUT.resting){
+    const next=GUIDED_WORKOUT.resting.next, exercises=guidedExercises(), ex=exercises[next.exerciseIndex];
+    if(ex) announce(`Descanso en curso. Al terminar: Ejercicio ${next.exerciseIndex+1} de ${exercises.length}: ${ex.n}. Serie ${next.seriesIndex+1} de ${getGuidedSeriesTotal(ex)}.`, 'assertive');
+    return;
+  }
   const exercises=guidedExercises(), ex=exercises[GUIDED_WORKOUT.exerciseIndex]; if(!ex)return;
-  const targets=getTargetReps(ex), target=targets[GUIDED_WORKOUT.seriesIndex]??'sin objetivo';
-  const previous=getPreviousSeriesContext(ex.id,GUIDED_WORKOUT.seriesIndex);
-  announce(`Ejercicio ${GUIDED_WORKOUT.exerciseIndex+1} de ${exercises.length}: ${ex.n}. Serie ${GUIDED_WORKOUT.seriesIndex+1} de ${targets.length||1}. Objetivo ${target} repeticiones.${previous?` Última vez: ${previous.set.kg} kilos por ${previous.set.reps} repeticiones${previous.set.rir!==''&&previous.set.rir!=null?`, RIR ${previous.set.rir}`:''}.`:''}`,'assertive');
+  announce(getGuidedInstruction(exercises,ex,GUIDED_WORKOUT.seriesIndex),'assertive');
 }
-function renderGuidedWorkout(){
+function renderGuidedRest(){
+  const rest=GUIDED_WORKOUT.resting; if(!rest)return;
+  const ex=guidedExercises()[rest.completed.exerciseIndex]; const p=pr();
+  const content=document.getElementById('guidedWorkoutContent');
+  content.innerHTML=`<div id="guidedRestTitle" tabindex="-1"><p style="font-size:11px;color:var(--muted);margin:0 0 10px;">SERIE COMPLETADA</p><h2 style="margin:0;color:${p.color};font-family:'Bebas Neue',sans-serif;font-size:1.65rem;letter-spacing:.05em;">DESCANSO</h2><p style="font-size:14px;line-height:1.6;color:var(--text);">${ex?.n||'Ejercicio'} · serie ${rest.completed.seriesIndex+1} completada. Descansa ${rest.seconds} segundos.</p><p style="font-size:12px;line-height:1.5;color:var(--muted);">Al terminar continuarás con ${rest.next.exerciseIndex===rest.completed.exerciseIndex?'la siguiente serie':'el siguiente ejercicio'}.</p></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;"><button onclick="guidedPrevious()" style="padding:11px;border:1px solid var(--border2);border-radius:8px;background:var(--card2);color:var(--text);cursor:pointer;">Volver a la serie anterior</button><button onclick="guidedRepeatInstructions()" style="padding:11px;border:1px solid var(--border2);border-radius:8px;background:var(--card2);color:var(--text);cursor:pointer;">Repetir instrucciones</button></div>`;
+  setTimeout(()=>document.getElementById('guidedRestTitle')?.focus(),30);
+}
+function renderGuidedWorkout(options={}){
+  if(GUIDED_WORKOUT.resting){renderGuidedRest();return;}
   const exercises=guidedExercises(), ex=exercises[GUIDED_WORKOUT.exerciseIndex]; if(!ex){closeGuidedWorkout();return;}
-  const targets=getTargetReps(ex); const totalSets=targets.length||Math.max(1,parseInt(ex.s)||1);
+  const targets=getTargetReps(ex); const totalSets=getGuidedSeriesTotal(ex);
   GUIDED_WORKOUT.seriesIndex=Math.min(GUIDED_WORKOUT.seriesIndex,totalSets-1);
   const si=GUIDED_WORKOUT.seriesIndex, saved=gd()['series_'+SK+'_'+ex.id]?.[si]||{};
-  const previous=getPreviousSeriesContext(ex.id,si), priorText=previous?`Última vez ${previous.samePosition?'en esta misma serie':'en el ejercicio'}: ${previous.set.kg} kg × ${previous.set.reps||'—'}${previous.set.rir!==''&&previous.set.rir!=null?` · RIR ${previous.set.rir}`:''} · ${previous.date}`:'Sin registro anterior.';
+  const priorText=getGuidedPreviousText(ex.id,si);
   const content=document.getElementById('guidedWorkoutContent'); const p=pr();
   content.innerHTML=`<p style="font-size:11px;color:var(--muted);margin:0 0 10px;">Ejercicio ${GUIDED_WORKOUT.exerciseIndex+1} de ${exercises.length}</p><h2 style="margin:0;color:${p.color};font-family:'Bebas Neue',sans-serif;font-size:1.65rem;letter-spacing:.05em;">${ex.n}</h2><p style="font-size:12px;line-height:1.55;color:var(--muted);">Objetivo: ${ex.s}. ${ex.note||''}</p><div style="padding:10px;border-radius:9px;background:var(--card2);font-size:11px;color:var(--text);margin:12px 0;">${priorText}</div><h3 style="font-size:14px;margin:14px 0 8px;">Serie ${si+1} de ${totalSets} · objetivo ${targets[si]??'—'} reps</h3><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;"><label style="font-size:10px;color:var(--muted);">Repeticiones<input id="guidedReps" aria-label="Repeticiones, serie ${si+1}" inputmode="numeric" type="number" value="${saved.reps??''}" style="width:100%;margin-top:4px;padding:10px;border-radius:8px;border:1px solid var(--border2);background:var(--card2);color:var(--text);font-size:16px;"></label><label style="font-size:10px;color:var(--muted);">Peso kg<input id="guidedKg" aria-label="Peso en kilos, serie ${si+1}" inputmode="decimal" type="text" value="${saved.kg??''}" style="width:100%;margin-top:4px;padding:10px;border-radius:8px;border:1px solid var(--border2);background:var(--card2);color:var(--text);font-size:16px;"></label><label style="font-size:10px;color:var(--muted);">RIR opcional<select id="guidedRir" aria-label="RIR, serie ${si+1}" style="width:100%;margin-top:4px;padding:10px;border-radius:8px;border:1px solid var(--border2);background:var(--card2);color:var(--text);font-size:16px;"><option value="">—</option>${[0,1,2,3,4,5].map(v=>`<option value="${v}" ${String(saved.rir)===String(v)?'selected':''}>${v}</option>`).join('')}</select></label></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;"><button onclick="guidedPrevious()" style="padding:11px;border:1px solid var(--border2);border-radius:8px;background:var(--card2);color:var(--text);cursor:pointer;">Anterior</button><button onclick="guidedRepeatInstructions()" style="padding:11px;border:1px solid var(--border2);border-radius:8px;background:var(--card2);color:var(--text);cursor:pointer;">Repetir instrucciones</button></div><button onclick="completeGuidedSeries()" style="width:100%;margin-top:8px;padding:12px;border:0;border-radius:8px;background:${p.color};color:#07110e;font-size:14px;font-weight:800;cursor:pointer;">Completar serie y descansar</button>`;
-  announce(`Entrenamiento guiado. Ejercicio ${GUIDED_WORKOUT.exerciseIndex+1} de ${exercises.length}. ${ex.n}. Serie ${si+1} de ${totalSets}. Objetivo ${targets[si]??'sin objetivo'} repeticiones. ${priorText}`);
+  if(!options.silent){
+    const prefix=options.automatic?`José Papá. Entrenamiento de hoy: ${SESSIONS[gd()?.[SK]?.session]?.title||'entrenamiento'}. ${exercises.length} ejercicios. `:'Entrenamiento guiado. ';
+    announce(getGuidedInstruction(exercises,ex,si,prefix),'assertive');
+  }
 }
 function completeGuidedSeries(){
+  if(GUIDED_WORKOUT.resting)return;
   const ex=guidedExercises()[GUIDED_WORKOUT.exerciseIndex]; if(!ex)return;
   const reps=document.getElementById('guidedReps').value, kg=document.getElementById('guidedKg').value, rir=document.getElementById('guidedRir').value;
   if(!Number.isFinite(parseDecimal(reps))||parseDecimal(reps)<=0||!Number.isFinite(parseDecimal(kg))||parseDecimal(kg)<0){announce('Indica repeticiones y peso válidos antes de completar la serie.','assertive');return;}
-  setRestTarget(ex.rest||90); saveSerie(ex.id,GUIDED_WORKOUT.seriesIndex,'reps',reps); saveSerie(ex.id,GUIDED_WORKOUT.seriesIndex,'rir',rir); saveSerie(ex.id,GUIDED_WORKOUT.seriesIndex,'kg',kg);
-  const targets=getTargetReps(ex), total=targets.length||1;
-  if(GUIDED_WORKOUT.seriesIndex<total-1){GUIDED_WORKOUT.seriesIndex++;announce(`Serie completada. Descanso iniciado: ${ex.rest||90} segundos. Siguiente, serie ${GUIDED_WORKOUT.seriesIndex+1} de ${total}.`);}
-  else {togEx(ex.id); if(GUIDED_WORKOUT.exerciseIndex<guidedExercises().length-1){GUIDED_WORKOUT.exerciseIndex++;GUIDED_WORKOUT.seriesIndex=0;announce(`Ejercicio completado. Descanso iniciado. Siguiente ejercicio: ${guidedExercises()[GUIDED_WORKOUT.exerciseIndex].n}.`);}else{announce('Entrenamiento completado.','assertive'); closeGuidedWorkout();return;}}
+  const completed={exerciseIndex:GUIDED_WORKOUT.exerciseIndex,seriesIndex:GUIDED_WORKOUT.seriesIndex};
+  _savingGuidedSeries=true;
+  try{saveSerie(ex.id,completed.seriesIndex,'reps',reps); saveSerie(ex.id,completed.seriesIndex,'rir',rir); saveSerie(ex.id,completed.seriesIndex,'kg',kg);}finally{_savingGuidedSeries=false;}
+  const total=getGuidedSeriesTotal(ex); let next;
+  if(completed.seriesIndex<total-1) next={exerciseIndex:completed.exerciseIndex,seriesIndex:completed.seriesIndex+1};
+  else if(completed.exerciseIndex<guidedExercises().length-1){togEx(ex.id); next={exerciseIndex:completed.exerciseIndex+1,seriesIndex:0};}
+  else {togEx(ex.id); announce('Entrenamiento completado.','assertive'); closeGuidedWorkout();return;}
+  const seconds=ex.rest||90;
+  GUIDED_WORKOUT.resting={completed,next,seconds};
+  setRestTarget(seconds); renderGuidedRest();
+  announce(`Serie ${completed.seriesIndex+1} completada. Descanso iniciado: ${seconds} segundos.`,'assertive');
+  startRestTimer(seconds);
+}
+function finishGuidedRest(){
+  const rest=GUIDED_WORKOUT.resting; if(!rest)return false;
+  GUIDED_WORKOUT.exerciseIndex=rest.next.exerciseIndex; GUIDED_WORKOUT.seriesIndex=rest.next.seriesIndex; GUIDED_WORKOUT.resting=null;
+  const exercises=guidedExercises(), ex=exercises[GUIDED_WORKOUT.exerciseIndex];
+  if(!ex)return false;
+  announce(`Descanso terminado. Serie ${GUIDED_WORKOUT.seriesIndex+1} de ${getGuidedSeriesTotal(ex)} de ${ex.n}.`,'assertive');
+  renderGuidedWorkout({silent:true});
+  setTimeout(()=>document.getElementById('guidedReps')?.focus(),60);
+  return true;
+}
+function guidedPrevious(){
+  if(GUIDED_WORKOUT.resting){
+    resetRestTimer(); GUIDED_WORKOUT.exerciseIndex=GUIDED_WORKOUT.resting.completed.exerciseIndex; GUIDED_WORKOUT.seriesIndex=GUIDED_WORKOUT.resting.completed.seriesIndex; GUIDED_WORKOUT.resting=null;
+  }else if(GUIDED_WORKOUT.seriesIndex>0)GUIDED_WORKOUT.seriesIndex--;else if(GUIDED_WORKOUT.exerciseIndex>0){GUIDED_WORKOUT.exerciseIndex--;const target=getTargetReps(guidedExercises()[GUIDED_WORKOUT.exerciseIndex]);GUIDED_WORKOUT.seriesIndex=Math.max(0,target.length-1);}
   renderGuidedWorkout(); setTimeout(()=>document.getElementById('guidedReps')?.focus(),30);
 }
-function guidedPrevious(){if(GUIDED_WORKOUT.seriesIndex>0)GUIDED_WORKOUT.seriesIndex--;else if(GUIDED_WORKOUT.exerciseIndex>0){GUIDED_WORKOUT.exerciseIndex--;const target=getTargetReps(guidedExercises()[GUIDED_WORKOUT.exerciseIndex]);GUIDED_WORKOUT.seriesIndex=Math.max(0,target.length-1);}renderGuidedWorkout();}
 function toggleTrackerExercise(exerciseId){
   OPEN_TRACKER_EXERCISE = OPEN_TRACKER_EXERCISE===exerciseId ? null : exerciseId;
   renderCal();
@@ -2231,7 +2305,7 @@ function saveSerie(exId, idx, field, value){
   sd(data);
   if(field==='kg'&&Number.isFinite(parseDecimal(value))) announce(`Serie ${idx+1} guardada: ${value} kg, ${data[key][idx].reps||'sin'} repeticiones${data[key][idx].rir!==''&&data[key][idx].rir!=null?`, RIR ${data[key][idx].rir}`:''}.`);
   // Al completar el peso de una serie se inicia el descanso seleccionado.
-  if(field==='kg'&&!previousValue&&parseDecimal(value)>0&&parseDecimal(data[key][idx].reps)>0){
+  if(field==='kg'&&!_savingGuidedSeries&&!previousValue&&parseDecimal(value)>0&&parseDecimal(data[key][idx].reps)>0){
     startRestTimer(_restTargetSeconds);
   }
   // Update volume cell inline without full re-render
@@ -4362,6 +4436,7 @@ function renderDietaDay(dayKey){
 let _restInterval = null;
 let _restSeconds = 0;
 let _restRunning = false;
+let _restCompletionHandled = false;
 let _restEndTimestamp = null; // absolute time when rest target is reached
 let _restTargetSeconds = 180; // default 3 min, can be overridden by exercise rest value
 let _notifPermissionAsked = false;
@@ -4388,7 +4463,17 @@ function scheduleRestNotification(targetSeconds){
 }
 
 function fireRestNotification(){
-  announce('Descanso terminado. Puedes continuar con la siguiente serie.','assertive');
+  if(_restCompletionHandled)return;
+  _restCompletionHandled=true;
+  clearInterval(_restInterval);
+  if(window._restNotifTimeout) clearTimeout(window._restNotifTimeout);
+  _restRunning=false;
+  const timerButton=document.getElementById('restTimerBtn');
+  const timerDot=document.getElementById('restTimerDot');
+  if(timerButton)timerButton.textContent='▶ Iniciar';
+  if(timerDot)timerDot.style.background='var(--muted)';
+  const guidedRestFinished=GUIDED_WORKOUT.resting&&finishGuidedRest();
+  if(!guidedRestFinished) announce('Descanso terminado. Puedes continuar con la siguiente serie.','assertive');
   const p2 = CP ? pr() : {color:'#cc5500'};
   // Vibrate + sound if app is in foreground
   if(navigator.vibrate) navigator.vibrate([200,100,200]);
@@ -4446,6 +4531,7 @@ async function startRestTimer(targetSeconds){
   requestNotifPermission();
   // Start — reset seconds and begin
   _restRunning = true;
+  _restCompletionHandled = false;
   _restSeconds = 0;
   _restTargetSeconds = targetSeconds || 180;
   announce(`Descanso iniciado: ${_restTargetSeconds} segundos.`);
@@ -4477,6 +4563,7 @@ function resetRestTimer(){
   clearInterval(_restInterval);
   if(window._restNotifTimeout) clearTimeout(window._restNotifTimeout);
   _restRunning = false;
+  _restCompletionHandled = false;
   _restSeconds = 0;
   const disp = document.getElementById('restTimerDisplay');
   const dot  = document.getElementById('restTimerDot');
