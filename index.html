@@ -882,10 +882,69 @@ function sd(d){ AD[CP]=d; lsSave(); }
 function gw(){ return WD[CP]; }
 function pr(){ return PROFS[CP]; }
 function gm(){ return MEASUREMENTS[CP]||(MEASUREMENTS[CP]=[]); }
+// ═══════════════════════════════════════════════════════════════
+// VOZ GUIADA — voz propia de GemFit para el perfil José Papá
+// Se mantiene aria-live para VoiceOver/TalkBack, pero José Papá también
+// puede escuchar GemFit aunque el lector de pantalla no esté activado.
+// ═══════════════════════════════════════════════════════════════
+const GUIDED_VOICE_KEY='gemfit_guided_voice_v1';
+let GUIDED_VOICE_ENABLED=true;
+let _guidedVoiceLastMessage='';
+let _guidedVoiceLastAt=0;
+try{
+  const storedVoice=localStorage.getItem(GUIDED_VOICE_KEY);
+  GUIDED_VOICE_ENABLED=storedVoice===null?true:storedVoice==='true';
+}catch(e){}
+
+function getSpanishVoice(){
+  if(!('speechSynthesis' in window))return null;
+  const voices=window.speechSynthesis.getVoices()||[];
+  return voices.find(v=>/^es-ES$/i.test(v.lang)) ||
+         voices.find(v=>/^es-/i.test(v.lang)) ||
+         voices.find(v=>/^es/i.test(v.lang)) || null;
+}
+function speakGuided(message,{interrupt=true}={}){
+  if(CP!=='jose_papa'||!GUIDED_VOICE_ENABLED||!message||!('speechSynthesis' in window))return;
+  const now=Date.now();
+  // Evita duplicados inmediatos provenientes de aria-live + eventos consecutivos.
+  if(message===_guidedVoiceLastMessage && now-_guidedVoiceLastAt<700)return;
+  _guidedVoiceLastMessage=message; _guidedVoiceLastAt=now;
+  try{
+    if(interrupt)window.speechSynthesis.cancel();
+    const utterance=new SpeechSynthesisUtterance(String(message));
+    utterance.lang='es-ES';
+    utterance.rate=.94; utterance.pitch=1; utterance.volume=1;
+    const voice=getSpanishVoice(); if(voice)utterance.voice=voice;
+    window.speechSynthesis.resume();
+    window.speechSynthesis.speak(utterance);
+  }catch(e){console.warn('Voz guiada no disponible:',e);}
+}
+function stopGuidedVoice(){
+  try{if('speechSynthesis' in window)window.speechSynthesis.cancel();}catch(e){}
+}
+function updateGuidedVoiceButton(){
+  const btn=document.getElementById('guidedVoiceToggle'); if(!btn)return;
+  btn.textContent=GUIDED_VOICE_ENABLED?'🔊 Voz activada':'🔇 Voz desactivada';
+  btn.setAttribute('aria-pressed',GUIDED_VOICE_ENABLED?'true':'false');
+  btn.setAttribute('aria-label',GUIDED_VOICE_ENABLED?'Desactivar voz guiada de GemFit':'Activar voz guiada de GemFit');
+}
+function toggleGuidedVoice(){
+  GUIDED_VOICE_ENABLED=!GUIDED_VOICE_ENABLED;
+  try{localStorage.setItem(GUIDED_VOICE_KEY,String(GUIDED_VOICE_ENABLED));}catch(e){}
+  if(!GUIDED_VOICE_ENABLED)stopGuidedVoice();
+  updateGuidedVoiceButton();
+  const msg=GUIDED_VOICE_ENABLED?'Voz guiada activada.':'Voz guiada desactivada.';
+  const region=document.getElementById('gemfitAnnouncements');
+  if(region){region.setAttribute('aria-live','assertive');region.textContent='';setTimeout(()=>region.textContent=msg,40);}
+  if(GUIDED_VOICE_ENABLED)speakGuided(msg);
+}
 function announce(message, priority='polite'){
-  const region=document.getElementById('gemfitAnnouncements'); if(!region||!message)return;
-  region.setAttribute('aria-live',priority); region.textContent='';
-  setTimeout(()=>{region.textContent=message;},40);
+  const region=document.getElementById('gemfitAnnouncements'); if(!message)return;
+  if(region){
+    region.setAttribute('aria-live',priority); region.textContent='';
+    setTimeout(()=>{region.textContent=message;},40);
+  }
+  speakGuided(message);
 }
 function getExerciseName(exerciseId){
   for(const session of Object.values(SESSIONS)) for(const section of session.sections||[]){
@@ -1826,7 +1885,8 @@ function getAutoSession(dateKey){
 let OPEN_TRACKER_EXERCISE = null;
 let ACTIVE_WORKOUT_MODE = false;
 let WORKOUT_WAKE_LOCK = null;
-let GUIDED_WORKOUT = {exerciseIndex:0,seriesIndex:0,returnFocus:null,resting:null};
+let OPEN_GUIDED_STEP = 'reps';
+let GUIDED_WORKOUT = {exerciseIndex:0,seriesIndex:0,returnFocus:null,resting:null,step:'reps',draft:{}};
 let _savingGuidedSeries = false;
 function guidedExercises(){
   const session=gd()?.[SK]?.session; return session&&SESSIONS[session]?SESSIONS[session].sections.flatMap(section=>section.ex||[]):[];
@@ -1863,19 +1923,39 @@ function startAutomaticGuidedWorkout(){
   goTab('tracker');
   setTimeout(()=>openGuidedWorkout({automatic:true}),80);
 }
+function getGuidedSavedDraft(ex,si){
+  const saved=gd()['series_'+SK+'_'+ex.id]?.[si]||{};
+  return {reps:saved.reps??'',kg:saved.kg??'',rir:saved.rir??''};
+}
+function resetGuidedDraft(){
+  const ex=guidedExercises()[GUIDED_WORKOUT.exerciseIndex];
+  GUIDED_WORKOUT.step='reps';
+  GUIDED_WORKOUT.draft=ex?getGuidedSavedDraft(ex,GUIDED_WORKOUT.seriesIndex):{};
+}
 function openGuidedWorkout(options={}){
   const exercises=guidedExercises();
   if(!exercises.length){announce('No hay entrenamiento asignado para este día.','assertive');return;}
-  GUIDED_WORKOUT={exerciseIndex:0,seriesIndex:0,returnFocus:document.activeElement,resting:null};
-  document.getElementById('guidedWorkoutModal').style.display='flex'; renderGuidedWorkout({automatic:options.automatic});
-  setTimeout(()=>document.getElementById('guidedReps')?.focus(),50);
+  GUIDED_WORKOUT={exerciseIndex:0,seriesIndex:0,returnFocus:document.activeElement,resting:null,step:'reps',draft:{}};
+  resetGuidedDraft();
+  document.getElementById('guidedWorkoutModal').style.display='flex';
+  updateGuidedVoiceButton();
+  renderGuidedWorkout({automatic:options.automatic});
 }
 function closeGuidedWorkout(){
   const modal=document.getElementById('guidedWorkoutModal'); if(modal)modal.style.display='none';
-  // Si se sale durante el descanso, el temporizador sigue siendo el existente,
-  // pero ya no debe devolver foco a un modal cerrado.
   if(GUIDED_WORKOUT.resting) GUIDED_WORKOUT.resting=null;
-  GUIDED_WORKOUT.returnFocus?.focus?.(); announce('Modo de entrenamiento guiado cerrado.');
+  GUIDED_WORKOUT.returnFocus?.focus?.();
+  announce('Modo de entrenamiento guiado cerrado.');
+  setTimeout(()=>stopGuidedVoice(),900);
+}
+function guidedStepPrompt(){
+  const exercises=guidedExercises(), ex=exercises[GUIDED_WORKOUT.exerciseIndex]; if(!ex)return '';
+  const si=GUIDED_WORKOUT.seriesIndex, total=getGuidedSeriesTotal(ex), target=getTargetReps(ex)[si]??'sin objetivo';
+  if(GUIDED_WORKOUT.step==='reps') return `${ex.n}. Serie ${si+1} de ${total}. Objetivo ${target} repeticiones. ¿Cuántas repeticiones hiciste?`;
+  if(GUIDED_WORKOUT.step==='kg') return `Has indicado ${GUIDED_WORKOUT.draft.reps} repeticiones. ¿Cuánto peso utilizaste, en kilos?`;
+  if(GUIDED_WORKOUT.step==='rir') return `Peso ${GUIDED_WORKOUT.draft.kg} kilos. ¿Cuál fue tu RIR? Puedes omitirlo.`;
+  if(GUIDED_WORKOUT.step==='confirm') return `Confirma la serie. ${GUIDED_WORKOUT.draft.reps} repeticiones con ${GUIDED_WORKOUT.draft.kg} kilos${GUIDED_WORKOUT.draft.rir!==''?`, RIR ${GUIDED_WORKOUT.draft.rir}`:', sin RIR'}.`;
+  return '';
 }
 function guidedRepeatInstructions(){
   if(GUIDED_WORKOUT.resting){
@@ -1883,63 +1963,98 @@ function guidedRepeatInstructions(){
     if(ex) announce(`Descanso en curso. Al terminar: Ejercicio ${next.exerciseIndex+1} de ${exercises.length}: ${ex.n}. Serie ${next.seriesIndex+1} de ${getGuidedSeriesTotal(ex)}.`, 'assertive');
     return;
   }
-  const exercises=guidedExercises(), ex=exercises[GUIDED_WORKOUT.exerciseIndex]; if(!ex)return;
-  announce(getGuidedInstruction(exercises,ex,GUIDED_WORKOUT.seriesIndex),'assertive');
+  announce(guidedStepPrompt(),'assertive');
 }
 function renderGuidedRest(){
   const rest=GUIDED_WORKOUT.resting; if(!rest)return;
   const ex=guidedExercises()[rest.completed.exerciseIndex]; const p=pr();
   const content=document.getElementById('guidedWorkoutContent');
-  content.innerHTML=`<div id="guidedRestTitle" tabindex="-1"><p style="font-size:11px;color:var(--muted);margin:0 0 10px;">SERIE COMPLETADA</p><h2 style="margin:0;color:${p.color};font-family:'Bebas Neue',sans-serif;font-size:1.65rem;letter-spacing:.05em;">DESCANSO</h2><p style="font-size:14px;line-height:1.6;color:var(--text);">${ex?.n||'Ejercicio'} · serie ${rest.completed.seriesIndex+1} completada. Descansa ${rest.seconds} segundos.</p><p style="font-size:12px;line-height:1.5;color:var(--muted);">Al terminar continuarás con ${rest.next.exerciseIndex===rest.completed.exerciseIndex?'la siguiente serie':'el siguiente ejercicio'}.</p></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;"><button onclick="guidedPrevious()" style="padding:11px;border:1px solid var(--border2);border-radius:8px;background:var(--card2);color:var(--text);cursor:pointer;">Volver a la serie anterior</button><button onclick="guidedRepeatInstructions()" style="padding:11px;border:1px solid var(--border2);border-radius:8px;background:var(--card2);color:var(--text);cursor:pointer;">Repetir instrucciones</button></div>`;
+  content.innerHTML=`<div id="guidedRestTitle" tabindex="-1"><p style="font-size:11px;color:var(--muted);margin:0 0 10px;">SERIE COMPLETADA</p><h2 style="margin:0;color:${p.color};font-family:'Bebas Neue',sans-serif;font-size:1.65rem;letter-spacing:.05em;">DESCANSO</h2><p style="font-size:14px;line-height:1.6;color:var(--text);">${ex?.n||'Ejercicio'} · serie ${rest.completed.seriesIndex+1} guardada. Descansa ${rest.seconds} segundos.</p><p style="font-size:12px;line-height:1.5;color:var(--muted);">GemFit te avisará automáticamente cuando toque continuar.</p></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;"><button onclick="guidedPrevious()" style="padding:13px;border:1px solid var(--border2);border-radius:9px;background:var(--card2);color:var(--text);cursor:pointer;">Volver</button><button onclick="guidedRepeatInstructions()" style="padding:13px;border:1px solid var(--border2);border-radius:9px;background:var(--card2);color:var(--text);cursor:pointer;">Repetir instrucciones</button></div>`;
   setTimeout(()=>document.getElementById('guidedRestTitle')?.focus(),30);
+}
+function guidedStepNav(){
+  return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;"><button onclick="guidedPrevious()" style="padding:13px;border:1px solid var(--border2);border-radius:9px;background:var(--card2);color:var(--text);cursor:pointer;font-size:13px;">Atrás</button><button onclick="guidedRepeatInstructions()" style="padding:13px;border:1px solid var(--border2);border-radius:9px;background:var(--card2);color:var(--text);cursor:pointer;font-size:13px;">🔊 Repetir</button></div>`;
 }
 function renderGuidedWorkout(options={}){
   if(GUIDED_WORKOUT.resting){renderGuidedRest();return;}
   const exercises=guidedExercises(), ex=exercises[GUIDED_WORKOUT.exerciseIndex]; if(!ex){closeGuidedWorkout();return;}
-  const targets=getTargetReps(ex); const totalSets=getGuidedSeriesTotal(ex);
-  GUIDED_WORKOUT.seriesIndex=Math.min(GUIDED_WORKOUT.seriesIndex,totalSets-1);
-  const si=GUIDED_WORKOUT.seriesIndex, saved=gd()['series_'+SK+'_'+ex.id]?.[si]||{};
-  const priorText=getGuidedPreviousText(ex.id,si);
-  const content=document.getElementById('guidedWorkoutContent'); const p=pr();
-  content.innerHTML=`<p style="font-size:11px;color:var(--muted);margin:0 0 10px;">Ejercicio ${GUIDED_WORKOUT.exerciseIndex+1} de ${exercises.length}</p><h2 style="margin:0;color:${p.color};font-family:'Bebas Neue',sans-serif;font-size:1.65rem;letter-spacing:.05em;">${ex.n}</h2><p style="font-size:12px;line-height:1.55;color:var(--muted);">Objetivo: ${ex.s}. ${ex.note||''}</p><div style="padding:10px;border-radius:9px;background:var(--card2);font-size:11px;color:var(--text);margin:12px 0;">${priorText}</div><h3 style="font-size:14px;margin:14px 0 8px;">Serie ${si+1} de ${totalSets} · objetivo ${targets[si]??'—'} reps</h3><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;"><label style="font-size:10px;color:var(--muted);">Repeticiones<input id="guidedReps" aria-label="Repeticiones, serie ${si+1}" inputmode="numeric" type="number" value="${saved.reps??''}" style="width:100%;margin-top:4px;padding:10px;border-radius:8px;border:1px solid var(--border2);background:var(--card2);color:var(--text);font-size:16px;"></label><label style="font-size:10px;color:var(--muted);">Peso kg<input id="guidedKg" aria-label="Peso en kilos, serie ${si+1}" inputmode="decimal" type="text" value="${saved.kg??''}" style="width:100%;margin-top:4px;padding:10px;border-radius:8px;border:1px solid var(--border2);background:var(--card2);color:var(--text);font-size:16px;"></label><label style="font-size:10px;color:var(--muted);">RIR opcional<select id="guidedRir" aria-label="RIR, serie ${si+1}" style="width:100%;margin-top:4px;padding:10px;border-radius:8px;border:1px solid var(--border2);background:var(--card2);color:var(--text);font-size:16px;"><option value="">—</option>${[0,1,2,3,4,5].map(v=>`<option value="${v}" ${String(saved.rir)===String(v)?'selected':''}>${v}</option>`).join('')}</select></label></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;"><button onclick="guidedPrevious()" style="padding:11px;border:1px solid var(--border2);border-radius:8px;background:var(--card2);color:var(--text);cursor:pointer;">Anterior</button><button onclick="guidedRepeatInstructions()" style="padding:11px;border:1px solid var(--border2);border-radius:8px;background:var(--card2);color:var(--text);cursor:pointer;">Repetir instrucciones</button></div><button onclick="completeGuidedSeries()" style="width:100%;margin-top:8px;padding:12px;border:0;border-radius:8px;background:${p.color};color:#07110e;font-size:14px;font-weight:800;cursor:pointer;">Completar serie y descansar</button>`;
+  const targets=getTargetReps(ex), totalSets=getGuidedSeriesTotal(ex), si=Math.min(GUIDED_WORKOUT.seriesIndex,totalSets-1);
+  GUIDED_WORKOUT.seriesIndex=si;
+  if(!GUIDED_WORKOUT.draft||GUIDED_WORKOUT.draft._for!==`${ex.id}_${si}`){GUIDED_WORKOUT.draft={...getGuidedSavedDraft(ex,si),_for:`${ex.id}_${si}`};}
+  const priorText=getGuidedPreviousText(ex.id,si), p=pr(), content=document.getElementById('guidedWorkoutContent');
+  const header=`<p style="font-size:11px;color:var(--muted);margin:0 0 8px;">Ejercicio ${GUIDED_WORKOUT.exerciseIndex+1} de ${exercises.length} · Serie ${si+1} de ${totalSets}</p><h2 style="margin:0;color:${p.color};font-family:'Bebas Neue',sans-serif;font-size:1.65rem;letter-spacing:.05em;">${ex.n}</h2><p style="font-size:12px;line-height:1.55;color:var(--muted);">Objetivo: ${targets[si]??'—'} reps. ${ex.note||''}</p><div style="padding:10px;border-radius:9px;background:var(--card2);font-size:11px;color:var(--text);margin:12px 0;">${priorText}</div>`;
+  let body='';
+  if(GUIDED_WORKOUT.step==='reps'){
+    body=`<h3 style="font-size:16px;margin:14px 0 8px;">¿Cuántas repeticiones hiciste?</h3><input id="guidedStepInput" aria-label="Repeticiones realizadas, serie ${si+1}" inputmode="numeric" type="number" min="1" max="200" value="${GUIDED_WORKOUT.draft.reps??''}" style="width:100%;padding:16px;border-radius:10px;border:1px solid var(--border2);background:var(--card2);color:var(--text);font-size:22px;text-align:center;"><button onclick="guidedContinue()" style="width:100%;margin-top:10px;padding:15px;border:0;border-radius:10px;background:${p.color};color:#06110f;font-size:15px;font-weight:800;cursor:pointer;">Continuar</button>`;
+  } else if(GUIDED_WORKOUT.step==='kg'){
+    body=`<h3 style="font-size:16px;margin:14px 0 8px;">¿Cuánto peso utilizaste?</h3><p style="font-size:12px;color:var(--muted);margin-bottom:8px;">Repeticiones: ${GUIDED_WORKOUT.draft.reps}</p><input id="guidedStepInput" aria-label="Peso utilizado en kilos, serie ${si+1}" inputmode="decimal" type="text" value="${GUIDED_WORKOUT.draft.kg??''}" placeholder="kg" style="width:100%;padding:16px;border-radius:10px;border:1px solid var(--border2);background:var(--card2);color:var(--text);font-size:22px;text-align:center;"><button onclick="guidedContinue()" style="width:100%;margin-top:10px;padding:15px;border:0;border-radius:10px;background:${p.color};color:#06110f;font-size:15px;font-weight:800;cursor:pointer;">Continuar</button>`;
+  } else if(GUIDED_WORKOUT.step==='rir'){
+    body=`<h3 style="font-size:16px;margin:14px 0 8px;">¿Cuál fue tu RIR?</h3><p style="font-size:12px;color:var(--muted);margin-bottom:10px;">${GUIDED_WORKOUT.draft.reps} reps · ${GUIDED_WORKOUT.draft.kg} kg. RIR es opcional.</p><div role="group" aria-label="Seleccionar RIR" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">${[0,1,2,3,4,5].map(v=>`<button onclick="guidedChooseRir('${v}')" aria-pressed="${String(GUIDED_WORKOUT.draft.rir)===String(v)}" style="padding:14px;border:1px solid ${String(GUIDED_WORKOUT.draft.rir)===String(v)?p.color:'var(--border2)'};border-radius:9px;background:${String(GUIDED_WORKOUT.draft.rir)===String(v)?p.dim:'var(--card2)'};color:var(--text);font-size:18px;cursor:pointer;">${v}</button>`).join('')}</div><button onclick="guidedChooseRir('')" style="width:100%;margin-top:8px;padding:13px;border:1px solid var(--border2);border-radius:9px;background:var(--card2);color:var(--text);cursor:pointer;">Omitir RIR</button>`;
+  } else {
+    body=`<h3 style="font-size:16px;margin:14px 0 8px;">Confirmar serie</h3><div style="padding:14px;border-radius:10px;background:var(--card2);border:1px solid var(--border2);font-size:15px;line-height:1.8;"><strong>Serie ${si+1}</strong><br>${GUIDED_WORKOUT.draft.reps} repeticiones<br>${GUIDED_WORKOUT.draft.kg} kg<br>${GUIDED_WORKOUT.draft.rir!==''?`RIR ${GUIDED_WORKOUT.draft.rir}`:'RIR omitido'}</div><button onclick="completeGuidedSeries()" style="width:100%;margin-top:10px;padding:15px;border:0;border-radius:10px;background:${p.color};color:#06110f;font-size:15px;font-weight:800;cursor:pointer;">Confirmar y guardar serie</button>`;
+  }
+  content.innerHTML=header+body+guidedStepNav();
+  const focusId=GUIDED_WORKOUT.step==='reps'||GUIDED_WORKOUT.step==='kg'?'guidedStepInput':null;
+  setTimeout(()=>{if(focusId)document.getElementById(focusId)?.focus();else content.querySelector('button')?.focus();},50);
   if(!options.silent){
-    const prefix=options.automatic?`José Papá. Entrenamiento de hoy: ${SESSIONS[gd()?.[SK]?.session]?.title||'entrenamiento'}. ${exercises.length} ejercicios. `:'Entrenamiento guiado. ';
-    announce(getGuidedInstruction(exercises,ex,si,prefix),'assertive');
+    if(options.automatic&&GUIDED_WORKOUT.step==='reps'){
+      const prefix=`José Papá. Entrenamiento de hoy: ${SESSIONS[gd()?.[SK]?.session]?.title||'entrenamiento'}. ${exercises.length} ejercicios. `;
+      announce(getGuidedInstruction(exercises,ex,si,prefix)+' ¿Cuántas repeticiones hiciste?','assertive');
+    }else announce(guidedStepPrompt(),'assertive');
   }
 }
+function guidedContinue(){
+  const input=document.getElementById('guidedStepInput');
+  if(GUIDED_WORKOUT.step==='reps'){
+    const reps=parseDecimal(input?.value); if(!Number.isFinite(reps)||reps<=0){announce('Indica un número válido de repeticiones.','assertive');input?.focus();return;}
+    GUIDED_WORKOUT.draft.reps=String(Math.round(reps)); GUIDED_WORKOUT.step='kg';
+  }else if(GUIDED_WORKOUT.step==='kg'){
+    const kg=parseDecimal(input?.value); if(!Number.isFinite(kg)||kg<0){announce('Indica un peso válido en kilos.','assertive');input?.focus();return;}
+    GUIDED_WORKOUT.draft.kg=String(Math.round(kg*100)/100).replace('.',','); GUIDED_WORKOUT.step='rir';
+  }
+  renderGuidedWorkout();
+}
+function guidedChooseRir(value){
+  GUIDED_WORKOUT.draft.rir=value; GUIDED_WORKOUT.step='confirm'; renderGuidedWorkout();
+}
 function completeGuidedSeries(){
-  if(GUIDED_WORKOUT.resting)return;
+  if(GUIDED_WORKOUT.resting||GUIDED_WORKOUT.step!=='confirm')return;
   const ex=guidedExercises()[GUIDED_WORKOUT.exerciseIndex]; if(!ex)return;
-  const reps=document.getElementById('guidedReps').value, kg=document.getElementById('guidedKg').value, rir=document.getElementById('guidedRir').value;
-  if(!Number.isFinite(parseDecimal(reps))||parseDecimal(reps)<=0||!Number.isFinite(parseDecimal(kg))||parseDecimal(kg)<0){announce('Indica repeticiones y peso válidos antes de completar la serie.','assertive');return;}
+  const {reps,kg,rir}=GUIDED_WORKOUT.draft;
+  if(!Number.isFinite(parseDecimal(reps))||parseDecimal(reps)<=0||!Number.isFinite(parseDecimal(kg))||parseDecimal(kg)<0){announce('Los datos de la serie no son válidos. Vuelve atrás para corregirlos.','assertive');return;}
   const completed={exerciseIndex:GUIDED_WORKOUT.exerciseIndex,seriesIndex:GUIDED_WORKOUT.seriesIndex};
   _savingGuidedSeries=true;
-  try{saveSerie(ex.id,completed.seriesIndex,'reps',reps); saveSerie(ex.id,completed.seriesIndex,'rir',rir); saveSerie(ex.id,completed.seriesIndex,'kg',kg);}finally{_savingGuidedSeries=false;}
+  try{saveSerie(ex.id,completed.seriesIndex,'reps',reps);saveSerie(ex.id,completed.seriesIndex,'rir',rir);saveSerie(ex.id,completed.seriesIndex,'kg',kg);}finally{_savingGuidedSeries=false;}
   const total=getGuidedSeriesTotal(ex); let next;
   if(completed.seriesIndex<total-1) next={exerciseIndex:completed.exerciseIndex,seriesIndex:completed.seriesIndex+1};
-  else if(completed.exerciseIndex<guidedExercises().length-1){togEx(ex.id); next={exerciseIndex:completed.exerciseIndex+1,seriesIndex:0};}
-  else {togEx(ex.id); announce('Entrenamiento completado.','assertive'); closeGuidedWorkout();return;}
+  else if(completed.exerciseIndex<guidedExercises().length-1){togEx(ex.id);next={exerciseIndex:completed.exerciseIndex+1,seriesIndex:0};}
+  else {togEx(ex.id);announce(`Entrenamiento completado. Has terminado ${guidedExercises().length} ejercicios. Buen trabajo.`,'assertive');setTimeout(()=>closeGuidedWorkout(),1800);return;}
   const seconds=ex.rest||90;
   GUIDED_WORKOUT.resting={completed,next,seconds};
-  setRestTarget(seconds); renderGuidedRest();
-  announce(`Serie ${completed.seriesIndex+1} completada. Descanso iniciado: ${seconds} segundos.`,'assertive');
+  setRestTarget(seconds);renderGuidedRest();
+  announce(`Serie guardada. ${reps} repeticiones con ${kg} kilos${rir!==''?`, RIR ${rir}`:''}. Descansa ${seconds} segundos.`,'assertive');
   startRestTimer(seconds);
 }
 function finishGuidedRest(){
   const rest=GUIDED_WORKOUT.resting; if(!rest)return false;
-  GUIDED_WORKOUT.exerciseIndex=rest.next.exerciseIndex; GUIDED_WORKOUT.seriesIndex=rest.next.seriesIndex; GUIDED_WORKOUT.resting=null;
-  const exercises=guidedExercises(), ex=exercises[GUIDED_WORKOUT.exerciseIndex];
-  if(!ex)return false;
-  announce(`Descanso terminado. Serie ${GUIDED_WORKOUT.seriesIndex+1} de ${getGuidedSeriesTotal(ex)} de ${ex.n}.`,'assertive');
+  GUIDED_WORKOUT.exerciseIndex=rest.next.exerciseIndex;GUIDED_WORKOUT.seriesIndex=rest.next.seriesIndex;GUIDED_WORKOUT.resting=null;
+  resetGuidedDraft();
+  const exercises=guidedExercises(),ex=exercises[GUIDED_WORKOUT.exerciseIndex];if(!ex)return false;
+  announce(`Descanso terminado. ${ex.n}. Serie ${GUIDED_WORKOUT.seriesIndex+1} de ${getGuidedSeriesTotal(ex)}. ${getGuidedPreviousText(ex.id,GUIDED_WORKOUT.seriesIndex)} ¿Cuántas repeticiones hiciste?`,'assertive');
   renderGuidedWorkout({silent:true});
-  setTimeout(()=>document.getElementById('guidedReps')?.focus(),60);
+  setTimeout(()=>document.getElementById('guidedStepInput')?.focus(),60);
   return true;
 }
 function guidedPrevious(){
   if(GUIDED_WORKOUT.resting){
-    resetRestTimer(); GUIDED_WORKOUT.exerciseIndex=GUIDED_WORKOUT.resting.completed.exerciseIndex; GUIDED_WORKOUT.seriesIndex=GUIDED_WORKOUT.resting.completed.seriesIndex; GUIDED_WORKOUT.resting=null;
-  }else if(GUIDED_WORKOUT.seriesIndex>0)GUIDED_WORKOUT.seriesIndex--;else if(GUIDED_WORKOUT.exerciseIndex>0){GUIDED_WORKOUT.exerciseIndex--;const target=getTargetReps(guidedExercises()[GUIDED_WORKOUT.exerciseIndex]);GUIDED_WORKOUT.seriesIndex=Math.max(0,target.length-1);}
-  renderGuidedWorkout(); setTimeout(()=>document.getElementById('guidedReps')?.focus(),30);
+    resetRestTimer();GUIDED_WORKOUT.exerciseIndex=GUIDED_WORKOUT.resting.completed.exerciseIndex;GUIDED_WORKOUT.seriesIndex=GUIDED_WORKOUT.resting.completed.seriesIndex;GUIDED_WORKOUT.resting=null;resetGuidedDraft();GUIDED_WORKOUT.step='confirm';
+  }else if(GUIDED_WORKOUT.step==='confirm')GUIDED_WORKOUT.step='rir';
+  else if(GUIDED_WORKOUT.step==='rir')GUIDED_WORKOUT.step='kg';
+  else if(GUIDED_WORKOUT.step==='kg')GUIDED_WORKOUT.step='reps';
+  else if(GUIDED_WORKOUT.seriesIndex>0){GUIDED_WORKOUT.seriesIndex--;resetGuidedDraft();}
+  else if(GUIDED_WORKOUT.exerciseIndex>0){GUIDED_WORKOUT.exerciseIndex--;const ex=guidedExercises()[GUIDED_WORKOUT.exerciseIndex];GUIDED_WORKOUT.seriesIndex=Math.max(0,getGuidedSeriesTotal(ex)-1);resetGuidedDraft();}
+  else {announce('Estás en la primera serie del entrenamiento.','assertive');return;}
+  renderGuidedWorkout();
 }
 function toggleTrackerExercise(exerciseId){
   OPEN_TRACKER_EXERCISE = OPEN_TRACKER_EXERCISE===exerciseId ? null : exerciseId;
@@ -2303,7 +2418,7 @@ function saveSerie(exId, idx, field, value){
     }
   }
   sd(data);
-  if(field==='kg'&&Number.isFinite(parseDecimal(value))) announce(`Serie ${idx+1} guardada: ${value} kg, ${data[key][idx].reps||'sin'} repeticiones${data[key][idx].rir!==''&&data[key][idx].rir!=null?`, RIR ${data[key][idx].rir}`:''}.`);
+  if(field==='kg'&&Number.isFinite(parseDecimal(value))&&!_savingGuidedSeries) announce(`Serie ${idx+1} guardada: ${value} kg, ${data[key][idx].reps||'sin'} repeticiones${data[key][idx].rir!==''&&data[key][idx].rir!=null?`, RIR ${data[key][idx].rir}`:''}.`);
   // Al completar el peso de una serie se inicia el descanso seleccionado.
   if(field==='kg'&&!_savingGuidedSeries&&!previousValue&&parseDecimal(value)>0&&parseDecimal(data[key][idx].reps)>0){
     startRestTimer(_restTargetSeconds);
@@ -5274,7 +5389,7 @@ function confirmFreeTextFood(){
 </div>
 <div id="guidedWorkoutModal" role="dialog" aria-modal="true" aria-labelledby="guidedWorkoutTitle" style="display:none;position:fixed;inset:0;z-index:2300;background:rgba(0,0,0,.82);backdrop-filter:blur(6px);padding:16px;align-items:center;justify-content:center;">
   <div style="width:min(100%,520px);max-height:92vh;overflow-y:auto;background:var(--card);color:var(--text);border:1px solid var(--border2);border-radius:14px;padding:16px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--border);padding-bottom:12px;"><div id="guidedWorkoutTitle" tabindex="-1" style="font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:.06em;">ENTRENAMIENTO GUIADO</div><button onclick="closeGuidedWorkout()" aria-label="Salir del entrenamiento guiado" style="padding:8px 10px;border-radius:8px;border:1px solid var(--border2);background:var(--card2);color:var(--text);cursor:pointer;">Salir</button></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid var(--border);padding-bottom:12px;flex-wrap:wrap;"><div id="guidedWorkoutTitle" tabindex="-1" style="font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:.06em;flex:1;">ENTRENAMIENTO GUIADO</div><button id="guidedVoiceToggle" type="button" onclick="toggleGuidedVoice()" aria-pressed="true" aria-label="Desactivar voz guiada de GemFit" style="padding:8px 10px;border-radius:8px;border:1px solid var(--border2);background:var(--card2);color:var(--text);cursor:pointer;font-size:12px;">🔊 Voz activada</button><button onclick="closeGuidedWorkout()" aria-label="Salir del entrenamiento guiado" style="padding:8px 10px;border-radius:8px;border:1px solid var(--border2);background:var(--card2);color:var(--text);cursor:pointer;">Salir</button></div>
     <div id="guidedWorkoutContent" style="padding-top:14px;"></div>
   </div>
 </div>
