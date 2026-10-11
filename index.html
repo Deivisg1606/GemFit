@@ -376,6 +376,65 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 #dietaDayContent>div:first-child>div:last-child>div>div:last-child{font-size:9px!important;letter-spacing:0!important;}
 @media(max-width:375px){.gf-water>div:nth-child(2){min-width:160px;}.gf-water>div:last-child{width:100%;text-align:left!important;display:flex;align-items:baseline;gap:8px;}.gf-water>div:last-child>div:first-child{font-size:18px!important;}}
 
+/* Two approved themes and a viewport that follows Safari's visible area. */
+:root{--on-accent:#243327;}
+body.light-theme{--bg:#e9f1fc;--card:#ffffff;--card2:#e2ecfa;--border:rgba(31,73,127,.10);--border2:rgba(31,73,127,.22);--text:#12254e;--muted:#506789;--muted2:#62789a;--accent:#2364cb;--on-accent:#ffffff;--done:#2364cb;--skip:#62789a;--push:#2364cb;--pull:#3977bf;--legs:#7363b0;--arms:#34858d;}
+html{width:100%;height:100%;overflow:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+body{width:100%;max-width:100%;height:100vh;height:100dvh;min-height:0;overflow:hidden;position:relative;}
+.screen{width:100%;max-width:100%;height:100%;min-height:0;flex:1 1 auto;}
+#s-main{min-height:0;overflow:hidden;}
+.topbar{flex:0 0 auto;min-width:0;width:100%;}
+.main-area{min-height:0;min-width:0;flex:1 1 0%;width:100%;overflow:hidden;}
+.tab{width:100%;max-width:100%;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain;scroll-padding-top:14px;scroll-padding-bottom:24px;}
+.bnav{flex:0 0 auto;width:100%;min-width:0;min-height:0;box-sizing:border-box;}
+.inner{min-width:0;width:100%;}
+.gf-primary{background:var(--accent);color:var(--on-accent);}
+.gf-primary .gf-icon{background:rgba(255,255,255,.55);color:#36513d;}
+body.light-theme .gf-primary .gf-icon{background:#ffffff;color:#2364cb;}
+body.light-theme .gf-avatar{color:white;}
+body.light-theme .gf-profile-switch button.selected{color:var(--text);background:var(--card2);}
+body.light-theme .gf-week button.selected{background:var(--accent);color:white;}
+body.light-theme .gf-week button.selected small{color:#e8f1ff;}
+body.light-theme .gf-week .selected i{background:white;}
+body.light-theme .gf-stat,body.light-theme .strength-card,body.light-theme .progress-summary-card{box-shadow:0 3px 12px rgba(44,85,143,.04);}
+body.light-theme .gf-hero{background:#ffffff;border-color:var(--border2);box-shadow:0 4px 12px rgba(42,86,143,.07);color:#12254e;}
+body.light-theme .gf-hero:after{background:linear-gradient(90deg,rgba(255,255,255,.99),rgba(255,255,255,.90) 38%,rgba(255,255,255,0) 78%),linear-gradient(0deg,rgba(226,237,255,.6),transparent 55%);}
+body.light-theme .gf-hero .gf-kicker{color:#455f85;}
+body.light-theme .gf-hero-line,body.light-theme .gf-hero-link{color:#213b67;}
+body.light-theme .gf-muscle-thumb{background:#e4edfa;}
+body.light-theme .gf-muscle-thumb .muscle-art{filter:hue-rotate(160deg) saturate(.6) brightness(1.2);}
+body.light-theme .gf-modal{color:var(--text);}
+body.light-theme [id$=Modal]:not(#foodModal):not(#guidedWorkoutModal):not(#dietFoodModal){background:rgba(234,242,252,.99)!important;}
+body.light-theme #foodModal{background:rgba(234,242,252,.99)!important;}
+body.light-theme #moreMenu>div{background:var(--card)!important;}
+body.light-theme .gf-detail .ex-sets{color:var(--accent)!important;}
+body.light-theme .nbtn.active{color:var(--accent);}
+body.light-theme #s-profiles [onclick^=selectProfile]{box-shadow:0 4px 12px rgba(42,86,143,.05);}
+#syncBadge{max-width:calc(100% - 24px);bottom:calc(75px + env(safe-area-inset-bottom))!important;}
+@media(max-width:600px){
+ .topbar{min-height:60px;padding-top:max(10px,env(safe-area-inset-top));padding-bottom:10px;}
+ .inner{padding-top:14px;padding-bottom:26px;}
+ .gf-heading{margin:2px 0 15px;}.gf-heading h1{font-size:27px;}.gf-heading p{font-size:12px;}
+ .gf-week{margin-bottom:15px;gap:5px;}.gf-week button{min-height:57px;padding:8px 0;gap:4px;}
+ .gf-hero{min-height:205px;padding:17px;margin-bottom:17px;}.gf-hero h2{font-size:31px;margin:3px 0 10px;}
+ .gf-hero .gf-kicker{font-size:9px;margin-bottom:5px;}.gf-hero-line{margin-bottom:3px;font-size:12px;}
+ .gf-hero-link{margin-bottom:13px;min-height:30px;}.gf-primary{min-height:46px;padding:10px 14px;}
+ .gf-section-head{margin:18px 0 10px;}.gf-section-head h2{font-size:17px;}
+ .gf-workout-list button{min-height:68px;padding:9px 12px;gap:10px;}.gf-muscle-thumb{height:48px;width:43px;}
+ .gf-workout-list strong{font-size:12px;}.gf-workout-list small{font-size:10px;}
+ .bnav{height:calc(64px + env(safe-area-inset-bottom));padding-top:2px;border-radius:20px 20px 0 0;}.nbtn{min-height:54px;font-size:10px;}
+ #moreMenu>div{bottom:calc(64px + env(safe-area-inset-bottom))!important;}
+}
+@media(max-width:360px){.topbar{padding-inline:12px;gap:5px;}.tname{font-size:22px;}.gf-profile-switch button{padding:4px;font-size:10px;}.gf-profile-switch .gf-avatar{width:17px;height:17px;}.theme-quick{width:29px;height:29px;}.inner{padding-inline:14px;}.gf-week{gap:4px;}.gf-hero{padding:15px;}.gf-primary{font-size:12px;}.gf-quick{gap:7px;}.gf-quick button{font-size:11px;padding:11px 7px;}}
+@media(max-height:700px) and (max-width:600px){.gf-hero{min-height:188px;}.gf-heading{margin-bottom:12px;}.gf-week button{min-height:51px;}.gf-week{margin-bottom:12px;}}
+
+
+@supports not (height:100dvh){body{height:var(--gf-viewport-height,100vh);}}
+
+.imc-inputs>div{flex:1 1 0%;min-width:0;}.imc-inp{width:100%;min-width:0;}.imc-inputs{min-width:0;}
+
+.macro-sel-grid,.macro-result-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.macro-sel{width:100%;min-width:0;}
+@media(max-width:600px){.macro-sel-grid{grid-template-columns:minmax(0,1fr);}}
 </style>
 </head>
 <body>
@@ -384,108 +443,14 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 <!-- ═══════════════ PROFILE SCREEN ═══════════════ -->
 <input type="file" id="iosPhotoInput" accept="image/*" style="display:none">
 <div id="s-profiles" class="screen active">
-  <!-- Logo -->
-  <div style="text-align:center;padding:40px 24px 28px;">
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:.2em;color:#f1f2eb;">GEMFIT</div>
-    <div style="font-size:10px;color:#333;letter-spacing:.2em;text-transform:uppercase;margin-top:2px;">¿Quién entrena hoy?</div>
-  </div>
-
-  <!-- Cards -->
-  <div style="display:flex;flex-direction:column;gap:10px;padding:0 20px 40px;width:100%;max-width:420px;margin:0 auto;">
-
-    <!-- DEIVIS -->
-    <div onclick="selectProfile('deivis')" style="
-      background:#111;border:0.5px solid #1e1e1e;border-radius:16px;
-      overflow:hidden;cursor:pointer;transition:border-color .2s;"
-      onmouseover="this.style.borderColor='#b0cfb0'" onmouseout="this.style.borderColor='#1e1e1e'">
-      <div style="height:3px;background:#b0cfb0;"></div>
-      <div style="padding:18px 16px;display:flex;align-items:center;gap:14px;">
-        <div id="pav-deivis" onclick="event.stopPropagation();avatarTap('deivis')"
-          style="width:64px;height:64px;border-radius:50%;background:#1a1a1a;border:1.5px solid #2a2a2a;
-          display:flex;align-items:center;justify-content:center;
-          font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#b0cfb0;
-          cursor:pointer;overflow:hidden;position:relative;flex-shrink:0;">
-          <span id="pav-txt-deivis">D</span>
-          <img id="pav-img-deivis" src="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%;">
-          <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);font-size:8px;color:#fff;text-align:center;padding:2px 0;">📷</div>
-        </div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;color:#f1f2eb;line-height:1;">DEIVIS</div>
-          <div style="font-size:10px;color:#444;margin-top:2px;margin-bottom:10px;">33 años · 88kg · Géminis ♊</div>
-          <div style="display:flex;gap:6px;">
-            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#b0cfb0;" id="dp-streak-deivis-val">0</div>
-              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">Racha</div>
-            </div>
-            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#f1f2eb;" id="dp-sess-deivis-val">0/6</div>
-              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">Semana</div>
-            </div>
-            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#f1f2eb;" id="dp-kg-deivis-val">88</div>
-              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">kg</div>
-            </div>
-          </div>
-          <div style="margin-top:8px;">
-            <div style="height:2px;background:#1a1a1a;border-radius:99px;overflow:hidden;">
-              <div id="dp-bar-deivis" style="height:100%;background:#b0cfb0;border-radius:99px;width:0%;transition:width .6s;"></div>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-top:3px;">
-              <span style="font-size:8px;color:#333;">Semana actual</span>
-              <span id="dp-pct-deivis" style="font-size:8px;color:#b0cfb0;font-weight:600;">0%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- YONA -->
-    <div onclick="selectProfile('yona')" style="
-      background:#111;border:0.5px solid #1e1e1e;border-radius:16px;
-      overflow:hidden;cursor:pointer;transition:border-color .2s;"
-      onmouseover="this.style.borderColor='#b6a8c7'" onmouseout="this.style.borderColor='#1e1e1e'">
-      <div style="height:3px;background:#b6a8c7;"></div>
-      <div style="padding:18px 16px;display:flex;align-items:center;gap:14px;">
-        <div id="pav-yona" onclick="event.stopPropagation();avatarTap('yona')"
-          style="width:64px;height:64px;border-radius:50%;background:#1a1a1a;border:1.5px solid #2a2a2a;
-          display:flex;align-items:center;justify-content:center;
-          font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#b6a8c7;
-          cursor:pointer;overflow:hidden;position:relative;flex-shrink:0;">
-          <span id="pav-txt-yona">Y</span>
-          <img id="pav-img-yona" src="" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%;">
-          <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);font-size:8px;color:#fff;text-align:center;padding:2px 0;">📷</div>
-        </div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;color:#f1f2eb;line-height:1;">YONA</div>
-          <div style="font-size:10px;color:#444;margin-top:2px;margin-bottom:10px;">29 años · 88kg · Géminis ♊</div>
-          <div style="display:flex;gap:6px;">
-            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#b6a8c7;" id="dp-streak-yona-val">0</div>
-              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">Racha</div>
-            </div>
-            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#f1f2eb;" id="dp-sess-yona-val">0/6</div>
-              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">Semana</div>
-            </div>
-            <div style="background:#1a1a1a;border-radius:7px;padding:5px 10px;text-align:center;flex:1;">
-              <div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#f1f2eb;" id="dp-kg-yona-val">88</div>
-              <div style="font-size:8px;color:#333;text-transform:uppercase;letter-spacing:.08em;">kg</div>
-            </div>
-          </div>
-          <div style="margin-top:8px;">
-            <div style="height:2px;background:#1a1a1a;border-radius:99px;overflow:hidden;">
-              <div id="dp-bar-yona" style="height:100%;background:#b6a8c7;border-radius:99px;width:0%;transition:width .6s;"></div>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-top:3px;">
-              <span style="font-size:8px;color:#333;">Semana actual</span>
-              <span id="dp-pct-yona" style="font-size:8px;color:#b6a8c7;font-weight:600;">0%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
+  <div style="text-align:center;padding:48px 24px 28px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:.16em;color:var(--text);">GEMFIT</div><p style="color:var(--muted);font-size:13px;">Tu entrenamiento, tu espacio</p></div>
+  <form onsubmit="gfLogin(event)" style="width:100%;max-width:420px;margin:auto;padding:0 24px 40px;">
+    <label for="gfEmail">Correo electrónico</label><input id="gfEmail" type="email" autocomplete="username" required class="gf-login-input">
+    <label for="gfPassword">Contraseña</label><input id="gfPassword" type="password" autocomplete="current-password" required class="gf-login-input">
+    <button id="gfLoginSubmit" type="submit" class="gf-access-button" style="width:100%;background:var(--accent);color:var(--on-accent);font-weight:700;">Entrar a mi perfil</button>
+    <button id="gfResetSubmit" type="button" class="gf-access-button" style="width:100%;margin-top:12px;" onclick="gfResetPassword()">Olvidé mi contraseña</button>
+    <p id="gfLoginMessage" role="status" aria-live="polite" style="color:var(--muted);font-size:13px;line-height:1.6;"></p>
+  </form>
 </div>
 
 <!-- ═══════════════ MAIN APP ═══════════════ -->
@@ -496,27 +461,11 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
       <div class="tname" id="tName">GEM<span>FIT</span></div>
       <div id="tStreak" style="font-size:10px;color:var(--muted);margin-top:2px;">🔥 0 días de racha</div>
     </div>
-    <button class="profile-greeting" onclick="goProfiles()" aria-label="Cambiar perfil"><span id="tGreeting">Mi perfil</span><span aria-hidden="true"> ›</span></button>
+    <button class="profile-greeting" onclick="goProfiles()" aria-label="Abrir mi perfil"><span id="tGreeting">Mi perfil</span><span aria-hidden="true"> ›</span></button>
     <div class="tright" id="tRight" style="display:none;">PLAN</div>
     <button class="theme-quick" id="themeQuickToggle" onclick="cycleQuickTheme()" aria-label="Cambiar entre modo claro y oscuro" title="Cambiar tema">☀</button>
 
-    <!-- Quick profile switcher dropdown -->
-    <div id="profileSwitcher" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:200;background:#111;border:1px solid rgba(255,255,255,.1);border-radius:0 0 12px 12px;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,.4);">
-      <div onclick="switchToProfile('deivis')" style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.06);">
-        <div id="sw-av-deivis" style="width:32px;height:32px;border-radius:50%;background:#1a1a1a;border:1.5px solid #b0cfb040;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:#b0cfb0;overflow:hidden;flex-shrink:0;">D</div>
-        <div style="flex:1;">
-          <div style="font-size:12px;font-weight:600;color:#f1f2eb;">Deivis</div>
-        </div>
-        <span id="sw-check-deivis" style="font-size:12px;color:#b0cfb0;"></span>
-      </div>
-      <div onclick="switchToProfile('yona')" style="display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;">
-        <div id="sw-av-yona" style="width:32px;height:32px;border-radius:50%;background:#1a1a1a;border:1.5px solid #b6a8c740;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:#b6a8c7;overflow:hidden;flex-shrink:0;">Y</div>
-        <div style="flex:1;">
-          <div style="font-size:12px;font-weight:600;color:#f1f2eb;">Yona</div>
-        </div>
-        <span id="sw-check-yona" style="font-size:12px;color:#b6a8c7;"></span>
-      </div>
-    </div>
+
   </div>
 
   <div class="main-area">
@@ -595,9 +544,7 @@ function parseDecimal(value){
 }
 
 // PWA: la caché offline se activa al publicar la app en HTTPS o localhost.
-if('serviceWorker' in navigator && location.protocol !== 'file:'){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(e=>console.warn('PWA no disponible:',e)));
-}
+
 function normalizeDecimalInput(el){
   const n=parseDecimal(el.value);
   if(Number.isFinite(n)) el.value=String(Math.round(n*100)/100).replace('.',',');
@@ -607,145 +554,13 @@ function normalizeDecimalInput(el){
 // ═══════════════════════════════════════════════════════════════
 // PROFILES
 // ═══════════════════════════════════════════════════════════════
-const PROFS = {
-  deivis: { name:'DEIVIS', age:33, h:1.68, w:88, color:'#b0cfb0', dim:'rgba(176,207,176,.10)', init:'D' },
-  yona:   { name:'YONA',   age:29, h:1.68, w:88, color:'#b6a8c7', dim:'rgba(106,0,184,.10)', init:'Y' },
-  jose_papa: { name:'JOSÉ PAPÁ', age:0, h:1.70, w:70, color:'#0b8f83', dim:'rgba(11,143,131,.10)', init:'J', accessibilityMode:'screen-reader', guidedWorkout:true, autoStartGuidedWorkout:true }
-};
+const PROFS = {};
+const SESSIONS = {};
+const ARCHIVED_EXERCISES = [];
+const SESS_LIST = [];
+function getSessionList(){return SESS_LIST;}
+function gfDefaultSession(){const list=getSessionList().filter(s=>s.id!=='skip');if(CP==='gisandry'){const day=new Date(SK+'T12:00:00').getDay();return list[(day>=1&&day<=5)?day-1:0]?.id;}return list[0]?.id;}
 
-// ═══════════════════════════════════════════════════════════════
-// RUTINA — Basada en evidencia (Israetel, Schoenfeld, Helms)
-// 6 días Upper/Lower/Push/Pull — frecuencia 2x por músculo
-// Ejercicios seleccionados por ratio estímulo/fatiga
-// ═══════════════════════════════════════════════════════════════
-const SESSIONS = {
-  // MARTES & SÁBADO — Hombros · Bíceps · Tríceps
-  brazoA: {
-    id:'brazoA', lbl:'Brazos A', type:'arms', emoji:'💪',
-    title:'MARTES — Hombros · Bíceps · Tríceps',
-    dur:'~90 min', focus:'Descansa 180s en compuestos pesados, 90s en aislamientos.',
-    sections: [
-      { t:'Hombros · Bíceps · Tríceps', ex:[
-        {id:'ba_press_militar',n:'Press Militar',s:'20 · 15 · 12 · 10',reps:[20,15,12,10],rest:180,note:'Aumenta progresivamente la carga manteniendo la técnica.',why:'Deltoides anterior.',star:true},
-        {id:'ba_laterales_maquina_v2',n:'Elevaciones Laterales en Máquina',s:'20 · 15 · 12 · 10',reps:[20,15,12,10],rest:90,note:'Rango controlado, sin impulso.',why:'Deltoides lateral.'},
-        {id:'ba_posterior_maquina',n:'Posterior en Máquina',s:'15 · 15 · 15 · 15',reps:[15,15,15,15],rest:90,note:'Controla el regreso y mantén el pecho apoyado.',why:'Deltoides posterior.'},
-        {id:'ba_encogimiento_polea',n:'Encogimiento de Hombros en Polea',s:'15 · 15 · 15',reps:[15,15,15],rest:90,note:'Eleva los hombros sin rotarlos.',why:'Trapecio.'},
-        {id:'ba_curl_barra_z',n:'Curl con Barra Z',s:'20 · 15 · 12 · 10',reps:[20,15,12,10],rest:90,note:'Codos estables y descenso controlado.',why:'Bíceps.',star:true},
-        {id:'ba_martillo_polea_cuerda',n:'Curl Martillo en Polea con Cuerda',s:'15 · 15 · 15',reps:[15,15,15],rest:90,note:'Agarre neutro y codos pegados al cuerpo.',why:'Braquial y braquiorradial.'},
-        {id:'ba_press_frances_z',n:'Press Francés con Barra Z',s:'15 · 15 · 15',reps:[15,15,15],rest:90,note:'Mantén los codos apuntando al frente.',why:'Tríceps.'},
-        {id:'ba_tirones_tras_nuca_v2',n:'Tirones Tras Nuca con Cuerda',s:'20 · 15 · 12 · 10',reps:[20,15,12,10],rest:90,note:'Separa la cuerda al final del recorrido.',why:'Tríceps, con énfasis en la cabeza larga.'},
-      ]},
-    ]
-  },
-
-  // MIÉRCOLES & DOMINGO — Espalda
-  espaldaA: {
-    id:'espaldaA', lbl:'Espalda', type:'pull', emoji:'🔵',
-    title:'MIÉRCOLES — Espalda',
-    dur:'~90 min', focus:'Contracción escapular completa en cada rep. Descansa 180s en pesados.',
-    sections: [
-      { t:'Espalda', ex:[
-        {id:'esp_dominadas',n:'Dominadas',s:'3×8-10',repTargets:['8-10','8-10','8-10'],rest:180,note:'Controla el descenso y completa el rango.',why:'Dorsal ancho y fuerza vertical.',star:true},
-        {id:'esp_remo_multipower_supino',n:'Remo en Multipower con Agarre Supino',s:'3×12-15',repTargets:['12-15','12-15','12-15'],rest:180,note:'Pecho alto y codos hacia atrás.',why:'Grosor de dorsal y espalda media.'},
-        {id:'esp_jalon_unilateral',n:'Jalón al Pecho Unilateral',s:'4×12-15',repTargets:['12-15','12-15','12-15','12-15'],rest:90,note:'Mantén el torso estable y baja el codo.',why:'Dorsal unilateral.'},
-        {id:'ea5',n:'Remo al Pecho Agarre Neutro',s:'12 · 10 · 10',repTargets:[12,10,10],rest:90,note:'Tira al pecho y aprieta las escápulas.',why:'Romboides y trapecio medio.'},
-        {id:'esp_remo_bajo_maquina_unilateral',n:'Remo Bajo en Máquina Unilateral',s:'12 · 10 · 10 · 8',repTargets:[12,10,10,8],rest:90,note:'Controla ambos lados por igual.',why:'Dorsal y espalda media.'},
-        {id:'ea1',n:'Pull Over en Polea',s:'3×15-20',repTargets:['15-20','15-20','15-20'],rest:90,note:'Brazos rectos y dorsal contraído al bajar.',why:'Aislamiento del dorsal.'},
-      ]},
-    ]
-  },
-
-  // JUEVES — Pectoral
-  pechoA: {
-    id:'pechoA', lbl:'Pecho', type:'push', emoji:'🔴',
-    title:'JUEVES — Pectoral',
-    dur:'~90 min', focus:'RPE 8-9 en compuestos. Mente-músculo en aislamientos. Descansa 180s en pesados.',
-    sections: [
-      { t:'Pectoral', ex:[
-        {id:'pec_press_plano_libre',n:'Press Plano Barra / Mancuerna',s:'4×6-8',repTargets:['6-8','6-8','6-8','6-8'],rest:180,note:'Controla el descenso y mantén los codos a 45°.',why:'Fuerza y masa de pectoral.',star:true},
-        {id:'pec_press_inclinado_libre',n:'Press Inclinado Barra / Mancuerna',s:'15 · 12 · 10+10',repTargets:[15,12,'10+10'],rest:180,note:'La última serie es una serie extendida 10+10.',why:'Pecho superior.'},
-        {id:'pec_press_declinado_libre',n:'Press Declinado Barra / Mancuerna',s:'3×8-10',repTargets:['8-10','8-10','8-10'],rest:180,note:'Recorrido controlado y hombros estables.',why:'Pectoral inferior.'},
-        {id:'pa2',n:'Press Plano en Máquina',s:'3×10-12',repTargets:['10-12','10-12','10-12'],rest:90,note:'Recorrido completo y sin bloquear codos.',why:'Pectoral medio.'},
-        {id:'pec_cruces_cables',n:'Cruces de Cables',s:'15 · 12 · 10 · 10+',repTargets:[15,12,10,'10+'],rest:90,note:'Cierra con control y mantén la tensión.',why:'Aislamiento de pectoral.'},
-        {id:'pec_aperturas_maquina',n:'Aperturas en Máquina',s:'3×15-20',repTargets:['15-20','15-20','15-20'],rest:90,note:'Pausa breve al cerrar.',why:'Aislamiento con tensión constante.'},
-      ]},
-    ]
-  },
-
-  // VIERNES — Pierna Completa
-  piernaA: {
-    id:'piernaA', lbl:'Pierna', type:'legs', emoji:'🦵',
-    title:'VIERNES — Pierna Completa',
-    dur:'~100 min', focus:'El día más duro. Descansa 180s en compuestos, 90s en aislamientos.',
-    sections: [
-      { t:'Pierna', ex:[
-        {id:'pie_peso_muerto_rumano',n:'Peso Muerto Rumano',s:'20 · 15 · 12 · 10',repTargets:[20,15,12,10],rest:180,note:'Cadera atrás y espalda neutra.',why:'Isquiotibiales y glúteo.',star:true},
-        {id:'pie_sentadilla_bulgara',n:'Sentadilla Búlgara',s:'3×12',repTargets:[12,12,12],rest:120,note:'Controla la rodilla y el equilibrio.',why:'Trabajo unilateral de pierna.'},
-        {id:'pie_zancadas_mancuernas',n:'Zancadas con Mancuernas',s:'3×15',repTargets:[15,15,15],rest:120,note:'Paso estable y torso erguido.',why:'Cuádriceps y glúteo.'},
-        {id:'pie_femoral_tumbado',n:'Femoral Tumbado',s:'20 · 15 · 12 · 10',repTargets:[20,15,12,10],rest:90,note:'Controla el descenso completo.',why:'Isquiotibiales.'},
-        {id:'pia1',n:'Extensiones de Cuádriceps',s:'20 · 15 · 12 · 10',repTargets:[20,15,12,10],rest:90,note:'Pausa arriba y bajada controlada.',why:'Aislamiento de cuádriceps.',star:true},
-        {id:'pie_gemelos_multipower',n:'Gemelos en Multipower',s:'3×20',repTargets:[20,20,20],rest:90,note:'Rango completo y pausa abajo.',why:'Gemelos.'},
-        {id:'pia8',n:'Abductor en Máquina',s:'3×20',repTargets:[20,20,20],rest:60,note:'Movimiento controlado, sin rebote.',why:'Glúteo medio.'},
-      ]},
-    ]
-  },
-
-
-  // Rutina 03: IDs nuevos para conservar los registros de los bloques anteriores.
-  pecho03: {"id":"pecho03","lbl":"Pecho · 03","type":"push","emoji":"🔴","title":"PECHO · 03","dur":"","focus":"Elige este bloque el día que quieras entrenarlo. Registra cada serie con su peso y repeticiones.","sections":[{"t":"Pecho","ex":[{"id":"gf03_aperturas_maquina","n":"Aperturas en máquina","s":"3 series · 15-20 / 15-20 / 15-20","repTargets":["15-20","15-20","15-20"],"rest":90,"note":"","star":false},{"id":"gf03_press_inclinado","n":"Press inclinado barra / mancuerna","s":"4 series · 6-8 / 6-8 / 6-8 / 6-8","repTargets":["6-8","6-8","6-8","6-8"],"rest":180,"note":"","star":true},{"id":"gf03_press_plano","n":"Press plano barra / mancuerna","s":"3 series · 15 / 12 / 10+10","repTargets":[15,12,"10+10"],"rest":180,"note":"","star":false},{"id":"gf03_press_declinado","n":"Press declinado barra / mancuerna","s":"3 series · 8-10 / 8-10 / 8-10","repTargets":["8-10","8-10","8-10"],"rest":180,"note":"","star":false},{"id":"gf03_cruces_polea_baja","n":"Cruces en polea baja","s":"3 series · 15 / 12 / 10+10","repTargets":[15,12,"10+10"],"rest":90,"note":"","star":false},{"id":"gf03_aperturas_inclinado","n":"Aperturas en banco inclinado","s":"3 series · 12-15 / 12-15 / 12-15","repTargets":["12-15","12-15","12-15"],"rest":90,"note":"","star":false}]}]},
-  hombros03: {"id":"hombros03","lbl":"Hombros · 03","type":"shoulders","emoji":"🟣","title":"HOMBROS · 03","dur":"","focus":"Elige este bloque el día que quieras entrenarlo. Registra cada serie con su peso y repeticiones.","sections":[{"t":"Hombros","ex":[{"id":"gf03_press_militar","n":"Press militar en máquina / barra / mancuernas","s":"4 series · 8-12 / 8-12 / 8-12 / 8-12","repTargets":["8-12","8-12","8-12","8-12"],"rest":180,"note":"","star":true},{"id":"gf03_lateral_polea","n":"Elevación lateral unilateral en polea","s":"4 series · 15 / 12 / 12 / 10","repTargets":[15,12,12,10],"rest":90,"note":"","star":false},{"id":"gf03_frontal_polea","n":"Elevación frontal en polea con barra recta","s":"3 series · 12-15 / 12-15 / 12-15","repTargets":["12-15","12-15","12-15"],"rest":90,"note":"","star":false}]},{"t":"Superserie · 3 rondas","ex":[{"id":"gf03_posterior_polea","n":"Hombro posterior unilateral en polea","s":"3 series · 12-15 / 12-15 / 12-15","repTargets":["12-15","12-15","12-15"],"rest":90,"note":"Alternar con elevaciones posteriores sentado.","star":false},{"id":"gf03_posterior_sentado","n":"Elevaciones posteriores sentado con mancuernas","s":"3 series · 12-15 / 12-15 / 12-15","repTargets":["12-15","12-15","12-15"],"rest":90,"note":"Alternar con posterior unilateral en polea.","star":false}]},{"t":"Trapecio y abdomen","ex":[{"id":"gf03_encogimientos","n":"Encogimientos con mancuernas","s":"3 series · 10-12 / 10-12 / 10-12","repTargets":["10-12","10-12","10-12"],"rest":90,"note":"","star":false},{"id":"gf03_crunch_mancuerna","n":"Crunch en el suelo con mancuerna tras nuca","s":"3 series · 12-15 / 12-15 / 12-15","repTargets":["12-15","12-15","12-15"],"rest":90,"note":"","star":false}]}]},
-  espalda03: {"id":"espalda03","lbl":"Espalda · 03","type":"pull","emoji":"🔵","title":"ESPALDA · 03","dur":"","focus":"Elige este bloque el día que quieras entrenarlo. Registra cada serie con su peso y repeticiones.","sections":[{"t":"Espalda y abdomen","ex":[{"id":"gf03_pullover_polea","n":"Pull over en polea","s":"3 series · 15-20 / 15-20 / 15-20","repTargets":["15-20","15-20","15-20"],"rest":90,"note":"","star":false},{"id":"gf03_jalon_inverso","n":"Jalón inverso al pecho","s":"3 series · 12-15 / 12-15 / 12-15","repTargets":["12-15","12-15","12-15"],"rest":90,"note":"","star":false},{"id":"gf03_remo_unilateral","n":"Remo bajo en máquina unilateral","s":"4 series · 12 / 10 / 10 / 8","repTargets":[12,10,10,8],"rest":120,"note":"","star":false},{"id":"gf03_remo_barra","n":"Remo con barra (bent over row)","s":"3 series · 10-12 / 10-12 / 10-12","repTargets":["10-12","10-12","10-12"],"rest":180,"note":"","star":false},{"id":"gf03_remo_gironda","n":"Remo gironda","s":"3 series · 12-15 / 12-15 / 12-15","repTargets":["12-15","12-15","12-15"],"rest":90,"note":"","star":false},{"id":"gf03_pullover_mancuerna","n":"Pull over con mancuerna","s":"3 series · 12-15 / 12-15 / 12-15","repTargets":["12-15","12-15","12-15"],"rest":90,"note":"","star":false},{"id":"gf03_crunch_espalda","n":"Crunches","s":"3 series · 15-20 / 15-20 / 15-20","repTargets":["15-20","15-20","15-20"],"rest":90,"note":"","star":false}]}]},
-  pierna03: {"id":"pierna03","lbl":"Pierna completa · 03","type":"legs","emoji":"🦵","title":"PIERNA COMPLETA · 03","dur":"","focus":"Elige este bloque el día que quieras entrenarlo. Registra cada serie con su peso y repeticiones.","sections":[{"t":"Calentamiento","ex":[{"id":"gf03_ext_calentamiento","n":"Extensión de cuádriceps · calentamiento","s":"2 series · calentamiento / calentamiento","repTargets":["calentamiento","calentamiento"],"rest":60,"note":"","star":false}]},{"t":"Pierna completa","ex":[{"id":"gf03_prensa","n":"Prensa 45°","s":"4 series · 15 / 12 / 10 / 8","repTargets":[15,12,10,8],"rest":180,"note":"","star":false},{"id":"gf03_sentadilla","n":"Sentadilla trasera","s":"4 series · 15 / 12 / 10 / 8","repTargets":[15,12,10,8],"rest":180,"note":"","star":false},{"id":"gf03_zancadas","n":"Zancada con mancuernas","s":"3 series · 20 / 20 / 20","repTargets":[20,20,20],"rest":120,"note":"","star":false},{"id":"gf03_extension","n":"Extensión de cuádriceps","s":"4 series · 15 / 12 / 10 / 8+8","repTargets":[15,12,10,"8+8"],"rest":90,"note":"","star":false},{"id":"gf03_femoral_sentado","n":"Femoral sentado","s":"4 series · 15 / 12 / 10 / 8+8","repTargets":[15,12,10,"8+8"],"rest":90,"note":"","star":false}]},{"t":"Superserie · 3 rondas","ex":[{"id":"gf03_aductor","n":"Aductor en máquina","s":"3 series · 12-15 / 12-15 / 12-15","repTargets":["12-15","12-15","12-15"],"rest":90,"note":"Alternar con abductor en máquina.","star":false},{"id":"gf03_abductor","n":"Abductor en máquina","s":"3 series · 12-15 / 12-15 / 12-15","repTargets":["12-15","12-15","12-15"],"rest":90,"note":"Alternar con aductor en máquina.","star":false}]},{"t":"Gemelos","ex":[{"id":"gf03_gemelo_sentado","n":"Gemelo sentado","s":"2 series · 15-20 / 15-20","repTargets":["15-20","15-20"],"rest":90,"note":"","star":false}]}]},
-  brazos03: {"id":"brazos03","lbl":"Brazos · 03","type":"arms","emoji":"💪","title":"BRAZOS · 03","dur":"","focus":"Elige este bloque el día que quieras entrenarlo. Registra cada serie con su peso y repeticiones.","sections":[{"t":"Bíceps y tríceps","ex":[{"id":"gf03_curl_sin_giro","n":"Curl mancuernas sin giro","s":"4 series · 8-10 / 8-10 / 8-10 / 8-10","repTargets":["8-10","8-10","8-10","8-10"],"rest":90,"note":"","star":false},{"id":"gf03_press_cerrado","n":"Press cerrado para tríceps en multipower","s":"4 series · 8-10 / 8-10 / 8-10 / 8-10","repTargets":["8-10","8-10","8-10","8-10"],"rest":180,"note":"","star":false}]},{"t":"Superserie · 3 rondas","ex":[{"id":"gf03_martillo_cuerda","n":"Curl de bíceps martillo en polea con cuerda","s":"3 series · 12-15 / 12-15 / 12-15","repTargets":["12-15","12-15","12-15"],"rest":90,"note":"Alternar con patada de tríceps.","star":false},{"id":"gf03_patada_triceps","n":"Patada tríceps con mancuerna","s":"3 series · 12-15 / 12-15 / 12-15","repTargets":["12-15","12-15","12-15"],"rest":90,"note":"Alternar con curl martillo.","star":false}]},{"t":"Brazos y abdomen","ex":[{"id":"gf03_predicador","n":"Predicador en máquina","s":"3 series · 8-10 / 8-10 / 8-10","repTargets":["8-10","8-10","8-10"],"rest":90,"note":"","star":false},{"id":"gf03_tiron_inverso","n":"Tirón inverso con barra plana","s":"3 series · 12-15 / 12-15 / 12-15","repTargets":["12-15","12-15","12-15"],"rest":90,"note":"","star":false},{"id":"gf03_curl_z_21","n":"Curl barra Z","s":"3 series · 21 / 21 / 21","repTargets":[21,21,21],"rest":90,"note":"","star":false},{"id":"gf03_crunch_polea","n":"Crunch abdominal en polea","s":"3 series · 12-15 / 12-15 / 12-15","repTargets":["12-15","12-15","12-15"],"rest":90,"note":"","star":false}]}]},
-
-  skip: {
-    id:'skip', lbl:'Descanso', type:'rest', emoji:'💤',
-    title:'DESCANSO',
-    dur:'', focus:'La recuperación también es entrenamiento.',
-    sections:[]
-  },
-};
-
-
-// IDs anteriores conservados para que sus registros históricos permanezcan en localStorage.
-const ARCHIVED_EXERCISES = [
-  {id:'ba1',n:'Face Pull'},
-  {id:'ba2',n:'Elevaciones Laterales en Máquina (rutina anterior)'},
-  {id:'ba3',n:'Elevaciones Frontales con Mancuernas (Unilateral)'},
-  {id:'ba4',n:'Encogimiento con Mancuernas'},
-  {id:'ba5',n:'Predicador en Máquina'},
-  {id:'ba6',n:'Martillo con Mancuerna (Unilateral)'},
-  {id:'ba7',n:'Tirones en Polea'},
-  {id:'ba8',n:'Tirones tras Nuca con Cuerda (rutina anterior)'},
-  {id:'ea2',n:'Jalón al Pecho (rutina anterior)'},
-  {id:'ea3',n:'Remo Gironda (rutina anterior)'},
-  {id:'ea4',n:'Jalón Inverso al Pecho (rutina anterior)'},
-  {id:'ea6',n:'Remo con Mancuerna (rutina anterior)'},
-  {id:'ea7',n:'Caminata Inclinada en Cinta (espalda anterior)'},
-  {id:'pa1',n:'Press Declinado en Máquina (rutina anterior)'},
-  {id:'pa3',n:'Aperturas en Banco Inclinado (rutina anterior)'},
-  {id:'pa4',n:'Press Inclinado en Máquina (rutina anterior)'},
-  {id:'pa5',n:'Apertura en Máquina (rutina anterior)'},
-  {id:'pa6',n:'Pull Over con Mancuerna (rutina anterior)'},
-  {id:'pa7',n:'Caminata Inclinada en Cinta (pecho anterior)'},
-  {id:'pia2',n:'Prensa 45° (rutina anterior)'},
-  {id:'pia3',n:'Sentadilla Hack (rutina anterior)'},
-  {id:'pia4',n:'Femoral Sentado (rutina anterior)'},
-  {id:'pia5',n:'Femoral de Pie (rutina anterior)'},
-  {id:'pia6',n:'Gemelo Sentado (rutina anterior)'},
-  {id:'pia7',n:'Aductor en Máquina (rutina anterior)'}
-];
-
-const SESS_LIST = [
-  {id:'pecho03', lbl:'Pecho', type:'push'},
-  {id:'hombros03', lbl:'Hombros', type:'shoulders'},
-  {id:'espalda03', lbl:'Espalda', type:'pull'},
-  {id:'pierna03', lbl:'Pierna completa', type:'legs'},
-  {id:'brazos03', lbl:'Brazos', type:'arms'},
-  {id:'skip', lbl:'Descanso', type:'skip'},
-];
-
-// ═══════════════════════════════════════════════════════════════
 // VOLUMEN SEMANAL ÓPTIMO (Israetel et al.)
 // MEV = Mínimo Efectivo, REC = Recomendado, MRV = Máximo Recuperable
 // ═══════════════════════════════════════════════════════════════
@@ -844,30 +659,12 @@ function cycleQuickTheme(){
   setThemePreference(document.body.classList.contains('light-theme')?'dark':'light');
 }
 
-function lsLoad(){
-  try{
-    const raw = localStorage.getItem(LS_KEY);
-    return raw ? JSON.parse(raw) : {};
-  }catch(e){ return {}; }
-}
-
-function lsSave(){
-  try{
-    localStorage.setItem(LS_KEY, JSON.stringify({
-      AD, WD, SC, PD, CALS, AVATARS, EXLIB, NUTRITION, MEASUREMENTS, CP
-    }));
-} catch(e){
-    console.warn('localStorage full or unavailable:', e);
-  }
-  cloudSave();
-}
-
+function lsLoad(){return {};}
+function lsSave(){if(gfCanSync()){GF_DIRTY=true;GF_CHANGE_VERSION++;cloudSave();}}
 function exportData(){
-  const backup={version:'2.5',exportedAt:new Date().toISOString(),theme:getThemePreference(),data:{AD,WD,SC,PD,CALS,AVATARS,EXLIB,NUTRITION,MEASUREMENTS,CP}};
-  const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
-  const url=URL.createObjectURL(blob); const link=document.createElement('a');
-  link.href=url; link.download='gemfit-backup-'+dk(new Date())+'.json'; link.click();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
+ if(!gfCanSync())return;
+ const backup={version:'3.0-private',profileId:CP,accountUid:GF_AUTH_UID,exportedAt:new Date().toISOString(),theme:getThemePreference(),data:gfPrivatePayload()};
+ const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download='gemfit-mi-perfil-'+dk(new Date())+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
 function exportCSV(){
@@ -890,42 +687,31 @@ function exportCSV(){
 }
 
 function importData(input){
-  const file=input.files&&input.files[0]; if(!file)return;
-  const reader=new FileReader();
-  reader.onload=event=>{
-    try{
-      const parsed=JSON.parse(event.target.result); const incoming=parsed.data||parsed;
-      if(!incoming||typeof incoming!=='object'||!incoming.AD||!incoming.WD) throw new Error('Formato no reconocido');
-      if(!confirm('Esto reemplazará los datos actuales de GemFit en este dispositivo. ¿Continuar?')) return;
-      ['AD','WD','SC','PD','CALS','AVATARS','EXLIB','NUTRITION','MEASUREMENTS'].forEach(key=>{
-        if(incoming[key]&&typeof incoming[key]==='object'){
-          const target={AD,WD,SC,PD,CALS,AVATARS,EXLIB,NUTRITION,MEASUREMENTS}[key];
-          Object.keys(target).forEach(k=>delete target[k]); Object.assign(target,incoming[key]);
-        }
-      });
-      if(incoming.CP&&PROFS[incoming.CP]) CP=incoming.CP;
-      if(parsed.theme) setThemePreference(parsed.theme);
-      ensureProfileStores();
-      lsSave(); updateProfileAvatars(); updateProfileStats();
-      if(CP&&PROFS[CP]) selectProfile(CP); else document.getElementById('s-profiles').classList.add('active');
-      alert('Copia restaurada correctamente.');
-    }catch(e){alert('No se pudo importar esta copia: '+e.message);}
-    input.value='';
-  };
-  reader.readAsText(file);
+ const file=input.files?.[0];if(!file||!gfCanSync())return;
+ const uid=GF_AUTH_UID,id=CP,epoch=GF_AUTH_EPOCH;const reader=new FileReader();
+ reader.onload=event=>{
+  try{
+   if(epoch!==GF_AUTH_EPOCH||!gfCanSync()||uid!==GF_AUTH_UID||id!==CP)throw new Error('La sesión ha cambiado.');
+   const backup=JSON.parse(event.target.result);
+   if(backup.version!=='3.0-private'||backup.profileId!==id||backup.accountUid!==uid)throw new Error('Esta copia no pertenece a tu cuenta. Las copias antiguas las migra el administrador.');
+   if(!backup.data||!backup.data.AD||!Array.isArray(backup.data.WD))throw new Error('Copia no válida.');
+   if(!confirm('¿Restaurar únicamente tus datos desde esta copia?'))return;
+   GF_STORE_KEYS.forEach(k=>{if(k in backup.data)gfStores()[k][id]=backup.data[k];});
+   if(backup.theme)setThemePreference(backup.theme);ensureProfileStores();lsSave();selectProfile(id);alert('Tu copia se ha restaurado.');
+  }catch(e){alert(e.message);}input.value='';
+ };reader.readAsText(file);
 }
 
 // Load persisted data or use defaults
-const _stored = lsLoad();
-const AD      = _stored.AD      || {deivis:{}, yona:{}};
-const WD      = _stored.WD      || {deivis:[], yona:[]};
-const SC      = _stored.SC      || {deivis:{}, yona:{}};
-const PD      = _stored.PD      || {deivis:[], yona:[]};
-const CALS    = _stored.CALS    || {deivis:{}, yona:{}};
-const AVATARS = _stored.AVATARS || {deivis:null, yona:null};
-const EXLIB   = _stored.EXLIB   || {deivis:[], yona:[]};  // Personal exercise library
-const NUTRITION = _stored.NUTRITION || {deivis:null, yona:null};
-const MEASUREMENTS = _stored.MEASUREMENTS || {deivis:[], yona:[]};
+const AD = {};
+const WD = {};
+const SC = {};
+const PD = {};
+const CALS = {};
+const AVATARS = {};
+const EXLIB = {};
+const NUTRITION = {};
+const MEASUREMENTS = {};
 // Migración aditiva: backups y datos anteriores sin este perfil siguen siendo válidos.
 function ensureProfileStores(){Object.keys(PROFS).forEach(id=>{
   if(!AD[id])AD[id]={}; if(!WD[id])WD[id]=[]; if(!SC[id])SC[id]={}; if(!PD[id])PD[id]=[];
@@ -1609,8 +1395,9 @@ function updateTopbarAvatar(){
 // ═══════════════════════════════════════════════════════════════
 function selectProfile(id){
   if(!PROFS[id])return;
+  if(!GF_DATA_READY||GF_AUTH_PROFILE!==id||_auth?.currentUser?.uid!==GF_AUTH_UID)return;
   CP = id;
-  lsSave(); // persist active profile
+  // The active profile is determined by the authenticated account.
   const p = pr();
   document.getElementById('s-profiles').classList.remove('active');
   document.getElementById('s-main').classList.add('active');
@@ -1659,42 +1446,88 @@ function updateTopbarStreak(){
   if(el) el.textContent = streak>0 ? `🔥 ${streak} día${streak===1?'':'s'} de racha` : 'Sin racha activa';
 }
 
-function goProfiles(){
-  // Quick switcher instead of full screen — toggle the dropdown
-  toggleProfileSwitcher();
+function goProfiles(){ goTab('perfil'); }
+function toggleProfileSwitcher(){ goTab('perfil'); }
+function switchToProfile(id){ if(id===GF_AUTH_PROFILE)selectProfile(id); }
+
+// Identity comes exclusively from Firebase Authentication and an administrator-owned mapping.
+let GF_AUTH_PROFILE=null, GF_AUTH_UID=null, GF_DATA_READY=false, GF_AUTH_EPOCH=0, GF_DIRTY=false, GF_CHANGE_VERSION=0;
+const GF_LINK_PROFILE=new URLSearchParams(location.search).get('perfil');
+const GF_MODAL_TEMPLATES=new Map();
+const GF_STORE_KEYS=['AD','WD','SC','PD','CALS','AVATARS','EXLIB','NUTRITION','MEASUREMENTS'];
+function gfStores(){return {AD,WD,SC,PD,CALS,AVATARS,EXLIB,NUTRITION,MEASUREMENTS};}
+function gfPrivatePayload(){return Object.fromEntries(GF_STORE_KEYS.map(k=>[k,gfStores()[k][CP]??null]));}
+function gfRenderProfileList(){/* Account login replaces public profile selection. */}
+function gfAuthMessage(message){document.getElementById('gfLoginMessage').textContent=message;}
+function gfAuthError(e){return ({'auth/invalid-credential':'Correo o contraseña incorrectos.','auth/wrong-password':'Correo o contraseña incorrectos.','auth/user-not-found':'Correo o contraseña incorrectos.','auth/invalid-email':'Revisa el correo electrónico.','auth/user-disabled':'Esta cuenta está desactivada.','auth/too-many-requests':'Demasiados intentos. Espera un momento y vuelve a intentarlo.','auth/network-request-failed':'No se pudo conectar. Revisa tu conexión.','auth/operation-not-allowed':'El acceso por correo aún no está activado en Firebase.','permission-denied':'El acceso a los datos aún no está configurado.'})[e.code]||e.message||'No se pudo iniciar sesión.';}
+async function gfLogin(event){
+ event.preventDefault();const button=document.getElementById('gfLoginSubmit');button.disabled=true;gfAuthMessage('Conectando…');
+ try{await initFirebase();await _auth.signInWithEmailAndPassword(document.getElementById('gfEmail').value.trim(),document.getElementById('gfPassword').value);document.getElementById('gfPassword').value='';}
+ catch(e){gfAuthMessage(gfAuthError(e));}finally{button.disabled=false;}
+}
+async function gfResetPassword(){
+ const email=document.getElementById('gfEmail').value.trim();if(!email){gfAuthMessage('Escribe tu correo para recuperar la contraseña.');return;}
+ const button=document.getElementById('gfResetSubmit');button.disabled=true;
+ try{await initFirebase();await _auth.sendPasswordResetEmail(email);gfAuthMessage('Si existe una cuenta con ese correo, recibirás instrucciones para recuperar la contraseña.');}
+ catch(e){gfAuthMessage(e.code==='auth/user-not-found'?'Si existe una cuenta con ese correo, recibirás instrucciones para recuperar la contraseña.':gfAuthError(e));}finally{button.disabled=false;}
+}
+function gfClearPrivateState(){
+ if(_saveTimer)clearTimeout(_saveTimer);_saveTimer=null;_pendingSave=false;
+ closeGuidedWorkout();stopGuidedVoice();stopGuidedListening();
+ GF_DATA_READY=false;GF_DIRTY=false;GF_CHANGE_VERSION=0;GF_AUTH_PROFILE=null;GF_AUTH_UID=null;CP=null;ACTIVE_WORKOUT_MODE=false;OPEN_TRACKER_EXERCISE=null;
+ Object.values(gfStores()).forEach(store=>Object.keys(store).forEach(k=>delete store[k]));
+ [PROFS,SESSIONS,MEAL_PLAN].forEach(store=>Object.keys(store).forEach(k=>delete store[k]));SESS_LIST.length=0;ARCHIVED_EXERCISES.length=0;PRE_ENTRENO=null;
+ document.querySelectorAll('.tab').forEach(el=>{el.innerHTML='';el.classList.remove('active');});
+ document.querySelectorAll('[id$="Modal"]').forEach(el=>{if(GF_MODAL_TEMPLATES.has(el.id)){el.innerHTML=GF_MODAL_TEMPLATES.get(el.id);el.style.display='none';}else el.remove();});
+ document.querySelectorAll('#s-main input').forEach(input=>input.value='');
+ window._pendingFreeTextItems=[];
+ document.getElementById('s-main').classList.remove('active');document.getElementById('bnav').classList.remove('on');document.getElementById('s-profiles').classList.add('active');
+ const header=document.getElementById('gfProfileSwitch');if(header)header.innerHTML='';
+ document.getElementById('tGreeting').textContent='Mi perfil';document.getElementById('tLogo').style.backgroundImage='none';
+ const menu=document.getElementById('moreMenu');if(menu)menu.style.display='none';
+ const badge=document.getElementById('syncBadge');if(badge)badge.remove();
+ document.getElementById('gfPassword').value='';
+}
+async function gfAuthStateChanged(user){
+ const epoch=++GF_AUTH_EPOCH;gfClearPrivateState();
+ if(!user){gfAuthMessage('');return;}
+ gfAuthMessage('Cargando tu perfil…');
+ try{
+  const mapping=await _db.collection('accounts').doc(user.uid).get();
+  if(epoch!==GF_AUTH_EPOCH||_auth.currentUser?.uid!==user.uid)return;
+  const id=mapping.exists&&mapping.data().enabled===true&&mapping.data().profileId;
+  if(typeof id!=='string'||!['deivis','yona','gisandry','jose_papa'].includes(id))throw new Error('Tu cuenta todavía no tiene un perfil asignado. Contacta con Deivis.');
+  if(GF_LINK_PROFILE&&GF_LINK_PROFILE!==id)throw new Error('Este enlace no corresponde a tu cuenta. Abre GemFit sin el enlace personalizado.');
+  GF_AUTH_UID=user.uid;GF_AUTH_PROFILE=id;CP=id;
+  const loaded=await cloudLoad(epoch);
+  if(epoch!==GF_AUTH_EPOCH)return;
+  if(!loaded)throw new Error('No se pudo cargar tu perfil. Comprueba la conexión y la configuración de Firebase.');
+  GF_DATA_READY=true;gfAuthMessage('');selectProfile(id);
+ }catch(e){if(epoch!==GF_AUTH_EPOCH)return;gfClearPrivateState();gfAuthMessage(gfAuthError(e));}
+}
+async function gfLogout(){
+ if(GF_DIRTY){const saved=await gfFlushCloud();if(!saved||GF_DIRTY){alert('No se pudieron guardar los últimos cambios. Revisa la conexión antes de cerrar sesión.');return;}}
+ ++GF_AUTH_EPOCH;gfClearPrivateState();
+ try{if(_auth)await _auth.signOut();gfAuthMessage('Sesión cerrada.');}catch(e){gfAuthMessage('No se pudo cerrar la sesión de Firebase. Cierra esta pestaña y vuelve a intentarlo.');}
+}
+function gfRequestAccess(id){if(GF_DATA_READY&&id===GF_AUTH_PROFILE)selectProfile(id);}
+function gfAccessSettings(){return `<section class="card" style="padding:16px;margin-bottom:16px;"><h3 style="font-size:16px;margin:0 0 12px;">Mi cuenta</h3><p style="font-size:13px;color:var(--muted);">${gfEscape(_auth?.currentUser?.email||'')}</p><div style="display:flex;gap:8px;flex-wrap:wrap;"><button class="gf-access-button" onclick="gfAccountReset()">Cambiar contraseña</button><button class="gf-access-button" onclick="gfShowProfileLink()">Mi enlace</button><button class="gf-access-button" onclick="gfLogout()">Cerrar sesión</button></div><p id="gfProfileLinkMessage" aria-live="polite" style="font-size:12px;color:var(--muted);overflow-wrap:anywhere;"></p></section>`;}
+async function gfAccountReset(){
+ const el=document.getElementById('gfProfileLinkMessage');
+ try{await _auth.sendPasswordResetEmail(_auth.currentUser.email);el.textContent='Te enviamos un correo para cambiar la contraseña.';}catch(e){el.textContent=gfAuthError(e);}
+}
+async function gfShowProfileLink(){
+ const url=new URL(location.href);url.search='';url.hash='';url.searchParams.set('perfil',CP);const el=document.getElementById('gfProfileLinkMessage');
+ try{await navigator.clipboard.writeText(url.href);el.textContent='Enlace copiado: '+url.href;}catch(e){el.textContent=url.href;}
 }
 
-function toggleProfileSwitcher(){
-  const sw = document.getElementById('profileSwitcher');
-  if(!sw) return;
-  const isOpen = sw.style.display === 'block';
-  sw.style.display = isOpen ? 'none' : 'block';
-}
-
-function switchToProfile(id){
-  document.getElementById('profileSwitcher').style.display = 'none';
-  selectProfile(id);
-}
-
-// On load — auto-enter last used profile if one exists
-window.addEventListener('DOMContentLoaded', async ()=>{
-  applyTheme();
-  renderAccessibleProfileControls();
-  enhanceAccessibility();
-  updateProfileAvatars();
-  updateProfileStats();
-  // Open the local profile immediately; cloud availability must not block the app.
-  if(CP && PROFS[CP]) selectProfile(CP);
-  else document.getElementById('s-profiles').classList.add('active');
-  const profileAtStartup=CP;
-  const cloudLoaded=await cloudLoad();
-  if(cloudLoaded){
-    updateProfileAvatars(); updateProfileStats();
-    if(CP===profileAtStartup&&CP){
-      const activeTab=document.querySelector('.tab.active')?.id.replace('tab-','')||'plan';
-      goTab(activeTab);gfSyncHeader();
-    }
-  }
+window.addEventListener('online',()=>{if(gfCanSync()&&GF_DIRTY)cloudSave();});
+window.addEventListener('beforeunload',event=>{if(GF_DIRTY){event.preventDefault();event.returnValue='';}});
+window.addEventListener('DOMContentLoaded',async()=>{
+ document.querySelectorAll('[id$="Modal"]').forEach(el=>GF_MODAL_TEMPLATES.set(el.id,el.innerHTML));
+ applyTheme();enhanceAccessibility();
+ try{await initFirebase();_auth.onAuthStateChanged(user=>gfAuthStateChanged(user));}
+ catch(e){gfAuthMessage(gfAuthError(e));}
 });
 
 function enhanceAccessibility(){
@@ -1710,25 +1543,7 @@ function enhanceAccessibility(){
   document.getElementById('restTimer180')?.setAttribute('aria-label','Seleccionar 180 segundos de descanso');
 }
 
-function renderAccessibleProfileControls(){
-  const p=PROFS.jose_papa; if(!p)return;
-  const cards=document.querySelector('#s-profiles > div:last-child');
-  if(cards&&!document.getElementById('profile-card-jose-papa')){
-    const card=document.createElement('button'); card.id='profile-card-jose-papa'; card.type='button';
-    card.setAttribute('aria-label','Seleccionar José Papá, entrenamiento guiado compatible con lector de pantalla');
-    card.onclick=()=>selectProfile('jose_papa');
-    card.style.cssText=`background:var(--card);border:1px solid ${p.color}55;border-radius:16px;padding:17px 16px;text-align:left;color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;`;
-    card.innerHTML=`<div style="display:flex;align-items:center;gap:14px;"><div aria-hidden="true" style="width:56px;height:56px;border-radius:50%;background:${p.dim};border:1px solid ${p.color};display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:${p.color};">${p.init}</div><div><div style="font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:.06em;color:${p.color};">${p.name}</div><div style="font-size:11px;color:var(--muted);margin-top:4px;">Entrenamiento guiado · lector de pantalla</div></div></div>`;
-    cards.appendChild(card);
-  }
-  const switcher=document.getElementById('profileSwitcher');
-  if(switcher&&!document.getElementById('sw-jose-papa-btn')){
-    const button=document.createElement('button'); button.id='sw-jose-papa-btn'; button.type='button'; button.onclick=()=>switchToProfile('jose_papa');
-    button.style.cssText='width:100%;display:flex;align-items:center;gap:10px;padding:12px 16px;background:transparent;border:0;color:var(--text);cursor:pointer;text-align:left;font-family:DM Sans,sans-serif;';
-    button.innerHTML=`<span aria-hidden="true" style="width:32px;height:32px;border-radius:50%;background:${p.dim};border:1px solid ${p.color};display:flex;align-items:center;justify-content:center;color:${p.color};font-family:'Bebas Neue',sans-serif;">${p.init}</span><span style="flex:1;font-size:12px;font-weight:600;">${p.name}</span>`;
-    switcher.appendChild(button);
-  }
-}
+function renderAccessibleProfileControls(){ gfRenderProfileList(); }
 
 function updateProfileStats(){
   const now = new Date();
@@ -1871,7 +1686,7 @@ function renderPlanLegacy(){
   const todayDone=Object.entries(todayData.checked||{}).filter(([id,done])=>done&&todayIds.has(id)).length;
   const todayPct=todayTotal?Math.min(100,Math.round(todayDone/todayTotal*100)):0;
   const dateLabel=new Date(SK+'T12:00:00').toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'});
-  const featuredId=todaySessionId&&todaySessionId!=='skip'&&SESS_LIST.some(s=>s.id===todaySessionId)?todaySessionId:'pecho03';
+  const featuredId=todaySessionId&&todaySessionId!=='skip'&&getSessionList().some(s=>s.id===todaySessionId)?todaySessionId:gfDefaultSession();
   const featured=SESSIONS[featuredId];
   const weekStart=new Date(SK+'T12:00:00');weekStart.setDate(weekStart.getDate()-(weekStart.getDay()+6)%7);
   const weekDays=Array.from({length:7},(_,i)=>{const d=new Date(weekStart);d.setDate(d.getDate()+i);return d;});
@@ -1886,7 +1701,7 @@ function renderPlanLegacy(){
         <span class="training-card-icon" aria-hidden="true">${muscleArt(featured.type)}</span>
         <span class="training-card-content"><strong>${featured.lbl}</strong><small>${texs(featuredId)} ejercicios${todaySessionId===featuredId?' · seleccionado':''}</small><span class="training-card-cta">Empezar →</span></span><span class="training-card-arrow" aria-hidden="true">›</span>
       </button>
-      ${SESS_LIST.filter(item=>item.id!=='skip'&&item.id!==featuredId).map(item=>{
+      ${getSessionList().filter(item=>item.id!=='skip'&&item.id!==featuredId).map(item=>{
         const sess=SESSIONS[item.id];
         return `<button class="training-card" style="--session-color:${TC[item.type]}" onclick="choosePlanSession('${item.id}')" aria-label="Elegir ${item.lbl} para ${dateLabel}">
           <span class="training-card-icon" aria-hidden="true">${muscleArt(item.type)}</span><span><strong>${item.lbl}</strong><small>${texs(item.id)} ejercicios</small></span><span class="training-card-arrow" aria-hidden="true">›</span></button>`;
@@ -1903,7 +1718,7 @@ function renderPlanLegacy(){
     <div class="plan-detail-label">Detalle de los bloques · toca para desplegar</div>`;
 
   // Sessions — collapsible, all closed by default
-  SESS_LIST.filter(item=>item.id!=='skip').map(item=>SESSIONS[item.id]).forEach(sess=>{
+  getSessionList().filter(item=>item.id!=='skip').map(item=>SESSIONS[item.id]).forEach(sess=>{
     const tc2 = TC[sess.type];
     h+=`<div class="day-block">
       <div class="day-hdr" onclick="togglePlanBlock('${sess.id}')" style="background:${tc2}09;border-color:${tc2}28;cursor:pointer;">
@@ -2122,6 +1937,7 @@ function extraExerciseId(sessId, sectionName, index){
 }
 
 function setSess(sid){
+  if(!GF_AUTH_PROFILE||!getSessionList().some(item=>item.id===sid))return;
   const data=gd(); data[SK]=data[SK]||{};
   data[SK].session=sid; data[SK].checked=data[SK].checked||{};
   if(sid&&sid!=='skip'&&SESSIONS[sid]){
@@ -2359,7 +2175,7 @@ function renderDayPanel(){
   const sd2=new Date(+parts[0],+parts[1]-1,+parts[2]);
   const ds=sd2.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}).toUpperCase();
   const MUSCLE_MAP={pecho03:'PECHO',hombros03:'HOMBROS',espalda03:'ESPALDA',pierna03:'PIERNA COMPLETA',brazos03:'BRAZOS',skip:'DESCANSO'};
-  let btns=SESS_LIST.map(s=>{
+  let btns=getSessionList().map(s=>{
     const isA=dd.session===s.id; const c=TC[s.type]||'#555';
     return `<button class="sess-btn" onclick="setSess('${s.id}')" style="${isA?`background:${c}18;border-color:${c};color:${c}`:''}">${s.lbl}</button>`;
   }).join('');
@@ -2510,7 +2326,7 @@ function renderDayPanel(){
             <!-- Cabecera columnas -->
             <div style="display:grid;grid-template-columns:28px 1fr 1fr 38px 1fr 24px;gap:4px;margin-bottom:4px;padding:0 2px;">
               <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">N°</div>
-              <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Reps</div>
+              <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">${ex.unit==='seconds'?'Seg':'Reps'}</div>
               <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Kg</div>
               <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;text-align:center;">RIR</div>
               <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Vol</div>
@@ -2520,7 +2336,7 @@ function renderDayPanel(){
               ${(savedSeries.length>0?savedSeries:Array(defaultSets).fill(null)).map((s,si)=>{
                 const targetRep=seriesTargets[si]??'';
                 const sv = s||{reps:(typeof targetRep==='number'?targetRep:''),kg:''};
-                const vol2 = sv.reps&&sv.kg?Math.round(sv.reps*sv.kg):'—';
+                const vol2 = ex.unit!=='seconds'&&sv.reps&&sv.kg?Math.round(sv.reps*sv.kg):'—';
                 const lastKg = last&&last.kg?last.kg:'';
                 const sameSeriesPrevious=getPreviousSeriesContext(ex.id,si);
                 const previousLabel=sameSeriesPrevious?`Última vez${sameSeriesPrevious.samePosition?' misma serie':' ejercicio'}: ${sameSeriesPrevious.set.kg} kg × ${sameSeriesPrevious.set.reps||'—'}${sameSeriesPrevious.set.rir!==''&&sameSeriesPrevious.set.rir!=null?` · RIR ${sameSeriesPrevious.set.rir}`:''}`:'';
@@ -2528,10 +2344,10 @@ function renderDayPanel(){
                 const border = sv.kg&&last&&last.kg?(currentKg>lastKgNum?'#b0cfb0':currentKg<lastKgNum?'#d5b69d':'var(--border2)'):'var(--border2)';
                 return `<div style="display:grid;grid-template-columns:28px 1fr 1fr 38px 1fr 24px;gap:4px;margin-bottom:4px;align-items:center;">
                   <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;color:var(--muted);text-align:center;">${si+1}</div>
-                  <input aria-label="Repeticiones, ${ex.n}, serie ${si+1}. Objetivo ${targetRep||'sin objetivo'}. ${previousLabel}" type="number" min="1" max="100" value="${sv.reps||''}" placeholder="${targetRep||last&&last.reps||'reps'}"
+                  <input aria-label="${ex.unit==='seconds'?'Segundos':'Repeticiones'}, ${ex.n}, serie ${si+1}. Objetivo ${targetRep||'sin objetivo'}. ${previousLabel}" type="number" min="1" max="100" value="${sv.reps||''}" placeholder="${targetRep||last&&last.reps||'reps'}"
                     oninput="saveSerie('${ex.id}',${si},'reps',this.value)" onblur="flashSaved(this)"
                     style="background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 6px;outline:none;width:100%;text-align:center;">
-                  <input aria-label="Peso en kilos, ${ex.n}, serie ${si+1}. ${previousLabel}" type="text" inputmode="decimal" value="${sv.kg||''}" placeholder="${lastKg||'kg'}"
+                  <input ${ex.unit==='seconds'?'disabled aria-hidden="true"':''} aria-label="Peso en kilos, ${ex.n}, serie ${si+1}. ${previousLabel}" type="text" inputmode="decimal" value="${sv.kg||''}" placeholder="${lastKg||'kg'}"
                     oninput="saveSerie('${ex.id}',${si},'kg',this.value)" onblur="normalizeDecimalInput(this);saveSerie('${ex.id}',${si},'kg',this.value)"
                     style="background:var(--card2);border:1px solid ${border};border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 6px;outline:none;width:100%;text-align:center;">
                   <select aria-label="RIR serie ${si+1}" ${CP==='jose_papa'?'disabled aria-hidden="true"':''} onchange="saveSerie('${ex.id}',${si},'rir',this.value)" style="display:${CP==='jose_papa'?'none':'block'};background:var(--card2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:5px 1px;outline:none;width:100%;text-align:center;"><option value="" ${sv.rir==null||sv.rir===''?'selected':''}>—</option>${[0,1,2,3,4,5].map(r=>`<option value="${r}" ${String(sv.rir)===String(r)?'selected':''}>${r}</option>`).join('')}</select>
@@ -3005,6 +2821,7 @@ function renderStats(){
 function renderPerfil(){
   const p=pr(); const lw=gw().length?gw()[gw().length-1].val:p.w; const themePref=getThemePreference(); const savedTargets=NUTRITION[CP]||getMacros();
   document.getElementById('tab-perfil').innerHTML=`<div class="inner">
+  ${gfAccessSettings()}
   <div style="display:flex;align-items:center;gap:10px;padding:10px 0 14px;position:sticky;top:0;z-index:10;background:rgba(10,10,10,0.96);border-bottom:1px solid #252525;margin-bottom:14px;">
     <button onclick="goTab('plan')" style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.7);border:1px solid rgba(0,0,0,.1);border-radius:8px;color:#7a6070;font-size:12px;padding:5px 10px;cursor:pointer;font-family:'DM Sans',sans-serif;">‹ Atrás</button>
     <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.06em;color:${p.color};">${p.name} — PERFIL</span>
@@ -3016,7 +2833,7 @@ function renderPerfil(){
     </div>
     <div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.06em;color:${p.color}">${p.name}</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:2px;">${p.age} años · ${p.h}m · Géminis ♊ · Recomposición Corporal</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px;">${CP==='gisandry'?'Rutina personal · 5 días':p.age+' años · '+p.h+'m · Géminis ♊ · Recomposición Corporal'}</div>
     </div>
   </div></div>
   <div class="card" style="margin-bottom:12px;"><div class="card-body">
@@ -4090,31 +3907,25 @@ let _saveTimer = null;
 let _saving = false;
 let _pendingSave = false;
 
+let _auth=null, _initPromise=null;
 function initFirebase(){
-  return new Promise((resolve) => {
-    if(_firebaseReady){ resolve(); return; }
-    const scripts = [
-      'https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js',
-      'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js'
-    ];
-    let loaded = 0;
-    scripts.forEach(src => {
-      const s = document.createElement('script');
-      s.src = src;
-      s.onload = () => {
-        loaded++;
-        if(loaded === scripts.length){
-          firebase.initializeApp(FIREBASE_CONFIG);
-          _db = firebase.firestore();
-          _firebaseReady = true;
-          resolve();
-        }
-      };
-      document.head.appendChild(s);
-    });
-  });
+ if(_firebaseReady)return Promise.resolve();
+ if(_initPromise)return _initPromise;
+ _initPromise=(async()=>{
+  for(const name of ['app','auth','firestore']){
+   await new Promise((resolve,reject)=>{
+    const script=document.createElement('script');const timeout=setTimeout(()=>reject(new Error('No se pudo conectar con Firebase. Revisa tu conexión.')),15000);
+    script.src=`https://www.gstatic.com/firebasejs/10.12.0/firebase-${name}-compat.js`;
+    script.onload=()=>{clearTimeout(timeout);resolve();};script.onerror=()=>{clearTimeout(timeout);script.remove();reject(new Error('No se pudo cargar Firebase. Revisa tu conexión.'));};document.head.appendChild(script);
+   });
+  }
+  if(!firebase.apps.length)firebase.initializeApp(FIREBASE_CONFIG);
+  _db=firebase.firestore();_auth=firebase.auth();_auth.languageCode='es';
+  await _auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+  _firebaseReady=true;
+ })().catch(e=>{_initPromise=null;throw e;});
+ return _initPromise;
 }
-
 function showSyncStatus(state){
   let el = document.getElementById('syncBadge');
   if(!el){
@@ -4125,376 +3936,59 @@ function showSyncStatus(state){
   const S = {
     saving: { bg:'rgba(250,204,21,.15)', color:'#d1c397', border:'rgba(250,204,21,.3)', txt:'Guardando…' },
     saved:  { bg:'rgba(74,222,128,.12)', color:'#b0cfb0', border:'rgba(74,222,128,.3)', txt:'\u2601\ufe0f Sincronizado' },
-    error:  { bg:'rgba(255,107,53,.12)', color:'#d5b69d', border:'rgba(255,107,53,.3)', txt:'\u26a0\ufe0f Sin conexi\u00f3n \u2014 local' },
+    error:  { bg:'rgba(255,107,53,.12)', color:'#d5b69d', border:'rgba(255,107,53,.3)', txt:'No sincronizado · revisa la conexión' },
     loading:{ bg:'rgba(0,102,170,.12)',  color:'#9ebdcd', border:'rgba(0,102,170,.3)',  txt:'Cargando…' },
   };
   const s = S[state] || S.saved;
   el.style.background = s.bg; el.style.color = s.color; el.style.borderColor = s.border;
   el.textContent = s.txt; el.style.opacity = '1';
+  el.style.pointerEvents=state==='error'?'auto':'none';el.onclick=state==='error'?()=>cloudSave():null;el.setAttribute('role',state==='error'?'button':'status');el.tabIndex=state==='error'?0:-1;el.onkeydown=event=>{if(state==='error'&&(event.key==='Enter'||event.key===' ')){event.preventDefault();cloudSave();}};
   if(state === 'saved') setTimeout(()=>{ el.style.opacity = '0'; }, 3000);
 }
 
+function gfCanSync(){return GF_DATA_READY&&CP===GF_AUTH_PROFILE&&GF_AUTH_UID&&_auth?.currentUser?.uid===GF_AUTH_UID;}
+async function gfFlushCloud(){
+ if(!gfCanSync())return false;
+ const id=GF_AUTH_PROFILE,uid=GF_AUTH_UID,epoch=GF_AUTH_EPOCH,revision=GF_CHANGE_VERSION;
+ const payload=JSON.parse(JSON.stringify(gfPrivatePayload()));payload.updatedAt=new Date().toISOString();
+ try{
+  await initFirebase();if(epoch!==GF_AUTH_EPOCH||_auth.currentUser?.uid!==uid||GF_AUTH_PROFILE!==id)return false;
+  await _db.collection('gemfit').doc(id).update(payload);
+  if(epoch===GF_AUTH_EPOCH){if(GF_CHANGE_VERSION===revision)GF_DIRTY=false;showSyncStatus(GF_DIRTY?'saving':'saved');}return true;
+ }catch(e){if(epoch===GF_AUTH_EPOCH){showSyncStatus('error');console.warn('No se pudo sincronizar tu perfil:',e.code||e.message);}return false;}
+}
 function cloudSave(){
-  if(_saveTimer) clearTimeout(_saveTimer);
-  _saveTimer = setTimeout(async () => {
-    if(_saving){ _pendingSave = true; return; }
-    _saving = true;
-    showSyncStatus('saving');
-    try {
-      await initFirebase();
-      for(const profileId of Object.keys(PROFS)){
-        const profileData = {
-          AD: AD[profileId] || {},
-          WD: WD[profileId] || [],
-          SC: SC[profileId] || {},
-          CALS: CALS[profileId] || {},
-          EXLIB: EXLIB[profileId] || [],
-          NUTRITION: NUTRITION[profileId] || null,
-          updatedAt: new Date().toISOString()
-        };
-        await _db.collection('gemfit').doc(profileId).set(profileData, { merge: true });
-      }
-      showSyncStatus('saved');
-    } catch(e) {
-      console.warn('CloudSave error:', e);
-      showSyncStatus('error');
-    } finally {
-      _saving = false;
-      if(_pendingSave){ _pendingSave = false; cloudSave(); }
-    }
-  }, 2000);
+ if(!gfCanSync())return;
+ if(_saveTimer)clearTimeout(_saveTimer);
+ _saveTimer=setTimeout(async()=>{
+  _saveTimer=null;
+  if(_saving){_pendingSave=true;return;}
+  _saving=true;showSyncStatus('saving');
+  try{await gfFlushCloud();}finally{_saving=false;if(_pendingSave){_pendingSave=false;cloudSave();}}
+ },700);
 }
-
-async function cloudLoad(){
-  try {
-    showSyncStatus('loading');
-    await initFirebase();
-    for(const profileId of Object.keys(PROFS)){
-      const doc = await _db.collection('gemfit').doc(profileId).get();
-      if(!doc.exists) continue;
-      const data = doc.data();
-      if(data.AD)    AD[profileId]    = data.AD;
-      if(data.WD)    WD[profileId]    = data.WD;
-      if(data.SC)    SC[profileId]    = data.SC;
-      if(data.CALS)  CALS[profileId]  = data.CALS;
-      if(data.EXLIB) EXLIB[profileId] = data.EXLIB;
-      if(data.NUTRITION) NUTRITION[profileId] = data.NUTRITION;
-    }
-    localStorage.setItem('gemfit_v1', JSON.stringify({ AD, WD, SC, PD, CALS, AVATARS, EXLIB, NUTRITION }));
-    showSyncStatus('saved');
-    return true;
-  } catch(e) {
-    console.warn('CloudLoad error:', e);
-    showSyncStatus('error');
-    return false;
-  }
+async function cloudLoad(epoch=GF_AUTH_EPOCH){
+ const id=GF_AUTH_PROFILE,uid=GF_AUTH_UID;
+ if(!id||!uid||_auth?.currentUser?.uid!==uid)return false;
+ try{
+  showSyncStatus('loading');const doc=await _db.collection('gemfit').doc(id).get({source:'server'});
+  if(epoch!==GF_AUTH_EPOCH||_auth.currentUser?.uid!==uid||GF_AUTH_PROFILE!==id)return false;
+  if(!doc.exists)throw new Error('Perfil no preparado.');const data=doc.data();
+  if(!data.profile||!data.sessions||!Array.isArray(data.sessionList)||!data.sessionList.length)throw new Error('Falta preparar tu rutina.');
+  Object.assign(PROFS,{[id]:data.profile});Object.assign(SESSIONS,data.sessions);SESS_LIST.push(...data.sessionList);ARCHIVED_EXERCISES.push(...(data.archivedExercises||[]));
+  Object.assign(MEAL_PLAN,data.mealPlan||{});PRE_ENTRENO=data.preWorkout||null;
+  GF_STORE_KEYS.forEach(k=>{gfStores()[k][id]=data[k]??(['WD','PD','EXLIB','MEASUREMENTS'].includes(k)?[]:['AVATARS','NUTRITION'].includes(k)?null:{});});
+  ensureProfileStores();showSyncStatus('saved');return true;
+ }catch(e){if(epoch===GF_AUTH_EPOCH)showSyncStatus('error');console.warn('No se pudo cargar tu perfil:',e.code||e.message);return false;}
 }
-
 // ═══════════════════════════════════════════════════════════════
 // PLAN NUTRICIONAL SEMANAL — Deivis & Yona (Team David Marmol)
 // Pega esto en el archivo index.html, dentro del bloque <script>
 // junto a los otros datos como SESSIONS, SUPS, etc.
 // ═══════════════════════════════════════════════════════════════
 
-const MEAL_PLAN = {
-  lunes: {
-    kcal: 1980, p: 160, c: 196, g: 62,
-    comidas: [
-      {
-        nombre: 'Comida',
-        nota: '',
-        items: [
-          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
-          { n: 'Ternera', g: '150g', kcal: 300, p: 28.5, c: 0, f: 19.5 },
-          { n: 'Ensalada / Verdura', g: 'sin límite', kcal: 17, p: 1, c: 3, f: 0 },
-        ]
-      },
-      {
-        nombre: 'Merienda',
-        nota: 'Opción 1',
-        items: [
-          { n: 'Claras de huevo', g: '250g', kcal: 105, p: 27.5, c: 2.5, f: 2.5 },
-          { n: 'Harina de avena Prozis', g: '50g', kcal: 184, p: 6.5, c: 32, f: 3 },
-          { n: 'Verdura sin límite', g: '200g', kcal: 34, p: 2, c: 6, f: 0 },
-        ]
-      },
-      {
-        nombre: 'Cena',
-        nota: 'Opción 1 · + Omega3 + Primrose + Cúrcuma',
-        items: [
-          { n: 'Ensalada / Verdura', g: '200g', kcal: 34, p: 2, c: 6, f: 0 },
-          { n: '1 Huevo', g: '60g', kcal: 78, p: 6, c: 0.6, f: 5 },
-          { n: 'Claras de huevo', g: '250g', kcal: 105, p: 27.5, c: 2.5, f: 2.5 },
-          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
-        ]
-      },
-      {
-        nombre: 'Pre cama',
-        nota: 'Lo puedes hacer como postre junto a la cena',
-        items: [
-          { n: 'Kefir Natural Hacendado', g: '75g', kcal: 56, p: 3, c: 5, f: 2 },
-          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
-          { n: 'Yogur 0% Natural Hacendado', g: '125g', kcal: 48, p: 5, c: 5, f: 0.1 },
-          { n: 'Real Casein Prozis', g: '15g', kcal: 54, p: 11, c: 2, f: 0.5 },
-        ]
-      },
-    ]
-  },
-  martes: {
-    kcal: 1980, p: 160, c: 196, g: 62,
-    comidas: [
-      {
-        nombre: 'Comida',
-        nota: '',
-        items: [
-          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
-          { n: 'Ternera', g: '150g', kcal: 300, p: 28.5, c: 0, f: 19.5 },
-          { n: 'Ensalada / Verdura', g: 'sin límite', kcal: 17, p: 1, c: 3, f: 0 },
-        ]
-      },
-      {
-        nombre: 'Merienda',
-        nota: 'Opción 2',
-        items: [
-          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
-          { n: 'Pollo', g: '150g', kcal: 180, p: 34.5, c: 0, f: 4.5 },
-        ]
-      },
-      {
-        nombre: 'Cena',
-        nota: 'Opción 2 · + Omega3 + Primrose + Cúrcuma',
-        items: [
-          { n: 'Ternera', g: '120g', kcal: 240, p: 22.8, c: 0, f: 15.6 },
-          { n: 'Ensalada / Verdura', g: '300g', kcal: 51, p: 3, c: 9, f: 0 },
-          { n: '1 Huevo', g: '60g', kcal: 78, p: 6, c: 0.6, f: 5 },
-          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
-        ]
-      },
-      {
-        nombre: 'Pre cama',
-        nota: 'Lo puedes hacer como postre junto a la cena',
-        items: [
-          { n: 'Kefir Natural Hacendado', g: '75g', kcal: 56, p: 3, c: 5, f: 2 },
-          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
-          { n: 'Yogur 0% Natural Hacendado', g: '125g', kcal: 48, p: 5, c: 5, f: 0.1 },
-          { n: 'Real Casein Prozis', g: '15g', kcal: 54, p: 11, c: 2, f: 0.5 },
-        ]
-      },
-    ]
-  },
-  miercoles: {
-    kcal: 1980, p: 160, c: 196, g: 62,
-    comidas: [
-      {
-        nombre: 'Comida',
-        nota: '',
-        items: [
-          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
-          { n: 'Ternera', g: '150g', kcal: 300, p: 28.5, c: 0, f: 19.5 },
-          { n: 'Ensalada / Verdura', g: 'sin límite', kcal: 17, p: 1, c: 3, f: 0 },
-        ]
-      },
-      {
-        nombre: 'Merienda',
-        nota: 'Opción 3',
-        items: [
-          { n: 'Harina de avena Prozis', g: '50g', kcal: 184, p: 6.5, c: 32, f: 3 },
-          { n: 'Proteína en polvo Prozis', g: '30g', kcal: 116, p: 25, c: 2, f: 1 },
-        ]
-      },
-      {
-        nombre: 'Cena',
-        nota: 'Opción 1 · + Omega3 + Primrose + Cúrcuma',
-        items: [
-          { n: 'Ensalada / Verdura', g: '200g', kcal: 34, p: 2, c: 6, f: 0 },
-          { n: '1 Huevo', g: '60g', kcal: 78, p: 6, c: 0.6, f: 5 },
-          { n: 'Claras de huevo', g: '250g', kcal: 105, p: 27.5, c: 2.5, f: 2.5 },
-          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
-        ]
-      },
-      {
-        nombre: 'Pre cama',
-        nota: 'Lo puedes hacer como postre junto a la cena',
-        items: [
-          { n: 'Kefir Natural Hacendado', g: '75g', kcal: 56, p: 3, c: 5, f: 2 },
-          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
-          { n: 'Yogur 0% Natural Hacendado', g: '125g', kcal: 48, p: 5, c: 5, f: 0.1 },
-          { n: 'Real Casein Prozis', g: '15g', kcal: 54, p: 11, c: 2, f: 0.5 },
-        ]
-      },
-    ]
-  },
-  jueves: {
-    kcal: 1980, p: 160, c: 196, g: 62,
-    comidas: [
-      {
-        nombre: 'Comida',
-        nota: '',
-        items: [
-          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
-          { n: 'Ternera', g: '150g', kcal: 300, p: 28.5, c: 0, f: 19.5 },
-          { n: 'Ensalada / Verdura', g: 'sin límite', kcal: 17, p: 1, c: 3, f: 0 },
-        ]
-      },
-      {
-        nombre: 'Merienda',
-        nota: 'Opción 4',
-        items: [
-          { n: 'Queso Fresco Batido 0% Hacendado', g: '250g', kcal: 115, p: 13.5, c: 5, f: 0.5 },
-          { n: 'Crema de arroz', g: '50g', kcal: 192, p: 4, c: 42, f: 1 },
-          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
-        ]
-      },
-      {
-        nombre: 'Cena',
-        nota: 'Opción 2 · + Omega3 + Primrose + Cúrcuma',
-        items: [
-          { n: 'Ternera', g: '120g', kcal: 240, p: 22.8, c: 0, f: 15.6 },
-          { n: 'Ensalada / Verdura', g: '300g', kcal: 51, p: 3, c: 9, f: 0 },
-          { n: '1 Huevo', g: '60g', kcal: 78, p: 6, c: 0.6, f: 5 },
-          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
-        ]
-      },
-      {
-        nombre: 'Pre cama',
-        nota: 'Lo puedes hacer como postre junto a la cena',
-        items: [
-          { n: 'Kefir Natural Hacendado', g: '75g', kcal: 56, p: 3, c: 5, f: 2 },
-          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
-          { n: 'Yogur 0% Natural Hacendado', g: '125g', kcal: 48, p: 5, c: 5, f: 0.1 },
-          { n: 'Real Casein Prozis', g: '15g', kcal: 54, p: 11, c: 2, f: 0.5 },
-        ]
-      },
-    ]
-  },
-  viernes: {
-    kcal: 1980, p: 160, c: 196, g: 62,
-    comidas: [
-      {
-        nombre: 'Comida',
-        nota: '',
-        items: [
-          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
-          { n: 'Ternera', g: '150g', kcal: 300, p: 28.5, c: 0, f: 19.5 },
-          { n: 'Ensalada / Verdura', g: 'sin límite', kcal: 17, p: 1, c: 3, f: 0 },
-        ]
-      },
-      {
-        nombre: 'Merienda',
-        nota: 'Opción 1',
-        items: [
-          { n: 'Claras de huevo', g: '250g', kcal: 105, p: 27.5, c: 2.5, f: 2.5 },
-          { n: 'Harina de avena Prozis', g: '50g', kcal: 184, p: 6.5, c: 32, f: 3 },
-          { n: 'Verdura sin límite', g: '200g', kcal: 34, p: 2, c: 6, f: 0 },
-        ]
-      },
-      {
-        nombre: 'Cena',
-        nota: 'Opción 1 · + Omega3 + Primrose + Cúrcuma',
-        items: [
-          { n: 'Ensalada / Verdura', g: '200g', kcal: 34, p: 2, c: 6, f: 0 },
-          { n: '1 Huevo', g: '60g', kcal: 78, p: 6, c: 0.6, f: 5 },
-          { n: 'Claras de huevo', g: '250g', kcal: 105, p: 27.5, c: 2.5, f: 2.5 },
-          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
-        ]
-      },
-      {
-        nombre: 'Pre cama',
-        nota: 'Lo puedes hacer como postre junto a la cena',
-        items: [
-          { n: 'Kefir Natural Hacendado', g: '75g', kcal: 56, p: 3, c: 5, f: 2 },
-          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
-          { n: 'Yogur 0% Natural Hacendado', g: '125g', kcal: 48, p: 5, c: 5, f: 0.1 },
-          { n: 'Real Casein Prozis', g: '15g', kcal: 54, p: 11, c: 2, f: 0.5 },
-        ]
-      },
-    ]
-  },
-  sabado: {
-    kcal: 1980, p: 160, c: 196, g: 62,
-    comidas: [
-      {
-        nombre: 'Comida',
-        nota: '',
-        items: [
-          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
-          { n: 'Pollo', g: '150g', kcal: 180, p: 34.5, c: 0, f: 4.5 },
-          { n: 'Ensalada / Verdura', g: 'sin límite', kcal: 17, p: 1, c: 3, f: 0 },
-        ]
-      },
-      {
-        nombre: 'Merienda',
-        nota: 'Opción 2',
-        items: [
-          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
-          { n: 'Pollo', g: '150g', kcal: 180, p: 34.5, c: 0, f: 4.5 },
-        ]
-      },
-      {
-        nombre: 'Cena',
-        nota: 'Opción 2 · + Omega3 + Primrose + Cúrcuma',
-        items: [
-          { n: 'Ternera', g: '120g', kcal: 240, p: 22.8, c: 0, f: 15.6 },
-          { n: 'Ensalada / Verdura', g: '300g', kcal: 51, p: 3, c: 9, f: 0 },
-          { n: '1 Huevo', g: '60g', kcal: 78, p: 6, c: 0.6, f: 5 },
-          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
-        ]
-      },
-      {
-        nombre: 'Pre cama',
-        nota: 'Lo puedes hacer como postre junto a la cena',
-        items: [
-          { n: 'Kefir Natural Hacendado', g: '75g', kcal: 56, p: 3, c: 5, f: 2 },
-          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
-          { n: 'Yogur 0% Natural Hacendado', g: '125g', kcal: 48, p: 5, c: 5, f: 0.1 },
-          { n: 'Real Casein Prozis', g: '15g', kcal: 54, p: 11, c: 2, f: 0.5 },
-        ]
-      },
-    ]
-  },
-  domingo: {
-    kcal: 1980, p: 160, c: 196, g: 62,
-    libre: true,
-    comidas: [
-      {
-        nombre: 'Comida',
-        nota: '🎉 Comida libre moderada hoy',
-        items: [
-          { n: 'Una comida libre moderada', g: '', kcal: 0, p: 0, c: 0, f: 0 },
-        ]
-      },
-      {
-        nombre: 'Resto del día',
-        nota: 'Mantén el plan habitual',
-        items: [
-          { n: 'Arroz', g: '50g', kcal: 173, p: 4, c: 38, f: 0.5 },
-          { n: 'Pollo / Ternera', g: '150g', kcal: 240, p: 30, c: 0, f: 12 },
-          { n: 'Verdura sin límite', g: '', kcal: 17, p: 1, c: 3, f: 0 },
-        ]
-      },
-      {
-        nombre: 'Pre cama',
-        nota: 'Lo puedes hacer como postre junto a la cena',
-        items: [
-          { n: 'Kefir Natural Hacendado', g: '75g', kcal: 56, p: 3, c: 5, f: 2 },
-          { n: '1 Kiwi', g: '75g', kcal: 46, p: 0.8, c: 10, f: 0.4 },
-          { n: 'Yogur 0% Natural Hacendado', g: '125g', kcal: 48, p: 5, c: 5, f: 0.1 },
-          { n: 'Real Casein Prozis', g: '15g', kcal: 54, p: 11, c: 2, f: 0.5 },
-        ]
-      },
-    ]
-  },
-};
-
-const PRE_ENTRENO = {
-  nombre: 'Pre Entreno',
-  nota: 'Hazlo 45-90 min antes · Sustituye una de las comidas del día · + 3g Carnitina + 1 Termogénico · Intra: 6g BCAAs + 6g EAAs + 6g Creatina',
-  items: [
-    { n: 'Crema de arroz', g: '50g', kcal: 192, p: 4, c: 42, f: 1 },
-    { n: 'Crema de almendras Prozis', g: '15g', kcal: 95, p: 3.5, c: 3, f: 8 },
-    { n: 'Proteína en polvo Prozis', g: '30g', kcal: 116, p: 25, c: 2, f: 1 },
-  ]
-};
+const MEAL_PLAN = {};
+let PRE_ENTRENO = null;
 
 // Fichas y equivalencias del plan. Los valores corresponden a la porción indicada.
 const DIET_FOOD_DETAILS = {
@@ -4531,6 +4025,7 @@ function closeDietFoodDetail(){document.getElementById('dietFoodModal').style.di
 // ── Función que renderiza la tab de Dieta ──
 function renderDieta(){
   const p = pr();
+  if(!Object.keys(MEAL_PLAN).length){document.getElementById('tab-dieta').innerHTML='<div class="inner"><h1>Mi alimentación</h1><p>Aún no tienes un plan de alimentación asignado.</p></div>';return;}
   const goals=getMacros();
   const DIAS = ['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
   const DIAS_ES = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
@@ -5338,15 +4833,7 @@ function closeProjection(){
 // ═══════════════════════════════════════════════════════════════
 // SERVICE WORKER — notificaciones push + offline básico
 // ═══════════════════════════════════════════════════════════════
-if('serviceWorker' in navigator){
-  window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('./sw.js').then(reg=>{
-      console.log('Service Worker registrado:', reg.scope);
-    }).catch(err=>{
-      console.warn('Service Worker no pudo registrarse:', err);
-    });
-  });
-}
+if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').then(reg=>reg.update()).catch(()=>{}));}
 
 
 // ═══════════════════════════════════════════════════════════════
@@ -5496,7 +4983,7 @@ function gfSyncHeader(){
  const name=document.getElementById('tName');name.innerHTML='GemFit';
  let wrap=document.getElementById('gfProfileSwitch');
  if(!wrap){wrap=document.createElement('div');wrap.id='gfProfileSwitch';wrap.className='gf-profile-switch';document.querySelector('.topbar').insertBefore(wrap,document.getElementById('themeQuickToggle'));}
- wrap.innerHTML=['deivis','yona'].map(id=>`<button class="${CP===id?'selected':''}" onclick="selectProfile('${id}')" aria-label="Cambiar a ${gfName(id)}" aria-pressed="${CP===id}"><span class="gf-avatar">${AVATARS[id]?`<img src="${AVATARS[id]}" alt="">`:PROFS[id].init}</span>${gfName(id)}</button>`).join('');
+ wrap.innerHTML=`<span style="padding:6px 10px;font-size:12px;color:var(--text)">${gfEscape(gfName(CP))}</span>`;
  const quick=document.getElementById('themeQuickToggle');if(quick)quick.innerHTML=gfIcon(document.body.classList.contains('light-theme')?'moon':'sun');
 }
 function gfStartSession(id){const day=gd()[SK]||{};if(day.session!==id)setSess(id);goTab('tracker');}
@@ -5505,7 +4992,7 @@ function gfViewRoutine(id){const detail=document.getElementById('gfRoutine-'+id)
 function renderPlan(){
  const p=pr(),data=gd(),dd=data[SK]||{};
  const session=SESSIONS[dd.session];
- const featuredId=session&&session.id!=='skip'?session.id:'pecho03';
+ const featuredId=session&&session.id!=='skip'?session.id:gfDefaultSession();
  const featured=SESSIONS[featuredId];
  const exercises=featured.sections.flatMap(sec=>sec.ex);
  const date=new Date(SK+'T12:00:00'),weekStart=new Date(date);weekStart.setDate(date.getDate()-(date.getDay()+6)%7);
@@ -5520,7 +5007,7 @@ function renderPlan(){
  <div class="gf-stats"><div class="gf-stat">${gfIcon('calendar')}<span>Esta semana</span><strong>${recorded} ${recorded===1?'sesión':'sesiones'}</strong><div class="gf-mini-bars" aria-hidden="true">${days.map(d=>`<i style="height:${data[dk(d)]?.session&&data[dk(d)].session!=='skip'?30:5}px;opacity:${data[dk(d)]?.session&&data[dk(d)].session!=='skip'?1:.25}"></i>`).join('')}</div></div><div class="gf-stat">${gfIcon('weight')}<span>Último peso registrado</span><strong>${weight!==null?gfEscape(weight)+' kg':'—'}</strong><p style="color:var(--muted);font-size:11px;margin-top:14px;">${weight!==null?'Consulta tu evolución':'Añade tu primer pesaje'}</p></div></div>
  <div class="gf-quick"><button onclick="goTab('calorias')">${gfIcon('food')} Registrar comida</button><button onclick="goTab('progreso')">${gfIcon('chart')} Ver progreso</button></div>
  <div class="gf-section-head"><h2>Tu rutina</h2><span style="font-size:11px;color:var(--muted)">Elige un bloque</span></div>`;
- SESS_LIST.filter(item=>item.id!=='skip').forEach(item=>{const sess=SESSIONS[item.id];h+=`<details class="gf-detail" id="gfRoutine-${sess.id}"><summary><span class="gf-muscle-thumb">${muscleArt(sess.type)}</span><span>${gfEscape(item.lbl)}<small style="display:block;color:var(--muted);font-weight:400;font-size:11px;margin-top:4px;">${texs(item.id)} ejercicios</small></span>${gfIcon('arrow')}</summary>`;
+ getSessionList().filter(item=>item.id!=='skip').forEach(item=>{const sess=SESSIONS[item.id];h+=`<details class="gf-detail" id="gfRoutine-${sess.id}"><summary><span class="gf-muscle-thumb">${muscleArt(sess.type)}</span><span>${gfEscape(item.lbl)}<small style="display:block;color:var(--muted);font-weight:400;font-size:11px;margin-top:4px;">${texs(item.id)} ejercicios</small></span>${gfIcon('arrow')}</summary>`;
  sess.sections.forEach(sec=>{h+=`<div class="ex-section">${gfEscape(sec.t)}</div>`;sec.ex.forEach((ex,i)=>{h+=`<div class="ex-row"><span class="ex-num">${String(i+1).padStart(2,'0')}</span><div><div class="ex-name">${gfEscape(ex.n)}</div>${ex.note?`<div class="ex-note">${gfEscape(ex.note)}</div>`:''}</div><span class="ex-sets">${gfEscape(ex.s)}</span></div>`;});});
  h+=`<div style="padding:16px"><button class="gf-primary" onclick="gfStartSession('${sess.id}')">Entrenar ${gfEscape(item.lbl.toLowerCase())}${gfIcon('arrow')}</button></div></details>`;});
  h+=`<button class="gf-text-btn" style="width:100%;margin:7px 0" onclick="gfStartSession('skip')">${gfIcon('moon')} Registrar día de descanso</button></div>`;
@@ -5577,6 +5064,46 @@ window.addEventListener('DOMContentLoaded',()=>{
  gfDecorate();
  let pending=false;const observer=new MutationObserver(mutations=>{if(pending||!mutations.some(m=>m.addedNodes.length&&Array.from(m.addedNodes).some(n=>n.nodeType===1&&!n.matches?.('.gf-icon,.gf-inline-icon'))))return;pending=true;setTimeout(()=>{pending=false;gfDecorate();},30);});observer.observe(document.body,{subtree:true,childList:true});
 });
+
+function gfApplyApprovedPalette(){
+ const light=document.body.classList.contains('light-theme');
+ const profileColors=light?{deivis:'#2364cb',yona:'#7363b0',gisandry:'#b56d86',jose_papa:'#34858d'}:{deivis:'#b0cfb0',yona:'#b6a8c7',gisandry:'#d5b69d',jose_papa:'#a5c7ba'};
+ Object.keys(profileColors).forEach(id=>{if(PROFS[id]){PROFS[id].color=profileColors[id];const hex=profileColors[id];PROFS[id].dim=`rgba(${parseInt(hex.slice(1,3),16)},${parseInt(hex.slice(3,5),16)},${parseInt(hex.slice(5,7),16)},.10)`;}});
+ Object.assign(TC,light?{push:'#2364cb',shoulders:'#7363b0',pull:'#3977bf',legs:'#7363b0',arms:'#34858d',skip:'#62789a',rest:'#62789a'}:{push:'#b0cfb0',shoulders:'#b6a8c7',pull:'#9ebdcd',legs:'#b6a8c7',arms:'#a5c7ba',skip:'#a2ada4',rest:'#a2ada4'});
+ const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=light?'#e9f1fc':'#202322';
+}
+const gfBeforeApprovedTheme=applyTheme;
+applyTheme=function(...args){
+ gfBeforeApprovedTheme(...args);gfApplyApprovedPalette();
+ if(CP){const tab=document.querySelector('.tab.active')?.id.replace('tab-','');if(tab)goTab(tab);gfSyncHeader();}
+ gfDecorate();
+};
+// Promote fixed decorative colors to theme tokens, including old static profile cards.
+const gfBeforeMobileDecorate=gfDecorate;
+gfDecorate=function(root=document){
+ gfBeforeMobileDecorate(root);
+ const light=document.body.classList.contains('light-theme');
+ const semanticColors=[['rgb(213, 182, 157)','rgb(155, 75, 40)'],['rgb(209, 195, 151)','rgb(128, 106, 34)'],['rgb(158, 189, 205)','rgb(57, 119, 191)']];
+ root.querySelectorAll?.('[style]').forEach(el=>{
+  if(el.closest('svg'))return;
+  const pair=semanticColors.find(colors=>colors.includes(el.style.color));if(pair)el.style.color=pair[light?1:0];
+  for(const prop of ['color','backgroundColor','borderColor']){const value=el.style[prop];
+   if(value==='rgb(176, 207, 176)'||value==='rgb(35, 100, 203)')el.style[prop]='var(--accent)';
+   if(prop==='color'&&value==='rgb(241, 242, 235)')el.style.color='var(--text)';
+  }
+  if(el.matches('[id^="pav-"]')&&!el.id.includes('txt')&&!el.id.includes('img')){const id=el.id.slice(4);if(PROFS[id]){el.style.color=PROFS[id].color;el.style.borderColor=PROFS[id].color;el.style.background=PROFS[id].dim;}}
+ });
+ // Explicit names make the two themes easy to identify.
+ document.querySelectorAll('[data-theme-choice="dark"]').forEach(btn=>{if(btn.dataset.gfLabel)return;btn.dataset.gfLabel='1';const span=btn.querySelector('span');btn.replaceChildren();if(span)btn.append(span);btn.append(document.createTextNode('Grafito'));});
+ document.querySelectorAll('[data-theme-choice="light"]').forEach(btn=>{if(btn.dataset.gfLabel)return;btn.dataset.gfLabel='1';const span=btn.querySelector('span');btn.replaceChildren();if(span)btn.append(span);btn.append(document.createTextNode('Azul claro'));});
+};
+function gfUpdateViewport(){
+ const viewport=window.visualViewport;const height=viewport&&viewport.scale===1?viewport.height:window.innerHeight;
+ document.documentElement.style.setProperty('--gf-viewport-height',Math.round(height)+'px');
+}
+window.addEventListener('DOMContentLoaded',()=>{gfUpdateViewport();gfApplyApprovedPalette();gfDecorate();});
+window.addEventListener('resize',gfUpdateViewport,{passive:true});
+window.visualViewport?.addEventListener('resize',gfUpdateViewport,{passive:true});
 
 </script>
 
@@ -5792,5 +5319,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     <div id="guidedWorkoutContent" style="padding-top:14px;"></div>
   </div>
 </div>
+<style>.gf-access-button{padding:11px 14px;border:1px solid var(--border2);border-radius:12px;background:var(--card2);color:var(--text);font:inherit;cursor:pointer;}#gfAccessModal [hidden]{display:none!important;}#gfAccessModal input{width:100%;box-sizing:border-box;padding:13px;margin:7px 0 14px;border:1px solid var(--border2);border-radius:12px;background:var(--card2);color:var(--text);font-size:18px;}</style>
+<style>.gf-login-input{width:100%;box-sizing:border-box;padding:14px;margin:8px 0 20px;background:var(--card);color:var(--text);border:1px solid var(--border2);border-radius:14px;font-size:16px;}</style>
 </body>
 </html>
