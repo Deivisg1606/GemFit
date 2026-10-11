@@ -359,7 +359,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 #moreMenu{background:rgba(10,16,12,.6);backdrop-filter:blur(8px);}#moreMenu>div{bottom:calc(70px + env(safe-area-inset-bottom))!important;background:var(--card)!important;border:1px solid var(--border2)!important;border-radius:26px 26px 0 0!important;padding:12px 10px 14px!important;max-width:740px;margin:auto;}#moreMenu button{min-height:61px;border-radius:14px;}#moreMenu button:active{background:var(--card2)!important;}#moreMenu button>span{color:var(--accent);width:30px;display:grid;place-items:center;}
 [id$=Modal]:not(#foodModal):not(#guidedWorkoutModal):not(#dietFoodModal){background:rgba(26,32,28,.98)!important;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);}.gf-modal{color:var(--text);}.gf-modal button{min-height:40px;border-radius:12px!important;}.gf-modal>div{max-width:760px;width:100%;margin-inline:auto;}.gf-modal input,.gf-modal textarea{background:var(--card2)!important;color:var(--text)!important;border-color:var(--border2)!important;}
 #dietFoodModal>div{border-radius:28px 28px 0 0!important;padding:23px 20px calc(25px + env(safe-area-inset-bottom))!important;max-width:760px;margin:auto auto 0;}#guidedWorkoutModal>div{border-radius:27px!important;padding:22px!important;}.gf-modal h2{font-size:24px!important;letter-spacing:-.5px!important;line-height:1.4;}
-#s-profiles{background:var(--bg);padding-top:max(24px,env(safe-area-inset-top));}#s-profiles>div:first-child{padding:28px 24px!important;}#s-profiles>div:first-child>div:first-child{font-size:38px!important;font-weight:720;letter-spacing:-1.3px!important;}#s-profiles>div:first-child>div:last-child{font-size:12px!important;letter-spacing:.5px!important;color:var(--muted)!important;margin-top:9px!important;}#s-profiles [onclick^=selectProfile]{background:var(--card)!important;border:1px solid var(--border)!important;border-radius:24px!important;}#s-profiles [onclick^=selectProfile]>div:first-child[style*="height:3px"]{display:none;}#s-profiles [style*="color:#333"],#s-profiles [style*="color:#444"]{color:var(--muted)!important;}#s-profiles>div:last-child{max-width:440px!important;gap:14px!important;}
+#s-profiles{background:var(--bg);padding-top:max(24px,env(safe-area-inset-top));}#s-profiles [onclick^=selectProfile]{background:var(--card)!important;border:1px solid var(--border)!important;border-radius:24px!important;}#s-profiles [onclick^=selectProfile]>div:first-child[style*="height:3px"]{display:none;}#s-profiles [style*="color:#333"],#s-profiles [style*="color:#444"]{color:var(--muted)!important;}
 .vol-grid{grid-template-columns:minmax(0,1fr) auto auto auto;}.vol-cell,.vol-hdr{font-size:11px;padding:9px;}.w-input-row{gap:8px;}.w-inp{min-width:0;}.w-entry{padding:12px;border-radius:12px;}.w-del{min-width:40px;min-height:40px;}
 @media(max-width:375px){.inner{padding:18px 14px 35px;}.topbar{padding-inline:14px;gap:6px;}.tname{font-size:23px;}.gf-profile-switch button{padding:4px 5px;font-size:10px;}.gf-profile-switch .gf-avatar{width:18px;height:18px;}.theme-quick{width:30px;height:30px;}.gf-hero{padding:17px;}.progress-summary-card strong{font-size:19px;}.gf-heading h1{font-size:27px;}.gf-water>div:nth-child(2){min-width:170px;}.gf-water [onclick^=setWater]{width:26px!important;}.gf-water>div:nth-child(2)>div:last-child{gap:2px!important;}}
 @media(min-width:700px){.gf-hero{min-height:285px;padding:28px;}.gf-hero h2{font-size:42px;}.gf-primary{max-width:420px;}.gf-workout-list{display:grid;grid-template-columns:1fr 1fr;}.gf-workout-list button{border-right:1px solid var(--border);}.gf-week{gap:9px;}.topbar{padding-inline:max(18px,calc((100vw - 724px)/2));}.gf-hero-image{object-position:60% 45%;}}
@@ -435,6 +435,55 @@ body.light-theme #s-profiles [onclick^=selectProfile]{box-shadow:0 4px 12px rgba
 
 .macro-sel-grid,.macro-result-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.macro-sel{width:100%;min-width:0;}
 @media(max-width:600px){.macro-sel-grid{grid-template-columns:minmax(0,1fr);}}
+
+/* Gisandry: approved lavender light / plum dark, scoped to her active profile. */
+body.gisandry-theme{--bg:#241827;--card:#332238;--card2:#402b45;--border:rgba(244,211,237,.12);--border2:rgba(244,211,237,.24);--text:#fcf3fa;--muted:#d4bfd2;--muted2:#bda4bd;--accent:#e7a5c4;--on-accent:#301d32;--done:#e7a5c4;--skip:#bda4bd;--warm:#e7a5c4;--protein:#d3b5eb;--carbs:#e7a5c4;--fat:#bda4bd;}
+body.gisandry-theme.light-theme{--bg:#f2edfa;--card:#fdfbff;--card2:#e8dff5;--border:rgba(75,47,103,.12);--border2:rgba(75,47,103,.24);--text:#352444;--muted:#6a557e;--muted2:#78628e;--accent:#7650a2;--on-accent:#ffffff;--done:#7650a2;--skip:#78628e;--warm:#7650a2;--protein:#7650a2;--carbs:#7650a2;--fat:#78628e;}
+body.gisandry-theme .gf-primary,body.gisandry-theme .gf-week button.selected{background:var(--accent);color:var(--on-accent);}
+body.gisandry-theme .gf-week button.selected small{color:var(--on-accent);}
+body.gisandry-theme .gf-primary .gf-icon{background:transparent;color:var(--on-accent);}
+body.gisandry-theme .gf-training-hero{position:relative;display:flex;align-items:center;gap:16px;padding:22px;border:1px solid var(--border2);border-radius:24px;background:linear-gradient(135deg,var(--card2),var(--card));margin:18px 0;color:var(--text);}
+.gf-training-hero>div:first-child{flex:1;min-width:0;}.gf-training-hero h2{font-size:26px;line-height:1.2;margin:6px 0 10px;letter-spacing:-.7px;}.gf-training-hero p{color:var(--muted);font-size:13px;line-height:1.5;}.gf-training-hero .gf-female-art{width:95px;height:118px;flex-shrink:0;}
+.gf-female-art{width:100%;height:100%;display:block;color:var(--accent);}.gf-training-list{display:grid;gap:10px;margin:14px 0;}.gf-training-list button{display:flex;align-items:center;gap:12px;text-align:left;width:100%;padding:14px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:18px;cursor:pointer;}.gf-training-list .gf-muscle-thumb{width:50px;height:58px;background:var(--card2);}.gf-training-list .gf-ex-info{flex:1;min-width:0;}.gf-ex-info strong{display:block;font-size:14px;line-height:1.4;}.gf-ex-info small{display:block;font-size:12px;color:var(--muted);margin-top:4px;}.gf-rest-note{display:flex;gap:9px;align-items:center;color:var(--muted);background:var(--card2);padding:12px;border-radius:14px;font-size:12px;line-height:1.5;margin:14px 0;}.gf-training-actions{display:flex;flex-wrap:wrap;gap:10px;}.gf-training-actions button{min-height:44px;}
+body.gisandry-theme .progress-summary{grid-template-columns:repeat(2,1fr);}
+body.gisandry-theme [id$=Modal]{background:var(--bg)!important;color:var(--text)!important;}
+body.gisandry-theme .gf-muscle-thumb{background:var(--card2);}
+button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:3px;}
+.bnav .nbtn[hidden],#moreMenu button[hidden]{display:none!important;}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+
+
+/* Approved administrator menu: compact two-column capsules. */
+#s-admin{overflow:auto;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);}
+.gf-admin-shell{width:100%;max-width:460px;min-height:100%;margin:auto;box-sizing:border-box;padding:32px 24px;display:flex;flex-direction:column;}
+.gf-admin-top{display:flex;justify-content:space-between;align-items:center;gap:16px;}.gf-admin-brand{font-size:25px;font-weight:750;letter-spacing:3px;}.gf-admin-top .theme-quick{width:42px;height:42px;border-radius:16px;border:1px solid var(--border2);}
+.gf-admin-badge{align-self:flex-start;display:inline-flex;margin-top:20px;padding:7px 12px;border:1px solid var(--border2);border-radius:99px;background:var(--card2);font-size:12px;color:var(--accent);font-weight:650;}
+.gf-admin-heading{margin:28px 0 30px;}.gf-admin-heading h1{font-size:30px;font-weight:720;letter-spacing:-.8px;line-height:1.2;}.gf-admin-heading p{color:var(--muted);font-size:15px;margin-top:9px;}
+.gf-admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.gf-admin-capsule{display:flex;align-items:center;gap:8px;min-height:78px;width:100%;padding:12px;border:1px solid var(--border2);border-radius:42px;background:var(--card);color:var(--text);text-align:left;cursor:pointer;font-family:var(--font);transition:border-color .15s,background .15s;}
+.gf-admin-capsule.is-own{border-color:var(--accent);background:var(--card2);}.gf-admin-capsule:hover:not(:disabled){border-color:var(--accent);}.gf-admin-capsule:disabled{opacity:.6;cursor:default;}
+.gf-admin-avatar{width:38px;height:38px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#b7cdb1;color:#23312b;font-size:17px;font-weight:700;}
+.gf-admin-capsule[data-profile="yona"] .gf-admin-avatar{background:#e4d8c5;color:#3d332b;}.gf-admin-capsule[data-profile="gisandry"] .gf-admin-avatar{background:#c6b0e7;color:#392647;}.gf-admin-capsule[data-profile="jose_papa"] .gf-admin-avatar{background:#b2c5d8;color:#26394c;}
+.gf-admin-name{flex:1;min-width:0;}.gf-admin-name strong{font-size:13px;display:block;line-height:1.3;font-weight:650;overflow-wrap:normal;}.gf-admin-name small{display:inline-block;font-size:10px;line-height:1.3;margin-top:4px;color:var(--muted);}.gf-admin-capsule.is-own small{padding:3px 6px;border-radius:99px;background:var(--accent);color:var(--on-accent);font-weight:650;}.gf-admin-chevron{font-size:22px;flex-shrink:0;color:var(--muted);line-height:1;}
+.gf-admin-footer{margin-top:auto;padding-top:48px;}.gf-admin-logout{width:100%;min-height:48px;background:var(--card);color:var(--text);border:1px solid var(--border2);border-radius:99px;font:500 14px var(--font);cursor:pointer;}.gf-admin-logout span{margin-left:8px;}.gf-admin-footer p{font-size:12px;color:var(--muted);text-align:center;line-height:1.5;margin:18px 0 0;}
+@media(max-width:360px){.gf-admin-shell{padding:24px 16px;}.gf-admin-grid{gap:8px;}.gf-admin-capsule{padding:10px;gap:6px;}.gf-admin-avatar{width:32px;height:32px;}.gf-admin-name strong{font-size:12px;}}
+@media(min-width:700px){.gf-admin-shell{min-height:600px;padding-top:48px;padding-bottom:48px;}}
+
+
+/* Compact sign-in layout with a single grouped card. */
+#s-profiles{padding:24px 20px max(24px,env(safe-area-inset-bottom));justify-content:flex-start;background:var(--bg);}
+.gf-login-shell{width:100%;max-width:420px;flex-shrink:0;margin:auto;}
+.gf-login-brand{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 6px 30px;}
+.gf-login-brand>div{display:flex;gap:10px;align-items:center;font-size:22px;font-weight:760;letter-spacing:1px;}.gf-login-mark{display:grid;place-items:center;width:40px;height:40px;background:var(--card2);border:1px solid var(--border2);border-radius:14px;color:var(--accent);}.gf-login-mark svg{width:24px;height:24px;}.gf-login-brand .theme-quick{width:40px;height:40px;border-radius:50%;border:1px solid var(--border2);}
+.gf-login-card{padding:28px 24px 20px;border-radius:30px;background:var(--card);border:1px solid var(--border2);box-shadow:0 12px 40px rgba(0,0,0,.08);}
+.gf-login-kicker{color:var(--accent);font-size:10px;letter-spacing:1.4px;font-weight:750;}.gf-login-card h1{font-size:29px;font-weight:720;line-height:1.18;letter-spacing:-.8px;margin:16px 0 12px;}.gf-login-intro{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:26px;}
+.gf-google-button{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:54px;padding:13px 16px;background:#fff;color:#202322;border:1px solid #e4e7e3;border-radius:99px;font:650 14px var(--font);cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,.04);}.gf-google-button svg{width:21px;height:21px;flex-shrink:0;}.gf-login-arrow{font-size:24px;line-height:1;margin-left:auto;color:#626b66;}.gf-google-button>span:first-of-type{flex:1;text-align:center;}.gf-google-button:disabled{opacity:.65;cursor:wait;}
+.gf-login-help{color:var(--muted);font-size:12px;line-height:1.5;text-align:center;margin:12px 5px 0;}.gf-login-divider{display:flex;gap:14px;align-items:center;color:var(--muted2);font-size:12px;margin:24px 0 12px;}.gf-login-divider:before,.gf-login-divider:after{content:'';height:1px;background:var(--border2);flex:1;}
+.gf-login-fallback summary{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;list-style:none;cursor:pointer;color:var(--muted);font-size:12px;}.gf-login-fallback summary::-webkit-details-marker{display:none;}.gf-login-chevron{font-size:20px;line-height:1;}.gf-login-fallback[open] .gf-login-chevron{transform:rotate(180deg);}.gf-login-form{padding-top:16px;}.gf-login-form label{font-size:12px;font-weight:600;color:var(--muted);}.gf-login-form .gf-login-input{margin:8px 0 16px;padding:13px;background:var(--bg);border-radius:16px;}.gf-login-submit{width:100%;min-height:48px;background:var(--accent);color:var(--on-accent);border:0;border-radius:99px;font:700 14px var(--font);cursor:pointer;}.gf-login-reset{display:block;width:100%;min-height:44px;margin-top:8px;background:transparent;border:0;color:var(--muted);font:500 12px var(--font);cursor:pointer;}
+.gf-login-message{font-size:12px;line-height:1.6;color:var(--text);overflow-wrap:anywhere;margin-top:14px;padding:12px;border:1px solid var(--border2);border-radius:14px;background:var(--card2);}.gf-login-message:empty{display:none;}.gf-login-footer{font-size:12px;line-height:1.5;color:var(--muted);text-align:center;margin-top:24px;}
+@media(max-width:360px){#s-profiles{padding-inline:16px;}.gf-login-card{padding:24px 20px 18px;}.gf-login-card h1{font-size:26px;}.gf-google-button{font-size:13px;gap:8px;}}
+@media(max-height:650px){.gf-login-brand{margin-bottom:20px;}.gf-login-card{padding-top:22px;}.gf-login-intro{margin-bottom:20px;}.gf-login-footer{margin-top:16px;}}
+
 </style>
 </head>
 <body>
@@ -443,22 +492,30 @@ body.light-theme #s-profiles [onclick^=selectProfile]{box-shadow:0 4px 12px rgba
 <!-- ═══════════════ PROFILE SCREEN ═══════════════ -->
 <input type="file" id="iosPhotoInput" accept="image/*" style="display:none">
 <div id="s-profiles" class="screen active">
-  <div style="text-align:center;padding:48px 24px 28px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:.16em;color:var(--text);">GEMFIT</div><p style="color:var(--muted);font-size:13px;">Tu entrenamiento, tu espacio</p></div>
-  <div style="width:100%;max-width:420px;margin:auto;padding:0 24px;box-sizing:border-box;">
-    <button id="gfGoogleSubmit" type="button" class="gf-access-button" style="width:100%;font-weight:700;background:var(--card);color:var(--text);" onclick="gfGoogleLogin()">Continuar con Google</button>
-    <p style="font-size:13px;color:var(--muted);line-height:1.6;">Usa la cuenta de Google que tienes asignada en GemFit.</p>
+  <div class="gf-login-shell">
+    <header class="gf-login-brand"><div><span class="gf-login-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6v12M3 8v8M18 6v12M21 8v8M6 12h12"/></svg></span><span>GEMFIT</span></div><button id="gfLoginTheme" class="theme-quick" type="button" onclick="cycleQuickTheme()" aria-label="Cambiar modo claro u oscuro" title="Cambiar tema">☀</button></header>
+    <section class="gf-login-card" aria-labelledby="gfLoginTitle">
+      <span class="gf-login-kicker">TU ESPACIO PERSONAL</span>
+      <h1 id="gfLoginTitle">Todo empieza<br>con tu próximo entreno.</h1>
+      <p class="gf-login-intro">Tu rutina y tus registros, en un solo lugar.</p>
+      <button id="gfGoogleSubmit" type="button" class="gf-google-button" onclick="gfGoogleLogin()"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59A14.41 14.41 0 0 1 9.75 24c0-1.59.27-3.13.78-4.59l-7.98-6.19A23.87 23.87 0 0 0 0 24c0 3.87.93 7.52 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.73-6c-2.15 1.45-4.92 2.3-8.18 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Continuar con Google</span><span class="gf-login-arrow" aria-hidden="true">›</span></button>
+      <p class="gf-login-help">Usa la cuenta que tienes asignada en GemFit.</p>
+      <div class="gf-login-divider"><span>o</span></div>
+      <details id="gfPasswordFallback" class="gf-login-fallback"><summary><span>Entrar con correo y contraseña</span><span class="gf-login-chevron" aria-hidden="true">⌄</span></summary>
+        <form onsubmit="gfLogin(event)" class="gf-login-form">
+          <label for="gfEmail">Correo electrónico</label><input id="gfEmail" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="tu@email.com" required class="gf-login-input">
+          <label for="gfPassword">Contraseña</label><input id="gfPassword" type="password" autocomplete="current-password" placeholder="Tu contraseña" required class="gf-login-input">
+          <button id="gfLoginSubmit" type="submit" class="gf-login-submit">Entrar a mi perfil</button>
+          <button id="gfResetSubmit" type="button" class="gf-login-reset" onclick="gfResetPassword()">Olvidé mi contraseña</button>
+        </form>
+      </details>
+      <p id="gfLoginMessage" role="status" aria-live="polite" class="gf-login-message"></p>
+    </section>
+    <p class="gf-login-footer">Tu entrenamiento, tu espacio.</p>
   </div>
-  <details id="gfPasswordFallback" style="max-width:420px;margin:12px auto;"><summary style="padding:12px 24px;cursor:pointer;color:var(--muted);">Entrar con correo y contraseña</summary>
-  <form onsubmit="gfLogin(event)" style="width:100%;max-width:420px;margin:auto;padding:0 24px 40px;">
-    <label for="gfEmail">Correo electrónico</label><input id="gfEmail" type="email" autocomplete="username" required class="gf-login-input">
-    <label for="gfPassword">Contraseña</label><input id="gfPassword" type="password" autocomplete="current-password" required class="gf-login-input">
-    <button id="gfLoginSubmit" type="submit" class="gf-access-button" style="width:100%;background:var(--accent);color:var(--on-accent);font-weight:700;">Entrar a mi perfil</button>
-    <button id="gfResetSubmit" type="button" class="gf-access-button" style="width:100%;margin-top:12px;" onclick="gfResetPassword()">Olvidé mi contraseña</button>
-  </form>
-  </details>
-  <p id="gfLoginMessage" role="status" aria-live="polite" style="max-width:420px;margin:12px auto;padding:0 24px;color:var(--muted);font-size:13px;line-height:1.6;"></p>
 </div>
-<div id="s-admin" class="screen"><div style="max-width:560px;margin:auto;padding:36px 24px;"><div class="gf-kicker">GEMFIT</div><h1>Administración</h1><p style="color:var(--muted);">Abre un perfil para consultar su rutina y actualizar sus registros.</p><div id="gfAdminProfiles"></div><p id="gfAdminMessage" role="status" style="color:var(--muted);"></p><button class="gf-access-button" onclick="gfLogout()">Cerrar sesión</button></div></div>
+<div id="s-loading" class="screen"><div style="max-width:420px;width:100%;margin:auto;padding:28px;box-sizing:border-box;text-align:center;"><div class="gf-kicker">GEMFIT</div><h1 id="gfLoadTitle">Abriendo tu espacio</h1><p id="gfLoadMessage" role="status" aria-live="polite" style="color:var(--muted);line-height:1.6;"></p><button id="gfLoadRetry" class="gf-access-button" style="display:none;width:100%;margin:12px 0;" onclick="gfRetryLoad()">Reintentar</button><button id="gfLoadAdminBack" class="gf-access-button" style="display:none;width:100%;margin:12px 0;" onclick="gfAdminHome()">Volver a Administración</button><button class="gf-access-button" style="margin-top:16px;" onclick="gfLogout()">Cerrar sesión</button></div></div>
+<div id="s-admin" class="screen"><div class="gf-admin-shell"><header class="gf-admin-top"><span class="gf-admin-brand">GEMFIT</span><button id="gfAdminTheme" class="theme-quick" onclick="cycleQuickTheme()" aria-label="Cambiar modo claro u oscuro" title="Cambiar tema">☀</button></header><span class="gf-admin-badge">Administrador</span><div class="gf-admin-heading"><h1 id="gfAdminGreeting">Hola</h1><p>Elige un perfil</p></div><div id="gfAdminProfiles" class="gf-admin-grid" aria-label="Perfiles disponibles"></div><footer class="gf-admin-footer"><button class="gf-admin-logout" onclick="gfLogout()">Cerrar sesión <span aria-hidden="true">↪</span></button><p id="gfAdminMessage" role="status" aria-live="polite">Acceso exclusivo de administrador</p></footer></div></div>
 
 <!-- ═══════════════ MAIN APP ═══════════════ -->
 <div id="s-main" class="screen">
@@ -649,7 +706,7 @@ function applyTheme(preference=getThemePreference()){
   document.querySelectorAll('[data-theme-choice]').forEach(button=>{
     const selected=button.dataset.themeChoice===preference;
     button.style.borderColor=selected?'var(--accent)':'var(--border2)';
-    button.style.background=selected?'var(--accent)18':'var(--card2)';
+    button.style.background=selected?'var(--card2)':'var(--card2)';
     button.style.color=selected?'var(--accent)':'var(--muted)';
   });
   const quickButton=document.getElementById('themeQuickToggle');
@@ -1405,6 +1462,8 @@ function selectProfile(id){
   if(!PROFS[id])return;
   if(!GF_DATA_READY||GF_AUTH_PROFILE!==id||_auth?.currentUser?.uid!==GF_AUTH_UID)return;
   CP = id;
+  gfApplyApprovedPalette();
+  gfConfigureNavigation();
   // The active profile is determined by the authenticated account.
   const p = pr();
   document.getElementById('s-profiles').classList.remove('active');
@@ -1460,13 +1519,28 @@ function switchToProfile(id){ if(id===GF_AUTH_PROFILE)selectProfile(id); }
 
 // Identity comes exclusively from Firebase Authentication and an administrator-owned mapping.
 let GF_AUTH_PROFILE=null, GF_AUTH_UID=null, GF_DATA_READY=false, GF_AUTH_EPOCH=0, GF_DIRTY=false, GF_CHANGE_VERSION=0;
-let GF_IS_ADMIN=false, GF_OWN_PROFILE=null, GF_PENDING_GOOGLE=null;
+let GF_IS_ADMIN=false, GF_OWN_PROFILE=null, GF_PENDING_GOOGLE=null, GF_LOAD_REQUEST=null;
 const GF_PROFILE_IDS=['deivis','yona','gisandry','jose_papa'];
 const GF_LINK_PROFILE=new URLSearchParams(location.search).get('perfil');
 const GF_MODAL_TEMPLATES=new Map();
 const GF_STORE_KEYS=['AD','WD','SC','PD','CALS','AVATARS','EXLIB','NUTRITION','MEASUREMENTS'];
 function gfStores(){return {AD,WD,SC,PD,CALS,AVATARS,EXLIB,NUTRITION,MEASUREMENTS};}
 function gfPrivatePayload(){return Object.fromEntries(GF_STORE_KEYS.map(k=>[k,gfStores()[k][CP]??null]));}
+function gfWithTimeout(promise,label,ms=12000){
+ let timer;
+ return Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error(label+' está tardando demasiado. Revisa la conexión y pulsa Reintentar.')),ms);})]).finally(()=>clearTimeout(timer));
+}
+function gfServerDoc(collection,id){return gfWithTimeout(_db.collection(collection).doc(id).get({source:'server'}),'La carga de datos');}
+function gfShowLoading(message,error=false){
+ document.getElementById('s-profiles').classList.remove('active');document.getElementById('s-admin').classList.remove('active');document.getElementById('s-loading').classList.add('active');
+ document.getElementById('gfLoadTitle').textContent=error?'No se pudo abrir el perfil':'Abriendo tu espacio';
+ document.getElementById('gfLoadMessage').textContent=message;
+ document.getElementById('gfLoadRetry').style.display=error?'block':'none';document.getElementById('gfLoadAdminBack').style.display=GF_IS_ADMIN?'block':'none';
+}
+async function gfRetryLoad(){
+ const request=GF_LOAD_REQUEST,user=_auth?.currentUser;
+ if(request&&user?.uid===request.uid)await gfAuthStateChanged(user,request.profile,request.adminHome);
+}
 function gfRenderProfileList(){/* Account login replaces public profile selection. */}
 function gfAuthMessage(message){document.getElementById('gfLoginMessage').textContent=message;}
 function gfAuthError(e){return ({'auth/invalid-credential':'Correo o contraseña incorrectos.','auth/wrong-password':'Correo o contraseña incorrectos.','auth/user-not-found':'Correo o contraseña incorrectos.','auth/invalid-email':'Revisa el correo electrónico.','auth/user-disabled':'Esta cuenta está desactivada.','auth/too-many-requests':'Demasiados intentos. Espera un momento y vuelve a intentarlo.','auth/network-request-failed':'No se pudo conectar. Revisa tu conexión.','auth/operation-not-allowed':'Este método de acceso aún no está activado en Firebase.','auth/unauthorized-domain':'Falta autorizar el dominio de GemFit en Firebase.','auth/popup-blocked':'Permite la ventana emergente para iniciar sesión con Google.','auth/popup-closed-by-user':'La ventana de Google se cerró. Puedes volver a intentarlo.','permission-denied':'El acceso a los datos aún no está configurado.'})[e.code]||e.message||'No se pudo iniciar sesión.';}
@@ -1497,17 +1571,22 @@ async function gfOpenAdminProfile(id){
  await gfAuthStateChanged(_auth.currentUser,id);
 }
 async function gfRenderAdminPanel(epoch){
- document.getElementById('s-profiles').classList.remove('active');document.getElementById('s-admin').classList.add('active');
+ document.getElementById('s-profiles').classList.remove('active');document.getElementById('s-loading').classList.remove('active');document.getElementById('s-admin').classList.add('active');
+ document.getElementById('gfAdminMessage').textContent='Cargando perfiles…';
+ document.getElementById('gfAdminGreeting').textContent='Hola';
  const rows=await Promise.all(GF_PROFILE_IDS.map(async id=>{
-  const doc=await _db.collection('gemfit').doc(id).get({source:'server'});
+  const doc=await gfServerDoc('gemfit',id);
   const data=doc.exists?doc.data():null;
   if(!data?.profile?.name)return '';
   const ready=data.sessions&&Array.isArray(data.sessionList)&&data.sessionList.length;
-  return `<button class="gf-access-button" style="width:100%;display:block;text-align:left;margin:12px 0;padding:18px;" ${ready?'':'disabled'} onclick="gfOpenAdminProfile('${id}')">${gfEscape(data.profile.name)}${id===GF_OWN_PROFILE?' · Mi perfil':''}${ready?'':' · Pendiente de preparar'}</button>`;
+  const name=String(data.profile.name).trim().toLocaleLowerCase('es-ES').replace(/(^|\s)\S/g,c=>c.toLocaleUpperCase('es-ES'));
+  const own=id===GF_OWN_PROFILE;
+  if(own&&epoch===GF_AUTH_EPOCH&&_auth?.currentUser?.uid===GF_AUTH_UID)document.getElementById('gfAdminGreeting').textContent='Hola, '+name;
+  return `<button class="gf-admin-capsule ${own?'is-own':''}" data-profile="${id}" ${ready?'':'disabled'} onclick="gfOpenAdminProfile('${id}')" aria-label="${gfEscape(ready?'Abrir perfil de '+name:name+' · Pendiente de preparar')}"><span class="gf-admin-avatar" aria-hidden="true">${gfEscape(name.charAt(0))}</span><span class="gf-admin-name"><strong>${gfEscape(name)}</strong>${own?'<small>Mi perfil</small>':''}${ready?'':'<small>Pendiente</small>'}</span><span class="gf-admin-chevron" aria-hidden="true">›</span></button>`;
  }));
  if(epoch!==GF_AUTH_EPOCH||_auth?.currentUser?.uid!==GF_AUTH_UID)return;
  document.getElementById('gfAdminProfiles').innerHTML=rows.join('');
- document.getElementById('gfAdminMessage').textContent='Solo tu cuenta de administrador puede acceder a este panel.';
+ document.getElementById('gfAdminMessage').textContent='Acceso exclusivo de administrador';
 }
 async function gfResetPassword(){
  const email=document.getElementById('gfEmail').value.trim();if(!email){gfAuthMessage('Escribe tu correo para recuperar la contraseña.');return;}
@@ -1519,8 +1598,8 @@ function gfClearPrivateState(){
  if(_saveTimer)clearTimeout(_saveTimer);_saveTimer=null;_pendingSave=false;
  closeGuidedWorkout();stopGuidedVoice();stopGuidedListening();
  GF_IS_ADMIN=false;GF_OWN_PROFILE=null;
- document.getElementById('s-admin').classList.remove('active');document.getElementById('gfAdminProfiles').innerHTML='';document.getElementById('gfAdminMessage').textContent='';document.getElementById('gfAdminHome').style.display='none';
- GF_DATA_READY=false;GF_DIRTY=false;GF_CHANGE_VERSION=0;GF_AUTH_PROFILE=null;GF_AUTH_UID=null;CP=null;ACTIVE_WORKOUT_MODE=false;OPEN_TRACKER_EXERCISE=null;
+ document.getElementById('s-loading').classList.remove('active');document.getElementById('s-admin').classList.remove('active');document.getElementById('gfAdminProfiles').innerHTML='';document.getElementById('gfAdminMessage').textContent='';document.getElementById('gfAdminHome').style.display='none';
+ GF_DATA_READY=false;GF_DIRTY=false;GF_CHANGE_VERSION=0;GF_AUTH_PROFILE=null;GF_AUTH_UID=null;CP=null;if(typeof gfApplyApprovedPalette==='function')gfApplyApprovedPalette();ACTIVE_WORKOUT_MODE=false;OPEN_TRACKER_EXERCISE=null;
  Object.values(gfStores()).forEach(store=>Object.keys(store).forEach(k=>delete store[k]));
  [PROFS,SESSIONS,MEAL_PLAN].forEach(store=>Object.keys(store).forEach(k=>delete store[k]));SESS_LIST.length=0;ARCHIVED_EXERCISES.length=0;PRE_ENTRENO=null;
  document.querySelectorAll('.tab').forEach(el=>{el.innerHTML='';el.classList.remove('active');});
@@ -1536,30 +1615,34 @@ function gfClearPrivateState(){
 }
 async function gfAuthStateChanged(user,requestedProfile=null,adminHome=false){
  const epoch=++GF_AUTH_EPOCH;gfClearPrivateState();
- if(!user){gfAuthMessage('');return;}
- gfAuthMessage('Cargando tu perfil…');
+ if(!user){GF_LOAD_REQUEST=null;gfAuthMessage('');return;}
+ GF_LOAD_REQUEST={uid:user.uid,profile:requestedProfile,adminHome};
+ gfShowLoading('Comprobando tu acceso…');let verifiedAccount=null;
  try{
-  const mapping=await _db.collection('accounts').doc(user.uid).get();
+  const mapping=await gfServerDoc('accounts',user.uid);
   if(epoch!==GF_AUTH_EPOCH||_auth.currentUser?.uid!==user.uid)return;
   const account=mapping.exists?mapping.data():null;
   const ownId=account?.enabled===true&&account.profileId;
   if(typeof ownId!=='string'||!GF_PROFILE_IDS.includes(ownId))throw new Error('Tu cuenta todavía no tiene un perfil asignado. Contacta con Deivis.');
-  GF_IS_ADMIN=account.role==='admin';GF_OWN_PROFILE=ownId;GF_AUTH_UID=user.uid;
+  verifiedAccount=account;GF_IS_ADMIN=account.role==='admin';GF_OWN_PROFILE=ownId;GF_AUTH_UID=user.uid;
   if(requestedProfile&&!GF_IS_ADMIN)throw new Error('Solo el administrador puede abrir otros perfiles.');
   if(GF_IS_ADMIN&&!requestedProfile&&(adminHome||!GF_LINK_PROFILE)){await gfRenderAdminPanel(epoch);if(epoch===GF_AUTH_EPOCH)gfAuthMessage('');return;}
   const id=GF_IS_ADMIN?(requestedProfile||GF_LINK_PROFILE||ownId):ownId;
   if(!GF_PROFILE_IDS.includes(id))throw new Error('Perfil no válido.');
   if(!GF_IS_ADMIN&&GF_LINK_PROFILE&&GF_LINK_PROFILE!==id)throw new Error('Este enlace no corresponde a tu cuenta. Abre GemFit sin el enlace personalizado.');
-  GF_AUTH_PROFILE=id;CP=id;
+  GF_AUTH_PROFILE=id;CP=id;gfShowLoading('Cargando la rutina y los registros…');
   const loaded=await cloudLoad(epoch);
   if(epoch!==GF_AUTH_EPOCH)return;
   if(!loaded)throw new Error('No se pudo cargar tu perfil. Comprueba la conexión y la configuración de Firebase.');
-  GF_DATA_READY=true;gfAuthMessage('');document.getElementById('gfAdminHome').style.display=GF_IS_ADMIN?'inline-block':'none';selectProfile(id);
- }catch(e){if(epoch!==GF_AUTH_EPOCH)return;gfClearPrivateState();gfAuthMessage(gfAuthError(e));}
+  GF_DATA_READY=true;document.getElementById('s-loading').classList.remove('active');gfAuthMessage('');document.getElementById('gfAdminHome').style.display=GF_IS_ADMIN?'inline-block':'none';selectProfile(id);
+ }catch(e){if(epoch!==GF_AUTH_EPOCH)return;gfClearPrivateState();
+  if(verifiedAccount&&_auth?.currentUser?.uid===user.uid){GF_IS_ADMIN=verifiedAccount.role==='admin';GF_OWN_PROFILE=verifiedAccount.profileId;GF_AUTH_UID=user.uid;}
+  gfShowLoading(gfAuthError(e),true);
+ }
 }
 async function gfLogout(){
  if(GF_DIRTY){const saved=await gfFlushCloud();if(!saved||GF_DIRTY){alert('No se pudieron guardar los últimos cambios. Revisa la conexión antes de cerrar sesión.');return;}}
- ++GF_AUTH_EPOCH;gfClearPrivateState();GF_PENDING_GOOGLE=null;
+ ++GF_AUTH_EPOCH;gfClearPrivateState();GF_PENDING_GOOGLE=null;GF_LOAD_REQUEST=null;
  try{if(_auth)await _auth.signOut();gfAuthMessage('Sesión cerrada.');}catch(e){gfAuthMessage('No se pudo cerrar la sesión de Firebase. Cierra esta pestaña y vuelve a intentarlo.');}
 }
 function gfRequestAccess(id){if(GF_DATA_READY&&id===GF_AUTH_PROFILE)selectProfile(id);}
@@ -1644,11 +1727,16 @@ function updateProfileStats(){
 }
 
 function goTab(t){
+  if(CP==='gisandry'&&!GF_TRAINING_TABS.includes(t))t='plan';
+  closeMoreMenu();
+  const previousTab=document.querySelector('.tab.active')?.id;
+  const main=document.querySelector('.main-area');
+  if(main&&previousTab!=='tab-'+t)main.scrollTop=0;
   ['plan','tracker','volumen','perfil','progreso','fotos','calorias','suplementos','dieta'].forEach(tab=>{
     const tabEl=document.getElementById('tab-'+tab);
     const nbEl=document.getElementById('nb-'+tab);
     if(tabEl) tabEl.classList.toggle('active', tab===t);
-    if(nbEl)  nbEl.classList.toggle('active', tab===t);
+    if(nbEl){nbEl.classList.toggle('active',tab===t);if(tab===t)nbEl.setAttribute('aria-current','page');else nbEl.removeAttribute('aria-current');}
   });
   // Main nav buttons
   ['plan','tracker','progreso','dieta','calorias'].forEach(tab=>{
@@ -1658,7 +1746,7 @@ function goTab(t){
   // More button active if on a secondary tab
   const moreTabs=['volumen','perfil','fotos','suplementos','calorias'];
   const moreBtn=document.getElementById('nb-more');
-  if(moreBtn) moreBtn.classList.toggle('active', moreTabs.includes(t));
+  if(moreBtn){moreBtn.classList.toggle('active',moreTabs.includes(t));if(moreTabs.includes(t))moreBtn.setAttribute('aria-current','page');else moreBtn.removeAttribute('aria-current');}
   document.getElementById('tRight').textContent = t.toUpperCase();
   if(t==='plan')        renderPlan();
   if(t==='tracker')     { renderCal(); renderStats(); }
@@ -1705,6 +1793,7 @@ function openPlanBlockAndScroll(sessId){
 }
 
 function muscleArt(kind){
+  if(CP==='gisandry')return gfFemaleArt(kind);
   const positions={push:'0%',shoulders:'25%',pull:'50%',legs:'75%',arms:'100%'};
   return `<span class="muscle-art" style="--muscle-position:${positions[kind]||'0%'}"></span>`;
 }
@@ -2871,6 +2960,7 @@ function renderStats(){
 // PERFIL TAB
 // ═══════════════════════════════════════════════════════════════
 function renderPerfil(){
+  if(CP==='gisandry')return gfRenderTrainingProfile();
   const p=pr(); const lw=gw().length?gw()[gw().length-1].val:p.w; const themePref=getThemePreference(); const savedTargets=NUTRITION[CP]||getMacros();
   document.getElementById('tab-perfil').innerHTML=`<div class="inner">
   ${gfAccessSettings()}
@@ -2892,7 +2982,7 @@ function renderPerfil(){
     <div class="section-label">Apariencia</div>
     <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:10px;">Elige cómo quieres ver GemFit en este dispositivo.</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
-      ${[['dark','☾','Oscuro'],['light','☀','Claro'],['system','◐','Auto']].map(([value,icon,label])=>`<button data-theme-choice="${value}" onclick="setThemePreference('${value}')" style="padding:9px 4px;border:1px solid ${themePref===value?'var(--accent)':'var(--border2)'};border-radius:9px;background:${themePref===value?'var(--accent)18':'var(--card2)'};color:${themePref===value?'var(--accent)':'var(--muted)'};cursor:pointer;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;"><span style="display:block;font-size:16px;line-height:1;margin-bottom:4px;">${icon}</span>${label}</button>`).join('')}
+      ${[['dark','☾','Oscuro'],['light','☀','Claro'],['system','◐','Auto']].map(([value,icon,label])=>`<button data-theme-choice="${value}" onclick="setThemePreference('${value}')" style="padding:9px 4px;border:1px solid ${themePref===value?'var(--accent)':'var(--border2)'};border-radius:9px;background:${themePref===value?'var(--card2)':'var(--card2)'};color:${themePref===value?'var(--accent)':'var(--muted)'};cursor:pointer;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;"><span style="display:block;font-size:16px;line-height:1;margin-bottom:4px;">${icon}</span>${label}</button>`).join('')}
     </div>
   </div></div>
   <div class="card"><div class="card-body">
@@ -3044,14 +3134,15 @@ function renderStrengthTrend(){
   let svg='<svg class="strength-chart" viewBox="0 0 320 155" role="img" aria-label="Evolución de '+safeName(id)+'">';
   for(const gy of [24,72,120])svg+='<line x1="24" y1="'+gy+'" x2="296" y2="'+gy+'" stroke="var(--border2)" stroke-dasharray="3 4"/>';
   svg+='<text x="2" y="27" fill="var(--muted)" font-size="9">'+high+'</text><text x="2" y="123" fill="var(--muted)" font-size="9">'+low+'</text>';
-  if(points.length>1)svg+='<polyline points="'+points.map(([,kg],i)=>x(i)+','+y(kg)).join(' ')+'" fill="none" stroke="#ff8a43" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>';
-  points.forEach(([,kg],i)=>svg+='<circle cx="'+x(i)+'" cy="'+y(kg)+'" r="4.5" fill="#ff8a43"/>');
+  if(points.length>1)svg+='<polyline points="'+points.map(([,kg],i)=>x(i)+','+y(kg)).join(' ')+'" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>';
+  points.forEach(([,kg],i)=>svg+='<circle cx="'+x(i)+'" cy="'+y(kg)+'" r="4.5" fill="var(--accent)"/>');
   svg+='<text x="24" y="147" fill="var(--muted)" font-size="9">'+points[0][0].slice(5).replace('-','/')+'</text>';
   svg+='<text x="296" y="147" text-anchor="end" fill="var(--muted)" font-size="9">'+points.at(-1)[0].slice(5).replace('-','/')+'</text></svg>';
   const options=ids.map(opt=>'<option value="'+opt+'" '+(opt===id?'selected':'')+'>'+safeName(opt)+'</option>').join('');
   return '<div class="strength-card"><div class="strength-card-head"><div><h2>'+safeName(id)+'</h2><p>Evolución de tu mejor serie</p></div><div class="strength-best"><small>Mejor marca</small><strong>'+best+' kg</strong></div></div>'+svg+'<label class="sr-only" for="strengthExercise">Elegir ejercicio</label><select class="strength-select" id="strengthExercise" onchange="setStrengthTrendExercise(this.value)">'+options+'</select></div>';
 }
 function renderProgreso(){
+  if(CP==='gisandry')return gfRenderTrainingProgress();
   const p=pr(); const wl=gw(); const data=gd();
 
   // ── Streak ──
@@ -3964,15 +4055,16 @@ function initFirebase(){
  if(_firebaseReady)return Promise.resolve();
  if(_initPromise)return _initPromise;
  _initPromise=(async()=>{
-  for(const name of ['app','auth','firestore']){
+  const loadSdk=async name=>{
    await new Promise((resolve,reject)=>{
     const script=document.createElement('script');const timeout=setTimeout(()=>reject(new Error('No se pudo conectar con Firebase. Revisa tu conexión.')),15000);
     script.src=`https://www.gstatic.com/firebasejs/10.12.0/firebase-${name}-compat.js`;
     script.onload=()=>{clearTimeout(timeout);resolve();};script.onerror=()=>{clearTimeout(timeout);script.remove();reject(new Error('No se pudo cargar Firebase. Revisa tu conexión.'));};document.head.appendChild(script);
    });
-  }
+  };
+  await loadSdk('app');await Promise.all(['auth','firestore'].map(loadSdk));
   if(!firebase.apps.length)firebase.initializeApp(FIREBASE_CONFIG);
-  _db=firebase.firestore();_auth=firebase.auth();_auth.languageCode='es';
+  _db=firebase.firestore();_db.settings({experimentalAutoDetectLongPolling:false,experimentalForceLongPolling:true});_auth=firebase.auth();_auth.languageCode='es';
   await _auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
   _firebaseReady=true;
  })().catch(e=>{_initPromise=null;throw e;});
@@ -4023,7 +4115,7 @@ async function cloudLoad(epoch=GF_AUTH_EPOCH){
  const id=GF_AUTH_PROFILE,uid=GF_AUTH_UID;
  if(!id||!uid||_auth?.currentUser?.uid!==uid)return false;
  try{
-  showSyncStatus('loading');const doc=await _db.collection('gemfit').doc(id).get({source:'server'});
+  showSyncStatus('loading');const doc=await gfServerDoc('gemfit',id);
   if(epoch!==GF_AUTH_EPOCH||_auth.currentUser?.uid!==uid||GF_AUTH_PROFILE!==id)return false;
   if(!doc.exists)throw new Error('Perfil no preparado.');const data=doc.data();
   if(!data.profile||!data.sessions||!Array.isArray(data.sessionList)||!data.sessionList.length)throw new Error('Falta preparar tu rutina.');
@@ -4031,7 +4123,7 @@ async function cloudLoad(epoch=GF_AUTH_EPOCH){
   Object.assign(MEAL_PLAN,data.mealPlan||{});PRE_ENTRENO=data.preWorkout||null;
   GF_STORE_KEYS.forEach(k=>{gfStores()[k][id]=data[k]??(['WD','PD','EXLIB','MEASUREMENTS'].includes(k)?[]:['AVATARS','NUTRITION'].includes(k)?null:{});});
   ensureProfileStores();showSyncStatus('saved');return true;
- }catch(e){if(epoch===GF_AUTH_EPOCH)showSyncStatus('error');console.warn('No se pudo cargar tu perfil:',e.code||e.message);return false;}
+ }catch(e){if(epoch===GF_AUTH_EPOCH)showSyncStatus('error');console.warn('No se pudo cargar tu perfil:',e.code||e.message);throw e;}
 }
 // ═══════════════════════════════════════════════════════════════
 // PLAN NUTRICIONAL SEMANAL — Deivis & Yona (Team David Marmol)
@@ -5042,6 +5134,7 @@ function gfStartSession(id){const day=gd()[SK]||{};if(day.session!==id)setSess(i
 function gfOpenExercise(sessionId,exerciseId){gfStartSession(sessionId);OPEN_TRACKER_EXERCISE=exerciseId;renderCal();}
 function gfViewRoutine(id){const detail=document.getElementById('gfRoutine-'+id);if(detail){detail.open=true;detail.scrollIntoView({behavior:'smooth',block:'start'});}}
 function renderPlan(){
+ if(CP==='gisandry')return gfRenderTrainingPlan();
  const p=pr(),data=gd(),dd=data[SK]||{};
  const session=SESSIONS[dd.session];
  const featuredId=session&&session.id!=='skip'?session.id:gfDefaultSession();
@@ -5111,18 +5204,21 @@ for(const fn of ['renderCal','renderProgreso','renderPerfil','renderVolumen','re
 const gfOriginalSelect=selectProfile;selectProfile=function(id){gfOriginalSelect(id);gfSyncHeader();gfDecorate();};
 const gfOriginalTheme=applyTheme;applyTheme=function(...args){gfOriginalTheme(...args);gfSyncHeader();};
 window.addEventListener('DOMContentLoaded',()=>{
- document.querySelectorAll('.nbtn').forEach(btn=>{const icon={plan:'home',tracker:'barbell',progreso:'chart',dieta:'food',more:'more'}[btn.id.slice(3)];if(icon)btn.querySelector('.nbtn-icon').innerHTML=gfIcon(icon);});
- const profileLabel=document.querySelector('#s-profiles>div:first-child>div:last-child');if(profileLabel)profileLabel.textContent='Elige tu perfil para comenzar';
+ document.querySelectorAll('.nbtn').forEach(btn=>{const icon={plan:'home',tracker:'barbell',progreso:'chart',dieta:'food',more:CP==='gisandry'?'user':'more'}[btn.id.slice(3)];if(icon)btn.querySelector('.nbtn-icon').innerHTML=gfIcon(icon);});
+
  gfDecorate();
  let pending=false;const observer=new MutationObserver(mutations=>{if(pending||!mutations.some(m=>m.addedNodes.length&&Array.from(m.addedNodes).some(n=>n.nodeType===1&&!n.matches?.('.gf-icon,.gf-inline-icon'))))return;pending=true;setTimeout(()=>{pending=false;gfDecorate();},30);});observer.observe(document.body,{subtree:true,childList:true});
 });
 
 function gfApplyApprovedPalette(){
  const light=document.body.classList.contains('light-theme');
- const profileColors=light?{deivis:'#2364cb',yona:'#7363b0',gisandry:'#b56d86',jose_papa:'#34858d'}:{deivis:'#b0cfb0',yona:'#b6a8c7',gisandry:'#d5b69d',jose_papa:'#a5c7ba'};
+ document.body.classList.toggle('gisandry-theme',CP==='gisandry');
+ const loginTheme=document.getElementById('gfLoginTheme');if(loginTheme){loginTheme.textContent=light?'☾':'☀';loginTheme.title=light?'Usar modo oscuro':'Usar modo claro';loginTheme.setAttribute('aria-label',loginTheme.title);}
+ const adminTheme=document.getElementById('gfAdminTheme');if(adminTheme){adminTheme.textContent=light?'☾':'☀';adminTheme.title=light?'Usar modo oscuro':'Usar modo claro';adminTheme.setAttribute('aria-label',adminTheme.title);}
+ const profileColors=light?{deivis:'#2364cb',yona:'#7363b0',gisandry:'#7650a2',jose_papa:'#34858d'}:{deivis:'#b0cfb0',yona:'#b6a8c7',gisandry:'#e7a5c4',jose_papa:'#a5c7ba'};
  Object.keys(profileColors).forEach(id=>{if(PROFS[id]){PROFS[id].color=profileColors[id];const hex=profileColors[id];PROFS[id].dim=`rgba(${parseInt(hex.slice(1,3),16)},${parseInt(hex.slice(3,5),16)},${parseInt(hex.slice(5,7),16)},.10)`;}});
  Object.assign(TC,light?{push:'#2364cb',shoulders:'#7363b0',pull:'#3977bf',legs:'#7363b0',arms:'#34858d',skip:'#62789a',rest:'#62789a'}:{push:'#b0cfb0',shoulders:'#b6a8c7',pull:'#9ebdcd',legs:'#b6a8c7',arms:'#a5c7ba',skip:'#a2ada4',rest:'#a2ada4'});
- const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=light?'#e9f1fc':'#202322';
+ const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=CP==='gisandry'?(light?'#f2edfa':'#241827'):(light?'#e9f1fc':'#202322');
 }
 const gfBeforeApprovedTheme=applyTheme;
 applyTheme=function(...args){
@@ -5130,6 +5226,43 @@ applyTheme=function(...args){
  if(CP){const tab=document.querySelector('.tab.active')?.id.replace('tab-','');if(tab)goTab(tab);gfSyncHeader();}
  gfDecorate();
 };
+
+// Presentation and available sections are derived from the authenticated profile.
+const GF_TRAINING_TABS=['plan','tracker','progreso','volumen','perfil'];
+function gfConfigureNavigation(){
+ const training=CP==='gisandry';
+ const diet=document.getElementById('nb-dieta');if(diet)diet.hidden=training;
+ for(const id of ['nb-calorias','nb-suplementos','nb-fotos']){const el=document.getElementById(id);if(el)el.hidden=training;}
+ const more=document.getElementById('nb-more');
+ if(more){more.setAttribute('onclick',training?"goTab('perfil')":"toggleMoreMenu()");more.innerHTML=`<span class="nbtn-icon" aria-hidden="true">${gfIcon(training?'user':'more')}</span>${training?'Perfil':'Más'}`;more.setAttribute('aria-label',training?'Abrir mi perfil':'Abrir más secciones');}
+}
+function gfFemaleArt(kind='legs',exercise=''){
+ const n=exercise.toLowerCase();
+ const pose=/thrust/.test(n)?'hip':/rumano|muerto/.test(n)?'hinge':/zancada|bulgarian|sentadilla|prensa/.test(n)?'lunge':/jalón|remo|pull|fly/.test(n)||kind==='pull'?'pull':'stand';
+ const paths={hip:'M29 43L51 49 72 42 86 69M51 49L64 69 80 70M30 44L25 64',hinge:'M48 32L65 48 48 54 39 78M48 54L62 78M62 46L68 62',lunge:'M48 31L47 54 28 64 25 80M47 54L66 61 70 80M48 36L31 49M48 36L63 45',pull:'M48 33L48 55 36 79M48 55L61 79M48 35L28 23M48 35L69 23',stand:'M48 31L48 54 37 79M48 54L60 79M48 36L29 49M48 36L67 49'};
+ const head=pose==='hip'?'<circle cx="24" cy="35" r="7"/><path d="M19 29q-12 0-8 15"/>':pose==='hinge'?'<circle cx="42" cy="25" r="7"/><path d="M36 19q-12 2-8 17"/>':'<circle cx="48" cy="20" r="7"/><path d="M42 14q-13 1-9 19"/>';
+ return `<svg class="gf-female-art" viewBox="0 0 100 95" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">${head}<path d="${paths[pose]}"/></g><path d="M${pose==='hip'?'27 40L38 44 34 51 25 48':pose==='hinge'?'46 29L56 35 51 43 41 36':'41 30Q48 27 55 30L53 43 43 43Z'}" fill="currentColor" opacity=".45"/><path d="M13 84h74" stroke="currentColor" stroke-width="2" opacity=".3"/>${pose==='hip'?'<path d="M12 49h21v4H12zM15 53v28M30 53v28" fill="none" stroke="currentColor" stroke-width="2"/>':''}</svg>`;
+}
+function gfRenderTrainingPlan(){
+ const data=gd(),dd=data[SK]||{},id=SESSIONS[dd.session]&&dd.session!=='skip'?dd.session:gfDefaultSession(),sess=SESSIONS[id];
+ if(!sess){document.getElementById('tab-plan').innerHTML='<div class="inner"><h1>Tu rutina</h1><p>Aún no tienes ejercicios asignados.</p></div>';return;}
+ const date=new Date(SK+'T12:00:00'),start=new Date(date);start.setDate(date.getDate()-(date.getDay()+6)%7);
+ const days=Array.from({length:7},(_,i)=>{const d=new Date(start);d.setDate(d.getDate()+i);return d;});
+ const exercises=sess.sections.flatMap(sec=>sec.ex),done=exercises.filter(ex=>dd.checked?.[ex.id]).length;
+ let h=`<div class="inner"><div class="gf-heading"><h1>Hola, ${gfEscape(gfName(CP))}</h1><p>Tu entrenamiento, tu espacio</p></div><div class="gf-week" aria-label="Seleccionar día">${days.map(d=>`<button class="${dk(d)===SK?'selected':''}" onclick="selectHomeDay('${dk(d)}')" aria-pressed="${dk(d)===SK}"><small>${['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'][d.getDay()]}</small><strong>${d.getDate()}</strong></button>`).join('')}</div><section class="gf-training-hero"><div><p>${gfEscape(date.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}))}</p><h2>${gfEscape(sess.lbl)}</h2><p>${exercises.length} ejercicios · ${done} marcados</p></div>${gfFemaleArt(sess.type,sess.type==='legs'?'Hip Thrust':'')}</section><div class="gf-section-head"><h2>Tu entrenamiento</h2></div><div class="gf-training-list">${exercises.map(ex=>`<button onclick="gfOpenExercise('${id}','${ex.id}')"><span class="gf-muscle-thumb">${gfFemaleArt(sess.type,ex.n)}</span><span class="gf-ex-info"><strong>${gfEscape(ex.n)}</strong><small>${gfEscape(ex.s)}</small></span>${gfIcon(dd.checked?.[ex.id]?'check':'arrow')}</button>`).join('')}</div><div class="gf-rest-note">${gfIcon('clock')}<span>Descanso: 2–3 min en ejercicios pesados · 60–90 s en aislados.</span></div><button class="gf-primary" onclick="gfStartSession('${id}')">${dd.session===id?'Continuar entrenamiento':'Comenzar entrenamiento'}${gfIcon('arrow')}</button><div class="gf-section-head" style="margin-top:24px"><h2>Tu semana</h2><button class="gf-text-btn" onclick="goTab('volumen')">Ver volumen ›</button></div>`;
+ getSessionList().filter(item=>item.id!=='skip').forEach(item=>{const session=SESSIONS[item.id];h+=`<details class="gf-detail" id="gfRoutine-${session.id}"><summary><span class="gf-muscle-thumb">${gfFemaleArt(session.type)}</span><span>${gfEscape(item.lbl)}<small style="display:block;color:var(--muted);font-size:12px">${texs(item.id)} ejercicios</small></span>${gfIcon('arrow')}</summary>`;session.sections.forEach(sec=>{h+=`<div class="ex-section">${gfEscape(sec.t)}</div>`;sec.ex.forEach(ex=>h+=`<div class="ex-row"><div><div class="ex-name">${gfEscape(ex.n)}</div>${ex.note?`<div class="ex-note">${gfEscape(ex.note)}</div>`:''}</div><span class="ex-sets">${gfEscape(ex.s)}</span></div>`);});h+=`<div style="padding:16px"><button class="gf-primary" onclick="gfStartSession('${session.id}')">Elegir este entrenamiento${gfIcon('arrow')}</button></div></details>`;});
+ h+=`<button class="gf-text-btn" style="width:100%;min-height:44px" onclick="gfStartSession('skip')">${gfIcon('moon')} Registrar descanso</button></div>`;
+ document.getElementById('tab-plan').innerHTML=h;gfSyncHeader();
+}
+function gfRenderTrainingProfile(){
+ const pref=getThemePreference();document.getElementById('tab-perfil').innerHTML=`<div class="inner"><div class="gf-heading"><h1>Tu perfil</h1><p>Gisandry · entrenamiento personal</p></div>${gfAccessSettings()}<section class="card"><div class="card-body"><h2 style="font-size:18px;margin-bottom:12px">Apariencia</h2><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">${[['dark','Ciruela'],['light','Lavanda'],['system','Automático']].map(([value,label])=>`<button class="gf-access-button" data-theme-choice="${value}" onclick="setThemePreference('${value}')" aria-pressed="${pref===value}" style="min-height:44px;background:${pref===value?'var(--card2)':'var(--card)'};color:var(--text)">${label}</button>`).join('')}</div></div></section><section class="card" style="margin-top:16px"><div class="card-body"><h2 style="font-size:18px;margin-bottom:12px">Tus datos</h2><p style="color:var(--muted);font-size:13px;margin-bottom:14px">Guarda una copia de tus entrenamientos y registros.</p><div class="gf-training-actions"><button class="gf-access-button" onclick="exportData()">Exportar copia</button><button class="gf-access-button" onclick="exportCSV()">Exportar CSV</button><button class="gf-access-button" onclick="document.getElementById('importFile').click()">Importar copia</button><input type="file" id="importFile" accept=".json" hidden onchange="importData(this)"></div></div></section></div>`;
+}
+function gfRenderTrainingProgress(){
+ const data=gd(),entries=Object.entries(data).filter(([k,d])=>/^\d{4}-\d{2}-\d{2}$/.test(k)&&d?.session&&d.session!=='skip'&&SESSIONS[d.session]),sessions=entries.length;
+ const recent=Array.from({length:14},(_,i)=>{const date=new Date();date.setDate(date.getDate()-(13-i));const k=dk(date),trained=entries.some(([key])=>key===k);return `<div style="text-align:center;padding:10px 0;border-radius:12px;background:${trained?'var(--accent)':'var(--card2)'};color:${trained?'var(--on-accent)':'var(--muted)'}" title="${k}" aria-label="${k}: ${trained?'Entrenamiento registrado':'Sin entrenamiento registrado'}">${date.getDate()}<br><small>${trained?'✓':'·'}</small></div>`;}).join('');
+ document.getElementById('tab-progreso').innerHTML=`<div class="inner"><div class="progress-hero"><h1>Tu progreso</h1><p>Tus entrenamientos y tus marcas de fuerza.</p></div><div class="progress-summary"><div class="progress-summary-card"><strong>${sessions}</strong><span>Entrenamientos registrados</span></div><div class="progress-summary-card"><strong>${entries.reduce((sum,[,day])=>sum+Object.values(day.checked||{}).filter(Boolean).length,0)}</strong><span>Ejercicios marcados</span></div></div>${renderStrengthTrend()}<section class="card" style="margin-top:16px"><div class="card-body"><h2 style="font-size:18px;margin-bottom:12px">Últimos 14 días</h2><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">${recent}</div><p style="font-size:12px;color:var(--muted);margin-top:12px">✓ Entrenamiento registrado</p></div></section><button class="gf-text-btn" style="min-height:44px;margin-top:14px" onclick="goTab('volumen')">${gfIcon('chart')} Consultar volumen semanal</button></div>`;
+}
+
 // Promote fixed decorative colors to theme tokens, including old static profile cards.
 const gfBeforeMobileDecorate=gfDecorate;
 gfDecorate=function(root=document){
@@ -5146,8 +5279,8 @@ gfDecorate=function(root=document){
   if(el.matches('[id^="pav-"]')&&!el.id.includes('txt')&&!el.id.includes('img')){const id=el.id.slice(4);if(PROFS[id]){el.style.color=PROFS[id].color;el.style.borderColor=PROFS[id].color;el.style.background=PROFS[id].dim;}}
  });
  // Explicit names make the two themes easy to identify.
- document.querySelectorAll('[data-theme-choice="dark"]').forEach(btn=>{if(btn.dataset.gfLabel)return;btn.dataset.gfLabel='1';const span=btn.querySelector('span');btn.replaceChildren();if(span)btn.append(span);btn.append(document.createTextNode('Grafito'));});
- document.querySelectorAll('[data-theme-choice="light"]').forEach(btn=>{if(btn.dataset.gfLabel)return;btn.dataset.gfLabel='1';const span=btn.querySelector('span');btn.replaceChildren();if(span)btn.append(span);btn.append(document.createTextNode('Azul claro'));});
+ document.querySelectorAll('[data-theme-choice="dark"]').forEach(btn=>{if(btn.dataset.gfLabel)return;btn.dataset.gfLabel='1';const span=btn.querySelector('span');btn.replaceChildren();if(span)btn.append(span);btn.append(document.createTextNode(CP==='gisandry'?'Ciruela':'Grafito'));});
+ document.querySelectorAll('[data-theme-choice="light"]').forEach(btn=>{if(btn.dataset.gfLabel)return;btn.dataset.gfLabel='1';const span=btn.querySelector('span');btn.replaceChildren();if(span)btn.append(span);btn.append(document.createTextNode(CP==='gisandry'?'Lavanda':'Azul claro'));});
 };
 function gfUpdateViewport(){
  const viewport=window.visualViewport;const height=viewport&&viewport.scale===1?viewport.height:window.innerHeight;
