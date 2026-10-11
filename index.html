@@ -499,6 +499,16 @@ body.gisandry-theme .ex-row,body.deivis-realistic-art .ex-row{grid-template-colu
 body.deivis-realistic-art .ex-row:has(.ex-num){grid-template-columns:auto auto minmax(0,1fr) auto;}
 body.gisandry-theme .ex-sets,body.deivis-realistic-art .ex-sets{white-space:normal;max-width:82px;text-align:right;}
 
+
+/* Approved sign-in palettes: elegant black / pearl white. */
+#s-profiles{--bg:#101114;--card:#1c1e24;--card2:#282b32;--border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.16);--text:#f8f8fa;--muted:#c2c3cb;--muted2:#92959f;--accent:#f3f3f6;--on-accent:#161820;background:radial-gradient(ellipse at 5% 100%,#272a31 0%,#16181d 30%,#101114 68%);}
+body.light-theme #s-profiles{--bg:#f5f4f2;--card:#ffffff;--card2:#f0efed;--border:rgba(28,32,44,.08);--border2:rgba(28,32,44,.16);--text:#182030;--muted:#626773;--muted2:#7b7f88;--accent:#182030;--on-accent:#ffffff;background:radial-gradient(ellipse at 100% 100%,#e9e7e3 0%,#f5f4f2 45%,#faf9f7 100%);}
+.gf-login-brand{position:relative;justify-content:center;margin-bottom:28px;}.gf-login-brand>div{flex-direction:column;gap:9px;font-size:29px;letter-spacing:-.6px;}.gf-login-mark{width:42px;height:38px;border:0;background:transparent;color:var(--text);border-radius:0;}.gf-login-mark svg{width:34px;height:34px;}.gf-login-brand .theme-quick{position:absolute;right:0;top:0;background:transparent;border:0;color:var(--text);}
+.gf-login-card{text-align:center;padding:30px 24px 24px;background:linear-gradient(135deg,var(--card),var(--bg));border-radius:32px;box-shadow:0 16px 44px rgba(0,0,0,.12);}.gf-login-kicker{display:none;}.gf-login-card h1{font-size:28px;line-height:1.25;letter-spacing:-.7px;margin:0 0 14px;}.gf-login-intro{font-size:13px;margin-bottom:28px;}.gf-login-fallback summary{border:1px solid var(--border2);border-radius:99px;background:var(--card2);padding:12px 16px;color:var(--text);min-height:48px;font-size:13px;font-weight:600;}.gf-login-form{text-align:left;}.gf-login-divider{margin-top:24px;margin-bottom:18px;}.gf-login-message{text-align:left;}.gf-login-footer{margin-top:28px;color:var(--muted);}
+body.light-theme .gf-login-card{background:#ffffff;border-color:rgba(28,32,44,.08);box-shadow:0 12px 36px rgba(28,32,44,.07);}
+body.light-theme .gf-login-fallback summary{background:#fff;}
+@media(max-width:360px){.gf-login-card h1{font-size:25px;}.gf-login-card{padding-inline:20px;}}
+
 </style>
 </head>
 <body>
@@ -511,12 +521,12 @@ body.gisandry-theme .ex-sets,body.deivis-realistic-art .ex-sets{white-space:norm
     <header class="gf-login-brand"><div><span class="gf-login-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6v12M3 8v8M18 6v12M21 8v8M6 12h12"/></svg></span><span>GEMFIT</span></div><button id="gfLoginTheme" class="theme-quick" type="button" onclick="cycleQuickTheme()" aria-label="Cambiar modo claro u oscuro" title="Cambiar tema">☀</button></header>
     <section class="gf-login-card" aria-labelledby="gfLoginTitle">
       <span class="gf-login-kicker">TU ESPACIO PERSONAL</span>
-      <h1 id="gfLoginTitle">Todo empieza<br>con tu próximo entreno.</h1>
+      <h1 id="gfLoginTitle">Tu entrenamiento<br>empieza aquí.</h1>
       <p class="gf-login-intro">Tu rutina y tus registros, en un solo lugar.</p>
       <button id="gfGoogleSubmit" type="button" class="gf-google-button" onclick="gfGoogleLogin()"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59A14.41 14.41 0 0 1 9.75 24c0-1.59.27-3.13.78-4.59l-7.98-6.19A23.87 23.87 0 0 0 0 24c0 3.87.93 7.52 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.73-6c-2.15 1.45-4.92 2.3-8.18 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Continuar con Google</span><span class="gf-login-arrow" aria-hidden="true">›</span></button>
       <p class="gf-login-help">Usa la cuenta que tienes asignada en GemFit.</p>
       <div class="gf-login-divider"><span>o</span></div>
-      <details id="gfPasswordFallback" class="gf-login-fallback"><summary><span>Entrar con correo y contraseña</span><span class="gf-login-chevron" aria-hidden="true">⌄</span></summary>
+      <details id="gfPasswordFallback" class="gf-login-fallback"><summary><span>Entrar con correo</span><span class="gf-login-chevron" aria-hidden="true">⌄</span></summary>
         <form onsubmit="gfLogin(event)" class="gf-login-form">
           <label for="gfEmail">Correo electrónico</label><input id="gfEmail" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" placeholder="tu@email.com" required class="gf-login-input">
           <label for="gfPassword">Contraseña</label><input id="gfPassword" type="password" autocomplete="current-password" placeholder="Tu contraseña" required class="gf-login-input">
@@ -2701,34 +2711,16 @@ function saveLog(exId, field, value){
 }
 
 function getLastPerf(exId){
-  const data=gd();
-  const sessions=Object.entries(data).map(([key,series])=>{
-    const match=key.match(/^series_(\d{4}-\d{2}-\d{2})_(.+)$/);
-    return match&&match[2]===exId&&match[1]!==SK&&Array.isArray(series)?{date:match[1],series}:null;
-  }).filter(Boolean).sort((a,b)=>b.date.localeCompare(a.date));
-  if(sessions.length){
-    const latest=sessions[0];
-    const completed=latest.series.filter(s=>s&&s.kg!==''&&Number.isFinite(parseDecimal(s.kg)));
-    if(completed.length){
-      const maxKg=Math.max(...completed.map(s=>parseDecimal(s.kg)));
-      const best=completed.find(s=>parseDecimal(s.kg)===maxKg)||completed[0];
-      return {sets:latest.series.length,reps:best.reps,kg:maxKg,date:latest.date};
-    }
-  }
-  return data._lastPerf&&data._lastPerf[exId] ? data._lastPerf[exId] : null;
+ const sessions=getExerciseSessions(exId).filter(session=>session.date!==SK);
+ if(sessions.length){const latest=sessions[0],best=latest.completed.find(set=>parseDecimal(set.kg)===latest.maxKg)||latest.completed[0];return {sets:latest.series.length,reps:best?.reps,kg:latest.maxKg,date:latest.date};}
+ const data=gd(),key=gfExerciseHistoryKey(exId,SK);
+ const older=Object.entries(data._lastPerf||{}).filter(([id,v])=>(!String(id).startsWith('extra_')||v?.date)&&gfExerciseHistoryKey(id,v?.date||SK)===key).map(([,v])=>v).filter(Boolean).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+ return older[0]||null;
 }
-
 function getBestPerf(exId){
-  const data=gd(); let best=null;
-  Object.entries(data).forEach(([key,series])=>{
-    const match=key.match(/^series_(\d{4}-\d{2}-\d{2})_(.+)$/);
-    if(!match||match[2]!==exId||!Array.isArray(series)) return;
-    series.forEach(s=>{
-      const kg=parseDecimal(s&&s.kg);
-      if(Number.isFinite(kg)&&(!best||kg>best.kg||kg===best.kg&&match[1]>best.date)) best={kg,reps:s.reps,date:match[1]};
-    });
-  });
-  return best||(data._lastPerf&&data._lastPerf[exId]||null);
+ const sessions=getExerciseSessions(exId);let best=null;
+ sessions.forEach(session=>session.completed.forEach(set=>{const kg=parseDecimal(set.kg);if(Number.isFinite(kg)&&(!best||kg>best.kg||kg===best.kg&&session.date>best.date))best={kg,reps:set.reps,date:session.date};}));
+ return best||getLastPerf(exId);
 }
 
 function getTargetReps(ex){
@@ -2760,17 +2752,55 @@ function getBlockComparison(){
   return {current:{sessions:current.sessions.size,volume:current.volume},previous:{sessions:previous.sessions.size,volume:previous.volume},volumeChange};
 }
 
-function getExerciseSessions(exId){
-  const data=gd();
-  return Object.entries(data).map(([key,series])=>{
-    const match=key.match(/^series_(\d{4}-\d{2}-\d{2})_(.+)$/);
-    if(!match||match[2]!==exId||!Array.isArray(series)) return null;
-    const completed=series.filter(s=>s&&s.kg!==''&&Number.isFinite(parseDecimal(s.kg)));
-    if(!completed.length) return null;
-    const maxKg=Math.max(...completed.map(s=>parseDecimal(s.kg)));
-    const volume=completed.reduce((sum,s)=>sum+(parseDecimal(s.kg)||0)*(parseDecimal(s.reps)||0),0);
-    return {date:match[1],series,completed,maxKg,volume};
-  }).filter(Boolean).sort((a,b)=>b.date.localeCompare(a.date));
+// Unified history is a read-only view. Original IDs and stored series remain intact.
+function gfHistoryName(name){
+ let n=String(name||'').toLocaleLowerCase('es-ES').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+ n=n.replace(/\((?:rutina\s+)?anterior[^)]*\)/g,'').replace(/\s*[·—-]\s*calentamiento\s*$/,'').replace(/\s*\/\s*/g,'/').replace(/\s+/g,' ').trim();
+ const equivalents={'extensiones de cuadriceps':'extension de cuadriceps','apertura en maquina':'aperturas en maquina','curl con barra z':'curl barra z'};
+ return equivalents[n]||n;
+}
+function gfGetHistoryExercise(exId,date=SK){
+ if(String(exId).startsWith('extra_')){
+  const data=gd(),daySession=data[date]?.session;
+  const sessions=daySession&&SESSIONS[daySession]?[SESSIONS[daySession]]:Object.values(SESSIONS);
+  const matches=[];
+  sessions.forEach(sess=>(sess.sections||[]).forEach(sec=>{
+   const extras=data[extraKey(date,sess.id,sec.t)];if(!Array.isArray(extras))return;
+   extras.forEach((ex,index)=>{if(extraExerciseId(sess.id,sec.t,index)===exId)matches.push({id:exId,n:ex.name,s:ex.sets,extra:true});});
+  }));
+  return matches.length&&new Set(matches.map(ex=>gfHistoryName(ex.n))).size===1?matches[0]:null;
+ }
+ for(const sess of Object.values(SESSIONS))for(const sec of sess.sections||[]){const found=(sec.ex||[]).find(ex=>ex.id===exId);if(found)return found;}
+ return ARCHIVED_EXERCISES.find(ex=>ex.id===exId)||null;
+}
+function gfExerciseHistoryKey(exId,date=SK){
+ const exercise=gfGetHistoryExercise(exId,date);
+ if(exercise?.n)return 'name:'+gfHistoryName(exercise.n);
+ return String(exId).startsWith('extra_')?'unknown:'+date+':'+exId:'id:'+exId;
+}
+function getExerciseSessions(exId,nameHint=''){
+ const data=gd(),identity=String(exId).startsWith('extra_')&&nameHint&&!gfGetHistoryExercise(exId,SK)?'name:'+gfHistoryName(nameHint):gfExerciseHistoryKey(exId,SK),sessions=[],withSeries=new Set();
+ Object.entries(data).forEach(([key,series])=>{
+  const match=key.match(/^series_(\d{4}-\d{2}-\d{2})_(.+)$/);
+  if(!match||!Array.isArray(series)||gfExerciseHistoryKey(match[2],match[1])!==identity)return;
+  const completed=series.filter(set=>set&&set.kg!==''&&set.kg!=null&&Number.isFinite(parseDecimal(set.kg)));
+  if(!completed.length)return;
+  withSeries.add(match[1]+'|'+match[2]);
+  sessions.push({date:match[1],exerciseId:match[2],series,completed,maxKg:Math.max(...completed.map(set=>parseDecimal(set.kg))),volume:completed.reduce((sum,set)=>sum+(parseDecimal(set.kg)||0)*(parseDecimal(set.reps)||0),0),legacy:false});
+ });
+ Object.entries(data).forEach(([date,day])=>{
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!day?.logs)return;
+  Object.entries(day.logs).forEach(([id,log])=>{
+   if(withSeries.has(date+'|'+id)||gfExerciseHistoryKey(id,date)!==identity||!log)return;
+   const kg=parseDecimal(log.kg);if(!Number.isFinite(kg)||kg<=0)return;
+   sessions.push({date,exerciseId:id,series:[log],completed:[log],maxKg:kg,volume:0,legacy:true});
+  });
+ });
+ return sessions.sort((a,b)=>b.date.localeCompare(a.date)||(a.exerciseId===exId?-1:b.exerciseId===exId?1:a.exerciseId.localeCompare(b.exerciseId)));
+}
+function gfExerciseHistoryPoints(exId,nameHint=''){
+ const days=new Map();getExerciseSessions(exId,nameHint).forEach(session=>{const old=days.get(session.date);if(!old||session.maxKg>old.kg)days.set(session.date,{date:session.date,kg:session.maxKg});});
+ return Array.from(days.values()).sort((a,b)=>a.date.localeCompare(b.date));
 }
 
 // Datos de la misma posición de serie para contexto y futuras métricas.
@@ -2783,16 +2813,15 @@ function getPreviousSeriesContext(exId, seriesIndex){
   const fallback=getLastPerf(exId);
   return fallback?{set:fallback,date:fallback.date,samePosition:false}:null;
 }
-function getSeriesHistory(exId){
-  const exercise=Object.values(SESSIONS).flatMap(s=>s.sections||[]).flatMap(s=>s.ex||[]).find(ex=>ex.id===exId);
-  const targets=exercise?getTargetReps(exercise):[];
-  const rows=[];
-  getExerciseSessions(exId).forEach(session=>session.series.forEach((set,index)=>{
-    const kg=parseDecimal(set&&set.kg), reps=parseDecimal(set&&set.reps);
-    if(!Number.isFinite(kg)&&!Number.isFinite(reps))return;
-    rows.push({date:session.date,index,target:targets[index]??'',reps:set.reps??'',kg:set.kg??'',rir:set.rir??'',volume:Number.isFinite(kg)&&Number.isFinite(reps)?kg*reps:null});
-  }));
-  return rows.sort((a,b)=>b.date.localeCompare(a.date)||a.index-b.index);
+function getSeriesHistory(exId,nameHint=''){
+ const rows=[];
+ getExerciseSessions(exId,nameHint).forEach(session=>{
+  const exercise=gfGetHistoryExercise(session.exerciseId,session.date),targets=exercise?getTargetReps(exercise):[];
+  session.series.forEach((set,index)=>{const kg=parseDecimal(set&&set.kg),reps=parseDecimal(set&&set.reps);if(!Number.isFinite(kg)&&!Number.isFinite(reps))return;
+   rows.push({date:session.date,index,target:targets[index]??'',reps:set.reps??'',kg:set.kg??'',rir:set.rir??'',volume:!session.legacy&&Number.isFinite(kg)&&Number.isFinite(reps)?kg*reps:null,legacy:session.legacy,exerciseId:session.exerciseId});
+  });
+ });
+ return rows.sort((a,b)=>b.date.localeCompare(a.date)||a.exerciseId.localeCompare(b.exerciseId)||a.index-b.index);
 }
 
 function getExerciseCoach(ex){
@@ -3129,23 +3158,27 @@ function calcMacros(){
 let STRENGTH_TREND_EXERCISE=null;
 function setStrengthTrendExercise(id){STRENGTH_TREND_EXERCISE=id;renderProgreso();}
 function renderStrengthTrend(){
-  const history={};
-  Object.entries(gd()).forEach(([key,sets])=>{
-    const m=key.match(/^series_(\d{4}-\d{2}-\d{2})_(.+)$/);
-    if(!m||!Array.isArray(sets))return;
-    const best=Math.max(0,...sets.map(s=>parseDecimal(s?.kg)).filter(Number.isFinite));
-    if(best<=0)return;
-    const id=m[2];if(!history[id])history[id]={};
-    history[id][m[1]]=Math.max(history[id][m[1]]||0,best);
+  const history={},historyNames={};
+  const add=(id,date,kg)=>{
+   if(!Number.isFinite(kg)||kg<=0)return;
+   const key=gfExerciseHistoryKey(id,date);if(!history[key])history[key]={};
+   history[key][date]=Math.max(history[key][date]||0,kg);
+   historyNames[key]=historyNames[key]||gfGetHistoryExercise(id,date)?.n||getExerciseName(id);
+  };
+  Object.entries(gd()).forEach(([key,value])=>{
+   const m=key.match(/^series_(\d{4}-\d{2}-\d{2})_(.+)$/);
+   if(m&&Array.isArray(value))value.forEach(set=>add(m[2],m[1],parseDecimal(set?.kg)));
+   if(/^\d{4}-\d{2}-\d{2}$/.test(key)&&value?.logs)Object.entries(value.logs).forEach(([id,log])=>add(id,key,parseDecimal(log?.kg)));
   });
   const ids=Object.keys(history).sort((a,b)=>Object.keys(history[b]).length-Object.keys(history[a]).length);
   if(!ids.length)return '<div class="strength-card"><h2>Evolución de fuerza</h2><div class="strength-empty">Cuando registres pesos, aquí aparecerá tu evolución real.</div></div>';
-  const id=STRENGTH_TREND_EXERCISE&&history[STRENGTH_TREND_EXERCISE]?STRENGTH_TREND_EXERCISE:(history.gf03_press_plano?'gf03_press_plano':ids[0]);
+  const selected=STRENGTH_TREND_EXERCISE&&(history[STRENGTH_TREND_EXERCISE]?STRENGTH_TREND_EXERCISE:gfExerciseHistoryKey(STRENGTH_TREND_EXERCISE,SK));
+  const id=selected&&history[selected]?selected:ids[0];
   const points=Object.entries(history[id]).sort(([a],[b])=>a.localeCompare(b)).slice(-8);
   const values=points.map(([,kg])=>kg),low=Math.max(0,Math.floor((Math.min(...values)-5)/5)*5),high=Math.ceil((Math.max(...values)+5)/5)*5;
   const x=i=>points.length===1?160:24+i*272/(points.length-1),y=kg=>120-(kg-low)/(high-low||1)*96;
   const best=Math.max(...values);
-  const safeName=id=>getExerciseName(id).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const safeName=id=>String(historyNames[id]||id).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   let svg='<svg class="strength-chart" viewBox="0 0 320 155" role="img" aria-label="Evolución de '+safeName(id)+'">';
   for(const gy of [24,72,120])svg+='<line x1="24" y1="'+gy+'" x2="296" y2="'+gy+'" stroke="var(--border2)" stroke-dasharray="3 4"/>';
   svg+='<text x="2" y="27" fill="var(--muted)" font-size="9">'+high+'</text><text x="2" y="123" fill="var(--muted)" font-size="9">'+low+'</text>';
@@ -3153,7 +3186,7 @@ function renderStrengthTrend(){
   points.forEach(([,kg],i)=>svg+='<circle cx="'+x(i)+'" cy="'+y(kg)+'" r="4.5" fill="var(--accent)"/>');
   svg+='<text x="24" y="147" fill="var(--muted)" font-size="9">'+points[0][0].slice(5).replace('-','/')+'</text>';
   svg+='<text x="296" y="147" text-anchor="end" fill="var(--muted)" font-size="9">'+points.at(-1)[0].slice(5).replace('-','/')+'</text></svg>';
-  const options=ids.map(opt=>'<option value="'+opt+'" '+(opt===id?'selected':'')+'>'+safeName(opt)+'</option>').join('');
+  const options=ids.map(opt=>'<option value="'+gfEscape(opt)+'" '+(opt===id?'selected':'')+'>'+safeName(opt)+'</option>').join('');
   return '<div class="strength-card"><div class="strength-card-head"><div><h2>'+safeName(id)+'</h2><p>Evolución de tu mejor serie</p></div><div class="strength-best"><small>Mejor marca</small><strong>'+best+' kg</strong></div></div>'+svg+'<label class="sr-only" for="strengthExercise">Elegir ejercicio</label><select class="strength-select" id="strengthExercise" onchange="setStrengthTrendExercise(this.value)">'+options+'</select></div>';
 }
 function renderProgreso(){
@@ -4656,30 +4689,8 @@ function restoreAllEx(){
 // HISTÓRICO DE EJERCICIO — gráfico de progreso
 // ═══════════════════════════════════════════════════════════════
 function openExHistory(exId, exName){
-  const data = gd();
-  // Find all days with series for this exercise, get max kg per day
-  const seriesKeys = Object.keys(data).filter(k=>k.startsWith('series_') && k.endsWith('_'+exId));
-  const points = [];
-  const seriesDates = new Set();
-  seriesKeys.forEach(sk=>{
-    // key format: series_YYYY-MM-DD_exId
-    const m = sk.match(/^series_(\d{4}-\d{2}-\d{2})_/);
-    if(!m) return;
-    const date = m[1];
-    const series = (data[sk]||[]).filter(s=>s&&s.kg);
-    if(!series.length) return;
-    const maxKg = Math.max(...series.map(s=>parseDecimal(s.kg)||0));
-    points.push({date, kg:maxKg});
-    seriesDates.add(date);
-  });
-  // Compatibilidad con los registros creados antes del sistema por series.
-  Object.entries(data).forEach(([date,day])=>{
-    const log=/^\d{4}-\d{2}-\d{2}$/.test(date)&&day&&day.logs&&day.logs[exId];
-    const kg=log&&parseDecimal(log.kg);
-    if(!seriesDates.has(date)&&Number.isFinite(kg)&&kg>0) points.push({date,kg});
-  });
-  points.sort((a,b)=>a.date.localeCompare(b.date));
-  const sessionStats=getExerciseSessions(exId);
+  const points=gfExerciseHistoryPoints(exId,exName);
+  const sessionStats=getExerciseSessions(exId,exName);
   const totalVolume=sessionStats.reduce((sum,s)=>sum+s.volume,0);
 
   const p = pr();
@@ -4720,8 +4731,8 @@ function openExHistory(exId, exName){
         <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:${p.color};">${pt.kg} kg${diffTxt}</span>
       </div>`;
     }).join('');
-    const perSeriesRows=getSeriesHistory(exId);
-    const perSeriesHtml=perSeriesRows.length?`<section aria-label="Historial por serie" style="margin-top:16px;"><h3 style="font-size:13px;margin:0 0 8px;">Historial por serie</h3>${perSeriesRows.map(row=>`<div style="padding:9px 0;border-bottom:1px solid var(--border);font-size:11px;line-height:1.55;"><strong>${row.date} · Serie ${row.index+1}</strong><br><span style="color:var(--muted);">Objetivo ${row.target||'—'} · ${row.reps||'—'} reps · ${row.kg||'—'} kg${row.rir!==''&&row.rir!=null?` · RIR ${row.rir}`:''}${row.volume!=null?` · ${Math.round(row.volume)} kg vol.`:''}</span></div>`).join('')}</section>`:'';
+    const perSeriesRows=getSeriesHistory(exId,exName);
+    const perSeriesHtml=perSeriesRows.length?`<section aria-label="Historial por serie" style="margin-top:16px;"><h3 style="font-size:13px;margin:0 0 8px;">Historial por serie</h3>${perSeriesRows.map(row=>`<div style="padding:9px 0;border-bottom:1px solid var(--border);font-size:11px;line-height:1.55;"><strong>${row.date} · ${row.legacy?'Registro anterior':'Serie '+(row.index+1)}</strong><br><span style="color:var(--muted);">Objetivo ${row.target||'—'} · ${row.reps||'—'} reps · ${row.kg||'—'} kg${row.rir!==''&&row.rir!=null?` · RIR ${row.rir}`:''}${row.volume!=null?` · ${Math.round(row.volume)} kg vol.`:''}</span></div>`).join('')}</section>`:'';
 
     content.innerHTML = `
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;">
@@ -4732,7 +4743,7 @@ function openExHistory(exId, exName){
       <div style="padding:14px;background:var(--card2);border-radius:10px;margin-bottom:14px;">
         ${chartHtml}
       </div>
-      <div>${listHtml}</div>${perSeriesHtml}
+      <p style="font-size:12px;color:var(--muted);line-height:1.6;margin:12px 0">Historial unificado del mismo ejercicio en tus rutinas actuales y anteriores. Volumen calculado solo con series registradas.</p><div>${listHtml}</div>${perSeriesHtml}
     `;
   }
 
