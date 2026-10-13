@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="gemfit-version" content="pulso-personal-2026-10-13">
 <title>GemFit · Grafito</title>
 
 <!-- Sin caché — siempre carga la versión más reciente -->
@@ -570,6 +571,32 @@ body{height:var(--gf-viewport-height,100dvh);}
 .gf-technique-image{background-image:none;background-size:auto;overflow:hidden;}
 .gf-technique-image svg{border-radius:inherit;}
 #s-main .bnav{position:fixed!important;bottom:0!important;left:0;right:0;margin:0;}
+
+/* GEMFIT PULSO — editorial rhythm, orbital progress, tactile capsules. */
+:root{--pulso-line:color-mix(in srgb,var(--accent) 24%,transparent);}
+body:not(.light-theme):not(.gisandry-theme){--bg:#101514;--card:#19201e;--card2:#232c28;--text:#f3f5ef;--muted:#a8b7ad;--muted2:#8c9d91;--border:rgba(194,216,198,.1);--border2:rgba(194,216,198,.2);--accent:#b8e0bc;--on-accent:#172b1c;}
+body.light-theme:not(.gisandry-theme){--bg:#f3f5f0;--card:#fff;--card2:#e9eee5;--text:#1b3027;--muted:#53675b;--muted2:#6b7d70;--accent:#346b4b;--on-accent:#fff;--border:rgba(34,68,48,.1);--border2:rgba(34,68,48,.2);}
+#s-main .topbar{background:var(--bg);border-bottom:0;box-shadow:none;}
+.tname{font-weight:800;letter-spacing:-1px!important;font-size:24px;}.tname:after{content:'PULSO';display:block;font-size:8px;letter-spacing:3px;color:var(--muted);margin-top:2px;}
+.pulso-heading{padding:12px 0 22px;}.pulso-eyebrow{text-transform:uppercase;letter-spacing:2px;font-size:10px;color:var(--muted);margin-bottom:8px;}.pulso-heading h1{font-size:clamp(32px,8vw,46px);line-height:1.02;letter-spacing:-1.8px;font-weight:750;max-width:300px;}.pulso-heading p{font-size:12px;color:var(--muted);margin-top:10px;}
+.pulso-hero{position:relative;overflow:hidden;border:1px solid var(--pulso-line);border-radius:32px;padding:22px;background:var(--card);margin:20px 0;}
+.pulso-hero:before{content:'';position:absolute;width:250px;height:250px;border:1px solid var(--pulso-line);border-radius:50%;right:-90px;top:-90px;pointer-events:none;}
+.pulso-hero h2{font-size:clamp(29px,8vw,44px);line-height:1.04;letter-spacing:-1.4px;max-width:100%;margin:8px 0 20px;overflow-wrap:anywhere;}
+.pulso-hero-stage{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;}.pulso-hero-art{width:130px;height:130px;flex-shrink:0;overflow:hidden;border-radius:30px;background:var(--card2);}.pulso-hero-art>*{width:100%;height:100%;display:block;}.pulso-orbit{position:relative;width:126px;height:126px;flex-shrink:0;}.pulso-orbit svg{width:100%;height:100%;transform:rotate(-90deg);}.pulso-orbit circle{fill:none;stroke-width:3;}.pulso-orbit-track{stroke:var(--border2);}.pulso-orbit-fill{stroke:var(--accent);stroke-linecap:round;transition:stroke-dasharray .4s;}.pulso-orbit-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;}.pulso-orbit-label strong{font-size:29px;letter-spacing:-1px;}.pulso-orbit-label small{font-size:10px;color:var(--muted);margin-top:4px;}
+.pulso-hero .gf-primary{border-radius:999px;width:100%;font-size:13px;min-height:50px;position:relative;}.pulso-rhythm{padding:18px 0 20px;border-bottom:1px solid var(--border);}.pulso-section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 12px;}.pulso-section-title h2{font-size:19px;letter-spacing:-.6px;}.pulso-section-title small{font-size:11px;color:var(--muted);}.pulso-weekline{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:9px;}.pulso-beat{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted);font-size:10px;}.pulso-beat i{height:36px;width:2px;background:var(--border2);position:relative;}.pulso-beat.is-recorded i{background:var(--accent);}.pulso-beat.is-recorded i:after{content:'';position:absolute;left:-3px;bottom:0;width:8px;height:8px;background:var(--accent);border-radius:50%;}.pulso-beat strong{font-size:11px;font-weight:600;}
+#tab-plan .gf-week button{border-radius:999px;min-height:62px;background:var(--card);border:1px solid var(--border);}.gf-week button.selected{background:var(--accent)!important;color:var(--on-accent)!important;}.gf-week button.selected small{color:inherit!important;}
+.pulso-home .gf-workout-list{display:flex;}.pulso-home .gf-workout-list button{background:transparent;border:1px solid var(--border2);padding:10px;min-height:76px;}.pulso-home .gf-workout-list button>span:nth-child(2){flex:1;min-width:0;}.pulso-home .gf-detail{background:var(--card);border-radius:24px;}
+#tab-tracker .gf-exercise-detail{border-radius:28px;background:var(--card);box-shadow:none;padding-top:20px;}#tab-tracker .gf-exercise-detail-heading strong{font-size:20px;letter-spacing:-.5px;line-height:1.3;}#tab-tracker .exercise-actions{margin-block:14px;gap:6px;}#tab-tracker .exercise-actions button{font-size:11px;padding:7px 12px;min-height:38px!important;}
+.gf-technique-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;overflow:visible;align-items:start;}.gf-technique-phase{min-width:0;max-width:none;}.gf-technique-image{border-radius:13px;}.gf-technique-phase figcaption{gap:4px;font-size:10px;flex-wrap:wrap;}.gf-technique-phase figcaption span{width:17px;height:17px;font-size:9px;}.gf-technique-note{font-size:11px;line-height:1.5;margin-top:12px;}.gf-technique-dialog .gf-technique-strip{display:flex;overflow-x:auto;}.gf-technique-dialog .gf-technique-phase{flex:0 0 85%;}.gf-technique-dialog .gf-technique-phase figcaption{font-size:13px;}
+#s-main .bnav{background:var(--bg);border-radius:22px 22px 0 0;border-top:1px solid var(--border2);box-shadow:0 -8px 24px rgba(0,0,0,.04);}.bnav .nbtn{font-size:10px;gap:4px;}.bnav .nbtn.active .nbtn-icon{background:var(--card2);border-radius:14px;padding:5px;width:36px;height:32px;display:grid;place-items:center;}
+#s-profiles .gf-login-card{border-radius:34px;box-shadow:none;}#s-profiles .gf-login-brand{letter-spacing:2px;}.gf-login-kicker{letter-spacing:2px;}.gf-google-button:disabled{opacity:.55;cursor:wait;}.gf-admin-profile{border-radius:999px!important;box-shadow:none!important;}.strength-card,.progress-summary-card,.gf-stat{box-shadow:none!important;border-radius:26px;}
+@media(max-width:360px){.pulso-hero{padding:17px;}.pulso-hero-art{width:110px;height:110px;}.pulso-orbit{width:105px;height:105px;}.pulso-heading h1{font-size:32px;}.gf-technique-phase figcaption{font-size:9px;}}
+@media(prefers-reduced-motion:reduce){.pulso-orbit-fill{transition:none;}}
+
+.gf-admin-avatar{overflow:hidden;}.gf-profile-switch .gf-avatar{width:30px;height:30px;}.pulso-hero-art .gf-realistic-art{filter:none!important;}
+
+#s-profiles,#s-admin{--bg:#101514;--card:#19201e;--card2:#232c28;--text:#f3f5ef;--muted:#a8b7ad;--muted2:#8c9d91;--accent:#b8e0bc;--on-accent:#172b1c;--border:rgba(194,216,198,.1);--border2:rgba(194,216,198,.2);}
+body.light-theme #s-profiles,body.light-theme #s-admin{--bg:#f3f5f0;--card:#fff;--card2:#e9eee5;--text:#1b3027;--muted:#53675b;--muted2:#6b7d70;--accent:#346b4b;--on-accent:#fff;--border:rgba(34,68,48,.1);--border2:rgba(34,68,48,.2);}
 </style>
 </head>
 <body>
@@ -584,7 +611,7 @@ body{height:var(--gf-viewport-height,100dvh);}
       <span class="gf-login-kicker">TU ESPACIO PERSONAL</span>
       <h1 id="gfLoginTitle">Tu entrenamiento<br>empieza aquí.</h1>
       <p class="gf-login-intro">Tu rutina y tus registros, en un solo lugar.</p>
-      <button id="gfGoogleSubmit" type="button" class="gf-google-button" onclick="gfGoogleLogin()"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59A14.41 14.41 0 0 1 9.75 24c0-1.59.27-3.13.78-4.59l-7.98-6.19A23.87 23.87 0 0 0 0 24c0 3.87.93 7.52 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.73-6c-2.15 1.45-4.92 2.3-8.18 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Continuar con Google</span><span class="gf-login-arrow" aria-hidden="true">›</span></button>
+      <button id="gfGoogleSubmit" type="button" disabled class="gf-google-button" onclick="gfGoogleLogin()"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59A14.41 14.41 0 0 1 9.75 24c0-1.59.27-3.13.78-4.59l-7.98-6.19A23.87 23.87 0 0 0 0 24c0 3.87.93 7.52 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.73-6c-2.15 1.45-4.92 2.3-8.18 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Continuar con Google</span><span class="gf-login-arrow" aria-hidden="true">›</span></button>
       <p class="gf-login-help">Usa la cuenta que tienes asignada en GemFit.</p>
       <div class="gf-login-divider"><span>o</span></div>
       <details id="gfPasswordFallback" class="gf-login-fallback"><summary><span>Entrar con correo</span><span class="gf-login-chevron" aria-hidden="true">⌄</span></summary>
@@ -595,6 +622,11 @@ body{height:var(--gf-viewport-height,100dvh);}
           <button id="gfResetSubmit" type="button" class="gf-login-reset" onclick="gfResetPassword()">Olvidé mi contraseña</button>
         </form>
       </details>
+      <div id="gfGoogleRecovery" hidden style="margin-top:14px;padding:14px;border:1px solid var(--border2);border-radius:18px;text-align:left">
+        <p style="font-size:13px;line-height:1.5">Si Google no vuelve a GemFit, cierra esa ventana y abre GemFit directamente en Safari o Chrome. Después vuelve a pulsar Continuar con Google.</p>
+        <button type="button" class="gf-login-reset" onclick="gfCopyLoginLink()">Copiar enlace de GemFit</button>
+        <p style="font-size:12px;color:var(--muted)">También puedes usar Entrar con correo.</p>
+      </div>
       <p id="gfLoginMessage" role="status" aria-live="polite" class="gf-login-message"></p>
     </section>
     <p class="gf-login-footer">Tu entrenamiento, tu espacio.</p>
@@ -1635,16 +1667,40 @@ async function gfLogin(event){
  try{await initFirebase();await _auth.signInWithEmailAndPassword(document.getElementById('gfEmail').value.trim(),document.getElementById('gfPassword').value);document.getElementById('gfPassword').value='';if(GF_PENDING_GOOGLE){await _auth.currentUser.linkWithCredential(GF_PENDING_GOOGLE);GF_PENDING_GOOGLE=null;}}
  catch(e){gfAuthMessage(gfAuthError(e));}finally{button.disabled=false;}
 }
+let GF_GOOGLE_READY=false,GF_GOOGLE_BUSY=false;
+function gfGoogleRecovery(show=true){document.getElementById('gfGoogleRecovery').hidden=!show;}
+async function gfCopyLoginLink(){
+ const url='https://deivisg1606.github.io/GemFit/';
+ try{await navigator.clipboard.writeText(url);gfAuthMessage('Enlace copiado. Pégalo en Safari o Chrome.');}
+ catch(e){gfAuthMessage('Abre Safari y escribe: '+url);}
+}
 async function gfGoogleLogin(){
- const button=document.getElementById('gfGoogleSubmit');button.disabled=true;gfAuthMessage('Abriendo Google…');
- try{await initFirebase();const provider=new firebase.auth.GoogleAuthProvider();provider.setCustomParameters({prompt:'select_account'});await _auth.signInWithPopup(provider);}
+ if(GF_GOOGLE_BUSY)return;
+ const button=document.getElementById('gfGoogleSubmit');
+ if(!GF_GOOGLE_READY){
+  button.disabled=true;gfAuthMessage('Preparando el acceso…');
+  try{await initFirebase();GF_GOOGLE_READY=true;gfAuthMessage('Listo. Pulsa Continuar con Google.');}
+  catch(e){gfAuthMessage(gfAuthError(e));gfGoogleRecovery();}
+  finally{button.disabled=false;}return;
+ }
+ GF_GOOGLE_BUSY=true;button.disabled=true;gfGoogleRecovery(false);gfAuthMessage('Abriendo Google…');
+ const timer=setTimeout(()=>{if(GF_GOOGLE_BUSY){gfAuthMessage('Google todavía no ha regresado. Si ves un error en su ventana, ciérrala y abre GemFit en Safari.');gfGoogleRecovery();}},20000);
+ try{
+  const provider=new firebase.auth.GoogleAuthProvider();provider.setCustomParameters({prompt:'select_account'});
+  // Call synchronously from the user's tap, before any asynchronous initialization.
+  const result=_auth.signInWithPopup(provider);await result;
+ }
  catch(e){
   if(e.code==='auth/account-exists-with-different-credential'){
    GF_PENDING_GOOGLE=e.credential||null;document.getElementById('gfPasswordFallback').open=true;
    document.getElementById('gfEmail').value=e.email||'';
    gfAuthMessage('Esta cuenta ya existe. Entra una vez con su contraseña para vincular Google.');
-  }else gfAuthMessage(gfAuthError(e));
- }finally{button.disabled=false;}
+  }else{
+   const storage=/missing initial state|sessionStorage|storage-partitioned/i.test(e.message||'')||e.code==='auth/web-storage-unsupported';
+   gfAuthMessage(storage?'El navegador perdió el acceso de Google. Abre GemFit directamente en Safari o Chrome y vuelve a intentarlo.':gfAuthError(e));
+   if(storage||['auth/popup-blocked','auth/popup-closed-by-user','auth/timeout','auth/internal-error'].includes(e.code))gfGoogleRecovery();
+  }
+ }finally{clearTimeout(timer);GF_GOOGLE_BUSY=false;button.disabled=false;}
 }
 async function gfAdminHome(){
  if(!GF_IS_ADMIN||!_auth?.currentUser)return;
@@ -1668,7 +1724,7 @@ async function gfRenderAdminPanel(epoch){
   const name=String(data.profile.name).trim().toLocaleLowerCase('es-ES').replace(/(^|\s)\S/g,c=>c.toLocaleUpperCase('es-ES'));
   const own=id===GF_OWN_PROFILE;
   if(own&&epoch===GF_AUTH_EPOCH&&_auth?.currentUser?.uid===GF_AUTH_UID)document.getElementById('gfAdminGreeting').textContent='Hola, '+name;
-  return `<button class="gf-admin-capsule ${own?'is-own':''}" data-profile="${id}" ${ready?'':'disabled'} onclick="gfOpenAdminProfile('${id}')" aria-label="${gfEscape(ready?'Abrir perfil de '+name:name+' · Pendiente de preparar')}"><span class="gf-admin-avatar" aria-hidden="true">${gfEscape(name.charAt(0))}</span><span class="gf-admin-name"><strong>${gfEscape(name)}</strong>${own?'<small>Mi perfil</small>':''}${ready?'':'<small>Pendiente</small>'}</span><span class="gf-admin-chevron" aria-hidden="true">›</span></button>`;
+  return `<button class="gf-admin-capsule ${own?'is-own':''}" data-profile="${id}" ${ready?'':'disabled'} onclick="gfOpenAdminProfile('${id}')" aria-label="${gfEscape(ready?'Abrir perfil de '+name:name+' · Pendiente de preparar')}"><span class="gf-admin-avatar" aria-hidden="true">${gfAvatarMarkup(data.AVATARS,name)}</span><span class="gf-admin-name"><strong>${gfEscape(name)}</strong>${own?'<small>Mi perfil</small>':''}${ready?'':'<small>Pendiente</small>'}</span><span class="gf-admin-chevron" aria-hidden="true">›</span></button>`;
  }));
  if(epoch!==GF_AUTH_EPOCH||_auth?.currentUser?.uid!==GF_AUTH_UID)return;
  document.getElementById('gfAdminProfiles').innerHTML=rows.join('');
@@ -1733,7 +1789,7 @@ async function gfLogout(){
  try{if(_auth)await _auth.signOut();gfAuthMessage('Sesión cerrada.');}catch(e){gfAuthMessage('No se pudo cerrar la sesión de Firebase. Cierra esta pestaña y vuelve a intentarlo.');}
 }
 function gfRequestAccess(id){if(GF_DATA_READY&&id===GF_AUTH_PROFILE)selectProfile(id);}
-function gfAccessSettings(){return `<section class="card" style="padding:16px;margin-bottom:16px;"><h3 style="font-size:16px;margin:0 0 12px;">${GF_IS_ADMIN?'Administrador':'Mi cuenta'}</h3><p style="font-size:13px;color:var(--muted);">${gfEscape(_auth?.currentUser?.email||'')}</p><div style="display:flex;gap:8px;flex-wrap:wrap;">${GF_IS_ADMIN?'<button class="gf-access-button" onclick="gfAdminHome()">Administrar perfiles</button>':''}<button class="gf-access-button" onclick="gfAccountReset()">Cambiar contraseña</button><button class="gf-access-button" onclick="gfShowProfileLink()">Mi enlace</button><button class="gf-access-button" onclick="gfLogout()">Cerrar sesión</button></div><p id="gfProfileLinkMessage" aria-live="polite" style="font-size:12px;color:var(--muted);overflow-wrap:anywhere;"></p></section>`;}
+function gfAccessSettings(){return `<section class="card" style="padding:16px;margin-bottom:16px;"><h3 style="font-size:16px;margin:0 0 12px;">${GF_IS_ADMIN?'Administrador':'Mi cuenta'}</h3><p style="font-size:13px;color:var(--muted);">${gfEscape(_auth?.currentUser?.email||'')}</p><div style="display:flex;gap:8px;flex-wrap:wrap;">${GF_IS_ADMIN?'<button class="gf-access-button" onclick="gfAdminHome()">Administrar perfiles</button>':''}<button class="gf-access-button" onclick="gfAccountReset()">Cambiar contraseña</button><button class="gf-access-button" onclick="gfShowProfileLink()">Mi enlace</button><button class="gf-access-button" onclick="gfLogout()">Cerrar sesión</button></div><p style="font-size:11px;color:var(--muted);margin-top:12px;">Pulso · Imágenes personalizadas · 13/10/2026</p><p id="gfProfileLinkMessage" aria-live="polite" style="font-size:12px;color:var(--muted);overflow-wrap:anywhere;"></p></section>`;}
 async function gfAccountReset(){
  const el=document.getElementById('gfProfileLinkMessage');
  try{await _auth.sendPasswordResetEmail(_auth.currentUser.email);el.textContent='Te enviamos un correo para cambiar la contraseña.';}catch(e){el.textContent=gfAuthError(e);}
@@ -1748,8 +1804,9 @@ window.addEventListener('beforeunload',event=>{if(GF_DIRTY){event.preventDefault
 window.addEventListener('DOMContentLoaded',async()=>{
  document.querySelectorAll('[id$="Modal"]').forEach(el=>GF_MODAL_TEMPLATES.set(el.id,el.innerHTML));
  applyTheme();enhanceAccessibility();
- try{await initFirebase();_auth.onAuthStateChanged(user=>gfAuthStateChanged(user));}
- catch(e){gfAuthMessage(gfAuthError(e));}
+ try{await initFirebase();GF_GOOGLE_READY=true;_auth.onAuthStateChanged(user=>gfAuthStateChanged(user));}
+ catch(e){gfAuthMessage(gfAuthError(e));gfGoogleRecovery();}
+ finally{document.getElementById('gfGoogleSubmit').disabled=false;}
 });
 
 function enhanceAccessibility(){
@@ -2891,15 +2948,21 @@ function gfExerciseCapsule(ex,type,isOpen,done){
 }
 
 const GF_TECHNIQUE_FRAMES = {"female0":{"file":"assets/technique/female0-05aeacf6f21a.png","width":887,"height":1774,"rows":[0,241,533,822,1090,1380,1774]},"female1":{"file":"assets/technique/female1-81124d099908.png","width":887,"height":1774,"rows":[0,293,586,883,1176,1475,1774]},"female2":{"file":"assets/technique/female2-9cc528b79064.png","width":887,"height":1774,"rows":[0,295,582,849,1134,1411,1774]},"female3":{"file":"assets/technique/female3-5d51ed1385da.png","width":887,"height":1774,"rows":[0,295,591,856,1141,1426,1774]},"male0":{"file":"assets/technique/male0-474a255f3762.png","width":887,"height":1774,"rows":[0,285,575,864,1155,1451,1774]},"male1":{"file":"assets/technique/male1-fb12248f2e9c.png","width":886,"height":1774,"rows":[0,294,592,887,1183,1443,1774]},"male2":{"file":"assets/technique/male2-4713a93ff303.png","width":887,"height":1774,"rows":[0,260,560,861,1147,1420,1774]},"male3":{"file":"assets/technique/male3-e54de57c5def.png","width":887,"height":1774,"rows":[0,278,529,822,1107,1401,1774]},"male4":{"file":"assets/technique/male4-489babc18a13.png","width":887,"height":1774,"rows":[0,270,530,796,1071,1387,1774]},"male5":{"file":"assets/technique/male5-e77effc69c2b.png","width":887,"height":1774,"rows":[0,317,587,896,1184,1490,1774]}};
+const GF_DEIVIS_TECHNIQUE_FRAMES = {"male0":{"file":"assets/technique/deivis-male0-b51a83fa247e.png","width":887,"height":1774,"rows":[0,295,590,886,1181,1478,1774]},"male1":{"file":"assets/technique/deivis-male1-612d131a1aeb.png","width":887,"height":1774,"rows":[0,296,590,886,1181,1437,1774]},"male2":{"file":"assets/technique/deivis-male2-b3da752a694c.png","width":1024,"height":1536,"rows":[0,217,457,698,940,1218,1536]},"male3":{"file":"assets/technique/deivis-male3-b5406778ad8e.png","width":887,"height":1774,"rows":[0,292,546,836,1132,1421,1774]},"male4":{"file":"assets/technique/deivis-male4-820b0ce70c89.png","width":1024,"height":1536,"rows":[0,219,446,680,942,1206,1536]},"male5":{"file":"assets/technique/deivis-male5-e7c1a34e9782.png","width":887,"height":1774,"rows":[0,295,590,886,1181,1474,1774]}};
+const GF_DEIVIS_TECHNIQUE_OVERRIDES = {"male0:2":{"file":"assets/technique/deivis-male0-2-06634a89ec9c.png","width":1942,"height":809,"rects":[[18,120,626,600],[664,120,616,600],[1298,120,626,600]]},"male0:4":{"file":"assets/technique/deivis-male0-4-77a61c04efd6.png","width":2172,"height":724,"rects":[[2,2,717,720],[729,2,712,720],[1453,2,717,720]]},"male4:0":{"file":"assets/technique/deivis-male4-0-142c7e4ba570.png","width":2172,"height":724,"rects":[[2,2,717,720],[729,2,712,720],[1453,2,717,720]]}};
 function gfTechniqueFrame(art,phase=0){
- const sheet=GF_TECHNIQUE_FRAMES[art.sheet];if(!sheet)return null;
+ if(!art)return null;
+ const personal=typeof CP!=='undefined'&&CP==='deivis';
+ const override=personal?GF_DEIVIS_TECHNIQUE_OVERRIDES[art.sheet+':'+art.row]:null;
+ if(override){const r=override.rects[phase];if(!r)return null;return {file:override.file,x:r[0],y:r[1],width:r[2],height:r[3],sheetWidth:override.width,sheetHeight:override.height};}
+ const sheet=(personal?GF_DEIVIS_TECHNIQUE_FRAMES[art.sheet]:null)||GF_TECHNIQUE_FRAMES[art.sheet];if(!sheet)return null;
  const x=Math.round(sheet.width*phase/3)+2,right=Math.round(sheet.width*(phase+1)/3)-2;
  const y=sheet.rows[art.row]+2,bottom=sheet.rows[art.row+1]-2;
  return {file:sheet.file,x,y,width:right-x,height:bottom-y,sheetWidth:sheet.width,sheetHeight:sheet.height};
 }
 function gfTechniqueArt(art,phase=0){
  const r=gfTechniqueFrame(art,phase);if(!r)return '';
- return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${r.x} ${r.y} ${r.width} ${r.height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false" style="display:block;width:100%;height:100%;overflow:hidden"><image href="${r.file}" width="${r.sheetWidth}" height="${r.sheetHeight}" /></svg>`;
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${r.x} ${r.y} ${r.width} ${r.height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false" style="display:block;width:100%;height:100%;overflow:hidden"><image href="${gfEscape(r.file)}" width="${r.sheetWidth}" height="${r.sheetHeight}" /></svg>`;
 }
 
 function gfTechniqueLookup(exName){
@@ -2913,7 +2976,7 @@ function gfTechniqueLookup(exName){
 function gfTechniquePanel(exName){
  const art=gfTechniqueLookup(exName);if(!art)return '';
  const plank=/plancha/i.test(art.name),labels=plank?['Preparación','Mantén la postura','Salida controlada']:['Inicio','Movimiento','Final'];
- return `<div class="gf-technique-strip" aria-label="Tres fases de ${gfEscape(exName)}">${labels.map((label,phase)=>`<figure class="gf-technique-phase"><span class="gf-technique-image" style="aspect-ratio:${gfTechniqueFrame(art,phase).width}/${gfTechniqueFrame(art,phase).height}" role="img" aria-label="${gfEscape(exName+' · '+label)}">${gfTechniqueArt(art,phase)}</span><figcaption><span>${phase+1}</span>${label}</figcaption></figure>`).join('')}</div><p class="gf-technique-note">Desliza para ver las tres fases. ${plank?'Mantén la posición durante los segundos indicados.':'Vuelve a la posición inicial de forma controlada.'}</p>`;
+ return `<div class="gf-technique-strip" aria-label="Tres fases de ${gfEscape(exName)}">${labels.map((label,phase)=>`<figure class="gf-technique-phase"><span class="gf-technique-image" style="aspect-ratio:${gfTechniqueFrame(art,phase).width}/${gfTechniqueFrame(art,phase).height}" role="img" aria-label="${gfEscape(exName+' · '+label)}">${gfTechniqueArt(art,phase)}</span><figcaption><span>${phase+1}</span>${label}</figcaption></figure>`).join('')}</div><p class="gf-technique-note">Inicio, movimiento y final. Pulsa Técnica para ampliar. ${plank?'Mantén la posición durante los segundos indicados.':'Vuelve a la posición inicial de forma controlada.'}</p>`;
 }
 function openTechniqueGuide(exName){
  let dialog=document.getElementById('gfTechniqueDialog');
@@ -4193,7 +4256,8 @@ function initFirebase(){
   await loadSdk('app');await Promise.all(['auth','firestore'].map(loadSdk));
   if(!firebase.apps.length)firebase.initializeApp(FIREBASE_CONFIG);
   _db=firebase.firestore();_db.settings({experimentalAutoDetectLongPolling:false,experimentalForceLongPolling:true});_auth=firebase.auth();_auth.languageCode='es';
-  await _auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+  try{await _auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);}
+  catch(e){if(e.code!=='auth/web-storage-unsupported')throw e;await _auth.setPersistence(firebase.auth.Auth.Persistence.NONE);}
   _firebaseReady=true;
  })().catch(e=>{_initPromise=null;throw e;});
  return _initPromise;
@@ -5228,18 +5292,36 @@ function gfIcon(name,cls=''){return `<svg class="gf-icon ${cls}" viewBox="0 0 24
 function gfEscape(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function gfName(id){return PROFS[id].name.charAt(0)+PROFS[id].name.slice(1).toLowerCase();}
 function gfFoodKind(name){const n=String(name).toLowerCase();return /arroz|avena|harina|pasta|cereal/.test(n)?'cereal':/huevo|clara/.test(n)?'egg':/pollo|ternera|carne|pavo|atún|salmon|salmón|pescado/.test(n)?'meat':/yogur|kefir|kéfir|queso|leche|casein|whey/.test(n)?'dairy':/kiwi|plátano|platano|fruta|manzana/.test(n)?'fruit':/pan|tostada/.test(n)?'bread':'leaf';}
+function gfAvatarMarkup(photo,name){return typeof photo==='string'&&/^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(photo)?`<img src="${photo}" alt="" style="width:100%;height:100%;object-fit:cover;object-position:50% 20%">`:gfEscape(String(name||'').charAt(0));}
 function gfSyncHeader(){
  if(!CP)return;
  const name=document.getElementById('tName');name.innerHTML='GemFit';
  let wrap=document.getElementById('gfProfileSwitch');
  if(!wrap){wrap=document.createElement('div');wrap.id='gfProfileSwitch';wrap.className='gf-profile-switch';document.querySelector('.topbar').insertBefore(wrap,document.getElementById('themeQuickToggle'));}
- wrap.innerHTML=`<span style="padding:6px 10px;font-size:12px;color:var(--text)">${gfEscape(gfName(CP))}</span>`;
+ wrap.innerHTML=`<button onclick="avatarTap(CP)" aria-label="Ver o cambiar tu foto" style="display:flex;align-items:center;gap:7px;padding:5px 8px;border:0;background:none;color:var(--text)"><span class="gf-avatar">${gfAvatarMarkup(AVATARS[CP],gfName(CP))}</span><span>${gfEscape(gfName(CP))}</span></button>`;
  const quick=document.getElementById('themeQuickToggle');if(quick)quick.innerHTML=gfIcon(document.body.classList.contains('light-theme')?'moon':'sun');
 }
 function gfStartSession(id){const day=gd()[SK]||{};if(day.session!==id)setSess(id);goTab('tracker');}
 function gfOpenExercise(sessionId,exerciseId){gfStartSession(sessionId);OPEN_TRACKER_EXERCISE=exerciseId;renderCal();}
 function gfViewRoutine(id){const detail=document.getElementById('gfRoutine-'+id);if(detail){detail.open=true;detail.scrollIntoView({behavior:'smooth',block:'start'});}}
+
+function gfPulsoOrbit(done,total){
+ const safeTotal=Math.max(0,total),safeDone=Math.min(safeTotal,Math.max(0,done)),length=326.73,filled=safeTotal?length*safeDone/safeTotal:0;
+ return `<div class="pulso-orbit" role="img" aria-label="${safeDone} de ${safeTotal} ejercicios marcados"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="pulso-orbit-track" cx="60" cy="60" r="52"/><circle class="pulso-orbit-fill" cx="60" cy="60" r="52" stroke-dasharray="${filled} ${length}"/></svg><div class="pulso-orbit-label"><strong>${safeDone}<span style="opacity:.4"> / ${safeTotal}</span></strong><small>ejercicios marcados</small></div></div>`;
+}
+function gfPulsoHome(){
+ const data=gd(),dd=data[SK]||{},id=SESSIONS[dd.session]&&dd.session!=='skip'?dd.session:gfDefaultSession(),sess=SESSIONS[id];
+ if(!sess){document.getElementById('tab-plan').innerHTML='<div class="inner"><h1>Tu espacio</h1><p>Aún no tienes un entrenamiento asignado.</p></div>';return;}
+ const date=new Date(SK+'T12:00:00'),start=new Date(date);start.setDate(date.getDate()-(date.getDay()+6)%7);
+ const days=Array.from({length:7},(_,i)=>{const d=new Date(start);d.setDate(d.getDate()+i);return d;}),exercises=sess.sections.flatMap(sec=>sec.ex||[]),done=exercises.filter(ex=>dd.checked?.[ex.id]).length;
+ const recorded=days.filter(d=>data[dk(d)]?.session&&data[dk(d)].session!=='skip'&&SESSIONS[data[dk(d)].session]).length;
+ let h=`<div class="inner pulso-home"><header class="pulso-heading"><div class="pulso-eyebrow">GemFit · Pulso</div><h1>${CP==='gisandry'?'Tu espacio.<br>Tu fuerza.':'Tu siguiente<br>paso.'}</h1><p>Hola, ${gfEscape(gfName(CP))} · ${gfEscape(date.toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}))}</p></header><div class="gf-week" aria-label="Seleccionar día">${days.map(d=>`<button class="${dk(d)===SK?'selected':''}" onclick="selectHomeDay('${dk(d)}')" aria-pressed="${dk(d)===SK}"><small>${['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'][d.getDay()]}</small><strong>${d.getDate()}</strong></button>`).join('')}</div><section class="pulso-hero"><div class="pulso-eyebrow">Tu sesión</div><h2>${gfEscape(sess.lbl)}</h2><div class="pulso-hero-stage">${gfPulsoOrbit(done,exercises.length)}<div class="pulso-hero-art" aria-hidden="true">${muscleArt(sess.type,exercises[0]?.n||'')}</div></div><button class="gf-primary" onclick="gfStartSession('${id}')">${dd.session===id?'Continuar sesión':'Empezar sesión'}${gfIcon('arrow')}</button></section><section class="pulso-rhythm"><div class="pulso-section-title"><h2>Tu ritmo</h2><small>${recorded} sesiones registradas esta semana</small></div><div class="pulso-weekline">${days.map(d=>{const k=dk(d),has=!!data[k]?.session&&data[k].session!=='skip'&&SESSIONS[data[k].session];return `<div class="pulso-beat ${has?'is-recorded':''}" aria-label="${k}: ${has?'Sesión registrada':'Sin sesión registrada'}"><span>${['D','L','M','X','J','V','S'][d.getDay()]}</span><i aria-hidden="true"></i><strong>${d.getDate()}</strong></div>`;}).join('')}</div></section><div class="pulso-section-title"><h2>El recorrido de hoy</h2><small>${exercises.length} ejercicios</small></div><div class="gf-workout-list">${exercises.map(ex=>`<button onclick="gfOpenExercise('${id}','${ex.id}')"><span class="gf-muscle-thumb">${muscleArt(sess.type,ex.n)}</span><span class="gf-ex-info"><strong>${gfEscape(ex.n)}</strong><small>${gfEscape(ex.s)}${ex.rest?' · '+ex.rest+' s':''}</small></span>${gfIcon(dd.checked?.[ex.id]?'check':'arrow')}</button>`).join('')}</div><div class="pulso-section-title"><h2>Tus bloques</h2><small>Elige tu entrenamiento</small></div>`;
+ getSessionList().filter(item=>item.id!=='skip'&&SESSIONS[item.id]).forEach(item=>{const session=SESSIONS[item.id];h+=`<details class="gf-detail" id="gfRoutine-${session.id}"><summary><span class="gf-muscle-thumb">${muscleArt(session.type,session.sections[0]?.ex[0]?.n||'')}</span><span>${gfEscape(item.lbl)}<small style="display:block;color:var(--muted);font-size:11px">${texs(item.id)} ejercicios</small></span>${gfIcon('arrow')}</summary>`;session.sections.forEach(sec=>{h+=`<div class="ex-section">${gfEscape(sec.t)}</div>`;(sec.ex||[]).forEach(ex=>h+=`<div class="ex-row"><div><div class="ex-name">${gfEscape(ex.n)}</div>${ex.note?`<div class="ex-note">${gfEscape(ex.note)}</div>`:''}</div><span class="ex-sets">${gfEscape(ex.s)}</span></div>`);});h+=`<div style="padding:16px"><button class="gf-primary" onclick="gfStartSession('${session.id}')">Elegir bloque${gfIcon('arrow')}</button></div></details>`;});
+ h+=`<button class="gf-text-btn" style="width:100%;min-height:44px" onclick="gfStartSession('skip')">${gfIcon('moon')} Registrar descanso</button></div>`;document.getElementById('tab-plan').innerHTML=h;gfSyncHeader();
+}
+
 function renderPlan(){
+ if(CP==='deivis'||CP==='gisandry')return gfPulsoHome();
  if(CP==='gisandry')return gfRenderTrainingPlan();
  const p=pr(),data=gd(),dd=data[SK]||{};
  const session=SESSIONS[dd.session];
@@ -5362,7 +5444,8 @@ function gfRealisticArt(kind,exercise=''){
  return `<span class="gf-realistic-art ${CP==='gisandry'?'gf-female-art':''}" aria-hidden="true">${gfTechniqueArt({sheet:sex+Math.floor(index/6),row:index%6},0)}</span>`;
 }
 function gfFemaleArt(kind='legs',exercise=''){return gfRealisticArt(kind,exercise);}
-function gfRenderTrainingPlan(){
+function gfRenderTrainingPlan(){return gfPulsoHome();}
+function gfOriginalTrainingPlan(){
  const data=gd(),dd=data[SK]||{},id=SESSIONS[dd.session]&&dd.session!=='skip'?dd.session:gfDefaultSession(),sess=SESSIONS[id];
  if(!sess){document.getElementById('tab-plan').innerHTML='<div class="inner"><h1>Tu rutina</h1><p>Aún no tienes ejercicios asignados.</p></div>';return;}
  const date=new Date(SK+'T12:00:00'),start=new Date(date);start.setDate(date.getDate()-(date.getDay()+6)%7);
@@ -5399,7 +5482,7 @@ gfDecorate=function(root=document){
  });
  // Explicit names make the two themes easy to identify.
  document.querySelectorAll('[data-theme-choice="dark"]').forEach(btn=>{if(btn.dataset.gfLabel)return;btn.dataset.gfLabel='1';const span=btn.querySelector('span');btn.replaceChildren();if(span)btn.append(span);btn.append(document.createTextNode(CP==='gisandry'?'Ciruela':'Grafito'));});
- document.querySelectorAll('[data-theme-choice="light"]').forEach(btn=>{if(btn.dataset.gfLabel)return;btn.dataset.gfLabel='1';const span=btn.querySelector('span');btn.replaceChildren();if(span)btn.append(span);btn.append(document.createTextNode(CP==='gisandry'?'Lavanda':'Azul claro'));});
+ document.querySelectorAll('[data-theme-choice="light"]').forEach(btn=>{if(btn.dataset.gfLabel)return;btn.dataset.gfLabel='1';const span=btn.querySelector('span');btn.replaceChildren();if(span)btn.append(span);btn.append(document.createTextNode(CP==='gisandry'?'Lavanda':'Perla'));});
 };
 function gfUpdateViewport(){
  const viewport=window.visualViewport;const height=viewport&&viewport.scale===1?viewport.height:window.innerHeight;
@@ -5412,6 +5495,8 @@ window.addEventListener('orientationchange',gfUpdateViewport,{passive:true});
 window.visualViewport?.addEventListener('scroll',gfUpdateViewport,{passive:true});
 window.visualViewport?.addEventListener('resize',gfUpdateViewport,{passive:true});
 
+
+const gfProfileWithPhoto=renderPerfil;renderPerfil=function(...args){const r=gfProfileWithPhoto.apply(this,args),inner=document.querySelector('#tab-perfil .inner');if(inner&&!document.getElementById('gfProfilePhotoSettings'))inner.insertAdjacentHTML('beforeend',`<section id="gfProfilePhotoSettings" class="card" style="margin-top:18px"><div class="card-body"><h2 style="font-size:19px;margin-bottom:8px">Tu foto, tu espacio</h2><p style="font-size:13px;line-height:1.5;color:var(--muted);margin-bottom:14px">Usa tu foto real como avatar del inicio y el perfil.</p><button class="gf-access-button" onclick="avatarTap(CP)">Ver o cambiar mi foto</button></div></section>`);return r;};
 </script>
 
 <!-- ═══════════════ EXERCISE PICKER MODAL ═══════════════ -->
